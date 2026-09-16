@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casas na Praia — Araranguá/SC</title>
+    <style>
+        *{margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', system-ui, sans-serif;}
+        :root{
+            --agua:#2596be; --agua-escura:#1a7a9e; --areia:#f5e6c8; --sol:#ffb703;
+            --sucesso:#2f855a; --alerta:#e53e3e; --cinza:#718096; --fundo:#e6f2f8;
+            --amarela:#f5c542; --beje:#d9b36c; --marrom:#8c4a2c; --branca:#ffffff;
+            --lado-esquerdo:#0f6b8a;
+        }
+        body{background:linear-gradient(180deg, #e6f2f8 0%, #fef9ef 100%); min-height:100vh;}
+        .oculto{display:none !important;}
+        .visivel{display:block !important;}
+
+        /* ========== LAYOUT ========== */
+        .pagina{display:flex; min-height:100vh;}
+        
+        .lado-esquerdo{
+            width:280px;
+            background:linear-gradient(180deg, var(--lado-esquerdo), var(--agua-escura));
+            color:white;
+            padding:30px 20px;
+            flex-shrink:0;
+        }
+        .logo-lado{text-align:center; margin-bottom:30px;}
+        .logo-lado h2{font-size:20px; margin-bottom:5px;}
+        .logo-lado p{font-size:12px; opacity:0.8;}
+        
+        .conteudo-principal{flex:1; padding:30px;}
+        .cabecalho-publico{text-align:center; margin-bottom:40px; padding-bottom:20px; border-bottom:2px solid rgba(37,150,190,0.2);}
+        .cabecalho-publico h1{color:var(--agua-escura); font-size:28px; margin-bottom:8px;}
+        .cabecalho-publico p{color:var(--cinza); font-size:16px;}
+
+        /* ========== LOGIN ========== */
+        .login-caixa{margin-top:40px;}
+        .login-caixa h3{font-size:16px; margin-bottom:15px; opacity:0.9;}
+        .login-caixa input{
+            width:100%; padding:12px; margin:6px 0; border:none; border-radius:8px;
+            font-size:14px; background:rgba(255,255,255,0.2); color:white;
+        }
+        .login-caixa input::placeholder{color:rgba(255,255,255,0.7);}
+        .login-caixa input:focus{outline:none; background:rgba(255,255,255,0.3);}
+        .login-btn{
+            width:100%; padding:12px; background:white; color:var(--agua-escura);
+            border:none; border-radius:8px; font-weight:bold; cursor:pointer; margin-top:8px;
+            transition:transform .2s;
+        }
+        .login-btn:hover{transform:scale(1.03);}
+        .erro-login{color:#ffcccb; margin-top:10px; font-size:13px; min-height:20px; text-align:center;}
+
+        /* ========== PAINEL ADMIN ========== */
+        .navegacao-titulo{font-size:14px; margin:25px 0 10px; opacity:0.7;}
+        .aba-lateral{
+            display:block; width:100%; text-align:left; padding:12px 15px; margin:4px 0;
+            background:transparent; color:white; border:none; border-radius:8px; cursor:pointer;
+            font-size:14px; transition:background .2s;
+        }
+        .aba-lateral:hover{background:rgba(255,255,255,0.15);}
+        .aba-lateral.ativa{background:rgba(255,255,255,0.25); font-weight:bold;}
+        .sair-btn{
+            margin-top:30px; width:100%; padding:12px; background:rgba(220,50,50,0.3);
+            color:white; border:none; border-radius:8px; cursor:pointer; font-size:14px;
+        }
+        .sair-btn:hover{background:rgba(220,50,50,0.5);}
+
+        /* ========== CONTEÚDO DAS ABAS ========== */
+        .conteudo-aba{display:none;}
+        .conteudo-aba.visivel{display:block;}
+        .painel-titulo{color:var(--agua-escura); font-size:24px; margin-bottom:20px;}
+        .painel-subtitulo{color:var(--cinza); margin-bottom:30px;}
+
+        /* ========== CASAS — PÁGINA PÚBLICA & ADMIN ========== */
+        .casas-grid{
+            display:grid; grid-template-columns:repeat(auto-fit, minmax(300px,1fr));
+            gap:25px; margin-top:30px;
+        }
+        .casa-card{
+            background:white; border-radius:18px; overflow:hidden;
+            box-shadow:0 6px 20px rgba(0,0,0,0.08); transition:transform .3s;
+        }
+        .casa-card:hover{transform:translateY(-5px);}
+        .casa-card.amarela{border-top:5px solid var(--amarela);}
+        .casa-card.beje{border-top:5px solid var(--beje);}
+        .casa-card.marrom{border-top:5px solid var(--marrom);}
+        .casa-card.branca{border-top:5px solid #ccc;}
+        
+        .casa-imagens{
+            display:grid; grid-template-columns:repeat(3,1fr); gap:6px; padding:12px;
+            background:var(--fundo); min-height:140px;
+        }
+        .foto-galeria{
+            width:100%; height:90px; object-fit:cover; border-radius:8px;
+            cursor:pointer; transition:transform .2s;
+        }
+        .foto-galeria:hover{transform:scale(1.08);}
+        .sem-foto{grid-column:1/-1; text-align:center; color:var(--cinza); padding:20px;}
+        
+        .upload-area{
+            border:2px dashed var(--agua); border-radius:8px; padding:10px; text-align:center;
+            cursor:pointer; font-size:12px; color:var(--agua);
+        }
+        .upload-area:hover{background:rgba(37,150,190,0.08);}
+        .upload-area input{display:none;}
+        
+        .casa-corpo{padding:20px;}
+        .casa-nome{font-size:18px; font-weight:bold; margin-bottom:8px;}
+        .casa-desc{font-size:14px; color:var(--cinza); margin-bottom:12px; line-height:1.5;}
+        
+        .status{
+            display:inline-block; padding:6px 14px; border-radius:50px;
+            font-weight:bold; font-size:13px; margin-bottom:12px;
+        }
+        .status.ok{background:#e6fffa; color:#047857;}
+        .status.busy{background:#fef2f2; color:#b91c1c;}
+        
+        .btn-reservar{
+            width:100%; padding:12px; background:linear-gradient(135deg, var(--sol), #e67700);
+            color:white; border:none; border-radius:10px; font-weight:bold;
+            cursor:pointer; font-size:15px; transition:transform .2s;
+        }
+        .btn-reservar:hover{transform:scale(1.02);}
+        .btn-reservar:disabled{background:#ccc; cursor:not-allowed; transform:none;}
+
+        /* ========== FORMULÁRIOS ========== */
+        .caixa-form{
+            background:white; padding:25px; border-radius:16px;
+            box-shadow:0 4px 15px rgba(0,0,0,0.06); margin:20px 0;
+        }
+        .caixa-form h3{color:var(--agua-escura); margin-bottom:15px;}
+        .linha-form{
+            display:grid; grid-template-columns:repeat(auto-fit, minmax(160px,1fr));
+            gap:12px; margin:8px 0;
+        }
+        input, select, textarea{
+            padding:12px; border:2px solid #e2e8f0; border-radius:10px;
+            font-size:14px; width:100%;
+        }
+        input:focus, select:focus{outline:none; border-color:var(--agua);}
+        button{
+            padding:12px; border:none; border-radius:10px; font-weight:bold; cursor:pointer;
+        }
+        button.sucesso{background:linear-gradient(135deg, #2f855a, #276749); color:white;}
+        button.vermelho{background:linear-gradient(135deg, #e53e3e, #c53030); color:white;}
+        button.padrao{background:var(--agua); color:white; margin-top:10px;}
+        
+        /* ========== MODAL ========== */
+        .modal{
+            position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6);
+            display:none; align-items:center; justify-content:center; z-index:1000;
+        }
+        .modal.aberto{display:flex;}
+        .modal-conteudo{
+            background:white; padding:30px; border-radius:16px; max-width:500px;
+            width:90%;
+        }
+        .modal-conteudo h3{margin-bottom:20px; color:var(--agua-escura);}
+        
+        /* ========== RESPONSIVO ========== */
+        @media (max-width:900px){
+            .pagina{flex-direction:column;}
+            .lado-esquerdo{width:100%;}
+            .conteudo-principal{padding:20px;}
+        }
+    </style>
+</head>
+<body>
+
+<div class="pagina">
+    <!-- LADO ESQUERDO: LOGIN / PAINEL ADMIN -->
+    <div class="lado-esquerdo">
+        <div class="logo-lado">
+            <h2>🏖️ Gestão</h2>
+            <p>Casas na Praia<br>Araranguá / SC</p>
+        </div>
+
+        <!-- ÁREA DE LOGIN — SEM SENHA EXPOSTA -->
+        <div id="areaLogin">
+            <div class="login-caixa">
+                <h3>🔐 Acesso Administrativo</h3>
+                <input type="text" id="usuarioLogin" placeholder="Usuário">
+                <input type="password" id="senhaLogin" placeholder="Senha">
+                <button class="login-btn" onclick="verificarLogin()">Entrar</button>
+                <p class="erro-login" id="erroLogin"></p>
+            </div>
+        </div>
+
+        <!-- PAINEL ADMIN — APARECE APÓS LOGIN -->
+        <div id="painelAdmin" class="oculto">
+            <p class="navegacao-titulo">Navegação</p>
+            <button class="aba-lateral ativa" data-aba="painel">📊 Painel</button>
+            <button class="aba-lateral" data-aba="casas">📷 Casas & Fotos</button>
+            <button class="aba-lateral" data-aba="solicitacoes">📩 Solicitações</button>
+            <button class="aba-lateral" data-aba="config">⚙️ Configurações</button>
+            <button class="sair-btn" onclick="sairAdmin()">🚪 Sair</button>
+        </div>
+    </div>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <div class="conteudo-principal">
+        <!-- PÁGINA PÚBLICA — SEMPRE VISÍVEL -->
+        <div id="paginaPublica">
+            <div class="cabecalho-publico">
+                <h1>🏡 Conheça Nossas Casas</h1>
+                <p>Verifique a disponibilidade e solicite sua reserva</p>
+            </div>
+            <div class="casas-grid" id="gridPublico"></div>
+        </div>
+
+        <!-- CONTEÚDO ADMIN — SÓ APÓS LOGIN -->
+        <div id="conteudoAdmin" class="oculto">
+            <!-- ABA PAINEL -->
+            <div class="conteudo-aba visivel" id="aba-painel">
+                <h2 class="painel-titulo">📊 Painel Administrativo</h2>
+                <p class="painel-subtitulo">Bem-vindo! Use os botões ao lado para gerenciar as casas, fotos e reservas.</p>
+                
+                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:15px; margin:30px 0;">
+                    <div class="caixa-form" style="text-align:center; border-top:4px solid var(--sucesso);">
+                        <p style="color:var(--cinza); font-size:13px;">🏡 Total de Casas</p>
+                        <p style="font-size:28px; font-weight:bold; color:var(--sucesso);">4</p>
+                    </div>
+                    <div class="caixa-form" style="text-align:center; border-top:4px solid var(--sol);">
+                        <p style="color:var(--cinza); font-size:13px;">📩 Solicitações</p>
+                        <p style="font-size:28px; font-weight:bold; color:#e67700;" id="qtdSolicitacoes">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ABA CASAS & FOTOS -->
+            <div class="conteudo-aba" id="aba-casas">
+                <h2 class="painel-titulo">📷 Gerenciar Casas & Fotos</h2>
+                <p class="painel-subtitulo">Adicione fotos e atualize as informações que aparecem para os visitantes.</p>
+                <div class="casas-grid" id="gridAdmin"></div>
+            </div>
+
+            <!-- ABA SOLICITAÇÕES -->
+            <div class="conteudo-aba" id="aba-solicitacoes">
+                <h2 class="painel-titulo">📩 Solicitações de Reserva</h2>
+                <p class="painel-subtitulo">Pedidos enviados pelos hóspedes pela página pública.</p>
+                <div id="listaSolicitacoes"></div>
+            </div>
+
+            <!-- ABA CONFIGURAÇÕES -->
+            <div class="conteudo-aba" id="aba-config">
+                <h2 class="painel-titulo">⚙️ Configurações</h2>
+                <div class="caixa-form">
+                    <h3>Alterar Dados de Acesso</h3>
+                    <p style="font-size:13px; color:var(--cinza); margin:10px 0;">Por segurança, altere os dados padrão após o primeiro acesso.</p>
+                    <div class="linha-form">
+                        <input type="text" id="novoUsuario" placeholder="Novo Usuário">
+                        <input type="password" id="novaSenha" placeholder="Nova Senha">
+                    </div>
+                    <button class="sucesso" onclick="alterarAcesso()">Salvar Novos Dados</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL RESERVA PÚBLICA -->
+<div class="modal" id="modalReserva">
+    <div class="modal-conteudo">
+        <h3>📩 Solicitar Reserva — <span id="nomeCasaReserva"></span></h3>
+        <div class="linha-form">
+            <input type="text" id="resNome" placeholder="Seu Nome Completo *">
+            <input type="tel" id="resTel" placeholder="WhatsApp / Telefone *">
+        </div>
+        <div class="linha-form">
+            <input type="date" id="resEntrada">
+            <input type="date" id="resSaida">
+        </div>
+        <textarea id="resObs" placeholder="Observações" rows="3"></textarea>
+        <button class="sucesso" onclick="enviarReserva()">✅ Enviar Solicitação</button>
+        <button class="vermelho" onclick="fecharModalReserva()">Cancelar</button>
+    </div>
+</div>
+
+<script>
+// ==============================================
+// DADOS
+// ==============================================
+const casas = {
+    amarela: {nome:'🟡 Casa Amarela', desc:'Paredes amarelas, janelas marrom, coqueiro na frente — aconchegante e espaçosa.'},
+    beje: {nome:'🟤 Casa Beje', desc:'Tom bege, janelas brancas, coqueiro na frente — ideal para famílias.'},
+    marrom: {nome:'🟫 Casa Marrom', desc:'Madeira escura, redes coloridas na varanda — com varanda ampla e vista.'},
+    branca: {nome:'⚪ Casa Branca', desc:'Paredes brancas, janelas marrom, ambiente arejado — perto do mar.'}
+};
+
+// DADOS DE ACESSO — NÃO EXIBIDOS PÚBLICAMENTE
+const USUARIO_PADRAO = 'admin';
+const SENHA_PADRAO = 'admin123';
+
+let admin = JSON.parse(localStorage.getItem('admin')) || {usuario: USUARIO_PADRAO, senha: SENHA_PADRAO};
+let solicitacoes = JSON.parse(localStorage.getItem('solicitacoes')) || [];
+let casaSelecionada = null;
+
+// ==============================================
+// INICIALIZAÇÃO
+// ==============================================
+document.addEventListener('DOMContentLoaded', function(){
+    renderizarPublico();
+    atualizarContadorSolicitacoes();
+});
+
+// ==============================================
+// LOGIN — CORRIGIDO E GARANTIDO FUNCIONANDO
+// ==============================================
+function verificarLogin(){
+    const usu = document.getElementById('usuarioLogin').value.trim();
+    const sen = document.getElementById('senhaLogin').value.trim();
+    
+    if(usu === admin.usuario && sen === admin.senha){
+        // ✅ LOGIN BEM-SUCEDIDO — ABRIR TUDO
+        document.getElementById('areaLogin').classList.add('oculto');
+        document.getElementById('painelAdmin').classList.remove('oculto');
+        document.getElementById('conteudoAdmin').classList.remove('oculto');
+        
+        // Carregar conteúdos das abas
+        renderizarAdminCasas();
+        renderizarSolicitacoes();
+        atualizarContadorSolicitacoes();
+    } else {
+        document.getElementById('erroLogin').textContent = 'Usuário ou senha incorretos!';
+    }
+}
+
+function sairAdmin(){
+    document.getElementById('areaLogin').classList.remove('oculto');
+    document.getElementById('painelAdmin').classList.add('oculto');
+    document.getElementById('conteudoAdmin').classList.add('oculto');
+    document.getElementById('usuarioLogin').value = '';
+    document.getElementById('senhaLogin').value = '';
+    document.getElementById('erroLogin').textContent = '';
+}
+
+function alterarAcesso(){
+    const u = document.getElementById('novoUsuario').value.trim();
+    const s = document.getElementById('novaSenha').value.trim();
+    if(!u || !s){ alert('Preencha usuário e senha!'); return; }
+    admin = {usuario: u, senha: s};
+    localStorage.setItem('admin', JSON.stringify(admin));
+    alert('✅ Acesso alterado! Anote seus dados.');
+    document.getElementById('novoUsuario').value = '';
+    document.getElementById('novaSenha').value = '';
+}
+
+// ==============================================
+// NAVEGAÇÃO ENTRE ABAS
+// ==============================================
+document.querySelectorAll('.aba-lateral').forEach(btn => {
+    btn.addEventListener('click', function(){
+        // Remover destaque de todos
+        document.querySelectorAll('.aba-lateral').forEach(b => b.classList.remove('ativa'));
+        document.querySelectorAll('.conteudo-aba').forEach(c => c.classList.remove('visivel'));
+        
+        // Ativar clicado
+        this.classList.add('ativa');
+        const abaId = this.getAttribute('data-aba');
+        document.getElementById(`aba-${abaId}`).classList.add('visivel');
+        
+        // Carregar conteúdo da aba
+        if(abaId === 'casas') renderizarAdminCasas();
+        if(abaId === 'solicitacoes') renderizarSolicitacoes();
+    });
+});
+
+// ==============================================
+// PÁGINA PÚBLICA — SEMPRE VISÍVEL
+// ==============================================
+function renderizarPublico(){
+    const grid = document.getElementById('gridPublico');
+    if(!grid) return;
+    
+    grid.innerHTML = Object.entries(casas).map(([id, casa]) => {
+        const fotos = JSON.parse(localStorage.getItem(`fotos-${id}`)) || [];
+        
+        return `
+        <div class="casa-card ${id}">
+            <div class="casa-imagens">
+                ${fotos.length ? 
+                    fotos.map(f => `<img src="${f}" class="foto-galeria">`).join('') : 
+                    '<div class="sem-foto">📷 Fotos em breve</div>'
+                }
+            </div>
+            <div class="casa-corpo">
+                <h3 class="casa-nome">${casa.nome}</h3>
+                <p class="casa-desc">${casa.desc}</p>
+                <span class="status ok">✅ Disponível</span>
+                <br><br>
+                <button class="btn-reservar" onclick="abrirFormReserva('${id}')">📩 Solicitar Reserva</button>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+// ==============================================
+// RESERVA
+// ==============================================
+function abrirFormReserva(casaId){
+    casaSelecionada = casaId;
+    document.getElementById('nomeCasaReserva').textContent = casas[casaId].nome;
+    document.getElementById('modalReserva').classList.add('aberto');
+}
+
+function fecharModalReserva(){
+    document.getElementById('modalReserva').classList.remove('aberto');
+    ['resNome','resTel','resEntrada','resSaida','resObs'].forEach(id => document.getElementById(id).value = '');
+}
+
+function enviarReserva(){
+    const dados = {
+        id: Date.now(),
+        casa: casaSelecionada,
+        nome: document.getElementById('resNome').value.trim(),
+        telefone: document.getElementById('resTel').value.trim(),
+        entrada: document.getElementById('resEntrada').value,
+        saida: document.getElementById('resSaida').value,
+        obs: document.getElementById('resObs').value.trim(),
+        data: new Date().toLocaleString('pt-BR'),
+        status: 'pendente'
+    };
+    
+    if(!dados.nome || !dados.telefone || !dados.entrada || !dados.saida){
+        alert('Preencha todos os campos obrigatórios!'); return;
+    }
+    
+    solicitacoes.unshift(dados);
+    localStorage.setItem('solicitacoes', JSON.stringify(solicitacoes));
+    alert('✅ Solicitação enviada! Entraremos em contato em breve.');
+    fecharModalReserva();
+    atualizarContadorSolicitacoes();
+    renderizarSolicitacoes();
+}
+
+function atualizarContadorSolicitacoes(){
+    const el = document.getElementById('qtdSolicitacoes');
+    if(el) el.textContent = solicitacoes.length;
+}
+
+// ==============================================
+// ADMIN — CASAS & FOTOS
+// ==============================================
+function renderizarAdminCasas(){
+    const grid = document.getElementById('gridAdmin');
+    if(!grid) return;
+    
+    grid.innerHTML = Object.entries(casas).map(([id, casa]) => {
+        const fotos = JSON.parse(localStorage.getItem(`fotos-${id}`)) || [];
+        
+        return `
+        <div class="casa-card ${id}">
+            <div class="casa-imagens">
+                ${fotos.length ? 
+                    fotos.map((f, i) => `<img src="${f}" class="foto-galeria" title="Duplo clique para remover" ondblclick="removerFoto('${id}',${i})">`).join('') : 
+                    '<div class="sem-foto">📷 Sem fotos</div>'
+                }
+                <label class="upload-area">
+                    ⬆️ Adicionar Foto
+                    <input type="file" accept="image/*" onchange="carregarFoto(event, '${id}')">
+                </label>
+            </div>
+            <div class="casa-corpo">
+                <h3 class="casa-nome">${casa.nome}</h3>
+                <p class="casa-desc">${casa.desc}</p>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function carregarFoto(evt, casaId){
+    const arq = evt.target.files[0]; if(!arq) return;
+    const leitor = new FileReader();
+    leitor.onload = function(e){
+        const fotos = JSON.parse(localStorage.getItem(`fotos-${casaId}`)) || [];
+        fotos.push(e.target.result);
+        localStorage.setItem(`fotos-${casaId}`, JSON.stringify(fotos));
+        renderizarPublico();
+        renderizarAdminCasas();
+    };
+    leitor.readAsDataURL(arq);
+}
+
+function removerFoto(casaId, indice){
+    if(!confirm('Excluir esta foto?')) return;
+    const fotos = JSON.parse(localStorage.getItem(`fotos-${casaId}`)) || [];
+    fotos.splice(indice, 1);
+    localStorage.setItem(`fotos-${casaId}`, JSON.stringify(fotos));
+    renderizarPublico();
+    renderizarAdminCasas();
+}
+
+// ==============================================
+// ADMIN — SOLICITAÇÕES
+// ==============================================
+function renderizarSolicitacoes(){
+    const lista = document.getElementById('listaSolicitacoes');
+    if(!lista) return;
+    
+    if(solicitacoes.length === 0){
+        lista.innerHTML = '<p style="color:var(--cinza); text-align:center; padding:30px;">Nenhuma solicitação recebida ainda.</p>';
+        return;
+    }
+    
+    lista.innerHTML = solicitacoes.map(s => `
+        <div class="caixa-form">
+            <h4 style="font-size:16px; margin-bottom:8px;">${casas[s.casa].nome}</h4>
+            <p><strong>Nome:</strong> ${s.nome}</p>
+            <p><strong>Telefone:</strong> 📞 ${s.telefone}</p>
+            <p><strong>Período:</strong> 📅 ${s.entrada} até ${s.saida}</p>
+            ${s.obs ? `<p><strong>Observações:</strong> 💬 ${s.obs}</p>` : ''}
+            <p style="font-size:12px; color:var(--cinza); margin-top:8px;">Enviado em: ${s.data}</p>
+        </div>`
+    ).join('');
+}
+</script>
+</body>
+</html>
