@@ -25,7 +25,7 @@
  --perigo:#dc3545;
  --branco:#fff;
  --sombra:0 8px 25px rgba(0,0,0,.10);
- --sombra-forte:0 15px 40px rgba(0,0,0,.18);
+ --sombra-forte:0 15px 40px rgba(0,0,0,.18)
 }
 
 *{
@@ -35,9 +35,7 @@
  font-family:'Segoe UI',sans-serif
 }
 
-html{
- scroll-behavior:smooth
-}
+html{scroll-behavior:smooth}
 
 body{
  background:linear-gradient(120deg,#e0f0f5,#fef9ed);
@@ -58,59 +56,24 @@ button{
  transition:.2s
 }
 
-.azul{
- background:var(--marinho);
- color:#fff
-}
-
-.azul:hover{
- background:#083b57
-}
-
-.sucesso{
- background:var(--sucesso);
- color:#fff
-}
-
-.sucesso:hover{
- background:#218838
-}
-
-.vermelho{
- background:var(--perigo);
- color:#fff
-}
-
-.vermelho:hover{
- background:#c82333
-}
-
-.amarelo{
- background:var(--ouro);
- color:#212529
-}
-
-.amarelo:hover{
- background:#e0a800
-}
-
-.cinza{
- background:#6c757d!important;
- color:#fff!important
-}
+.azul{background:var(--marinho);color:#fff}
+.azul:hover{background:#083b57}
+.sucesso{background:var(--sucesso);color:#fff}
+.sucesso:hover{background:#218838}
+.vermelho{background:var(--perigo);color:#fff}
+.vermelho:hover{background:#c82333}
+.amarelo{background:var(--ouro);color:#212529}
+.amarelo:hover{background:#e0a800}
+.cinza{background:#6c757d!important;color:#fff!important}
 
 button:disabled{
  opacity:.55;
  cursor:not-allowed
 }
 
-/* =========================================================
-   PÁGINA PÚBLICA - NOVO VISUAL
-   ========================================================= */
+/* PÁGINA PÚBLICA */
 
-#areaPublica{
- background:#fff
-}
+#areaPublica{background:#fff}
 
 .cabecalho-publico{
  position:absolute;
@@ -118,11 +81,7 @@ button:disabled{
  left:0;
  right:0;
  z-index:50;
- background:linear-gradient(
-   180deg,
-   rgba(0,35,55,.82),
-   rgba(0,35,55,.25)
- );
+ background:linear-gradient(180deg,rgba(0,35,55,.82),rgba(0,35,55,.25));
  color:#fff;
  padding:20px 35px;
  display:flex;
@@ -155,8 +114,6 @@ button:disabled{
  transform:translateY(-2px)
 }
 
-/* HERO */
-
 .hero-praia{
  min-height:650px;
  height:78vh;
@@ -169,13 +126,13 @@ button:disabled{
  color:#fff;
  overflow:hidden;
  background-image:
-   linear-gradient(
-     180deg,
-     rgba(0,45,70,.18) 0%,
-     rgba(0,55,75,.08) 35%,
-     rgba(0,35,55,.72) 100%
-   ),
-   url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2200&q=90");
+ linear-gradient(
+  180deg,
+  rgba(0,45,70,.18) 0%,
+  rgba(0,55,75,.08) 35%,
+  rgba(0,35,55,.72) 100%
+ ),
+ url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2200&q=90");
  background-size:cover;
  background-position:center
 }
@@ -184,12 +141,7 @@ button:disabled{
  content:"";
  position:absolute;
  inset:0;
- background:
-   radial-gradient(
-     circle at 50% 35%,
-     rgba(255,255,255,.18),
-     transparent 35%
-   );
+ background:radial-gradient(circle at 50% 35%,rgba(255,255,255,.18),transparent 35%);
  pointer-events:none
 }
 
@@ -202,14 +154,8 @@ button:disabled{
 }
 
 @keyframes aparecerHero{
- from{
-  opacity:0;
-  transform:translateY(25px)
- }
- to{
-  opacity:1;
-  transform:translateY(0)
- }
+ from{opacity:0;transform:translateY(25px)}
+ to{opacity:1;transform:translateY(0)}
 }
 
 .hero-icone{
@@ -259,8 +205,6 @@ button:disabled{
  box-shadow:0 10px 25px rgba(0,0,0,.3)
 }
 
-/* CONTEÚDO PÚBLICO */
-
 .area-publica{
  padding:65px 35px 70px;
  max-width:1400px;
@@ -307,8 +251,6 @@ button:disabled{
  display:none
 }
 
-/* CARDS */
-
 .grade-casas{
  display:grid;
  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
@@ -332,8 +274,7 @@ button:disabled{
 
 .card-imagem{
  height:250px;
- background:
-   linear-gradient(135deg,var(--turquesa),var(--marinho));
+ background:linear-gradient(135deg,var(--turquesa),var(--marinho));
  display:flex;
  align-items:center;
  justify-content:center;
@@ -348,11 +289,7 @@ button:disabled{
  content:"";
  position:absolute;
  inset:0;
- background:linear-gradient(
-   180deg,
-   transparent 65%,
-   rgba(0,0,0,.28)
- );
+ background:linear-gradient(180deg,transparent 65%,rgba(0,0,0,.28));
  pointer-events:none
 }
 
@@ -367,9 +304,7 @@ button:disabled{
  transform:scale(1.05)
 }
 
-.card-corpo{
- padding:22px
-}
+.card-corpo{padding:22px}
 
 .card-corpo h3{
  color:var(--marinho);
@@ -445,8 +380,6 @@ button:disabled{
  transform:translateY(-1px)
 }
 
-/* FAIXA DECORATIVA DA PRAIA */
-
 .faixa-praia{
  min-height:330px;
  display:flex;
@@ -456,11 +389,8 @@ button:disabled{
  color:#fff;
  position:relative;
  background-image:
-   linear-gradient(
-     rgba(0,55,75,.30),
-     rgba(0,35,55,.65)
-   ),
-   url("https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1800&q=85");
+ linear-gradient(rgba(0,55,75,.30),rgba(0,35,55,.65)),
+ url("https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1800&q=85");
  background-size:cover;
  background-position:center
 }
@@ -480,8 +410,6 @@ button:disabled{
  font-size:17px;
  line-height:1.6
 }
-
-/* INFORMAÇÕES */
 
 .info-praia{
  padding:55px 25px;
@@ -526,8 +454,6 @@ button:disabled{
  line-height:1.5
 }
 
-/* RODAPÉ */
-
 .rodape-publico{
  background:linear-gradient(90deg,var(--marinho2),var(--marinho));
  color:#fff;
@@ -546,9 +472,7 @@ button:disabled{
  margin-top:5px
 }
 
-/* =========================================================
-   GALERIA
-   ========================================================= */
+/* GALERIA */
 
 .overlay-galeria,.overlay-login,.modal{
  position:fixed;
@@ -603,9 +527,7 @@ button:disabled{
  font-size:18px
 }
 
-.galeria-contador{
- color:#fff
-}
+.galeria-contador{color:#fff}
 
 .galeria-miniaturas{
  display:flex;
@@ -624,8 +546,7 @@ button:disabled{
  opacity:.7
 }
 
-.miniatura.ativa,
-.miniatura:hover{
+.miniatura.ativa,.miniatura:hover{
  border-color:var(--ouro);
  opacity:1
 }
@@ -640,9 +561,7 @@ button:disabled{
  font-size:28px
 }
 
-/* =========================================================
-   PAINEL ADMINISTRATIVO
-   ========================================================= */
+/* ADMIN */
 
 .barra-lateral{
  position:fixed;
@@ -680,8 +599,7 @@ button:disabled{
  margin-top:20px
 }
 
-.item-menu,
-.voltar-publico{
+.item-menu,.voltar-publico{
  background:transparent;
  border:0;
  color:rgba(255,255,255,.85);
@@ -691,8 +609,7 @@ button:disabled{
  font-size:15px
 }
 
-.item-menu:hover,
-.item-menu.ativo{
+.item-menu:hover,.item-menu.ativo{
  background:rgba(255,255,255,.15);
  color:#fff
 }
@@ -703,15 +620,12 @@ button:disabled{
  width:100%
 }
 
-/* LOGIN */
-
 .overlay-login{
  background:rgba(0,0,0,.5);
  z-index:300
 }
 
-.caixa-login,
-.modal-conteudo{
+.caixa-login,.modal-conteudo{
  background:#fff;
  padding:25px;
  border-radius:12px;
@@ -733,9 +647,7 @@ button:disabled{
  color:var(--marinho)
 }
 
-.grupo-input{
- margin-bottom:15px
-}
+.grupo-input{margin-bottom:15px}
 
 .grupo-input label{
  display:block;
@@ -747,8 +659,7 @@ button:disabled{
 .grupo-input input,
 .grupo-input select,
 .grupo-input textarea,
-select,
-textarea{
+select,textarea{
  width:100%;
  padding:10px 12px;
  border:1px solid #ddd;
@@ -814,9 +725,7 @@ textarea{
  user-select:none
 }
 
-.dia:hover{
- background:var(--areia)
-}
+.dia:hover{background:var(--areia)}
 
 .dia.selecionado{
  background:var(--ouro);
@@ -856,8 +765,7 @@ textarea{
  flex-wrap:wrap
 }
 
-.linha-form input,
-.linha-form select{
+.linha-form input,.linha-form select{
  flex:1;
  min-width:140px;
  padding:10px;
@@ -907,21 +815,9 @@ textarea{
  margin:8px 8px 8px 0
 }
 
-.status-pendente{
- background:#fff3cd;
- color:#856404
-}
-
-.status-confirmada,
-.status-pago{
- background:#d4edda;
- color:#155724
-}
-
-.status-parcial{
- background:#d1ecf1;
- color:#0c5460
-}
+.status-pendente{background:#fff3cd;color:#856404}
+.status-confirmada,.status-pago{background:#d4edda;color:#155724}
+.status-parcial{background:#d1ecf1;color:#0c5460}
 
 .total-geral{
  background:var(--concha);
@@ -936,21 +832,11 @@ textarea{
  padding:6px 0
 }
 
-.pagina{
- display:none
-}
+.pagina{display:none}
+.pagina.ativa{display:block}
+.oculto{display:none!important}
 
-.pagina.ativa{
- display:block
-}
-
-.oculto{
- display:none!important
-}
-
-.lista-fotos-galeria{
- margin-top:10px
-}
+.lista-fotos-galeria{margin-top:10px}
 
 .item-foto-galeria{
  display:flex;
@@ -989,28 +875,73 @@ textarea{
  color:var(--marinho)
 }
 
-/* =========================================================
-   RESPONSIVO
-   ========================================================= */
+/* NOVO - VALORES DA RESERVA */
+
+.caixa-valores-reserva{
+ background:#f7fafb;
+ border:1px solid #e3eaed;
+ border-radius:8px;
+ padding:14px;
+ margin:15px 0
+}
+
+.caixa-valores-reserva .linha-valor{
+ border-bottom:1px solid #e5e5e5;
+ padding:8px 0
+}
+
+.caixa-valores-reserva .linha-valor:last-child{
+ border-bottom:0
+}
+
+.linha-desconto{
+ background:#fff8e1;
+ margin:8px -5px;
+ padding:10px!important;
+ border-radius:6px;
+ border:1px solid #ffe082
+}
+
+.campo-desconto{
+ width:100%;
+ padding:10px 12px;
+ border:1px solid #e0b84f;
+ border-radius:6px;
+ font-size:15px;
+ background:#fff
+}
+
+.total-reserva-destaque{
+ font-size:18px;
+ font-weight:700;
+ color:var(--marinho)
+}
+
+.a-receber-destaque{
+ font-size:17px;
+ font-weight:700;
+ color:var(--sucesso)
+}
+
+.desconto-info{
+ color:#9a6b00;
+ font-size:13px
+}
+
+/* RESPONSIVO */
 
 @media(max-width:900px){
 
- .info-blocos{
-  grid-template-columns:1fr
- }
+ .info-blocos{grid-template-columns:1fr}
 
  .hero-praia{
   min-height:600px;
   height:72vh
  }
 
- .hero-conteudo h1{
-  font-size:52px
- }
+ .hero-conteudo h1{font-size:52px}
 
- .area-publica{
-  padding:50px 20px
- }
+ .area-publica{padding:50px 20px}
 }
 
 @media(max-width:800px){
@@ -1023,13 +954,9 @@ textarea{
   padding:15px 20px
  }
 
- .cabecalho-publico h1{
-  font-size:18px
- }
+ .cabecalho-publico h1{font-size:18px}
 
- .botao-login{
-  padding:8px 16px
- }
+ .botao-login{padding:8px 16px}
 
  .hero-praia{
   min-height:620px;
@@ -1037,26 +964,18 @@ textarea{
   background-position:center
  }
 
- .hero-icone{
-  font-size:48px
- }
+ .hero-icone{font-size:48px}
 
- .hero-conteudo h1{
-  font-size:45px
- }
+ .hero-conteudo h1{font-size:45px}
 
- .hero-conteudo h2{
-  font-size:25px
- }
+ .hero-conteudo h2{font-size:25px}
 
  .hero-conteudo p{
   font-size:15px;
   padding:0 10px
  }
 
- .grade-casas{
-  grid-template-columns:1fr
- }
+ .grade-casas{grid-template-columns:1fr}
 
  .barra-lateral{
   position:relative;
@@ -1074,58 +993,38 @@ textarea{
   grid-template-columns:1fr 1fr
  }
 
- .area-publica{
-  padding:40px 15px
- }
+ .area-publica{padding:40px 15px}
 
  .calendario{
   padding:10px;
   overflow-x:auto
  }
 
- .calendario-grade{
-  min-width:650px
- }
+ .calendario-grade{min-width:650px}
 }
 
 @media(max-width:500px){
 
- .menu-lateral{
-  grid-template-columns:1fr
- }
+ .menu-lateral{grid-template-columns:1fr}
 
- .hero-conteudo h1{
-  font-size:38px
- }
+ .hero-conteudo h1{font-size:38px}
 
- .hero-conteudo h2{
-  font-size:22px
- }
+ .hero-conteudo h2{font-size:22px}
 
- .hero-botao{
-  padding:13px 22px
- }
+ .hero-botao{padding:13px 22px}
 
- .introducao-publica h2{
-  font-size:29px
- }
+ .introducao-publica h2{font-size:29px}
 
- .card-imagem{
-  height:220px
- }
+ .card-imagem{height:220px}
 
- .info-praia{
-  padding:40px 15px
- }
+ .info-praia{padding:40px 15px}
 }
 </style>
 </head>
 
 <body>
 
-<!-- =========================================================
-     PÁGINA PÚBLICA
-     ========================================================= -->
+<!-- PÁGINA PÚBLICA -->
 
 <div id="areaPublica">
 
@@ -1150,8 +1049,7 @@ textarea{
    com sua família e amigos.
   </p>
 
-  <button
-   class="hero-botao"
+  <button class="hero-botao"
    onclick="document.getElementById('nossasCasas').scrollIntoView({behavior:'smooth'})">
    🏖️ Conheça nossas casas
   </button>
@@ -1164,9 +1062,7 @@ textarea{
 
  <div class="introducao-publica" id="nossasCasas">
 
-  <div class="selo-praia">
-   🌊 TEMPORADA NA PRAIA
-  </div>
+  <div class="selo-praia">🌊 TEMPORADA NA PRAIA</div>
 
   <h2>Escolha sua casa</h2>
 
@@ -1207,28 +1103,19 @@ textarea{
   <div class="info-bloco">
    <div class="icone">🏖️</div>
    <h3>Perto da praia</h3>
-   <p>
-    Casas localizadas a poucos passos da praia,
-    para você aproveitar muito mais seu tempo.
-   </p>
+   <p>Casas localizadas a poucos passos da praia, para você aproveitar muito mais seu tempo.</p>
   </div>
 
   <div class="info-bloco">
    <div class="icone">🏡</div>
    <h3>Conforto</h3>
-   <p>
-    Estrutura completa para receber famílias
-    e grupos durante a temporada.
-   </p>
+   <p>Estrutura completa para receber famílias e grupos durante a temporada.</p>
   </div>
 
   <div class="info-bloco">
    <div class="icone">📅</div>
    <h3>Reserve sua estadia</h3>
-   <p>
-    Escolha a casa, informe suas datas e envie
-    sua solicitação de reserva diretamente pelo site.
-   </p>
+   <p>Escolha a casa, informe suas datas e envie sua solicitação de reserva diretamente pelo site.</p>
   </div>
 
  </div>
@@ -1239,59 +1126,44 @@ textarea{
 
  <h3>🏖️ Casas na Praia — Balneário Arroio do Silva/SC</h3>
 
- <p>
-  Conforto, tranquilidade e momentos especiais perto do mar.
- </p>
+ <p>Conforto, tranquilidade e momentos especiais perto do mar.</p>
 
- <p>
-  © 2026 — Todos os direitos reservados.
- </p>
+ <p>© 2026 — Todos os direitos reservados.</p>
 
 </footer>
 
 </div>
 
-<!-- =========================================================
-     GALERIA
-     ========================================================= -->
+<!-- GALERIA -->
 
-<div id="overlayGaleria"
-     class="overlay-galeria"
-     onclick="if(event.target===this)fecharGaleria()">
+<div id="overlayGaleria" class="overlay-galeria"
+ onclick="if(event.target===this)fecharGaleria()">
 
  <div class="galeria-conteudo">
 
-  <button class="fechar-galeria"
-          onclick="fecharGaleria()">&times;</button>
+  <button class="fechar-galeria" onclick="fecharGaleria()">&times;</button>
 
   <img id="fotoPrincipalGaleria"
-       class="galeria-foto-principal"
-       src=""
-       alt="">
+   class="galeria-foto-principal"
+   src="" alt="">
 
   <div class="galeria-navegacao">
 
-   <button class="galeria-botao-nav"
-           onclick="fotoAnterior()">&#10094;</button>
+   <button class="galeria-botao-nav" onclick="fotoAnterior()">&#10094;</button>
 
-   <span id="contadorGaleria"
-         class="galeria-contador">1 de 1</span>
+   <span id="contadorGaleria" class="galeria-contador">1 de 1</span>
 
-   <button class="galeria-botao-nav"
-           onclick="proximaFoto()">&#10095;</button>
+   <button class="galeria-botao-nav" onclick="proximaFoto()">&#10095;</button>
 
   </div>
 
-  <div id="miniaturasGaleria"
-       class="galeria-miniaturas"></div>
+  <div id="miniaturasGaleria" class="galeria-miniaturas"></div>
 
  </div>
 
 </div>
 
-<!-- =========================================================
-     LOGIN
-     ========================================================= -->
+<!-- LOGIN -->
 
 <div id="overlayLogin" class="overlay-login">
 
@@ -1301,35 +1173,23 @@ textarea{
 
   <div class="grupo-input">
    <label>Usuário</label>
-   <input id="usuario"
-          type="text"
-          placeholder="admin">
+   <input id="usuario" type="text" placeholder="admin">
   </div>
 
   <div class="grupo-input">
    <label>Senha</label>
-   <input id="senha"
-          type="password"
-          placeholder="••••••">
+   <input id="senha" type="password" placeholder="••••••">
   </div>
 
-  <button class="btn-primario"
-          onclick="fazerLogin()">
-   Entrar no Sistema
-  </button>
+  <button class="btn-primario" onclick="fazerLogin()">Entrar no Sistema</button>
 
-  <button class="fechar-login"
-          onclick="fecharLogin()">
-   Voltar para página
-  </button>
+  <button class="fechar-login" onclick="fecharLogin()">Voltar para página</button>
 
  </div>
 
 </div>
 
-<!-- =========================================================
-     PAINEL ADMINISTRATIVO
-     ========================================================= -->
+<!-- PAINEL ADMIN -->
 
 <div id="painelAdmin" class="oculto">
 
@@ -1339,33 +1199,27 @@ textarea{
 
  <div class="menu-lateral">
 
-  <button class="item-menu ativo"
-          data-pagina="calendario">
+  <button class="item-menu ativo" data-pagina="calendario">
    📅 Calendário & Valores
   </button>
 
-  <button class="item-menu"
-          data-pagina="casas">
+  <button class="item-menu" data-pagina="casas">
    🏠 Casas / Fotos / Taxas
   </button>
 
-  <button class="item-menu"
-          data-pagina="hospedes">
+  <button class="item-menu" data-pagina="hospedes">
    👤 Hóspedes
   </button>
 
-  <button class="item-menu"
-          data-pagina="reservas">
+  <button class="item-menu" data-pagina="reservas">
    📋 Reservas
   </button>
 
-  <button class="item-menu"
-          data-pagina="relatorios">
+  <button class="item-menu" data-pagina="relatorios">
    📊 Relatórios
   </button>
 
-  <button class="voltar-publico"
-          onclick="fazerLogout()">
+  <button class="voltar-publico" onclick="fazerLogout()">
    🔙 Ver Página Pública
   </button>
 
@@ -1374,10 +1228,6 @@ textarea{
 </div>
 
 <div class="conteudo-admin">
-
-<!-- =========================================================
-     CALENDÁRIO
-     ========================================================= -->
 
 <div id="pagina-calendario" class="pagina ativa">
 
@@ -1390,28 +1240,14 @@ textarea{
 
  <div class="linha-form">
 
-  <label style="font-weight:600">
-   Casa:
-  </label>
+  <label style="font-weight:600">Casa:</label>
 
-  <select id="casaCalendario"
-          onchange="trocarCasaCalendario()">
+  <select id="casaCalendario" onchange="trocarCasaCalendario()">
 
-   <option value="amarela">
-    🏡 Casa Amarela
-   </option>
-
-   <option value="bege">
-    🌾 Casa Bege
-   </option>
-
-   <option value="marrom">
-    🪵 Casa Marrom
-   </option>
-
-   <option value="branca">
-    ☁️ Casa Branca
-   </option>
+   <option value="amarela">🏡 Casa Amarela</option>
+   <option value="bege">🌾 Casa Bege</option>
+   <option value="marrom">🪵 Casa Marrom</option>
+   <option value="branca">☁️ Casa Branca</option>
 
   </select>
 
@@ -1421,68 +1257,41 @@ textarea{
 
   <div class="calendario-cabecalho">
 
-   <button onclick="mudarMes(-1)">
-    &lt; Mês Anterior
-   </button>
+   <button onclick="mudarMes(-1)">&lt; Mês Anterior</button>
 
    <h3 id="nomeMes">Mês</h3>
 
-   <button onclick="mudarMes(1)">
-    Próximo Mês &gt;
-   </button>
+   <button onclick="mudarMes(1)">Próximo Mês &gt;</button>
 
   </div>
 
-  <div class="calendario-grade"
-       id="gradeCalendario"></div>
+  <div class="calendario-grade" id="gradeCalendario"></div>
 
  </div>
 
  <div class="linha-form">
 
-  <label>
-   Valor Diária (R$):
-  </label>
+  <label>Valor Diária (R$):</label>
 
-  <input type="number"
-         id="valorDiaria"
-         min="0"
-         step="5"
-         placeholder="0,00">
+  <input type="number" id="valorDiaria" min="0" step="5" placeholder="0,00">
 
-  <button class="sucesso"
-          onclick="salvarValorPeriodo()">
-   💾 Salvar
-  </button>
+  <button class="sucesso" onclick="salvarValorPeriodo()">💾 Salvar</button>
 
-  <button class="vermelho"
-          onclick="removerValor()">
-   🗑️ Remover
-  </button>
+  <button class="vermelho" onclick="removerValor()">🗑️ Remover</button>
 
  </div>
 
- <p id="infoSelecao"
-    style="color:var(--cinza)">
-  Nenhum dia selecionado
- </p>
+ <p id="infoSelecao" style="color:var(--cinza)">Nenhum dia selecionado</p>
 
 </div>
-
-<!-- =========================================================
-     CASAS
-     ========================================================= -->
 
 <div id="pagina-casas" class="pagina">
 
  <h2>🏠 Gerenciar Casas, Galeria de Fotos & Taxa de Limpeza</h2>
 
- <p style="color:var(--cinza);margin:10px 0">
-  📸 Adicione várias fotos por casa.
- </p>
+ <p style="color:var(--cinza);margin:10px 0">📸 Adicione várias fotos por casa.</p>
 
- <div class="grade-casas"
-      id="gradeCasas"></div>
+ <div class="grade-casas" id="gradeCasas"></div>
 
  <div style="margin-top:25px;padding:15px;background:#f0f9fc;border-radius:8px">
 
@@ -1490,32 +1299,15 @@ textarea{
 
   <ol style="margin:10px 20px;font-size:14px">
 
-   <li>
-    Acesse
-    <a href="https://imgur.com"
-       target="_blank">
-     imgur.com
-    </a>
-   </li>
-
-   <li>
-    Faça upload da foto → clique nela →
-    copie o link direto.
-   </li>
-
-   <li>
-    Cole o link no cadastro da galeria.
-   </li>
+   <li>Acesse <a href="https://imgur.com" target="_blank">imgur.com</a></li>
+   <li>Faça upload da foto → clique nela → copie o link direto.</li>
+   <li>Cole o link no cadastro da galeria.</li>
 
   </ol>
 
  </div>
 
 </div>
-
-<!-- =========================================================
-     HÓSPEDES
-     ========================================================= -->
 
 <div id="pagina-hospedes" class="pagina">
 
@@ -1528,29 +1320,18 @@ textarea{
  <div class="linha-form">
 
   <input id="buscarHospede"
-         placeholder="Buscar por nome..."
-         oninput="filtrarHospedes()">
+   placeholder="Buscar por nome..."
+   oninput="filtrarHospedes()">
 
-  <button class="azul"
-          onclick="abrirCadastroHospede()">
-   + Novo Cadastro
-  </button>
+  <button class="azul" onclick="abrirCadastroHospede()">+ Novo Cadastro</button>
 
-  <button class="azul"
-          onclick="sincronizarHospedesReservas()">
-   🔄 Sincronizar
-  </button>
+  <button class="azul" onclick="sincronizarHospedesReservas()">🔄 Sincronizar</button>
 
  </div>
 
- <div id="listaHospedes"
-      style="margin-top:20px"></div>
+ <div id="listaHospedes" style="margin-top:20px"></div>
 
 </div>
-
-<!-- =========================================================
-     RESERVAS
-     ========================================================= -->
 
 <div id="pagina-reservas" class="pagina">
 
@@ -1558,30 +1339,11 @@ textarea{
 
  <div style="display:flex;gap:10px;margin:15px 0;flex-wrap:wrap">
 
-  <button data-filtro="todas"
-          class="azul ativo">
-   Todas
-  </button>
-
-  <button data-filtro="pendente"
-          class="azul">
-   Pendentes
-  </button>
-
-  <button data-filtro="confirmada"
-          class="azul">
-   ✅ Confirmadas
-  </button>
-
-  <button data-filtro="parcial"
-          class="azul">
-   Pagamento Parcial
-  </button>
-
-  <button data-filtro="pago"
-          class="azul">
-   💰 Pagas
-  </button>
+  <button data-filtro="todas" class="azul ativo">Todas</button>
+  <button data-filtro="pendente" class="azul">Pendentes</button>
+  <button data-filtro="confirmada" class="azul">✅ Confirmadas</button>
+  <button data-filtro="parcial" class="azul">Pagamento Parcial</button>
+  <button data-filtro="pago" class="azul">💰 Pagas</button>
 
  </div>
 
@@ -1589,30 +1351,15 @@ textarea{
 
 </div>
 
-<!-- =========================================================
-     RELATÓRIOS
-     ========================================================= -->
-
 <div id="pagina-relatorios" class="pagina">
 
  <h2>📊 Relatórios</h2>
 
  <div style="display:flex;gap:10px;margin:15px 0">
 
-  <button data-periodo="todos"
-          class="azul ativo">
-   Todo o Período
-  </button>
-
-  <button data-periodo="mes"
-          class="azul">
-   Este Mês
-  </button>
-
-  <button data-periodo="ano"
-          class="azul">
-   Este Ano
-  </button>
+  <button data-periodo="todos" class="azul ativo">Todo o Período</button>
+  <button data-periodo="mes" class="azul">Este Mês</button>
+  <button data-periodo="ano" class="azul">Este Ano</button>
 
  </div>
 
@@ -1623,9 +1370,7 @@ textarea{
 </div>
 </div>
 
-<!-- =========================================================
-     MODAL RESERVA
-     ========================================================= -->
+<!-- MODAL RESERVA PÚBLICA -->
 
 <div id="modalReserva" class="modal">
 
@@ -1633,109 +1378,63 @@ textarea{
 
  <div class="cabecalho-modal">
 
-  <h3>
-   Solicitar Reserva —
-   <span id="nomeCasaReserva"></span>
-  </h3>
+  <h3>Solicitar Reserva — <span id="nomeCasaReserva"></span></h3>
 
-  <button class="fechar"
-          onclick="fecharModal()">
-   &times;
-  </button>
+  <button class="fechar" onclick="fecharModal()">&times;</button>
 
  </div>
 
- <div id="avisoBloqueio"
-      class="aviso-bloqueio">
+ <div id="avisoBloqueio" class="aviso-bloqueio">
   ⚠️ Período já reservado ou indisponível!
  </div>
 
  <div class="grupo-input">
-
   <label>Nome Completo</label>
-
   <input id="hospedeNome">
-
  </div>
 
  <div class="grupo-input">
-
   <label>Telefone com WhatsApp</label>
-
-  <input id="hospedeTelefone"
-         type="tel">
-
+  <input id="hospedeTelefone" type="tel">
  </div>
 
  <div class="grupo-input">
 
   <label>Capacidade da casa</label>
 
-  <div id="infoCapacidadeReserva"
-       class="capacidade"></div>
+  <div id="infoCapacidadeReserva" class="capacidade"></div>
 
  </div>
 
  <div class="linha-form">
 
-  <div class="grupo-input"
-       style="flex:1">
-
+  <div class="grupo-input" style="flex:1">
    <label>Data Entrada</label>
-
-   <input type="date"
-          id="dataEntrada"
-          onchange="verificarDisponibilidade()">
-
+   <input type="date" id="dataEntrada" onchange="verificarDisponibilidade()">
   </div>
 
-  <div class="grupo-input"
-       style="flex:1">
-
+  <div class="grupo-input" style="flex:1">
    <label>Data Saída</label>
-
-   <input type="date"
-          id="dataSaida"
-          onchange="verificarDisponibilidade()">
-
+   <input type="date" id="dataSaida" onchange="verificarDisponibilidade()">
   </div>
 
  </div>
 
  <div class="linha-form">
 
-  <div class="grupo-input"
-       style="flex:1">
-
+  <div class="grupo-input" style="flex:1">
    <label>👨 Adultos</label>
-
-   <input type="number"
-          id="qtdAdultos"
-          min="0"
-          max="30"
-          value="1"
-          onchange="atualizarTotalPessoas()">
-
+   <input type="number" id="qtdAdultos" min="0" max="30" value="1" onchange="atualizarTotalPessoas()">
   </div>
 
-  <div class="grupo-input"
-       style="flex:1">
-
+  <div class="grupo-input" style="flex:1">
    <label>👧 Crianças</label>
-
-   <input type="number"
-          id="qtdCriancas"
-          min="0"
-          max="30"
-          value="0"
-          onchange="atualizarTotalPessoas()">
-
+   <input type="number" id="qtdCriancas" min="0" max="30" value="0" onchange="atualizarTotalPessoas()">
   </div>
 
  </div>
 
- <div id="avisoCapacidadeReserva"
-      class="aviso-capacidade">
+ <div id="avisoCapacidadeReserva" class="aviso-capacidade">
   Informe a quantidade de adultos e crianças.
  </div>
 
@@ -1743,32 +1442,24 @@ textarea{
 
   <label>Valor da Estadia</label>
 
-  <input id="valorDiarias"
-         readonly
-         style="background:#f9f9f9">
+  <input id="valorDiarias" readonly style="background:#f9f9f9">
 
  </div>
 
  <div class="grupo-input taxa-limpeza-info">
 
   🧹 Taxa de Limpeza:
-
-  <span id="valorTaxaLimpeza"
-        class="valor-destaque">
-   R$ 0,00
-  </span>
+  <span id="valorTaxaLimpeza" class="valor-destaque">R$ 0,00</span>
 
  </div>
 
  <div class="grupo-input">
 
-  <label>
-   Valor Total (inclui taxa de limpeza)
-  </label>
+  <label>Valor Total (inclui taxa de limpeza)</label>
 
   <input id="valorEstimado"
-         readonly
-         style="background:#fef9e7;font-weight:bold">
+   readonly
+   style="background:#fef9e7;font-weight:bold">
 
  </div>
 
@@ -1777,24 +1468,22 @@ textarea{
   <label>Observações</label>
 
   <textarea id="obsReserva"
-            rows="3"
-            placeholder="Se ultrapassar a capacidade máxima, explique aqui a situação."></textarea>
+   rows="3"
+   placeholder="Se ultrapassar a capacidade máxima, explique aqui a situação."></textarea>
 
  </div>
 
  <button class="amarelo"
-         id="btnEnviarReserva"
-         onclick="enviarReserva()"
-         style="width:100%">
+  id="btnEnviarReserva"
+  onclick="enviarReserva()"
+  style="width:100%">
   📤 Enviar Solicitação
  </button>
 
 </div>
 </div>
 
-<!-- =========================================================
-     MODAL EDITAR RESERVA
-     ========================================================= -->
+<!-- MODAL EDITAR RESERVA -->
 
 <div id="modalEditarReserva" class="modal">
 
@@ -1804,10 +1493,7 @@ textarea{
 
   <h3>Gestão de Reserva</h3>
 
-  <button class="fechar"
-          onclick="fecharModalEditar()">
-   &times;
-  </button>
+  <button class="fechar" onclick="fecharModalEditar()">&times;</button>
 
  </div>
 
@@ -1816,15 +1502,9 @@ textarea{
 </div>
 </div>
 
-<!-- =========================================================
-     JAVASCRIPT
-     ========================================================= -->
-
 <script>
 
-/* =========================================================
-   FIREBASE
-   ========================================================= */
+/* FIREBASE */
 
 const firebaseConfig={
  apiKey:"AIzaSyC8ZtXwPnUa9WnqLdKfYbXzYbXzYbXzYbXzYbXzYbX",
@@ -1836,16 +1516,13 @@ const firebaseConfig={
 };
 
 const ADM_USUARIO='admin',
-      ADM_SENHA='praia2026';
+ADM_SENHA='praia2026';
 
 firebase.initializeApp(firebaseConfig);
 
 const db=firebase.firestore();
 
-
-/* =========================================================
-   CASAS
-   ========================================================= */
+/* CASAS */
 
 const casas={
 
@@ -1915,78 +1592,51 @@ const casas={
 
 };
 
-
-/* =========================================================
-   ESTADO
-   ========================================================= */
+/* ESTADO */
 
 let casaGaleriaAtual=null,
-    indiceFotoAtual=0,
-    dataAtual=new Date();
+indiceFotoAtual=0,
+dataAtual=new Date();
 
 let valoresDiarias={},
-    reservasConfirmadas=[],
-    hospedesCadastrados=[];
+reservasConfirmadas=[],
+hospedesCadastrados=[];
 
 let filtroReservas='todas',
-    filtroRelatorio='todos',
-    selecionando=false;
+filtroRelatorio='todos',
+selecionando=false;
 
 let datasSelecionadas=new Set(),
-    casaSelecionadaParaReserva=null;
+casaSelecionadaParaReserva=null;
 
-
-/* =========================================================
-   AUXILIARES
-   ========================================================= */
+/* AUXILIARES */
 
 const $=id=>document.getElementById(id);
 
 function criarDataLocal(s){
-
  if(!s)return null;
-
  const p=s.split('-').map(Number);
-
- return p.length===3
-  ?new Date(p[0],p[1]-1,p[2])
-  :null;
+ return p.length===3?new Date(p[0],p[1]-1,p[2]):null;
 }
 
 function dataParaString(d){
-
  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-
 }
 
 function formatarMoeda(v){
-
- return 'R$ '+Number(v||0)
-  .toFixed(2)
-  .replace('.',',');
-
+ return 'R$ '+Number(v||0).toFixed(2).replace('.',',');
 }
 
 function formatarDataBr(s){
-
  const[a,m,d]=s.split('-');
-
  return `${d}/${m}/${a}`;
-
 }
 
 function calcularDias(a,b){
-
- return a&&b
-  ?Math.round(Math.abs((b-a)/86400000))
-  :0;
-
+ return a&&b?Math.round(Math.abs((b-a)/86400000)):0;
 }
 
-
-/* =========================================================
-   INICIALIZAÇÃO
-   ========================================================= */
+/* INICIALIZAÇÃO */
 
 document.addEventListener('DOMContentLoaded',async()=>{
 
@@ -1996,11 +1646,8 @@ document.addEventListener('DOMContentLoaded',async()=>{
   carregarDadosCasas
  ]){
 
-  try{
-   await fn();
-  }catch(e){
-   console.error(e);
-  }
+  try{await fn()}
+  catch(e){console.error(e)}
 
  }
 
@@ -2008,24 +1655,16 @@ document.addEventListener('DOMContentLoaded',async()=>{
 
 });
 
-
-/* =========================================================
-   LOGIN
-   ========================================================= */
+/* LOGIN */
 
 function abrirLogin(){
-
  $('overlayLogin').classList.add('aberto');
-
 }
 
 function fecharLogin(){
-
  $('overlayLogin').classList.remove('aberto');
-
  $('usuario').value='';
  $('senha').value='';
-
 }
 
 function fazerLogin(){
@@ -2036,7 +1675,6 @@ function fazerLogin(){
  ){
 
   fecharLogin();
-
   $('areaPublica').classList.add('oculto');
   $('painelAdmin').classList.remove('oculto');
 
@@ -2053,17 +1691,13 @@ function fazerLogin(){
 function fazerLogout(){
 
  $('painelAdmin').classList.add('oculto');
-
  $('areaPublica').classList.remove('oculto');
 
  renderizarPaginaPublica();
 
 }
 
-
-/* =========================================================
-   PAINEL
-   ========================================================= */
+/* PAINEL */
 
 async function inicializarPainel(){
 
@@ -2085,28 +1719,18 @@ async function inicializarPainel(){
 
   console.error(e);
 
-  alert(
-   '⚠️ O painel abriu, mas ocorreu um erro ao carregar alguns dados.'
-  );
+  alert('⚠️ O painel abriu, mas ocorreu um erro ao carregar alguns dados.');
 
  }
 
 }
 
-
-/* =========================================================
-   GALERIA
-   ========================================================= */
+/* GALERIA */
 
 function abrirGaleria(id,i=0){
 
- if(!casas[id]?.fotos?.length){
-
-  return alert(
-   'Esta casa ainda não possui fotos cadastradas.'
-  );
-
- }
+ if(!casas[id]?.fotos?.length)
+  return alert('Esta casa ainda não possui fotos cadastradas.');
 
  casaGaleriaAtual=id;
  indiceFotoAtual=i;
@@ -2120,7 +1744,6 @@ function abrirGaleria(id,i=0){
 function fecharGaleria(){
 
  $('overlayGaleria').classList.remove('aberto');
-
  casaGaleriaAtual=null;
 
 }
@@ -2131,53 +1754,35 @@ function atualizarFotoGaleria(){
 
  const fotos=casas[casaGaleriaAtual].fotos||[];
 
- if(!fotos.length){
+ if(!fotos.length)return fecharGaleria();
 
-  return fecharGaleria();
+ indiceFotoAtual=(indiceFotoAtual+fotos.length)%fotos.length;
 
- }
-
- indiceFotoAtual=
-  (indiceFotoAtual+fotos.length)%fotos.length;
-
- $('fotoPrincipalGaleria').src=
-  fotos[indiceFotoAtual];
+ $('fotoPrincipalGaleria').src=fotos[indiceFotoAtual];
 
  $('contadorGaleria').textContent=
   `${indiceFotoAtual+1} de ${fotos.length}`;
 
  $('miniaturasGaleria').innerHTML=
   fotos.map((f,i)=>`
-
-   <img
-    src="${f}"
+   <img src="${f}"
     class="miniatura ${i===indiceFotoAtual?'ativa':''}"
     onclick="indiceFotoAtual=${i};atualizarFotoGaleria()">
-
   `).join('');
 
 }
 
 function fotoAnterior(){
-
  indiceFotoAtual--;
-
  atualizarFotoGaleria();
-
 }
 
 function proximaFoto(){
-
  indiceFotoAtual++;
-
  atualizarFotoGaleria();
-
 }
 
-
-/* =========================================================
-   PÁGINA PÚBLICA
-   ========================================================= */
+/* PÁGINA PÚBLICA */
 
 function renderizarPaginaPublica(){
 
@@ -2185,152 +1790,109 @@ function renderizarPaginaPublica(){
 
  if(!c)return;
 
- c.innerHTML=
-  Object.entries(casas).map(([id,x])=>{
+ c.innerHTML=Object.entries(casas).map(([id,x])=>{
 
-   const fotos=x.fotos||[],
-         foto=fotos[0];
+  const fotos=x.fotos||[],
+  foto=fotos[0];
 
-   return `
+  return `
+  <div class="card-casa">
 
-   <div class="card-casa">
+   <div class="card-imagem" onclick="abrirGaleria('${id}')">
 
-    <div
-     class="card-imagem"
-     onclick="abrirGaleria('${id}')">
-
-     ${
-      foto
-      ?`<img src="${foto}" alt="${x.nome}">`
-      :'🏠'
-     }
-
-    </div>
-
-    <div class="card-corpo">
-
-     <h3>${x.nome}</h3>
-
-     <p class="descricao-casa">
-      ${x.desc}
-     </p>
-
-     <div class="caracteristicas-casa">
-
-      ${
-       x.caracteristicas.map(v=>
-        `<div class="caracteristica-item">${v}</div>`
-       ).join('')
-      }
-
-     </div>
-
-     <div class="capacidade">
-
-      👥 Capacidade máxima:
-      ${x.capacidade} pessoas
-
-     </div>
-
-     <p class="taxa-limpeza-info">
-
-      🧹 Taxa de limpeza:
-      <strong>${formatarMoeda(x.taxaLimpeza)}</strong>
-
-     </p>
-
-     ${
-      fotos.length>1
-      ?`
-       <button
-        class="botao-galeria"
-        onclick="abrirGaleria('${id}')">
-
-        📷 Ver Galeria (${fotos.length} fotos)
-
-       </button>
-      `
-      :''
-     }
-
-     <button
-      class="amarelo"
-      style="width:100%;margin-top:5px"
-      onclick="abrirModalReserva('${id}')">
-
-      📝 Solicitar Reserva
-
-     </button>
-
-    </div>
+    ${foto?`<img src="${foto}" alt="${x.nome}">`:'🏠'}
 
    </div>
 
-   `;
+   <div class="card-corpo">
 
-  }).join('');
+    <h3>${x.nome}</h3>
+
+    <p class="descricao-casa">${x.desc}</p>
+
+    <div class="caracteristicas-casa">
+     ${x.caracteristicas.map(v=>`
+      <div class="caracteristica-item">${v}</div>
+     `).join('')}
+    </div>
+
+    <div class="capacidade">
+     👥 Capacidade máxima: ${x.capacidade} pessoas
+    </div>
+
+    <p class="taxa-limpeza-info">
+     🧹 Taxa de limpeza:
+     <strong>${formatarMoeda(x.taxaLimpeza)}</strong>
+    </p>
+
+    ${fotos.length>1?`
+     <button class="botao-galeria"
+      onclick="abrirGaleria('${id}')">
+      📷 Ver Galeria (${fotos.length} fotos)
+     </button>
+    `:''}
+
+    <button class="amarelo"
+     style="width:100%;margin-top:5px"
+     onclick="abrirModalReserva('${id}')">
+     📝 Solicitar Reserva
+    </button>
+
+   </div>
+
+  </div>`;
+
+ }).join('');
 
 }
 
-
-/* =========================================================
-   NAVEGAÇÃO
-   ========================================================= */
+/* NAVEGAÇÃO */
 
 function configurarNavegacao(){
 
- document.querySelectorAll('.item-menu')
-  .forEach(b=>{
+ document.querySelectorAll('.item-menu').forEach(b=>{
 
-   b.onclick=()=>{
+  b.onclick=()=>{
 
-    document
-     .querySelectorAll('.item-menu')
-     .forEach(x=>x.classList.remove('ativo'));
+   document.querySelectorAll('.item-menu')
+    .forEach(x=>x.classList.remove('ativo'));
 
-    b.classList.add('ativo');
+   b.classList.add('ativo');
 
-    document
-     .querySelectorAll('.pagina')
-     .forEach(x=>x.classList.remove('ativa'));
+   document.querySelectorAll('.pagina')
+    .forEach(x=>x.classList.remove('ativa'));
 
-    const p=$('pagina-'+b.dataset.pagina);
+   const p=$('pagina-'+b.dataset.pagina);
 
-    if(p)p.classList.add('ativa');
+   if(p)p.classList.add('ativa');
 
-    if(b.dataset.pagina==='reservas')
-     atualizarListaReservas();
+   if(b.dataset.pagina==='reservas')
+    atualizarListaReservas();
 
-    if(b.dataset.pagina==='calendario')
-     renderizarCalendario();
+   if(b.dataset.pagina==='calendario')
+    renderizarCalendario();
 
-    if(b.dataset.pagina==='hospedes')
-     filtrarHospedes();
+   if(b.dataset.pagina==='hospedes')
+    filtrarHospedes();
 
-    if(b.dataset.pagina==='casas')
-     renderizarCasasAdmin();
+   if(b.dataset.pagina==='casas')
+    renderizarCasasAdmin();
 
-   };
+  };
 
-  });
+ });
 
 }
 
-
-/* =========================================================
-   CALENDÁRIO
-   ========================================================= */
+/* CALENDÁRIO */
 
 function mudarMes(d){
 
- dataAtual.setMonth(
-  dataAtual.getMonth()+d
- );
+ dataAtual.setMonth(dataAtual.getMonth()+d);
 
  datasSelecionadas.clear();
 
  atualizarInfoSelecao();
-
  renderizarCalendario();
 
 }
@@ -2338,11 +1900,9 @@ function mudarMes(d){
 function trocarCasaCalendario(){
 
  datasSelecionadas.clear();
-
  $('valorDiaria').value='';
 
  atualizarInfoSelecao();
-
  renderizarCalendario();
 
 }
@@ -2350,63 +1910,45 @@ function trocarCasaCalendario(){
 function renderizarCalendario(){
 
  const ano=dataAtual.getFullYear(),
-       mes=dataAtual.getMonth(),
-       grade=$('gradeCalendario');
+ mes=dataAtual.getMonth(),
+ grade=$('gradeCalendario');
 
  if(!grade)return;
 
  $('nomeMes').textContent=
   new Date(ano,mes)
-   .toLocaleDateString(
-    'pt-BR',
-    {
-     month:'long',
-     year:'numeric'
-    }
-   );
+   .toLocaleDateString('pt-BR',{
+    month:'long',
+    year:'numeric'
+   });
 
  grade.innerHTML=
   ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb']
-  .map(d=>
-   `<div class="rotulo-dia-semana">${d}</div>`
-  )
+  .map(d=>`<div class="rotulo-dia-semana">${d}</div>`)
   .join('');
 
- const primeiro=
-  new Date(ano,mes,1);
-
- const ultimo=
-  new Date(ano,mes+1,0);
-
- const hoje=new Date();
+ const primeiro=new Date(ano,mes,1),
+ ultimo=new Date(ano,mes+1,0),
+ hoje=new Date();
 
  hoje.setHours(0,0,0,0);
 
  grade.innerHTML+=
   Array(primeiro.getDay())
-   .fill('<div class="dia"></div>')
-   .join('');
+  .fill('<div class="dia"></div>')
+  .join('');
 
- const casa=
-  $('casaCalendario')?.value||'amarela';
+ const casa=$('casaCalendario')?.value||'amarela';
 
- for(
-  let dia=1;
-  dia<=ultimo.getDate();
-  dia++
- ){
+ for(let dia=1;dia<=ultimo.getDate();dia++){
 
   const s=
    `${ano}-${String(mes+1).padStart(2,'0')}-${String(dia).padStart(2,'0')}`;
 
-  const d=
-   new Date(ano,mes,dia);
+  const d=new Date(ano,mes,dia);
 
-  const bloqueado=
-   verificarDiaBloqueado(casa,s);
-
-  const valor=
-   valoresDiarias[`${casa}_${s}`];
+  const bloqueado=verificarDiaBloqueado(casa,s),
+  valor=valoresDiarias[`${casa}_${s}`];
 
   let cls=
    'dia'
@@ -2423,41 +1965,19 @@ function renderizarCalendario(){
    :'';
 
   grade.innerHTML+=`
-
    <div class="${cls}" ${ev}>
-
     ${dia}
-
-    ${
-     valor
-     ?`
-      <div style="
-       font-size:10px;
-       color:var(--sucesso);
-       font-weight:bold
-      ">
-       R$${Number(valor).toFixed(0)}
-      </div>
-     `
-     :''
-    }
-
-    ${
-     bloqueado
-     ?`
-      <div style="
-       font-size:9px;
-       color:var(--perigo);
-       font-weight:bold
-      ">
-       BLOQ
-      </div>
-     `
-     :''
-    }
-
+    ${valor?`
+     <div style="font-size:10px;color:var(--sucesso);font-weight:bold">
+      R$${Number(valor).toFixed(0)}
+     </div>
+    `:''}
+    ${bloqueado?`
+     <div style="font-size:9px;color:var(--perigo);font-weight:bold">
+      BLOQ
+     </div>
+    `:''}
    </div>
-
   `;
 
  }
@@ -2482,26 +2002,19 @@ function verificarDiaBloqueado(casa,s){
 function iniciarSelecao(s){
 
  const d=criarDataLocal(s),
-       hoje=new Date();
+ hoje=new Date();
 
  hoje.setHours(0,0,0,0);
 
  const casa=$('casaCalendario').value;
 
- if(
-  !d ||
-  d<hoje ||
-  verificarDiaBloqueado(casa,s)
- )return;
+ if(!d||d<hoje||verificarDiaBloqueado(casa,s))return;
 
  selecionando=true;
-
  datasSelecionadas.clear();
-
  datasSelecionadas.add(s);
 
  atualizarInfoSelecao();
-
  renderizarCalendario();
 
 }
@@ -2511,39 +2024,24 @@ function estenderSelecao(s){
  if(!selecionando)return;
 
  const d=criarDataLocal(s),
-       hoje=new Date();
+ hoje=new Date();
 
  hoje.setHours(0,0,0,0);
 
  const casa=$('casaCalendario').value;
 
- if(
-  !d ||
-  d<hoje ||
-  verificarDiaBloqueado(casa,s)
- )return;
+ if(!d||d<hoje||verificarDiaBloqueado(casa,s))return;
 
- const arr=
-  [...datasSelecionadas].sort();
+ const arr=[...datasSelecionadas].sort(),
+ ini=criarDataLocal(arr[0]||s),
+ fim=d;
 
- const ini=
-  criarDataLocal(arr[0]||s);
-
- const fim=d;
-
- const a=
-  ini<=fim?ini:fim;
-
- const b=
-  ini<=fim?fim:ini;
+ const a=ini<=fim?ini:fim,
+ b=ini<=fim?fim:ini;
 
  datasSelecionadas.clear();
 
- for(
-  let x=new Date(a);
-  x<=b;
-  x.setDate(x.getDate()+1)
- ){
+ for(let x=new Date(a);x<=b;x.setDate(x.getDate()+1)){
 
   const v=dataParaString(x);
 
@@ -2553,21 +2051,15 @@ function estenderSelecao(s){
  }
 
  atualizarInfoSelecao();
-
  renderizarCalendario();
 
 }
 
 function finalizarSelecao(){
-
  selecionando=false;
-
 }
 
-document.addEventListener(
- 'mouseup',
- finalizarSelecao
-);
+document.addEventListener('mouseup',finalizarSelecao);
 
 function atualizarInfoSelecao(){
 
@@ -2576,15 +2068,11 @@ function atualizarInfoSelecao(){
  if(!i)return;
 
  if(!datasSelecionadas.size){
-
   i.textContent='Nenhum dia selecionado';
-
   return;
-
  }
 
- const a=
-  [...datasSelecionadas].sort();
+ const a=[...datasSelecionadas].sort();
 
  i.textContent=
   `${a.length} dia(s) selecionado(s):
@@ -2594,34 +2082,18 @@ function atualizarInfoSelecao(){
 
 }
 
-
-/* =========================================================
-   VALORES
-   ========================================================= */
+/* VALORES */
 
 async function salvarValorPeriodo(){
 
- const valor=
-  parseFloat($('valorDiaria').value);
+ const valor=parseFloat($('valorDiaria').value),
+ casa=$('casaCalendario').value;
 
- const casa=
-  $('casaCalendario').value;
+ if(isNaN(valor)||valor<=0)
+  return alert('⚠️ Digite um valor válido!');
 
- if(isNaN(valor)||valor<=0){
-
-  return alert(
-   '⚠️ Digite um valor válido!'
-  );
-
- }
-
- if(!datasSelecionadas.size){
-
-  return alert(
-   '⚠️ Selecione os dias!'
-  );
-
- }
+ if(!datasSelecionadas.size)
+  return alert('⚠️ Selecione os dias!');
 
  const lote=db.batch();
 
@@ -2637,8 +2109,7 @@ async function salvarValorPeriodo(){
     casa,
     data:s,
     valor,
-    atualizadoEm:
-     firebase.firestore.Timestamp.now()
+    atualizadoEm:firebase.firestore.Timestamp.now()
    }
   );
 
@@ -2658,10 +2129,7 @@ async function salvarValorPeriodo(){
  }catch(e){
 
   console.error(e);
-
-  alert(
-   '❌ Não foi possível salvar os valores.'
-  );
+  alert('❌ Não foi possível salvar os valores.');
 
  }
 
@@ -2669,24 +2137,14 @@ async function salvarValorPeriodo(){
 
 async function removerValor(){
 
- if(!datasSelecionadas.size){
+ if(!datasSelecionadas.size)
+  return alert('⚠️ Selecione os dias!');
 
-  return alert(
-   '⚠️ Selecione os dias!'
-  );
+ if(!confirm(`Remover valor de ${datasSelecionadas.size} dia(s)?`))
+  return;
 
- }
-
- if(
-  !confirm(
-   `Remover valor de ${datasSelecionadas.size} dia(s)?`
-  )
- )return;
-
- const casa=
-  $('casaCalendario').value;
-
- const lote=db.batch();
+ const casa=$('casaCalendario').value,
+ lote=db.batch();
 
  datasSelecionadas.forEach(s=>{
 
@@ -2694,9 +2152,7 @@ async function removerValor(){
 
   delete valoresDiarias[chave];
 
-  lote.delete(
-   db.collection('valores').doc(chave)
-  );
+  lote.delete(db.collection('valores').doc(chave));
 
  });
 
@@ -2705,16 +2161,12 @@ async function removerValor(){
   await lote.commit();
 
   alert('✅ Valores removidos!');
-
   limparSelecao();
 
  }catch(e){
 
   console.error(e);
-
-  alert(
-   '❌ Não foi possível remover os valores.'
-  );
+  alert('❌ Não foi possível remover os valores.');
 
  }
 
@@ -2723,56 +2175,35 @@ async function removerValor(){
 function limparSelecao(){
 
  datasSelecionadas.clear();
-
  $('valorDiaria').value='';
 
  atualizarInfoSelecao();
-
  renderizarCalendario();
 
 }
 
 async function carregarValoresDiarias(){
 
- const snap=
-  await db.collection('valores').get();
+ const snap=await db.collection('valores').get();
 
  valoresDiarias={};
 
  snap.forEach(d=>
-  valoresDiarias[d.id]=
-   Number(d.data().valor||0)
+  valoresDiarias[d.id]=Number(d.data().valor||0)
  );
 
 }
 
-
-/* =========================================================
-   RESERVA
-   ========================================================= */
+/* RESERVA */
 
 function atualizarTotalPessoas(){
 
- const a=
-  Math.max(
-   0,
-   parseInt($('qtdAdultos').value)||0
-  );
+ const a=Math.max(0,parseInt($('qtdAdultos').value)||0),
+ c=Math.max(0,parseInt($('qtdCriancas').value)||0);
 
- const c=
-  Math.max(
-   0,
-   parseInt($('qtdCriancas').value)||0
-  );
-
- const total=a+c;
-
- const limite=
-  casas[casaSelecionadaParaReserva]
-   ?.capacidade||0;
-
- const box=
-  $('avisoCapacidadeReserva');
+ const total=a+c,
+ limite=casas[casaSelecionadaParaReserva]?.capacidade||0,
+ box=$('avisoCapacidadeReserva');
 
  if(!limite)return;
 
@@ -2782,8 +2213,7 @@ function atualizarTotalPessoas(){
 
   box.innerHTML=
    `⚠️ Foram informadas <strong>${total} pessoas</strong>,
-    mas a capacidade da casa é de
-    <strong>${limite}</strong>.
+    mas a capacidade da casa é de <strong>${limite}</strong>.
     A solicitação poderá ser enviada, porém pedimos
     que explique essa situação nas observações.`;
 
@@ -2806,12 +2236,10 @@ function abrirModalReserva(id){
 
  casaSelecionadaParaReserva=id;
 
- $('nomeCasaReserva').textContent=
-  casas[id].nome;
+ $('nomeCasaReserva').textContent=casas[id].nome;
 
  $('infoCapacidadeReserva').innerHTML=
-  `👥 Esta casa comporta até
-   <strong>${casas[id].capacidade} pessoas</strong>.`;
+  `👥 Esta casa comporta até <strong>${casas[id].capacidade} pessoas</strong>.`;
 
  $('modalReserva').classList.add('aberto');
 
@@ -2819,16 +2247,13 @@ function abrirModalReserva(id){
 
  $('btnEnviarReserva').disabled=false;
 
- const hoje=
-  dataParaString(new Date());
+ const hoje=dataParaString(new Date());
 
  $('dataEntrada').min=hoje;
  $('dataSaida').min=hoje;
 
  $('valorTaxaLimpeza').textContent=
-  formatarMoeda(
-   casas[id].taxaLimpeza
-  );
+  formatarMoeda(casas[id].taxaLimpeza);
 
  $('qtdAdultos').value=1;
  $('qtdCriancas').value=0;
@@ -2849,12 +2274,9 @@ function fecharModal(){
   'valorDiarias',
   'valorEstimado',
   'obsReserva'
- ].forEach(id=>
-  $(id).value=''
- );
+ ].forEach(id=>$(id).value='');
 
- $('valorTaxaLimpeza').textContent=
-  'R$ 0,00';
+ $('valorTaxaLimpeza').textContent='R$ 0,00';
 
  $('qtdAdultos').value=1;
  $('qtdCriancas').value=0;
@@ -2865,38 +2287,21 @@ function fecharModal(){
 
 function verificarDisponibilidade(){
 
- const entrada=
-  $('dataEntrada').value;
+ const entrada=$('dataEntrada').value,
+ saida=$('dataSaida').value,
+ btn=$('btnEnviarReserva'),
+ aviso=$('avisoBloqueio');
 
- const saida=
-  $('dataSaida').value;
+ if(!entrada||!saida||!casaSelecionadaParaReserva)
+  return false;
 
- const btn=
-  $('btnEnviarReserva');
-
- const aviso=
-  $('avisoBloqueio');
-
- if(
-  !entrada ||
-  !saida ||
-  !casaSelecionadaParaReserva
- )return false;
-
- const ini=
-  criarDataLocal(entrada);
-
- const fim=
-  criarDataLocal(saida);
-
- const hoje=new Date();
+ const ini=criarDataLocal(entrada),
+ fim=criarDataLocal(saida),
+ hoje=new Date();
 
  hoje.setHours(0,0,0,0);
 
- if(
-  fim<=ini ||
-  ini<hoje
- ){
+ if(fim<=ini||ini<hoje){
 
   aviso.textContent=
    fim<=ini
@@ -2904,7 +2309,6 @@ function verificarDisponibilidade(){
    :'⚠️ A data de entrada não pode ser anterior a hoje.';
 
   aviso.style.display='block';
-
   btn.disabled=true;
 
   $('valorDiarias').value='';
@@ -2914,26 +2318,14 @@ function verificarDisponibilidade(){
 
  }
 
- if(
-  verificarPeriodoBloqueado(
-   casaSelecionadaParaReserva,
-   entrada,
-   saida
-  )
- ){
+ if(verificarPeriodoBloqueado(casaSelecionadaParaReserva,entrada,saida)){
 
-  aviso.textContent=
-   '⚠️ Período já reservado ou indisponível!';
-
+  aviso.textContent='⚠️ Período já reservado ou indisponível!';
   aviso.style.display='block';
-
   btn.disabled=true;
 
   $('valorDiarias').value='';
-
-  $('valorTaxaLimpeza').textContent=
-   'R$ 0,00';
-
+  $('valorTaxaLimpeza').textContent='R$ 0,00';
   $('valorEstimado').value='';
 
   return false;
@@ -2941,7 +2333,6 @@ function verificarDisponibilidade(){
  }
 
  aviso.style.display='none';
-
  btn.disabled=false;
 
  const diarias=
@@ -2952,63 +2343,38 @@ function verificarDisponibilidade(){
   );
 
  const taxa=
-  casas[casaSelecionadaParaReserva]
-   .taxaLimpeza||0;
+  casas[casaSelecionadaParaReserva].taxaLimpeza||0;
 
- $('valorDiarias').value=
-  formatarMoeda(diarias);
-
- $('valorTaxaLimpeza').textContent=
-  formatarMoeda(taxa);
-
- $('valorEstimado').value=
-  formatarMoeda(diarias+taxa);
+ $('valorDiarias').value=formatarMoeda(diarias);
+ $('valorTaxaLimpeza').textContent=formatarMoeda(taxa);
+ $('valorEstimado').value=formatarMoeda(diarias+taxa);
 
  return true;
 
 }
 
-function verificarPeriodoBloqueado(
- casa,
- entrada,
- saida
-){
+function verificarPeriodoBloqueado(casa,entrada,saida){
 
- const ini=
-  criarDataLocal(entrada);
-
- const fim=
-  criarDataLocal(saida);
+ const ini=criarDataLocal(entrada),
+ fim=criarDataLocal(saida);
 
  return reservasConfirmadas.some(r=>
   r.casa===casa &&
-  ['confirmada','pago']
-   .includes(r.statusPagamento) &&
+  ['confirmada','pago'].includes(r.statusPagamento) &&
   ini<criarDataLocal(r.saida) &&
   fim>criarDataLocal(r.entrada)
  );
 
 }
 
-function calcularValorDiarias(
- casa,
- entrada,
- saida
-){
+function calcularValorDiarias(casa,entrada,saida){
 
  let total=0;
 
- let ini=
-  criarDataLocal(entrada);
+ const ini=criarDataLocal(entrada),
+ fim=criarDataLocal(saida);
 
- let fim=
-  criarDataLocal(saida);
-
- if(
-  !ini ||
-  !fim ||
-  fim<=ini
- )return 0;
+ if(!ini||!fim||fim<=ini)return 0;
 
  for(
   let d=new Date(ini);
@@ -3030,72 +2396,31 @@ function calcularValorDiarias(
 
 async function enviarReserva(){
 
- const nome=
-  $('hospedeNome').value.trim();
+ const nome=$('hospedeNome').value.trim(),
+ telefone=$('hospedeTelefone').value.trim(),
+ entrada=$('dataEntrada').value,
+ saida=$('dataSaida').value,
+ obs=$('obsReserva').value.trim();
 
- const telefone=
-  $('hospedeTelefone').value.trim();
+ const adultos=Math.max(0,parseInt($('qtdAdultos').value)||0),
+ criancas=Math.max(0,parseInt($('qtdCriancas').value)||0),
+ totalPessoas=adultos+criancas;
 
- const entrada=
-  $('dataEntrada').value;
+ if(!nome||!entrada||!saida)
+  return alert('⚠️ Preencha nome, entrada e saída!');
 
- const saida=
-  $('dataSaida').value;
+ if(totalPessoas<=0)
+  return alert('⚠️ Informe pelo menos 1 adulto ou criança!');
 
- const obs=
-  $('obsReserva').value.trim();
+ if(!verificarDisponibilidade())
+  return alert('❌ Verifique as datas informadas.');
 
- const adultos=
-  Math.max(
-   0,
-   parseInt($('qtdAdultos').value)||0
-  );
-
- const criancas=
-  Math.max(
-   0,
-   parseInt($('qtdCriancas').value)||0
-  );
-
- const totalPessoas=
-  adultos+criancas;
-
- if(!nome||!entrada||!saida){
-
-  return alert(
-   '⚠️ Preencha nome, entrada e saída!'
-  );
-
- }
-
- if(totalPessoas<=0){
-
-  return alert(
-   '⚠️ Informe pelo menos 1 adulto ou criança!'
-  );
-
- }
-
- if(!verificarDisponibilidade()){
-
-  return alert(
-   '❌ Verifique as datas informadas.'
-  );
-
- }
-
- const casa=
-  casaSelecionadaParaReserva;
+ const casa=casaSelecionadaParaReserva;
 
  const diarias=
-  calcularValorDiarias(
-   casa,
-   entrada,
-   saida
-  );
+  calcularValorDiarias(casa,entrada,saida);
 
- const taxa=
-  casas[casa].taxaLimpeza||0;
+ const taxa=casas[casa].taxaLimpeza||0;
 
  try{
 
@@ -3112,33 +2437,30 @@ async function enviarReserva(){
    criancas,
    totalPessoas,
 
-   dias:
-    calcularDias(
-     criarDataLocal(entrada),
-     criarDataLocal(saida)
-    ),
+   dias:calcularDias(
+    criarDataLocal(entrada),
+    criarDataLocal(saida)
+   ),
 
    valorDiarias:diarias,
    taxaLimpeza:taxa,
+
+   /* NOVO CAMPO */
+   desconto:0,
+
    valorTotal:diarias+taxa,
 
    valorPago:0,
 
    statusPagamento:'pendente',
 
-   criadoEm:
-    firebase.firestore.Timestamp.now()
+   criadoEm:firebase.firestore.Timestamp.now()
 
   });
 
-  await cadastrarOuAtualizarHospede(
-   nome,
-   telefone
-  );
+  await cadastrarOuAtualizarHospede(nome,telefone);
 
-  alert(
-   '✅ Solicitação enviada com sucesso! Obrigado!'
-  );
+  alert('✅ Solicitação enviada com sucesso! Obrigado!');
 
   fecharModal();
 
@@ -3148,34 +2470,22 @@ async function enviarReserva(){
 
   console.error(e);
 
-  alert(
-   '❌ Não foi possível enviar a solicitação.'
-  );
+  alert('❌ Não foi possível enviar a solicitação.');
 
  }
 
 }
 
-
-/* =========================================================
-   CASAS FIREBASE
-   ========================================================= */
+/* CASAS FIREBASE */
 
 async function carregarDadosCasas(){
 
- const ref=
-  db.collection('configuracoes').doc('casas');
+ const ref=db.collection('configuracoes').doc('casas'),
+ doc=await ref.get();
 
- const doc=
-  await ref.get();
+ if(doc.exists&&doc.data()?.casas){
 
- if(
-  doc.exists &&
-  doc.data()?.casas
- ){
-
-  const salvas=
-   doc.data().casas;
+  const salvas=doc.data().casas;
 
   Object.keys(casas).forEach(id=>{
 
@@ -3187,9 +2497,7 @@ async function carregarDadosCasas(){
      :[];
 
     casas[id].taxaLimpeza=
-     Number(
-      salvas[id].taxaLimpeza||0
-     );
+     Number(salvas[id].taxaLimpeza||0);
 
    }
 
@@ -3205,20 +2513,13 @@ async function carregarDadosCasas(){
 
 async function salvarTodasCasas(){
 
- await db
-  .collection('configuracoes')
+ await db.collection('configuracoes')
   .doc('casas')
-  .set(
-   {casas},
-   {merge:true}
-  );
+  .set({casas},{merge:true});
 
 }
 
-
-/* =========================================================
-   ADMIN - CASAS
-   ========================================================= */
+/* ADMIN CASAS */
 
 function renderizarCasasAdmin(){
 
@@ -3227,22 +2528,18 @@ function renderizarCasasAdmin(){
  if(!c)return;
 
  c.innerHTML=
-  Object.entries(casas)
-  .map(([id,x])=>{
+  Object.entries(casas).map(([id,x])=>{
 
    const fotos=x.fotos||[];
 
    return `
-
    <div class="card-casa">
 
     <div class="card-imagem">
 
-     ${
-      fotos.length
+     ${fotos.length
       ?`<img src="${fotos[0]}" alt="${x.nome}">`
-      :'🏠'
-     }
+      :'🏠'}
 
     </div>
 
@@ -3250,105 +2547,66 @@ function renderizarCasasAdmin(){
 
      <h3>${x.nome}</h3>
 
-     <p class="descricao-casa">
-      ${x.desc}
-     </p>
+     <p class="descricao-casa">${x.desc}</p>
 
      <div class="capacidade">
-      👥 Capacidade máxima:
-      ${x.capacidade} pessoas
+      👥 Capacidade máxima: ${x.capacidade} pessoas
      </div>
 
      <label>📷 Link da foto:</label>
 
-     <input
-      type="url"
+     <input type="url"
       id="fotoNova-${id}"
       placeholder="https://i.imgur.com/xxxx.jpg"
-      style="
-       width:100%;
-       padding:8px;
-       margin:5px 0
-      ">
+      style="width:100%;padding:8px;margin:5px 0">
 
-     <button
-      class="azul"
+     <button class="azul"
       style="width:100%"
       onclick="adicionarFotoGaleria('${id}')">
-
       ➕ Adicionar à Galeria
-
      </button>
 
      <div class="lista-fotos-galeria">
 
-      <strong>
-       Fotos (${fotos.length}):
-      </strong>
+      <strong>Fotos (${fotos.length}):</strong>
 
-      ${
-       fotos.map((f,i)=>`
+      ${fotos.map((f,i)=>`
+       <div class="item-foto-galeria">
 
-        <div class="item-foto-galeria">
+        <img src="${f}">
 
-         <img src="${f}">
+        <span>Foto ${i+1}</span>
 
-         <span>
-          Foto ${i+1}
-         </span>
+        <button class="remover-foto"
+         onclick="removerFotoGaleria('${id}',${i})">
+         ✕
+        </button>
 
-         <button
-          class="remover-foto"
-          onclick="removerFotoGaleria('${id}',${i})">
-
-          ✕
-
-         </button>
-
-        </div>
-
-       `).join('')
-      }
+       </div>
+      `).join('')}
 
      </div>
 
-     <label
-      style="
-       display:block;
-       margin-top:15px
-      ">
-
+     <label style="display:block;margin-top:15px">
       🧹 Taxa de Limpeza (R$):
-
      </label>
 
-     <input
-      type="number"
+     <input type="number"
       id="limpeza-${id}"
       value="${x.taxaLimpeza||0}"
       min="0"
       step="10"
-      style="
-       width:100%;
-       padding:8px
-      ">
+      style="width:100%;padding:8px">
 
-     <button
-      class="sucesso"
-      style="
-       margin-top:10px;
-       width:100%
-      "
+     <button class="sucesso"
+      style="margin-top:10px;width:100%"
       onclick="salvarConfiguracoesCasa('${id}')">
-
       💾 Salvar Casa
-
      </button>
 
     </div>
 
    </div>
-
    `;
 
   }).join('');
@@ -3357,27 +2615,14 @@ function renderizarCasasAdmin(){
 
 async function adicionarFotoGaleria(id){
 
- const campo=
-  $(`fotoNova-${id}`);
+ const campo=$(`fotoNova-${id}`),
+ url=campo?.value.trim();
 
- const url=
-  campo?.value.trim();
+ if(!url)
+  return alert('⚠️ Cole o link da foto primeiro!');
 
- if(!url){
-
-  return alert(
-   '⚠️ Cole o link da foto primeiro!'
-  );
-
- }
-
- if(!url.includes('imgur.com')){
-
-  return alert(
-   'ℹ️ Use links do Imgur.'
-  );
-
- }
+ if(!url.includes('imgur.com'))
+  return alert('ℹ️ Use links do Imgur.');
 
  casas[id].fotos.push(url);
 
@@ -3388,7 +2633,6 @@ async function adicionarFotoGaleria(id){
   campo.value='';
 
   renderizarCasasAdmin();
-
   renderizarPaginaPublica();
 
   alert('✅ Foto adicionada!');
@@ -3396,10 +2640,7 @@ async function adicionarFotoGaleria(id){
  }catch(e){
 
   console.error(e);
-
-  alert(
-   '❌ Não foi possível salvar.'
-  );
+  alert('❌ Não foi possível salvar.');
 
  }
 
@@ -3407,11 +2648,7 @@ async function adicionarFotoGaleria(id){
 
 async function removerFotoGaleria(id,i){
 
- if(
-  !confirm(
-   'Remover esta foto da galeria?'
-  )
- )return;
+ if(!confirm('Remover esta foto da galeria?'))return;
 
  casas[id].fotos.splice(i,1);
 
@@ -3420,7 +2657,6 @@ async function removerFotoGaleria(id,i){
   await salvarTodasCasas();
 
   renderizarCasasAdmin();
-
   renderizarPaginaPublica();
 
   alert('✅ Foto removida!');
@@ -3435,17 +2671,13 @@ async function removerFotoGaleria(id,i){
 
 async function salvarConfiguracoesCasa(id){
 
- const taxa=
-  parseFloat(
-   $(`limpeza-${id}`).value
-  )||0;
+ const taxa=parseFloat($(`limpeza-${id}`).value)||0;
 
  casas[id].taxaLimpeza=taxa;
 
  try{
 
   await salvarTodasCasas();
-
   renderizarPaginaPublica();
 
   alert(
@@ -3456,27 +2688,20 @@ Taxa: ${formatarMoeda(taxa)}`
  }catch(e){
 
   console.error(e);
-
-  alert(
-   '❌ Não foi possível salvar.'
-  );
+  alert('❌ Não foi possível salvar.');
 
  }
 
 }
 
-
-/* =========================================================
-   RESERVAS ADMIN
-   ========================================================= */
+/* RESERVAS ADMIN */
 
 async function carregarReservasConfirmadas(){
 
  const snap=
-  await db
-   .collection('reservas')
-   .orderBy('criadoEm','desc')
-   .get();
+  await db.collection('reservas')
+  .orderBy('criadoEm','desc')
+  .get();
 
  reservasConfirmadas=
   snap.docs.map(d=>({
@@ -3494,76 +2719,71 @@ function atualizarListaReservas(){
 
  if(!c)return;
 
- let dados=
-  reservasConfirmadas;
+ let dados=reservasConfirmadas;
 
- if(filtroReservas!=='todas'){
+ if(filtroReservas!=='todas')
+  dados=dados.filter(r=>r.statusPagamento===filtroReservas);
 
-  dados=
-   dados.filter(
-    r=>r.statusPagamento===filtroReservas
+ c.innerHTML=dados.length?dados.map(r=>{
+
+  const statusTexto={
+   pendente:'⏳ Pendente',
+   confirmada:'✅ Confirmada',
+   parcial:'💵 Parcial',
+   pago:'💰 Pago'
+  }[r.statusPagamento]||r.statusPagamento;
+
+  const desconto=Number(r.desconto||0);
+
+  const totalCalculado=
+   Math.max(
+    0,
+    Number(r.valorDiarias||0)+
+    Number(r.taxaLimpeza||0)-
+    desconto
    );
 
- }
+  const totalReserva=
+   r.valorTotal!==undefined
+   ?Number(r.valorTotal)
+   :totalCalculado;
 
- c.innerHTML=
-  dados.length
+  const aReceber=
+   Math.max(
+    0,
+    totalReserva-Number(r.valorPago||0)
+   );
 
-  ?dados.map(r=>{
-
-   const statusTexto={
-    pendente:'⏳ Pendente',
-    confirmada:'✅ Confirmada',
-    parcial:'💵 Parcial',
-    pago:'💰 Pago'
-   }[r.statusPagamento]||
-    r.statusPagamento;
-
-   return `
+  return `
 
    <div class="reserva-item">
 
-    <h4>
-     ${casas[r.casa]?.nome||r.casa}
-    </h4>
+    <h4>${casas[r.casa]?.nome||r.casa}</h4>
 
-    <p>
-     <strong>Hóspede:</strong>
-     ${r.nome||''}
-    </p>
+    <p><strong>Hóspede:</strong> ${r.nome||''}</p>
 
-    <p>
-     <strong>Telefone:</strong>
-     ${r.telefone||'Não informado'}
-    </p>
+    <p><strong>Telefone:</strong> ${r.telefone||'Não informado'}</p>
 
     <p>
      <strong>Período:</strong>
-     ${r.entrada||''}
-     →
-     ${r.saida||''}
+     ${r.entrada||''} → ${r.saida||''}
      (${r.dias||0} dias)
     </p>
 
     <p>
      👥 <strong>Hóspedes:</strong>
      ${r.totalPessoas||0} pessoa(s)
-     —
-     ${r.adultos||0} adulto(s)
-     e
-     ${r.criancas||0} criança(s)
+     — ${r.adultos||0} adulto(s)
+     e ${r.criancas||0} criança(s)
     </p>
 
     <p>
      🏠 <strong>Capacidade:</strong>
-     ${casas[r.casa]?.capacidade||'—'}
-     pessoas
+     ${casas[r.casa]?.capacidade||'—'} pessoas
     </p>
 
     ${
-     r.totalPessoas>
-     casas[r.casa]?.capacidade
-
+     r.totalPessoas>casas[r.casa]?.capacidade
      ?`
       <p class="aviso-excesso">
        ⚠️ Reserva acima da capacidade cadastrada.
@@ -3583,57 +2803,97 @@ function atualizarListaReservas(){
      :''
     }
 
-    <span
-     class="status-badge status-${r.statusPagamento}">
-
+    <span class="status-badge status-${r.statusPagamento}">
      ${statusTexto}
-
     </span>
 
-    <p>
-     💰 Total:
-     ${formatarMoeda(r.valorTotal)}
-     |
-     Pago:
-     ${formatarMoeda(r.valorPago)}
-    </p>
+    <div class="caixa-valores-reserva">
 
-    <button
-     class="azul"
+     <div class="linha-valor">
+      <span>💵 Diárias:</span>
+      <strong>${formatarMoeda(r.valorDiarias)}</strong>
+     </div>
+
+     <div class="linha-valor">
+      <span>🧹 Taxa de Limpeza:</span>
+      <strong>${formatarMoeda(r.taxaLimpeza)}</strong>
+     </div>
+
+     <div class="linha-valor desconto-info">
+      <span>🏷️ Desconto:</span>
+      <strong>- ${formatarMoeda(desconto)}</strong>
+     </div>
+
+     <div class="linha-valor">
+      <span class="total-reserva-destaque">💰 Total:</span>
+      <strong class="total-reserva-destaque">
+       ${formatarMoeda(totalReserva)}
+      </strong>
+     </div>
+
+     <div class="linha-valor">
+      <span>💳 Pago:</span>
+      <strong>${formatarMoeda(r.valorPago)}</strong>
+     </div>
+
+     <div class="linha-valor">
+      <span class="a-receber-destaque">⏳ A Receber:</span>
+      <strong class="a-receber-destaque">
+       ${formatarMoeda(aReceber)}
+      </strong>
+     </div>
+
+    </div>
+
+    <button class="azul"
      onclick="abrirEditarReserva('${r.id}')"
      style="margin-top:8px">
-
      ✏️ Editar / Confirmar
-
     </button>
 
    </div>
 
-   `;
-
-  }).join('')
-
-  :`
-
-   <p style="
-    color:var(--cinza);
-    padding:20px
-   ">
-    Nenhuma reserva encontrada.
-   </p>
-
   `;
+
+ }).join(''):
+
+ `<p style="color:var(--cinza);padding:20px">
+   Nenhuma reserva encontrada.
+  </p>`;
 
 }
 
+/* EDITAR RESERVA */
+
 function abrirEditarReserva(id){
 
- const r=
-  reservasConfirmadas.find(
-   x=>x.id===id
-  );
+ const r=reservasConfirmadas.find(x=>x.id===id);
 
  if(!r)return;
+
+ const descontoAtual=Number(r.desconto||0);
+
+ const diarias=Number(r.valorDiarias||0);
+ const taxa=Number(r.taxaLimpeza||0);
+
+ const totalAtual=
+  Math.max(
+   0,
+   diarias+taxa-descontoAtual
+  );
+
+ const valorTotalSalvo=
+  r.valorTotal!==undefined
+  ?Number(r.valorTotal)
+  :totalAtual;
+
+ const valorPago=Number(r.valorPago||0);
+
+ const aReceber=
+  Math.max(
+   0,
+   valorTotalSalvo-valorPago
+  );
 
  $('conteudoEditar').innerHTML=`
 
@@ -3654,9 +2914,7 @@ function abrirEditarReserva(id){
 
   <p>
    <strong>Período:</strong>
-   ${r.entrada}
-   →
-   ${r.saida}
+   ${r.entrada} → ${r.saida}
   </p>
 
   <p>
@@ -3669,14 +2927,11 @@ function abrirEditarReserva(id){
 
   <p>
    <strong>Capacidade:</strong>
-   ${casas[r.casa]?.capacidade||'—'}
-   pessoas
+   ${casas[r.casa]?.capacidade||'—'} pessoas
   </p>
 
   ${
-   r.totalPessoas>
-   casas[r.casa]?.capacidade
-
+   r.totalPessoas>casas[r.casa]?.capacidade
    ?`
     <div class="aviso-excesso">
      ⚠️ Quantidade acima da capacidade cadastrada.
@@ -3697,72 +2952,142 @@ function abrirEditarReserva(id){
    :''
   }
 
-  <p>
-   <strong>Valor Diárias:</strong>
-   ${formatarMoeda(r.valorDiarias)}
-  </p>
+  <div class="caixa-valores-reserva">
 
-  <p>
-   <strong>Taxa de Limpeza:</strong>
-   ${formatarMoeda(r.taxaLimpeza)}
-  </p>
+   <div class="linha-valor">
 
-  <p>
-   <strong>Valor Total:</strong>
-   ${formatarMoeda(r.valorTotal)}
-  </p>
+    <span>💵 Valor das Diárias:</span>
+
+    <strong>
+     ${formatarMoeda(diarias)}
+    </strong>
+
+   </div>
+
+   <div class="linha-valor">
+
+    <span>🧹 Taxa de Limpeza:</span>
+
+    <strong>
+     ${formatarMoeda(taxa)}
+    </strong>
+
+   </div>
+
+   <div class="linha-desconto">
+
+    <label style="display:block;font-weight:600;margin-bottom:6px">
+     🏷️ Desconto (R$)
+    </label>
+
+    <input
+     type="number"
+     id="novoDesconto"
+     class="campo-desconto"
+     value="${descontoAtual.toFixed(2)}"
+     min="0"
+     step="10"
+     oninput="atualizarValoresEdicaoReserva()">
+
+    <small style="display:block;margin-top:5px;color:#856404">
+     Informe o desconto que deseja conceder nesta reserva.
+    </small>
+
+   </div>
+
+   <div class="linha-valor">
+
+    <span class="total-reserva-destaque">
+     💰 Valor Total:
+    </span>
+
+    <strong
+     id="novoValorTotalVisual"
+     class="total-reserva-destaque">
+     ${formatarMoeda(valorTotalSalvo)}
+    </strong>
+
+   </div>
+
+   <div class="linha-valor">
+
+    <span>💳 Valor Pago:</span>
+
+    <strong>
+     ${formatarMoeda(valorPago)}
+    </strong>
+
+   </div>
+
+   <div class="linha-valor">
+
+    <span class="a-receber-destaque">
+     ⏳ A Receber:
+    </span>
+
+    <strong
+     id="novoAReceberVisual"
+     class="a-receber-destaque">
+     ${formatarMoeda(aReceber)}
+    </strong>
+
+   </div>
+
+  </div>
 
   <hr style="margin:15px 0">
 
-  <h4>
-   Atualizar Status & Pagamento
-  </h4>
+  <h4>Atualizar Status & Pagamento</h4>
 
   <div class="linha-form">
 
-   <input
-    type="number"
-    id="novoValorPago"
-    value="${r.valorPago||0}"
-    min="0"
-    step="10">
+   <div style="flex:1;min-width:180px">
 
-   <select id="novoStatus">
+    <label style="display:block;margin-bottom:5px;font-size:14px">
+     💳 Valor Pago (R$)
+    </label>
 
-    ${
-     [
+    <input
+     type="number"
+     id="novoValorPago"
+     value="${valorPago}"
+     min="0"
+     step="10"
+     oninput="atualizarValoresEdicaoReserva()">
+
+   </div>
+
+   <div style="flex:1;min-width:180px">
+
+    <label style="display:block;margin-bottom:5px;font-size:14px">
+     📌 Status
+    </label>
+
+    <select id="novoStatus">
+
+     ${[
       ['pendente','Pendente'],
-      [
-       'confirmada',
-       '✅ Confirmada (Bloquear datas)'
-      ],
-      [
-       'parcial',
-       'Pagamento Parcial'
-      ],
-      [
-       'pago',
-       '💰 Pago (Bloquear datas)'
-      ]
-     ]
-     .map(([v,t])=>
-      `<option
+      ['confirmada','✅ Confirmada (Bloquear datas)'],
+      ['parcial','Pagamento Parcial'],
+      ['pago','💰 Pago (Bloquear datas)']
+     ].map(([v,t])=>`
+      <option
        value="${v}"
        ${r.statusPagamento===v?'selected':''}>
        ${t}
-      </option>`
-     )
-     .join('')
-    }
+      </option>
+     `).join('')}
 
-   </select>
+    </select>
+
+   </div>
 
   </div>
 
   <button
    class="sucesso"
    onclick="salvarEdicao('${id}')"
-   style="margin-top:10px">
+   style="margin-top:10px;width:100%">
 
    💾 Salvar Alterações
 
@@ -3771,7 +3096,7 @@ function abrirEditarReserva(id){
   <button
    class="vermelho"
    onclick="excluirReserva('${id}')"
-   style="margin-top:8px">
+   style="margin-top:8px;width:100%">
 
    🗑️ Excluir / Liberar Datas
 
@@ -3779,27 +3104,150 @@ function abrirEditarReserva(id){
 
  `;
 
- $('modalEditarReserva')
-  .classList.add('aberto');
+ $('modalEditarReserva').classList.add('aberto');
 
 }
+
+/* ATUALIZAÇÃO VISUAL DO DESCONTO */
+
+function atualizarValoresEdicaoReserva(){
+
+ const desconto=
+  Math.max(
+   0,
+   parseFloat($('novoDesconto')?.value)||0
+  );
+
+ const valorPago=
+  Math.max(
+   0,
+   parseFloat($('novoValorPago')?.value)||0
+  );
+
+ const textoDiarias=
+  $('conteudoEditar')?.querySelector('.caixa-valores-reserva');
+
+ if(!textoDiarias)return;
+
+/*
+ * Recupera os valores exibidos no documento da reserva.
+ * O ID da reserva não é necessário aqui porque
+ * os valores-base já estão presentes na tela.
+ */
+
+ const reservaAtual=
+  reservasConfirmadas.find(
+   r=>r.id===window.reservaEditandoId
+  );
+
+ if(!reservaAtual)return;
+
+ const diarias=Number(reservaAtual.valorDiarias||0);
+ const taxa=Number(reservaAtual.taxaLimpeza||0);
+
+ const total=
+  Math.max(
+   0,
+   diarias+taxa-desconto
+  );
+
+ const aReceber=
+  Math.max(
+   0,
+   total-valorPago
+  );
+
+ const totalEl=$('novoValorTotalVisual');
+ const receberEl=$('novoAReceberVisual');
+
+ if(totalEl)
+  totalEl.textContent=formatarMoeda(total);
+
+ if(receberEl)
+  receberEl.textContent=formatarMoeda(aReceber);
+
+}
+
+/* FECHAR MODAL */
 
 function fecharModalEditar(){
 
- $('modalEditarReserva')
-  .classList.remove('aberto');
+ $('modalEditarReserva').classList.remove('aberto');
+
+ window.reservaEditandoId=null;
 
 }
 
+/*
+ * Guarda o ID da reserva atualmente aberta.
+ * Esta pequena função é chamada sempre que o modal é aberto.
+ */
+
+const _abrirEditarReservaOriginal=abrirEditarReserva;
+
+abrirEditarReserva=function(id){
+
+ window.reservaEditandoId=id;
+
+ _abrirEditarReservaOriginal(id);
+
+};
+
+/* SALVAR EDIÇÃO */
+
 async function salvarEdicao(id){
 
- const valorPago=
-  parseFloat(
-   $('novoValorPago').value
-  )||0;
+ const r=
+  reservasConfirmadas.find(
+   x=>x.id===id
+  );
 
- const status=
-  $('novoStatus').value;
+ if(!r)return;
+
+ const valorPago=
+  Math.max(
+   0,
+   parseFloat($('novoValorPago').value)||0
+  );
+
+ const desconto=
+  Math.max(
+   0,
+   parseFloat($('novoDesconto').value)||0
+  );
+
+ const status=$('novoStatus').value;
+
+ const diarias=
+  Number(r.valorDiarias||0);
+
+ const taxa=
+  Number(r.taxaLimpeza||0);
+
+ const valorTotal=
+  Math.max(
+   0,
+   diarias+taxa-desconto
+  );
+
+ if(desconto>diarias+taxa){
+
+  if(!confirm(
+   '⚠️ O desconto é maior que o valor total da reserva.\n\nDeseja realmente salvar com valor total de R$ 0,00?'
+  ))return;
+
+ }
+
+ if(valorPago>valorTotal){
+
+  if(!confirm(
+   `⚠️ O valor pago (${formatarMoeda(valorPago)})
+é maior que o valor total (${formatarMoeda(valorTotal)}).
+
+Deseja realmente continuar?`
+  ))return;
+
+ }
 
  try{
 
@@ -3807,26 +3255,42 @@ async function salvarEdicao(id){
    .collection('reservas')
    .doc(id)
    .update({
+
+    desconto,
+    valorTotal,
+
     valorPago,
+
     statusPagamento:status,
+
     atualizadoEm:
      firebase.firestore.Timestamp.now()
+
    });
 
   await carregarReservasConfirmadas();
 
   renderizarCalendario();
 
+  gerarRelatorio();
+
   fecharModalEditar();
 
-  alert('✅ Atualizado!');
+  alert(
+   `✅ Reserva atualizada!
+
+Desconto: ${formatarMoeda(desconto)}
+Valor Total: ${formatarMoeda(valorTotal)}
+Pago: ${formatarMoeda(valorPago)}
+A Receber: ${formatarMoeda(Math.max(0,valorTotal-valorPago))}`
+  );
 
  }catch(e){
 
   console.error(e);
 
   alert(
-   '❌ Não foi possível atualizar.'
+   '❌ Não foi possível atualizar a reserva.'
   );
 
  }
@@ -3835,11 +3299,8 @@ async function salvarEdicao(id){
 
 async function excluirReserva(id){
 
- if(
-  !confirm(
-   'Tem certeza? Esta ação libera as datas!'
-  )
- )return;
+ if(!confirm('Tem certeza? Esta ação libera as datas!'))
+  return;
 
  try{
 
@@ -3854,72 +3315,52 @@ async function excluirReserva(id){
 
   fecharModalEditar();
 
-  alert(
-   '✅ Excluído! Datas liberadas.'
-  );
+  alert('✅ Excluído! Datas liberadas.');
 
  }catch(e){
 
   console.error(e);
 
-  alert(
-   '❌ Não foi possível excluir.'
-  );
+  alert('❌ Não foi possível excluir.');
 
  }
 
 }
 
+/* RELATÓRIOS */
 
-/* =========================================================
-   RELATÓRIOS
-   ========================================================= */
+document.addEventListener('click',e=>{
 
-document.addEventListener(
- 'click',
- e=>{
+ const f=e.target.closest('[data-filtro]');
+ const p=e.target.closest('[data-periodo]');
 
-  const f=
-   e.target.closest('[data-filtro]');
+ if(f){
 
-  const p=
-   e.target.closest('[data-periodo]');
+  document.querySelectorAll('[data-filtro]')
+   .forEach(x=>x.classList.remove('ativo'));
 
-  if(f){
+  f.classList.add('ativo');
 
-   document
-    .querySelectorAll('[data-filtro]')
-    .forEach(x=>
-     x.classList.remove('ativo')
-    );
+  filtroReservas=f.dataset.filtro;
 
-   f.classList.add('ativo');
+  atualizarListaReservas();
 
-   filtroReservas=
-    f.dataset.filtro;
+ }
 
-   atualizarListaReservas();
+ if(p){
 
-  }
+  document.querySelectorAll('[data-periodo]')
+   .forEach(x=>x.classList.remove('ativo'));
 
-  if(p){
+  p.classList.add('ativo');
 
-   document
-    .querySelectorAll('[data-periodo]')
-    .forEach(x=>
-     x.classList.remove('ativo')
-    );
+  filtroRelatorio=p.dataset.periodo;
 
-   p.classList.add('ativo');
+  gerarRelatorio();
 
-   filtroRelatorio=
-    p.dataset.periodo;
+ }
 
-   gerarRelatorio();
-
-  }
-
- });
+});
 
 function gerarRelatorio(){
 
@@ -3927,98 +3368,130 @@ function gerarRelatorio(){
 
  if(!c)return;
 
- let dados=
-  reservasConfirmadas;
+ let dados=reservasConfirmadas;
 
  const agora=new Date();
 
  if(filtroRelatorio==='mes'){
 
-  dados=
-   dados.filter(r=>{
+  dados=dados.filter(r=>{
 
-    const d=
-     r.criadoEm?.toDate
-     ?r.criadoEm.toDate()
-     :criarDataLocal(r.entrada);
+   const d=
+    r.criadoEm?.toDate
+    ?r.criadoEm.toDate()
+    :criarDataLocal(r.entrada);
 
-    return d &&
-     d.getMonth()===agora.getMonth() &&
-     d.getFullYear()===agora.getFullYear();
+   return d &&
+    d.getMonth()===agora.getMonth() &&
+    d.getFullYear()===agora.getFullYear();
 
-   });
+  });
 
  }
 
  if(filtroRelatorio==='ano'){
 
-  dados=
-   dados.filter(r=>{
+  dados=dados.filter(r=>{
 
-    const d=
-     r.criadoEm?.toDate
-     ?r.criadoEm.toDate()
-     :criarDataLocal(r.entrada);
+   const d=
+    r.criadoEm?.toDate
+    ?r.criadoEm.toDate()
+    :criarDataLocal(r.entrada);
 
-    return d &&
-     d.getFullYear()===agora.getFullYear();
+   return d &&
+    d.getFullYear()===agora.getFullYear();
 
-   });
+  });
 
  }
 
  const recebido=
   dados.reduce(
-   (s,r)=>
-    s+Number(r.valorPago||0),
+   (s,r)=>s+Number(r.valorPago||0),
    0
   );
 
  const esperado=
   dados.reduce(
-   (s,r)=>
-    s+Number(r.valorTotal||0),
+   (s,r)=>{
+
+    const diarias=Number(r.valorDiarias||0);
+    const taxa=Number(r.taxaLimpeza||0);
+    const desconto=Number(r.desconto||0);
+
+    /*
+     * Reservas antigas sem desconto continuam normais.
+     * Se houver valorTotal salvo, ele é utilizado.
+     */
+
+    const total=
+     r.valorTotal!==undefined
+     ?Number(r.valorTotal)
+     :Math.max(0,diarias+taxa-desconto);
+
+    return s+total;
+
+   },
+   0
+  );
+
+ const descontos=
+  dados.reduce(
+   (s,r)=>s+Number(r.desconto||0),
    0
   );
 
  const limpeza=
   dados.reduce(
-   (s,r)=>
-    s+Number(r.taxaLimpeza||0),
+   (s,r)=>s+Number(r.taxaLimpeza||0),
    0
   );
 
  const porCasa={};
 
- Object.keys(casas)
-  .forEach(id=>
+ Object.keys(casas).forEach(id=>
 
-   porCasa[id]={
-    nome:casas[id].nome,
-    recebido:0,
-    esperado:0,
-    pendente:0,
-    taxaLimpeza:0
-   }
+  porCasa[id]={
+   nome:casas[id].nome,
+   recebido:0,
+   esperado:0,
+   pendente:0,
+   taxaLimpeza:0,
+   desconto:0
+  }
 
-  );
+ );
 
  dados.forEach(r=>{
 
   if(porCasa[r.casa]){
 
+   const total=
+    r.valorTotal!==undefined
+    ?Number(r.valorTotal)
+    :Math.max(
+     0,
+     Number(r.valorDiarias||0)+
+     Number(r.taxaLimpeza||0)-
+     Number(r.desconto||0)
+    );
+
    porCasa[r.casa].recebido+=
     Number(r.valorPago||0);
 
-   porCasa[r.casa].esperado+=
-    Number(r.valorTotal||0);
+   porCasa[r.casa].esperado+=total;
 
    porCasa[r.casa].pendente+=
-    Number(r.valorTotal||0)-
-    Number(r.valorPago||0);
+    Math.max(
+     0,
+     total-Number(r.valorPago||0)
+    );
 
    porCasa[r.casa].taxaLimpeza+=
     Number(r.taxaLimpeza||0);
+
+   porCasa[r.casa].desconto+=
+    Number(r.desconto||0);
 
   }
 
@@ -4032,9 +3505,7 @@ function gerarRelatorio(){
 
  c.innerHTML=`
 
-  <h3>
-   📊 Resumo — ${titulo}
-  </h3>
+  <h3>📊 Resumo — ${titulo}</h3>
 
   <p>
    <strong>Total de Reservas:</strong>
@@ -4044,160 +3515,109 @@ function gerarRelatorio(){
   <div class="total-geral">
 
    <div class="linha-valor">
-
     <span>🧹 Taxa de Limpeza:</span>
-
-    <span>
-     ${formatarMoeda(limpeza)}
-    </span>
-
+    <span>${formatarMoeda(limpeza)}</span>
    </div>
 
    <div class="linha-valor">
+    <span>🏷️ Total de Descontos:</span>
+    <span style="color:var(--perigo)">
+     - ${formatarMoeda(descontos)}
+    </span>
+   </div>
 
+   <div class="linha-valor">
     <span>💰 Total Recebido:</span>
-
-    <span>
-     ${formatarMoeda(recebido)}
-    </span>
-
+    <span>${formatarMoeda(recebido)}</span>
    </div>
 
    <div class="linha-valor">
-
     <span>📊 Total Esperado:</span>
-
-    <span>
-     ${formatarMoeda(esperado)}
-    </span>
-
+    <span>${formatarMoeda(esperado)}</span>
    </div>
 
    <div class="linha-valor">
-
     <span>⏳ A Receber:</span>
-
-    <span>
-     ${formatarMoeda(esperado-recebido)}
-    </span>
-
+    <span>${formatarMoeda(Math.max(0,esperado-recebido))}</span>
    </div>
 
   </div>
 
-  <h3 style="margin-top:30px">
-   🏠 Por Casa
-  </h3>
+  <h3 style="margin-top:30px">🏠 Por Casa</h3>
 
-  ${
-   Object.values(porCasa)
-   .map(x=>`
+  ${Object.values(porCasa).map(x=>`
 
-    <div
-     style="
-      padding:12px 0;
-      border-bottom:1px solid #eee
-     ">
+   <div style="padding:12px 0;border-bottom:1px solid #eee">
 
-     <h4>${x.nome}</h4>
+    <h4>${x.nome}</h4>
 
-     <div class="linha-valor">
-
-      <span>🧹 Taxa:</span>
-
-      <span>
-       ${formatarMoeda(x.taxaLimpeza)}
-      </span>
-
-     </div>
-
-     <div class="linha-valor">
-
-      <span>✅ Recebido:</span>
-
-      <span>
-       ${formatarMoeda(x.recebido)}
-      </span>
-
-     </div>
-
-     <div class="linha-valor">
-
-      <span>📊 Esperado:</span>
-
-      <span>
-       ${formatarMoeda(x.esperado)}
-      </span>
-
-     </div>
-
-     <div class="linha-valor">
-
-      <span>⏳ A Receber:</span>
-
-      <span>
-       ${formatarMoeda(x.pendente)}
-      </span>
-
-     </div>
-
+    <div class="linha-valor">
+     <span>🧹 Taxa:</span>
+     <span>${formatarMoeda(x.taxaLimpeza)}</span>
     </div>
 
-   `).join('')
-  }
+    <div class="linha-valor">
+     <span>🏷️ Descontos:</span>
+     <span style="color:var(--perigo)">
+      - ${formatarMoeda(x.desconto)}
+     </span>
+    </div>
+
+    <div class="linha-valor">
+     <span>✅ Recebido:</span>
+     <span>${formatarMoeda(x.recebido)}</span>
+    </div>
+
+    <div class="linha-valor">
+     <span>📊 Esperado:</span>
+     <span>${formatarMoeda(x.esperado)}</span>
+    </div>
+
+    <div class="linha-valor">
+     <span>⏳ A Receber:</span>
+     <span>${formatarMoeda(x.pendente)}</span>
+    </div>
+
+   </div>
+
+  `).join('')}
 
  `;
 
 }
 
+/* HÓSPEDES */
 
-/* =========================================================
-   HÓSPEDES
-   ========================================================= */
-
-async function cadastrarOuAtualizarHospede(
- nome,
- telefone
-){
+async function cadastrarOuAtualizarHospede(nome,telefone){
 
  if(!nome)return;
 
- const normal=
-  nome.trim().toLowerCase();
+ const normal=nome.trim().toLowerCase();
 
  const snap=
-  await db
-   .collection('hospedes')
-   .where(
-    'nomeNormalizado',
-    '==',
-    normal
-   )
-   .limit(1)
-   .get();
+  await db.collection('hospedes')
+  .where('nomeNormalizado','==',normal)
+  .limit(1)
+  .get();
 
  if(snap.empty){
 
-  await db
-   .collection('hospedes')
-   .add({
+  await db.collection('hospedes').add({
 
-    nome:nome.trim(),
+   nome:nome.trim(),
 
-    telefone:
-     telefone?.trim()||'',
+   telefone:telefone?.trim()||'',
 
-    nomeNormalizado:normal,
+   nomeNormalizado:normal,
 
-    cadastradoEm:
-     firebase.firestore.Timestamp.now()
+   cadastradoEm:
+    firebase.firestore.Timestamp.now()
 
-   });
+  });
 
  }else{
 
-  await db
-   .collection('hospedes')
+  await db.collection('hospedes')
    .doc(snap.docs[0].id)
    .update({
 
@@ -4217,10 +3637,9 @@ async function cadastrarOuAtualizarHospede(
 async function carregarHospedes(){
 
  const snap=
-  await db
-   .collection('hospedes')
-   .orderBy('nome')
-   .get();
+  await db.collection('hospedes')
+  .orderBy('nome')
+  .get();
 
  hospedesCadastrados=
   snap.docs.map(d=>({
@@ -4233,138 +3652,83 @@ async function carregarHospedes(){
 function filtrarHospedes(){
 
  const campo=$('buscarHospede'),
-       c=$('listaHospedes');
+ c=$('listaHospedes');
 
  if(!campo||!c)return;
 
- const t=
-  campo.value.toLowerCase().trim();
+ const t=campo.value.toLowerCase().trim();
 
  const lista=
   hospedesCadastrados.filter(h=>
-
-   (h.nome||'')
-    .toLowerCase()
-    .includes(t)
-
-   ||
-
-   (h.telefone||'')
-    .includes(t)
-
+   (h.nome||'').toLowerCase().includes(t)||
+   (h.telefone||'').includes(t)
   );
 
- c.innerHTML=
-  lista.length
+ c.innerHTML=lista.length?lista.map(h=>`
 
-  ?lista.map(h=>`
+  <div style="
+   padding:12px;
+   border-bottom:1px solid #ddd;
+   display:flex;
+   justify-content:space-between;
+   gap:10px">
 
-   <div
-    style="
-     padding:12px;
-     border-bottom:1px solid #ddd;
-     display:flex;
-     justify-content:space-between;
-     gap:10px
-    ">
+   <div>
 
-    <div>
+    <strong>${h.nome}</strong><br>
 
-     <strong>
-      ${h.nome}
-     </strong>
+    📞 ${h.telefone||'Não informado'}<br>
 
-     <br>
-
-     📞
-     ${h.telefone||'Não informado'}
-
-     <br>
-
-     <small style="color:var(--cinza)">
-
-      Cadastrado:
-      ${
-       h.cadastradoEm?.toDate
-       ?h.cadastradoEm
-        .toDate()
-        .toLocaleDateString('pt-BR')
-       :''
-      }
-
-     </small>
-
-    </div>
-
-    <button
-     class="azul"
-     onclick="editarHospede('${h.id}')">
-
-     ✏️ Editar
-
-    </button>
+    <small style="color:var(--cinza)">
+     Cadastrado:
+     ${
+      h.cadastradoEm?.toDate
+      ?h.cadastradoEm.toDate().toLocaleDateString('pt-BR')
+      :''
+     }
+    </small>
 
    </div>
 
-  `).join('')
+   <button class="azul"
+    onclick="editarHospede('${h.id}')">
+    ✏️ Editar
+   </button>
 
-  :`
+  </div>
 
-   <p
-    style="
-     color:var(--cinza);
-     padding:10px
-    ">
+ `).join(''):
 
-    Nenhum hóspede encontrado.
-
-   </p>
-
-  `;
+ `<p style="color:var(--cinza);padding:10px">
+   Nenhum hóspede encontrado.
+  </p>`;
 
 }
 
 async function abrirCadastroHospede(){
 
- const nome=
-  prompt(
-   'Digite o nome completo do hóspede:'
-  );
+ const nome=prompt('Digite o nome completo do hóspede:');
 
- if(
-  nome===null ||
-  !nome.trim()
- )return;
+ if(nome===null||!nome.trim())return;
 
- const tel=
-  prompt(
-   'Digite o telefone/WhatsApp:'
-  );
+ const tel=prompt('Digite o telefone/WhatsApp:');
 
  if(tel===null)return;
 
  try{
 
-  await cadastrarOuAtualizarHospede(
-   nome,
-   tel
-  );
+  await cadastrarOuAtualizarHospede(nome,tel);
 
   await carregarHospedes();
 
   filtrarHospedes();
 
-  alert(
-   '✅ Hóspede cadastrado/atualizado!'
-  );
+  alert('✅ Hóspede cadastrado/atualizado!');
 
  }catch(e){
 
   console.error(e);
-
-  alert(
-   '❌ Não foi possível cadastrar.'
-  );
+  alert('❌ Não foi possível cadastrar.');
 
  }
 
@@ -4372,42 +3736,22 @@ async function abrirCadastroHospede(){
 
 async function editarHospede(id){
 
- const h=
-  hospedesCadastrados.find(
-   x=>x.id===id
-  );
+ const h=hospedesCadastrados.find(x=>x.id===id);
 
  if(!h)return;
 
- const nome=
-  prompt(
-   'Editar nome:',
-   h.nome||''
-  );
+ const nome=prompt('Editar nome:',h.nome||'');
 
  if(nome===null)return;
 
- const tel=
-  prompt(
-   'Editar telefone:',
-   h.telefone||''
-  );
+ const tel=prompt('Editar telefone:',h.telefone||'');
 
- if(
-  tel===null ||
-  !nome.trim()
- ){
-
-  return alert(
-   '⚠️ O nome não pode ficar vazio.'
-  );
-
- }
+ if(tel===null||!nome.trim())
+  return alert('⚠️ O nome não pode ficar vazio.');
 
  try{
 
-  await db
-   .collection('hospedes')
+  await db.collection('hospedes')
    .doc(id)
    .update({
 
@@ -4416,8 +3760,7 @@ async function editarHospede(id){
     nomeNormalizado:
      nome.trim().toLowerCase(),
 
-    telefone:
-     tel.trim(),
+    telefone:tel.trim(),
 
     atualizadoEm:
      firebase.firestore.Timestamp.now()
@@ -4425,20 +3768,14 @@ async function editarHospede(id){
    });
 
   await carregarHospedes();
-
   filtrarHospedes();
 
-  alert(
-   '✅ Cadastro atualizado!'
-  );
+  alert('✅ Cadastro atualizado!');
 
  }catch(e){
 
   console.error(e);
-
-  alert(
-   '❌ Não foi possível atualizar.'
-  );
+  alert('❌ Não foi possível atualizar.');
 
  }
 
@@ -4446,19 +3783,15 @@ async function editarHospede(id){
 
 async function sincronizarHospedesReservas(){
 
- if(
-  !confirm(
-   'Importar nomes de todas as reservas para a lista de hóspedes?'
-  )
- )return;
+ if(!confirm(
+  'Importar nomes de todas as reservas para a lista de hóspedes?'
+ ))return;
 
  let n=0;
 
  try{
 
-  for(
-   const r of reservasConfirmadas
-  ){
+  for(const r of reservasConfirmadas){
 
    await cadastrarOuAtualizarHospede(
     r.nome,
@@ -4470,7 +3803,6 @@ async function sincronizarHospedesReservas(){
   }
 
   await carregarHospedes();
-
   filtrarHospedes();
 
   alert(
@@ -4481,35 +3813,26 @@ async function sincronizarHospedesReservas(){
  }catch(e){
 
   console.error(e);
-
-  alert(
-   '❌ Ocorreu um erro.'
-  );
+  alert('❌ Ocorreu um erro.');
 
  }
 
 }
 
+/* ESC */
 
-/* =========================================================
-   ESC
-   ========================================================= */
+document.addEventListener('keydown',e=>{
 
-document.addEventListener(
- 'keydown',
- e=>{
+ if(e.key==='Escape'){
 
-  if(e.key==='Escape'){
-
-   fecharGaleria();
-   fecharModal();
-   fecharModalEditar();
-   fecharLogin();
-
-  }
+  fecharGaleria();
+  fecharModal();
+  fecharModalEditar();
+  fecharLogin();
 
  }
-);
+
+});
 
 </script>
 
