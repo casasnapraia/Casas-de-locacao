@@ -1,746 +1,537 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Casas na Praia — Araranguá/SC</title>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-    <style>
-        *{margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', system-ui, sans-serif;}
-        :root{
-            --agua:#2596be; --agua-escura:#1a7a9e; --sol:#ffb703;
-            --sucesso:#2f855a; --alerta:#e53e3e; --cinza:#718096; --fundo:#e6f2f8;
-            --amarela:#f5c542; --beje:#d9b36c; --marrom:#8c4a2c; --lado-esquerdo:#0f6b8a;
-            --pendente:#f59e0b; --pago:#10b981; --parcial:#3b82f6; --cancelado:#ef4444;
-            --indisponivel:#fee2e2; --texto-indisponivel:#991b1b;
-        }
-        body{background:linear-gradient(180deg, #e6f2f8 0%, #fef9ef 100%); min-height:100vh;}
-        .oculto{display:none !important;}
-        .pagina{display:flex; min-height:100vh;}
-        .lado-esquerdo{width:280px; background:linear-gradient(180deg, var(--lado-esquerdo), var(--agua-escura)); color:white; padding:30px 20px; flex-shrink:0;}
-        .logo-lado{text-align:center; margin-bottom:30px;}
-        .conteudo-principal{flex:1; padding:30px;}
-        .cabecalho-publico{text-align:center; margin-bottom:40px; padding-bottom:20px; border-bottom:2px solid rgba(37,150,190,0.2);}
-        .cabecalho-publico h1{color:var(--agua-escura); font-size:28px; margin-bottom:8px;}
-        .login-caixa{margin-top:40px;}
-        .login-caixa input{width:100%; padding:12px; margin:6px 0; border:none; border-radius:8px; background:rgba(255,255,255,0.2); color:white; font-size:14px;}
-        .login-caixa input::placeholder{color:rgba(255,255,255,0.7);}
-        .login-btn{width:100%; padding:12px; background:white; color:var(--agua-escura); border:none; border-radius:8px; font-weight:bold; cursor:pointer; margin-top:8px; font-size:15px;}
-        .erro-login{color:#ffcccb; margin-top:10px; font-size:13px; text-align:center;}
-        .navegacao-titulo{font-size:14px; margin:25px 0 10px; opacity:0.7;}
-        .aba-lateral{display:block; width:100%; text-align:left; padding:12px 15px; margin:4px 0; background:transparent; color:white; border:none; border-radius:8px; cursor:pointer; font-size:14px;}
-        .aba-lateral:hover{background:rgba(255,255,255,0.15);}
-        .aba-lateral.ativa{background:rgba(255,255,255,0.25); font-weight:bold;}
-        .sair-btn{margin-top:30px; width:100%; padding:12px; background:rgba(220,50,50,0.3); color:white; border:none; border-radius:8px; cursor:pointer; font-size:14px;}
-        .conteudo-aba{display:none;}
-        .conteudo-aba.visivel{display:block;}
-        .painel-titulo{color:var(--agua-escura); font-size:24px; margin-bottom:20px;}
-        .casas-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(320px,1fr)); gap:25px; margin-top:30px;}
-        .casa-card{background:white; border-radius:18px; overflow:hidden; box-shadow:0 6px 20px rgba(0,0,0,0.08); transition:transform .3s;}
-        .casa-card:hover{transform:translateY(-5px);}
-        .casa-card.amarela{border-top:5px solid var(--amarela);}
-        .casa-card.beje{border-top:5px solid var(--beje);}
-        .casa-card.marrom{border-top:5px solid var(--marrom);}
-        .casa-card.branca{border-top:5px solid #ccc;}
-        .casa-imagens{display:grid; grid-template-columns:repeat(3,1fr); gap:6px; padding:12px; background:var(--fundo); min-height:140px;}
-        .foto-item{position:relative;}
-        .foto-galeria{width:100%; height:90px; object-fit:cover; border-radius:8px;}
-        .btn-apagar-foto{position:absolute; top:4px; right:4px; background:rgba(0,0,0,0.6); color:white; border:none; border-radius:50%; width:24px; height:24px; cursor:pointer; font-size:14px; display:flex; align-items:center; justify-content:center; z-index:10;}
-        .btn-apagar-foto:hover{background:var(--alerta);}
-        .sem-foto{grid-column:1/-1; text-align:center; color:var(--cinza); padding:20px;}
-        .link-area{padding:10px;}
-        .link-area input{width:100%; padding:10px; margin:5px 0; border:2px solid #e2e8f0; border-radius:8px; font-size:13px;}
-        .link-area button{width:100%; padding:10px; margin-top:5px; background:var(--agua); color:white; border:none; border-radius:8px; cursor:pointer; font-size:14px; font-weight:bold;}
-        .link-area button:hover{background:var(--agua-escura);}
-        .casa-corpo{padding:20px;}
-        .casa-nome{font-size:18px; font-weight:bold; margin-bottom:8px;}
-        .casa-desc{font-size:14px; color:var(--cinza); margin-bottom:12px; line-height:1.5;}
-        .btn-reservar{width:100%; padding:12px; background:linear-gradient(135deg, var(--sol), #e67700); color:white; border:none; border-radius:10px; font-weight:bold; cursor:pointer; font-size:15px;}
-        .btn-reservar:disabled{background:#ccc; cursor:not-allowed;}
-        .caixa-form{background:white; padding:25px; border-radius:16px; box-shadow:0 4px 15px rgba(0,0,0,0.06); margin:20px 0;}
-        .linha-form{display:grid; grid-template-columns:repeat(auto-fit, minmax(160px,1fr)); gap:12px; margin:8px 0;}
-        input, textarea, select{padding:12px; border:2px solid #e2e8f0; border-radius:10px; font-size:14px; width:100%;}
-        button.sucesso{background:linear-gradient(135deg, #2f855a, #276749); color:white; border:none; border-radius:10px; font-weight:bold; cursor:pointer; padding:12px;}
-        button.vermelho{background:linear-gradient(135deg, #e53e3e, #c53030); color:white; border:none; border-radius:10px; font-weight:bold; cursor:pointer; padding:12px;}
-        button.azul{background:linear-gradient(135deg, #3b82f6, #2563eb); color:white; border:none; border-radius:10px; font-weight:bold; cursor:pointer; padding:10px;}
-        .modal{position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); display:none; align-items:center; justify-content:center; z-index:1000;}
-        .modal.aberto{display:flex;}
-        .modal-conteudo{background:white; padding:30px; border-radius:16px; max-width:600px; width:90%; max-height:90vh; overflow-y:auto;}
-        .solicitacao-item, .reserva-item{border-bottom:1px solid #eee; padding:20px 0;}
-        .solicitacao-item:last-child, .reserva-item:last-child{border-bottom:none;}
-        .badge-novo{background:var(--sol); color:#333; font-size:11px; padding:2px 6px; border-radius:10px; margin-left:6px;}
-        .dica{font-size:12px; color:var(--cinza); margin-top:5px;}
-        .limpar-btn{background:var(--alerta); color:white; border:none; border-radius:8px; padding:8px 12px; cursor:pointer; font-size:13px; margin-bottom:15px;}
-        .valor-destaque{font-size:22px; font-weight:bold; color:var(--sucesso); margin:10px 0;}
-        .resumo-valores{background:#f0fdf4; padding:15px; border-radius:10px; margin:15px 0;}
-        .status-badge{display:inline-block; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:bold;}
-        .status-pendente{background:#fef3c7; color:#92400e;}
-        .status-pago{background:#d1fae5; color:#065f46;}
-        .status-parcial{background:#dbeafe; color:#1e40af;}
-        .filtros{display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap;}
-        .filtro-btn{padding:8px 16px; border:none; border-radius:8px; cursor:pointer; background:#e5e7eb;}
-        .filtro-btn.ativo{background:var(--agua); color:white;}
-        .total-geral{font-size:20px; font-weight:bold; text-align:right; margin-top:20px; padding:15px; background:#f0fdf4; border-radius:10px;}
-        .linha-valor{display:flex; justify-content:space-between; padding:5px 0;}
-        .calendario-container{margin-top:20px;}
-        .calendario-navegacao{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;}
-        .calendario-navegacao button{background:var(--agua); color:white; border:none; border-radius:6px; padding:6px 12px; cursor:pointer;}
-        .calendario-grade{display:grid; grid-template-columns:repeat(7, 1fr); gap:4px; text-align:center;}
-        .calendario-dia-semana{font-weight:bold; font-size:12px; color:var(--cinza); padding:8px 4px;}
-        .calendario-dia{padding:8px 4px; border-radius:6px; cursor:pointer; min-height:40px; display:flex; flex-direction:column; justify-content:center; font-size:13px; border:1px solid transparent;}
-        .calendario-dia:hover{background:#e6f2f8; border-color:var(--agua);}
-        .calendario-dia.vazio{cursor:default; background:transparent; border:none;}
-        .calendario-dia.passado{color:#ddd; cursor:not-allowed;}
-        .calendario-dia.selecionado{background:var(--agua); color:white; font-weight:bold;}
-        .calendario-dia.com-valor{background:#f0fdf4; border-color:var(--sucesso);}
-        .calendario-valor-diaria{font-size:10px; margin-top:2px; font-weight:bold;}
-        .aviso-indisponivel{background:var(--indisponivel); color:var(--texto-indisponivel); padding:12px; border-radius:8px; margin:10px 0; display:none;}
-        .aviso-indisponivel.visivel{display:block;}
-        @media (max-width:900px){.pagina{flex-direction:column;} .lado-esquerdo{width:100%;} .conteudo-principal{padding:20px;}}
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Casas na Praia - Gestão de Locações</title>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<style>
+:root{
+    --marinho:#0a4b6e; --turquesa:#17a2b8; --areia:#f8f5e6; --ouro:#ffc107;
+    --concha:#fff8e7; --texto:#2c3e50; --cinza:#7f8c8d; --sucesso:#28a745;
+    --alerta:#ffc107; --perigo:#dc3545; --branco:#fff; --sombra:0 4px 12px rgba(0,0,0,.08);
+}
+*{margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', sans-serif;}
+body{background:linear-gradient(120deg, #e0f0f5, #fef9ed); color:var(--texto); min-height:100vh;}
+
+/* Layout */
+.barra-lateral{position:fixed; left:0; top:0; width:260px; height:100vh; background:linear-gradient(180deg, var(--marinho), #0f6694); color:white; padding:25px 20px; z-index:100; box-shadow:2px 0 15px rgba(0,0,0,.1);}
+.conteudo-principal{margin-left:260px; padding:30px; min-height:100vh;}
+.logo{font-size:22px; font-weight:700; margin-bottom:35px; text-align:center; padding-bottom:20px; border-bottom:1px solid rgba(255,255,255,.2);}
+.menu-lateral{display:flex; flex-direction:column; gap:8px; margin-top:20px;}
+.item-menu{background:transparent; border:none; color:rgba(255,255,255,.85); padding:12px 15px; text-align:left; border-radius:8px; cursor:pointer; transition:.2s; font-size:15px;}
+.item-menu:hover, .item-menu.ativo{background:rgba(255,255,255,.15); color:white;}
+.area-publica{display:none;}
+.pagina{display:none; animation:aparecer .3s ease;}
+.pagina.ativa{display:block;}
+@keyframes aparecer{from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:none;}}
+
+/* Login */
+.caixa-login{background:white; padding:30px; border-radius:12px; box-shadow:var(--sombra); max-width:340px; margin:100px auto;}
+.caixa-login h2{text-align:center; margin-bottom:25px; color:var(--marinho);}
+.grupo-input{margin-bottom:15px;}
+.grupo-input label{display:block; margin-bottom:5px; font-weight:500; font-size:14px;}
+.grupo-input input, select{width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:6px; font-size:15px;}
+button{cursor:pointer; border:none; border-radius:6px; font-weight:500; transition:.2s;}
+.btn-primario{background:var(--turquesa); color:white; width:100%; padding:12px; font-size:16px;}
+.btn-primario:hover{background:#138496;}
+.oculto{display:none !important;}
+
+/* Calendário */
+.calendario{background:white; padding:25px; border-radius:12px; box-shadow:var(--sombra); margin:20px 0;}
+.calendario-cabecalho{display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;}
+.calendario-cabecalho button{background:var(--turquesa); color:white; padding:8px 16px;}
+.calendario-grade{display:grid; grid-template-columns:repeat(7, 1fr); gap:6px;}
+.dia{padding:12px 8px; text-align:center; border-radius:8px; cursor:pointer; transition:.2s; border:2px solid transparent;}
+.dia:hover{background:var(--areia);}
+.dia.selecionado{background:var(--ouro); color:#212529; font-weight:bold; border-color:#d4a000;}
+.dia.selecionado-inicio{border-left:3px solid #d4a000; border-radius:8px 0 0 8px;}
+.dia.selecionado-fim{border-right:3px solid #d4a000; border-radius:0 8px 8px 0;}
+.dia.no-intervalo{background:#fff3cd; border-color:#ffd90080;}
+.dia.ocupado{background:#f8d7da; color:#721c24; cursor:not-allowed;}
+.dia.passado{color:#ccc; cursor:not-allowed;}
+.dia.com-valor{border-color:var(--sucesso); background:#e8f5e9;}
+.rotulo-dia-semana{text-align:center; font-weight:600; padding:8px; color:var(--cinza); font-size:14px;}
+.linha-form{display:flex; gap:10px; align-items:center; margin:15px 0; flex-wrap:wrap;}
+.linha-form input, .linha-form select{flex:1; min-width:140px;}
+.azul{background:var(--turquesa); color:white; padding:8px 14px;}
+.verde{background:var(--sucesso); color:white; padding:8px 14px;}
+.vermelho{background:var(--perigo); color:white; padding:8px 14px;}
+.sucesso{background:var(--sucesso); color:white; padding:10px 18px;}
+.amarelo{background:var(--ouro); color:#212529; padding:10px 18px; font-weight:bold;}
+
+/* Casas e Cards */
+.grade-casas{display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:25px; margin-top:20px;}
+.card-casa{background:white; border-radius:12px; overflow:hidden; box-shadow:var(--sombra); transition:.3s;}
+.card-casa:hover{transform:translateY(-5px);}
+.card-imagem{height:200px; background:linear-gradient(135deg, var(--turquesa), var(--marinho)); display:flex; align-items:center; justify-content:center; color:white; font-size:40px;}
+.card-corpo{padding:20px;}
+.etiqueta-status{display:inline-block; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:bold; margin:8px 0;}
+.etiqueta-status.disponivel{background:#d4edda; color:#155724;}
+.etiqueta-status.ocupado{background:#f8d7da; color:#721c24;}
+
+/* Modal */
+.modal{position:fixed; inset:0; background:rgba(0,0,0,.5); display:flex; align-items:center; justify-content:center; z-index:200; opacity:0; visibility:hidden; transition:.2s;}
+.modal.aberto{opacity:1; visibility:visible;}
+.modal-conteudo{background:white; padding:25px; border-radius:12px; max-width:500px; width:90%; max-height:90vh; overflow-y:auto;}
+.cabecalho-modal{display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;}
+.fechar{background:none; border:none; font-size:20px; cursor:pointer; color:var(--cinza);}
+
+/* Relatórios e Listas */
+.reserva-item{border:1px solid #eee; border-radius:8px; padding:15px; margin-bottom:10px;}
+.status-badge{display:inline-block; padding:3px 10px; border-radius:12px; font-size:12px; font-weight:bold; margin-top:8px;}
+.status-pendente{background:#fff3cd; color:#856404;}
+.status-parcial{background:#d1ecf1; color:#0c5460;}
+.status-pago{background:#d4edda; color:#155724;}
+.total-geral{background:var(--concha); padding:20px; border-radius:8px; margin:15px 0;}
+.linha-valor{display:flex; justify-content:space-between; padding:6px 0;}
+.ativo{background:var(--ouro) !important; color:#212529 !important;}
+.aviso-sucesso{background:#d4edda; color:#155724; padding:10px 15px; border-radius:6px; margin:15px 0; display:none;}
+</style>
 </head>
 <body>
-<div class="pagina">
-    <div class="lado-esquerdo">
-        <div class="logo-lado">
-            <h2>🏖️ Gestão</h2>
-            <p>Casas na Praia<br>Araranguá / SC</p>
+
+<!-- Área de Login -->
+<div id="telaLogin" class="pagina ativa">
+    <div class="caixa-login">
+        <h2>🔐 Acesso Administrativo</h2>
+        <div class="grupo-input">
+            <label>Usuário</label>
+            <input type="text" id="usuario" placeholder="Digite seu usuário">
         </div>
-        <div id="areaLogin">
-            <div class="login-caixa">
-                <h3>🔐 Acesso Administrativo</h3>
-                <input type="text" id="usuarioLogin" placeholder="Usuário">
-                <input type="password" id="senhaLogin" placeholder="Senha">
-                <button class="login-btn" onclick="verificarLogin()">Entrar</button>
-                <p class="erro-login" id="erroLogin"></p>
-            </div>
+        <div class="grupo-input">
+            <label>Senha</label>
+            <input type="password" id="senha" placeholder="Digite sua senha">
         </div>
-        <div id="painelAdmin" class="oculto">
-            <p class="navegacao-titulo">Navegação</p>
-            <button class="aba-lateral ativa" data-aba="painel">📊 Painel</button>
-            <button class="aba-lateral" data-aba="casas">📷 Casas & Fotos</button>
-            <button class="aba-lateral" data-aba="calendario">📅 Valores por Data</button>
-            <button class="aba-lateral" data-aba="solicitacoes">📩 Solicitações <span class="badge-novo oculto" id="badgeSolicitacoes">0</span></button>
-            <button class="aba-lateral" data-aba="reservas">📅 Reservas</button>
-            <button class="aba-lateral" data-aba="relatorios">📈 Relatórios</button>
-            <button class="aba-lateral" data-aba="config">⚙️ Configurações</button>
-            <button class="sair-btn" onclick="sairAdmin()">🚪 Sair</button>
+        <button class="btn-primario" onclick="fazerLogin()">Entrar no Sistema</button>
+        <p style="text-align:center; margin-top:20px; font-size:13px; color:var(--cinza);">
+            Área restrita · Para disponibilidade pública, compartilhe a página principal
+        </p>
+    </div>
+</div>
+
+<!-- Painel Administrativo -->
+<div id="painelAdmin" class="oculto">
+    <div class="barra-lateral">
+        <div class="logo">🏖️ Casas na Praia</div>
+        <div class="menu-lateral">
+            <button class="item-menu ativo" data-pagina="calendario">📅 Calendário & Valores</button>
+            <button class="item-menu" data-pagina="casas">🏠 Gerenciar Casas</button>
+            <button class="item-menu" data-pagina="hospedes">👤 Cadastro Hóspedes</button>
+            <button class="item-menu" data-pagina="reservas">📋 Reservas</button>
+            <button class="item-menu" data-pagina="relatorios">📊 Relatórios</button>
+            <button class="item-menu" data-pagina="publica">🌐 Ver Página Pública</button>
+            <button class="item-menu" style="margin-top:20px; color:#ffd0d0;" onclick="fazerLogout()">🚪 Sair</button>
         </div>
     </div>
+
     <div class="conteudo-principal">
-        <div id="paginaPublica">
-            <div class="cabecalho-publico">
-                <h1>🏡 Conheça Nossas Casas</h1>
-                <p>Informe o período desejado para ver o valor total</p>
+        <!-- Página: Calendário e Valores com Seleção de Intervalo -->
+        <div id="pagina-calendario" class="pagina ativa">
+            <h2>📅 Calendário de Disponibilidade & Valores</h2>
+            <p style="color:var(--cinza); margin:10px 0;">💡 Clique e arraste para selecionar um período → defina o valor e clique em Salvar para aplicar a todos os dias selecionados.</p>
+            
+            <div class="linha-form">
+                <label style="font-weight:600;">Selecione a Casa:</label>
+                <select id="casaCalendario">
+                    <option value="amarela">🏡 Casa Amarela</option>
+                    <option value="bege">🌾 Casa Bege</option>
+                    <option value="marrom">🪵 Casa Marrom</option>
+                    <option value="branca">☁️ Casa Branca</option>
+                </select>
             </div>
-            <div class="casas-grid" id="gridPublico"></div>
+
+            <div class="calendario">
+                <div class="calendario-cabecalho">
+                    <button onclick="mudarMes(-1)">&lt; Mês Anterior</button>
+                    <h3 id="nomeMes">Mês</h3>
+                    <button onclick="mudarMes(1)">Próximo Mês &gt;</button>
+                </div>
+                <div class="calendario-grade" id="gradeCalendario"></div>
+            </div>
+
+            <div class="linha-form">
+                <label>Valor da Diária (R$):</label>
+                <input type="number" id="valorDiaria" min="0" step="5" placeholder="0,00">
+                <button class="sucesso" onclick="salvarValorPeriodo()">💾 Salvar para Selecionado(s)</button>
+                <button class="vermelho" onclick="removerValor()">🗑️ Remover Valor</button>
+            </div>
+            <p id="infoSelecao" style="margin-top:10px; color:var(--cinza);">Nenhum dia selecionado</p>
         </div>
-        <div id="conteudoAdmin" class="oculto">
-            <div class="conteudo-aba visivel" id="aba-painel">
-                <h2 class="painel-titulo">📊 Painel Administrativo</h2>
-                <p>Bem-vindo! Use os botões ao lado para gerenciar tudo.</p>
-                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:15px; margin:30px 0;">
-                    <div class="caixa-form" style="text-align:center; border-top:4px solid var(--pendente);">
-                        <p style="color:var(--cinza); font-size:13px;">📩 Solicitações</p>
-                        <p style="font-size:28px; font-weight:bold; color:var(--pendente);" id="qtdSolicitacoes">0</p>
-                    </div>
-                    <div class="caixa-form" style="text-align:center; border-top:4px solid var(--parcial);">
-                        <p style="color:var(--cinza); font-size:13px;">📅 Reservas Ativas</p>
-                        <p style="font-size:28px; font-weight:bold; color:var(--parcial);" id="qtdReservasAtivas">0</p>
-                    </div>
-                    <div class="caixa-form" style="text-align:center; border-top:4px solid var(--sucesso);">
-                        <p style="color:var(--cinza); font-size:13px;">💰 Total Recebido</p>
-                        <p style="font-size:24px; font-weight:bold; color:var(--sucesso);" id="totalRecebido">R$ 0,00</p>
-                    </div>
-                </div>
+
+        <!-- Página: Gerenciar Casas -->
+        <div id="pagina-casas" class="pagina">
+            <h2>🏠 Gerenciar Casas</h2>
+            <p style="color:var(--cinza); margin:10px 0;">Faça upload de fotos e cadastre as informações de cada casa.</p>
+            <div class="grade-casas" id="gradeCasas"></div>
+        </div>
+
+        <!-- Página: Hóspedes -->
+        <div id="pagina-hospedes" class="pagina">
+            <h2>👤 Cadastro de Hóspedes</h2>
+            <div class="linha-form">
+                <input type="text" id="buscarHospede" placeholder="Buscar hóspede pelo nome..." oninput="filtrarHospedes()">
+                <button class="azul" onclick="abrirCadastroHospede()">+ Novo Cadastro</button>
             </div>
-            <div class="conteudo-aba" id="aba-casas">
-                <h2 class="painel-titulo">📷 Gerenciar Casas & Fotos</h2>
-                <p class="dica">💡 Use links diretos de imagens (.jpg/.png). Clique no ✖️ para remover.</p>
-                <button class="limpar-btn" onclick="limparTodasFotos()">🗑️ Limpar TODAS as fotos</button>
-                <div class="casas-grid" id="gridAdmin"></div>
+            <div id="listaHospedes" style="margin-top:20px;"></div>
+        </div>
+
+        <!-- Página: Reservas -->
+        <div id="pagina-reservas" class="pagina">
+            <h2>📋 Solicitações e Reservas</h2>
+            <div style="display:flex; gap:10px; margin:15px 0;">
+                <button data-filtro="todas" class="azul ativo">Todas</button>
+                <button data-filtro="pendente">Pendentes</button>
+                <button data-filtro="parcial">Parcial</button>
+                <button data-filtro="pago">Pagas</button>
             </div>
-            <div class="conteudo-aba" id="aba-calendario">
-                <h2 class="painel-titulo">📅 Valores de Diária por Data</h2>
-                <p class="dica">💡 Clique em um dia para definir valor. Valores padrão são usados se não houver definição.</p>
-                <div style="margin-bottom:15px;">
-                    <label><strong>Selecione a Casa:</strong></label>
-                    <select id="casaCalendario" onchange="mudarCalendario()">
-                        <option value="amarela">🟡 Casa Amarela</option>
-                        <option value="beje">🟤 Casa Beje</option>
-                        <option value="marrom">🟫 Casa Marrom</option>
-                        <option value="branca">⚪ Casa Branca</option>
-                    </select>
-                </div>
-                <div class="calendario-container" id="calendarioArea"></div>
-                <div class="valor-edicao" id="edicaoValor" style="display:none; margin-top:15px;">
-                    <label>Valor da Diária (R$):</label>
-                    <input type="number" id="valorDiaSelecionado" step="10" min="0" style="width:120px;">
-                    <button class="sucesso" onclick="salvarValorDia()">💾 Salvar</button>
-                    <button class="vermelho" onclick="removerValorDia()">🗑️ Remover</button>
-                </div>
+            <div id="listaReservas"></div>
+        </div>
+
+        <!-- Página: Relatórios -->
+        <div id="pagina-relatorios" class="pagina">
+            <h2>📊 Relatórios</h2>
+            <div style="display:flex; gap:10px; margin:15px 0;">
+                <button data-periodo="todos" class="azul ativo">Todo o Período</button>
+                <button data-periodo="mes">Este Mês</button>
+                <button data-periodo="ano">Este Ano</button>
             </div>
-            <div class="conteudo-aba" id="aba-solicitacoes">
-                <h2 class="painel-titulo">📩 Solicitações de Reserva</h2>
-                <p style="color:var(--cinza); margin-bottom:20px;">Avalie e converta em reserva confirmada.</p>
-                <div id="listaSolicitacoes"></div>
-            </div>
-            <div class="conteudo-aba" id="aba-reservas">
-                <h2 class="painel-titulo">📅 Reservas Confirmadas</h2>
-                <div class="filtros">
-                    <button class="filtro-btn ativo" data-filtro="todas">Todas</button>
-                    <button class="filtro-btn" data-filtro="pendente">Pendentes</button>
-                    <button class="filtro-btn" data-filtro="parcial">Pagamento Parcial</button>
-                    <button class="filtro-btn" data-filtro="pago">Pagas</button>
-                </div>
-                <div id="listaReservas"></div>
-            </div>
-            <div class="conteudo-aba" id="aba-relatorios">
-                <h2 class="painel-titulo">📈 Relatório de Recebimentos</h2>
-                <div class="filtros">
-                    <button class="filtro-btn ativo" data-periodo="todos">Todo Período</button>
-                    <button class="filtro-btn" data-periodo="mes">Este Mês</button>
-                    <button class="filtro-btn" data-periodo="ano">Este Ano</button>
-                </div>
-                <div id="relatorioConteudo"></div>
-            </div>
-            <div class="conteudo-aba" id="aba-config">
-                <h2 class="painel-titulo">⚙️ Configurações</h2>
-                <div class="caixa-form">
-                    <h3>Alterar Dados de Acesso</h3>
-                    <p style="font-size:13px; color:var(--cinza); margin:10px 0;">Padrão: <strong>admin / admin123</strong></p>
-                    <div class="linha-form">
-                        <input type="text" id="novoUsuario" placeholder="Novo Usuário">
-                        <input type="password" id="novaSenha" placeholder="Nova Senha">
-                    </div>
-                    <button class="sucesso" onclick="alterarAcesso()">Salvar</button>
-                </div>
-            </div>
+            <div id="relatorioConteudo"></div>
+        </div>
+
+        <!-- Página: Pública -->
+        <div id="pagina-publica" class="pagina">
+            <h2>🌐 Pré-visualização — Página Pública</h2>
+            <p style="color:var(--cinza); margin-bottom:20px;">Compartilhe o link do GitHub Pages com os hóspedes para visualização e solicitação de reservas.</p>
+            <div id="conteudoPublico"></div>
         </div>
     </div>
 </div>
-<div class="modal" id="modalReserva">
+
+<!-- Modal de Reserva -->
+<div id="modalReserva" class="modal">
     <div class="modal-conteudo">
-        <h3>📩 Solicitar Reserva — <span id="nomeCasaReserva"></span></h3>
-        <div class="aviso-indisponivel" id="avisoIndisponivel">⚠️ Este período já está reservado. Por favor, escolha outras datas.</div>
-        <div class="linha-form">
-            <input type="text" id="resNome" placeholder="Seu Nome Completo *">
-            <input type="tel" id="resTel" placeholder="WhatsApp / Telefone *">
+        <div class="cabecalho-modal">
+            <h3>Solicitar Reserva</h3>
+            <button class="fechar" onclick="fecharModal()">&times;</button>
+        </div>
+        <div class="grupo-input">
+            <label>Nome Completo</label>
+            <input type="text" id="hospedeNome">
+        </div>
+        <div class="grupo-input">
+            <label>Telefone com WhatsApp</label>
+            <input type="tel" id="hospedeTelefone">
         </div>
         <div class="linha-form">
-            <input type="date" id="resEntrada" onchange="calcularValorPublico()">
-            <input type="date" id="resSaida" onchange="calcularValorPublico()">
+            <div class="grupo-input" style="flex:1;">
+                <label>Data Entrada</label>
+                <input type="date" id="dataEntrada">
+            </div>
+            <div class="grupo-input" style="flex:1;">
+                <label>Data Saída</label>
+                <input type="date" id="dataSaida">
+            </div>
         </div>
-        <div id="resumoValorPublico" class="resumo-valores oculto">
-            <p>Valor médio/diária: <span id="valorDiariaPub"></span></p>
-            <p>Quantidade de diárias: <span id="qtdDiasPub"></span></p>
-            <p class="valor-destaque">Total a pagar: <span id="valorTotalPub"></span></p>
+        <div class="grupo-input">
+            <label>Observações</label>
+            <textarea id="obsReserva" rows="3" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px;"></textarea>
         </div>
-        <textarea id="resObs" placeholder="Observações" rows="3"></textarea>
-        <div style="display:flex; gap:10px; margin-top:15px;">
-            <button class="sucesso" id="btnEnviarReserva" onclick="enviarReserva()">✅ Enviar Solicitação</button>
-            <button class="vermelho" onclick="fecharModalReserva()">Cancelar</button>
-        </div>
+        <button class="amarelo" style="width:100%; margin-top:10px;" onclick="enviarReserva()">📤 Enviar Solicitação</button>
     </div>
 </div>
-<div class="modal" id="modalGerenciarReserva">
+
+<!-- Modal Gerenciar Reserva -->
+<div id="modalGerenciarReserva" class="modal">
     <div class="modal-conteudo">
-        <h3>📋 Gerenciar Reserva</h3>
+        <div class="cabecalho-modal">
+            <h3>Editar Reserva</h3>
+            <button class="fechar" onclick="fecharModalGerenciar()">&times;</button>
+        </div>
         <div id="conteudoGerenciar"></div>
-        <div style="display:flex; gap:10px; margin-top:20px;">
-            <button class="vermelho" onclick="fecharModalGerenciar()">Fechar</button>
-        </div>
     </div>
 </div>
+
 <script>
+// Configuração Firebase — substitua pelos seus dados
 const firebaseConfig = {
-  apiKey: "AIzaSyDDxYq7YRcNNLk3pIZWff7i45RNs6kpDtA",
-  authDomain: "casas-na-praia.firebaseapp.com",
-  projectId: "casas-na-praia",
-  storageBucket: "casas-na-praia.appspot.com",
-  messagingSenderId: "593715521697",
-  appId: "1:593715521697:web:30f1329a325e2444b9e8e0"
+    apiKey: "AIzaSyC8ZtXwPnUa9WnqLdKfYbXzYbXzYbXzYbXzYbXzYbX",
+    authDomain: "casas-na-praia.firebaseapp.com",
+    projectId: "casas-na-praia",
+    storageBucket: "casas-na-praia.appspot.com",
+    messagingSenderId: "123456789012",
+    appId: "1:123456789012:web:abc123def456"
 };
+
+// Inicializar Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
+
+// Dados
 const casas = {
-    amarela: {nome:'🟡 Casa Amarela', desc:'Paredes amarelas, janelas marrom, coqueiro na frente — aconchegante e espaçosa.', valorPadrao:380},
-    beje: {nome:'🟤 Casa Beje', desc:'Tom bege, janelas brancas, coqueiro na frente — ideal para famílias.', valorPadrao:350},
-    marrom: {nome:'🟫 Casa Marrom', desc:'Madeira escura, redes coloridas na varanda — com varanda ampla e vista.', valorPadrao:350},
-    branca: {nome:'⚪ Casa Branca', desc:'Paredes brancas, janelas marrom, ambiente arejado — perto do mar.', valorPadrao:350}
+    amarela: {nome: 'Casa Amarela', desc: 'Janela marrom, com coqueiro na frente', imagem: ''},
+    bege: {nome: 'Casa Bege', desc: 'Com coqueiro na frente e janelas brancas', imagem: ''},
+    marrom: {nome: 'Casa Marrom', desc: 'Madeira com redes coloridas', imagem: ''},
+    branca: {nome: 'Casa Branca', desc: 'Paredes brancas, janelas marrom, ambiente arejado — perto do mar', imagem: ''}
 };
-const USUARIO_PADRAO = 'admin';
-const SENHA_PADRAO = 'admin123';
-let admin = JSON.parse(localStorage.getItem('admin')) || {usuario: USUARIO_PADRAO, senha: SENHA_PADRAO};
-let casaSelecionada = null;
-let fotosCasas = {};
-let valoresPorData = {};
+
+let dataAtual = new Date();
+let valoresDiarias = {}; // {casa_data: valor}
 let reservasConfirmadas = [];
+let hospedesCadastrados = [];
 let filtroReservas = 'todas';
 let filtroRelatorio = 'todos';
-let mesAtual = new Date();
-let diaSelecionado = null;
-document.addEventListener('DOMContentLoaded', async function(){
-    console.log('✅ Sistema carregado');
-    await carregarFotosDoFirestore();
-    await carregarValoresPorData();
+
+// Variáveis para SELEÇÃO DE INTERVALO
+let selecionando = false;
+let dataInicioSelecao = null;
+let datasSelecionadas = new Set();
+
+// Login
+const ADM_USUARIO = 'admin';
+const ADM_SENHA = 'praia2026'; // Altere para sua senha!
+
+function fazerLogin(){
+    const u = document.getElementById('usuario').value.trim();
+    const s = document.getElementById('senha').value.trim();
+    if(u === ADM_USUARIO && s === ADM_SENHA){
+        document.getElementById('telaLogin').classList.add('oculto');
+        document.getElementById('painelAdmin').classList.remove('oculto');
+        inicializarSistema();
+    }else{
+        alert('❌ Usuário ou senha incorretos!');
+    }
+}
+function fazerLogout(){
+    document.getElementById('painelAdmin').classList.add('oculto');
+    document.getElementById('telaLogin').classList.remove('oculto');
+    document.getElementById('usuario').value = '';
+    document.getElementById('senha').value = '';
+}
+
+async function inicializarSistema(){
+    await carregarValoresDiarias();
     await carregarReservasConfirmadas();
-    renderizarPublico();
-    renderizarAdminCasas();
-    monitorarSolicitacoes();
-    monitorarReservas();
-    configurarFiltros();
-});
-async function carregarFotosDoFirestore(){
-    for(const [id] of Object.entries(casas)){
-        try {
-            const doc = await db.collection('fotosCasas').doc(id).get();
-            fotosCasas[id] = doc.exists ? (doc.data().urls || []) : [];
-        } catch (e) { fotosCasas[id] = []; }
-    }
+    await carregarHospedes();
+    renderizarCalendario();
+    configurarNavegacao();
+    renderizarCasas();
+    gerarRelatorio();
 }
-async function salvarLinkFoto(casaId, link){
-    try {
-        const fotosAtuais = fotosCasas[casaId] || [];
-        fotosAtuais.push(link.trim());
-        await db.collection('fotosCasas').doc(casaId).set({ urls: fotosAtuais });
-        fotosCasas[casaId] = fotosAtuais;
-        renderizarPublico();
-        renderizarAdminCasas();
-        return true;
-    } catch (erro) { console.error('Erro:', erro); return false; }
-}
-async function removerFoto(casaId, indice){
-    if(!confirm('Remover esta foto?')) return;
-    fotosCasas[casaId].splice(indice, 1);
-    await db.collection('fotosCasas').doc(casaId).set({ urls: fotosCasas[casaId] });
-    renderizarPublico();
-    renderizarAdminCasas();
-}
-async function limparTodasFotos(){
-    if(!confirm('Tem CERTEZA? TODAS as fotos serão apagadas!')) return;
-    for(const [id] of Object.entries(casas)){
-        fotosCasas[id] = [];
-        await db.collection('fotosCasas').doc(id).set({ urls: [] });
-    }
-    alert('✅ Limpo!');
-    renderizarPublico();
-    renderizarAdminCasas();
-}
-async function carregarValoresPorData(){
-    try {
-        const doc = await db.collection('configuracoes').doc('valoresPorData').get();
-        if(doc.exists && doc.data().dados){
-            valoresPorData = doc.data().dados;
-        }
-    } catch (e) { valoresPorData = {}; }
-}
-async function salvarValoresPorData(){
-    await db.collection('configuracoes').doc('valoresPorData').set({ dados: valoresPorData });
-}
-async function carregarReservasConfirmadas(){
-    const snap = await db.collection('reservas').get();
-    reservasConfirmadas = snap.docs.map(d => ({id: d.id, ...d.data()}));
-}
-function verificarDisponibilidade(casaId, entrada, saida){
-    if(!entrada || !saida) return {disponivel: true};
-    const e = new Date(entrada);
-    const s = new Date(saida);
-    for(const r of reservasConfirmadas){
-        if(r.casa !== casaId) continue;
-        const re = new Date(r.entrada);
-        const rs = new Date(r.saida);
-        if(e < rs && s > re) return {disponivel: false, reserva: r};
-    }
-    return {disponivel: true};
-}
-function obterValorDiaria(casaId, data){
-    const chave = `${casaId}-${data}`;
-    return valoresPorData[chave] || casas[casaId].valorPadrao;
-}
-function calcularDias(entrada, saida){
-    if(!entrada || !saida) return 0;
-    const d1 = new Date(entrada);
-    const d2 = new Date(saida);
-    const diff = d2 - d1;
-    return diff > 0 ? Math.ceil(diff / (1000 * 60 * 60 * 24)) : 0;
-}
-function formatarValor(valor){
-    return new Intl.NumberFormat('pt-BR', {style:'currency', currency:'BRL'}).format(valor || 0);
-}
-function formatarDataISO(d){
-    return d.toISOString().split('T')[0];
-}
-function calcularValorPublico(){
-    const entrada = document.getElementById('resEntrada').value;
-    const saida = document.getElementById('resSaida').value;
-    const aviso = document.getElementById('avisoIndisponivel');
-    const resumo = document.getElementById('resumoValorPublico');
-    const btn = document.getElementById('btnEnviarReserva');
-    
-    if(!entrada || !saida || !casaSelecionada){
-        resumo.classList.add('oculto');
-        aviso.classList.remove('visivel');
-        return;
-    }
-    
-    const dias = calcularDias(entrada, saida);
-    if(dias <= 0){
-        resumo.classList.add('oculto');
-        aviso.classList.remove('visivel');
-        return;
-    }
-    
-    const disp = verificarDisponibilidade(casaSelecionada, entrada, saida);
-    if(!disp.disponivel){
-        aviso.classList.add('visivel');
-        resumo.classList.add('oculto');
-        btn.disabled = true;
-        return;
-    }
-    
-    aviso.classList.remove('visivel');
-    btn.disabled = false;
-    
-    let valorTotal = 0;
-    let dataAtual = new Date(entrada);
-    const dataFim = new Date(saida);
-    while(dataAtual < dataFim){
-        valorTotal += obterValorDiaria(casaSelecionada, formatarDataISO(dataAtual));
-        dataAtual.setDate(dataAtual.getDate() + 1);
-    }
-    
-    const valorMedio = valorTotal / dias;
-    document.getElementById('valorDiariaPub').textContent = formatarValor(valorMedio);
-    document.getElementById('qtdDiasPub').textContent = dias + ' diária(s)';
-    document.getElementById('valorTotalPub').textContent = formatarValor(valorTotal);
-    resumo.classList.remove('oculto');
-}
-function renderizarPublico(){
-    const grid = document.getElementById('gridPublico');
-    if(!grid) return;
-    grid.innerHTML = '';
-    
-    Object.entries(casas).forEach(([id, casa]) => {
-        const fotos = fotosCasas[id] || [];
-        const card = document.createElement('div');
-        card.className = `casa-card ${id}`;
-        
-        let htmlImagens = fotos.length > 0 
-            ? fotos.map(f => `<img src="${f}" class="foto-galeria" loading="lazy">`).join('')
-            : '<div class="sem-foto">📷 Fotos em breve</div>';
-        
-        card.innerHTML = `
-            <div class="casa-imagens">${htmlImagens}</div>
-            <div class="casa-corpo">
-                <h3 class="casa-nome">${casa.nome}</h3>
-                <p class="casa-desc">${casa.desc}</p>
-                <button class="btn-reservar" onclick="abrirFormReserva('${id}')">📩 Solicitar Reserva</button>
-            </div>
-        `;
-        grid.appendChild(card);
+
+function configurarNavegacao(){
+    document.querySelectorAll('.item-menu').forEach(botao => {
+        botao.addEventListener('click', () => {
+            document.querySelectorAll('.item-menu').forEach(b => b.classList.remove('ativo'));
+            botao.classList.add('ativo');
+            const paginaId = 'pagina-' + botao.getAttribute('data-pagina');
+            document.querySelectorAll('.pagina').forEach(p => p.classList.remove('ativa'));
+            document.getElementById(paginaId).classList.add('ativa');
+            if(paginaId === 'pagina-publica') renderizarPaginaPublica();
+            if(paginaId === 'pagina-reservas') atualizarListaReservas();
+        });
     });
 }
-function renderizarAdminCasas(){
-    const grid = document.getElementById('gridAdmin');
-    if(!grid) return;
-    grid.innerHTML = '';
-    
-    Object.entries(casas).forEach(([id, casa]) => {
-        const fotos = fotosCasas[id] || [];
-        const card = document.createElement('div');
-        card.className = `casa-card ${id}`;
-        
-        let htmlImagens = fotos.length > 0 
-            ? fotos.map((f, i) => `
-                <div class="foto-item">
-                    <img src="${f}" class="foto-galeria">
-                    <button class="btn-apagar-foto" onclick="removerFoto('${id}', ${i})">✖</button>
-                </div>
-              `).join('')
-            : '<div class="sem-foto">📷 Sem fotos ainda</div>';
-        
-        card.innerHTML = `
-            <div class="casa-imagens">${htmlImagens}</div>
-            <div class="link-area">
-                <input type="text" id="linkFoto-${id}" placeholder="Cole o link da foto (.jpg, .png)">
-                <button onclick="salvarLinkFoto('${id}', document.getElementById('linkFoto-${id}').value)">📤 Adicionar Foto</button>
-            </div>
-            <div class="casa-corpo">
-                <h3 class="casa-nome">${casa.nome}</h3>
-                <p class="casa-desc">${casa.desc}</p>
-                <p class="dica">Valor padrão: ${formatarValor(casa.valorPadrao)} — personalize por data na aba "Valores por Data"</p>
-            </div>
-        `;
-        grid.appendChild(card);
-    });
-}
-function mudarCalendario(){
-    mesAtual = new Date();
-    diaSelecionado = null;
-    document.getElementById('edicaoValor').style.display = 'none';
+
+// === CALENDÁRIO COM SELEÇÃO DE INTERVALO ===
+function mudarMes(delta){
+    dataAtual.setMonth(dataAtual.getMonth() + delta);
     renderizarCalendario();
 }
+
 function renderizarCalendario(){
-    const casaId = document.getElementById('casaCalendario').value;
-    const container = document.getElementById('calendarioArea');
-    const ano = mesAtual.getFullYear();
-    const mes = mesAtual.getMonth();
-    const nomeMes = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'][mes];
+    const ano = dataAtual.getFullYear();
+    const mes = dataAtual.getMonth();
+    document.getElementById('nomeMes').textContent = new Date(ano, mes).toLocaleDateString('pt-BR', {month:'long', year:'numeric'});
     
     const primeiroDia = new Date(ano, mes, 1);
     const ultimoDia = new Date(ano, mes + 1, 0);
-    const diasSemana = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+    const grade = document.getElementById('gradeCalendario');
+    grade.innerHTML = '';
     
-    let html = `
-        <div class="calendario-navegacao">
-            <button onclick="mesAnterior()">&lt; Mês Anterior</button>
-            <h4>${nomeMes} ${ano}</h4>
-            <button onclick="mesProximo()">Próximo Mês &gt;</button>
-        </div>
-        <div class="calendario-grade">
-            ${diasSemana.map(d => `<div class="calendario-dia-semana">${d}</div>`).join('')}
-    `;
+    ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'].forEach(d => {
+        grade.innerHTML += `<div class="rotulo-dia-semana">${d}</div>`;
+    });
     
-    for(let i = 0; i < primeiroDia.getDay(); i++){
-        html += `<div class="calendario-dia vazio"></div>`;
+    // Dias vazios antes do mês
+    for(let i=0; i < primeiroDia.getDay(); i++){
+        grade.innerHTML += `<div class="dia"></div>`;
     }
     
-    const hoje = new Date();
-    for(let d = 1; d <= ultimoDia.getDate(); d++){
-        const dataStr = formatarDataISO(new Date(ano, mes, d));
-        const chave = `${casaId}-${dataStr}`;
-        const valor = valoresPorData[chave];
-        const diaCompleto = new Date(ano, mes, d);
-        const passado = diaCompleto < hoje && formatarDataISO(diaCompleto) !== formatarDataISO(hoje);
+    const hoje = new Date(); hoje.setHours(0,0,0,0);
+    const casaSelecionada = document.getElementById('casaCalendario').value;
+    
+    for(let dia=1; dia <= ultimoDia.getDate(); dia++){
+        const dataStr = `${ano}-${String(mes+1).padStart(2,'0')}-${String(dia).padStart(2,'0')}`;
+        const dataDia = new Date(ano, mes, dia);
+        const chave = `${casaSelecionada}_${dataStr}`;
+        const passou = dataDia < hoje;
+        const temValor = valoresDiarias[chave];
+        const estaSelecionado = datasSelecionadas.has(dataStr);
+        const eInicio = dataInicioSelecao === dataStr;
+        const eFim = selecionando && estaSelecionado ? verificarFimIntervalo(dataStr) : false;
         
-        let classes = '';
-        if(passado) classes += ' passado';
-        if(valor) classes += ' com-valor';
-        if(diaSelecionado === dataStr) classes += ' selecionado';
+        // Verificar se está no intervalo selecionado
+        let classeIntervalo = '';
+        if(estaSelecionado && !eInicio && !eFim) classeIntervalo = 'no-intervalo';
+        if(eInicio) classeIntervalo = 'selecionado-inicio';
+        if(eFim) classeIntervalo = 'selecionado-fim';
         
-        html += `
-            <div class="calendario-dia ${classes}" ${passado ? '' : `onclick="selecionarDia('${dataStr}')"`}>
-                <span>${d}</span>
-                ${valor ? `<span class="calendario-valor-diaria">R$ ${valor}</span>` : ''}
+        let classes = 'dia';
+        if(passou) classes += ' passado';
+        if(temValor) classes += ' com-valor';
+        if(estaSelecionado) classes += ` selecionado ${classeIntervalo}`;
+        
+        grade.innerHTML += `
+            <div class="${classes}" 
+                 data-data="${dataStr}" 
+                 onmousedown="iniciarSelecao('${dataStr}')"
+                 onmouseover="estenderSelecao('${dataStr}')"
+                 onmouseup="finalizarSelecao()">
+                ${dia}
+                ${temValor ? `<div style="font-size:10px; color:var(--sucesso); font-weight:bold;">R$${valoresDiarias[chave]}</div>` : ''}
             </div>
         `;
     }
+}
+
+function iniciarSelecao(dataStr){
+    selecionando = true;
+    dataInicioSelecao = dataStr;
+    datasSelecionadas.clear();
+    datasSelecionadas.add(dataStr);
+    atualizarInfoSelecao();
+    renderizarCalendario();
+}
+
+function estenderSelecao(dataStr){
+    if(!selecionando || !dataInicioSelecao) return;
     
-    html += `</div>`;
-    container.innerHTML = html;
-}
-function mesAnterior(){
-    mesAtual.setMonth(mesAtual.getMonth() - 1);
-    renderizarCalendario();
-}
-function mesProximo(){
-    mesAtual.setMonth(mesAtual.getMonth() + 1);
-    renderizarCalendario();
-}
-function selecionarDia(dataStr){
-    diaSelecionado = dataStr;
-    const casaId = document.getElementById('casaCalendario').value;
-    const chave = `${casaId}-${dataStr}`;
-    const valorAtual = valoresPorData[chave] || casas[casaId].valorPadrao;
+    const [anoI, mesI, diaI] = dataInicioSelecao.split('-').map(Number);
+    const [anoF, mesF, diaF] = dataStr.split('-').map(Number);
     
-    document.getElementById('valorDiaSelecionado').value = valorAtual;
-    document.getElementById('edicaoValor').style.display = 'flex';
-    renderizarCalendario();
-}
-async function salvarValorDia(){
-    if(!diaSelecionado) return;
-    const casaId = document.getElementById('casaCalendario').value;
-    const valor = parseFloat(document.getElementById('valorDiaSelecionado').value);
-    if(isNaN(valor) || valor < 0){ alert('Informe um valor válido!'); return; }
+    const dataInicio = new Date(anoI, mesI-1, diaI);
+    const dataFim = new Date(anoF, mesF-1, diaF);
     
-    valoresPorData[`${casaId}-${diaSelecionado}`] = valor;
-    await salvarValoresPorData();
+    // Garantir ordem crescente
+    const inicio = dataInicio <= dataFim ? dataInicio : dataFim;
+    const fim = dataInicio <= dataFim ? dataFim : dataInicio;
+    
+    datasSelecionadas.clear();
+    let percorrendo = new Date(inicio);
+    while(percorrendo <= fim){
+        const s = `${percorrendo.getFullYear()}-${String(percorrendo.getMonth()+1).padStart(2,'0')}-${String(percorrendo.getDate()).padStart(2,'0')}`;
+        datasSelecionadas.add(s);
+        percorrendo.setDate(percorrendo.getDate() + 1);
+    }
+    
+    atualizarInfoSelecao();
     renderizarCalendario();
-    alert('✅ Valor salvo!');
 }
-async function removerValorDia(){
-    if(!diaSelecionado || !confirm('Remover valor personalizado? Voltará ao padrão.')) return;
-    const casaId = document.getElementById('casaCalendario').value;
-    delete valoresPorData[`${casaId}-${diaSelecionado}`];
-    await salvarValoresPorData();
-    document.getElementById('edicaoValor').style.display = 'none';
-    diaSelecionado = null;
-    renderizarCalendario();
-    alert('✅ Removido!');
+
+function finalizarSelecao(){
+    selecionando = false;
 }
-function verificarLogin(){
-    const usu = document.getElementById('usuarioLogin').value.trim();
-    const sen = document.getElementById('senhaLogin').value.trim();
-    if(usu === admin.usuario && sen === admin.senha){
-        document.getElementById('areaLogin').classList.add('oculto');
-        document.getElementById('painelAdmin').classList.remove('oculto');
-        document.getElementById('conteudoAdmin').classList.remove('oculto');
-        renderizarAdminCasas();
-        renderizarCalendario();
-        atualizarPainel();
-    } else {
-        document.getElementById('erroLogin').textContent = 'Usuário ou senha incorretos!';
+
+function verificarFimIntervalo(dataStr){
+    if(datasSelecionadas.size === 1) return false;
+    const arr = Array.from(datasSelecionadas).sort();
+    return arr[arr.length - 1] === dataStr;
+}
+
+function atualizarInfoSelecao(){
+    const info = document.getElementById('infoSelecao');
+    if(datasSelecionadas.size === 0){
+        info.textContent = 'Nenhum dia selecionado';
+        return;
+    }
+    const arr = Array.from(datasSelecionadas).sort();
+    if(arr.length === 1){
+        info.textContent = `Selecionado: ${formatarDataBr(arr[0])}`;
+    }else{
+        info.textContent = `Selecionados ${arr.length} dias: ${formatarDataBr(arr[0])} até ${formatarDataBr(arr[arr.length-1])}`;
     }
 }
-function sairAdmin(){
-    document.getElementById('areaLogin').classList.remove('oculto');
-    document.getElementById('painelAdmin').classList.add('oculto');
-    document.getElementById('conteudoAdmin').classList.add('oculto');
-    document.getElementById('usuarioLogin').value = '';
-    document.getElementById('senhaLogin').value = '';
+
+function formatarDataBr(dataStr){
+    const [a,m,d] = dataStr.split('-');
+    return `${d}/${m}/${a}`;
 }
-function alterarAcesso(){
-    const u = document.getElementById('novoUsuario').value.trim();
-    const s = document.getElementById('novaSenha').value.trim();
-    if(!u || !s){ alert('Preencha usuário e senha!'); return; }
-    admin = {usuario: u, senha: s};
-    localStorage.setItem('admin', JSON.stringify(admin));
-    alert('✅ Salvo!');
-}
-document.querySelectorAll('.aba-lateral').forEach(btn => {
-    btn.addEventListener('click', function(){
-        document.querySelectorAll('.aba-lateral').forEach(b => b.classList.remove('ativa'));
-        document.querySelectorAll('.conteudo-aba').forEach(c => c.classList.remove('visivel'));
-        this.classList.add('ativa');
-        const abaId = this.getAttribute('data-aba');
-        document.getElementById(`aba-${abaId}`).classList.add('visivel');
-        if(abaId === 'casas') renderizarAdminCasas();
-        if(abaId === 'calendario') renderizarCalendario();
-        if(abaId === 'relatorios') gerarRelatorio();
-    });
-});
-function abrirFormReserva(casaId){
-    casaSelecionada = casaId;
-    document.getElementById('nomeCasaReserva').textContent = casas[casaId].nome;
-    document.getElementById('modalReserva').classList.add('aberto');
-    document.getElementById('resumoValorPublico').classList.add('oculto');
-    document.getElementById('avisoIndisponivel').classList.remove('visivel');
-    document.getElementById('btnEnviarReserva').disabled = false;
-}
-function fecharModalReserva(){
-    document.getElementById('modalReserva').classList.remove('aberto');
-    ['resNome','resTel','resEntrada','resSaida','resObs'].forEach(id => document.getElementById(id).value = '');
-}
-async function enviarReserva(){
-    const entrada = document.getElementById('resEntrada').value;
-    const saida = document.getElementById('resSaida').value;
-    const dias = calcularDias(entrada, saida);
-    
-    const disp = verificarDisponibilidade(casaSelecionada, entrada, saida);
-    if(!disp.disponivel){
-        alert('⚠️ Este período já está reservado! Escolha outras datas.');
+
+async function salvarValorPeriodo(){
+    const valor = parseFloat(document.getElementById('valorDiaria').value);
+    if(isNaN(valor) || valor <= 0){
+        alert('⚠️ Digite um valor válido!');
+        return;
+    }
+    if(datasSelecionadas.size === 0){
+        alert('⚠️ Selecione pelo menos um dia no calendário!');
         return;
     }
     
-    let valorTotal = 0;
-    let dataAtual = new Date(entrada);
-    const dataFim = new Date(saida);
-    while(dataAtual < dataFim){
-        valorTotal += obterValorDiaria(casaSelecionada, formatarDataISO(dataAtual));
-        dataAtual.setDate(dataAtual.getDate() + 1);
-    }
+    const casa = document.getElementById('casaCalendario').value;
+    const lote = db.batch();
     
-    const dados = {
-        casa: casaSelecionada,
-        nome: document.getElementById('resNome').value.trim(),
-        telefone: document.getElementById('resTel').value.trim(),
-        entrada, saida, dias, valorTotal,
-        obs: document.getElementById('resObs').value.trim(),
-        data: new Date().toLocaleString('pt-BR'),
-        criadoEm: firebase.firestore.Timestamp.now(),
-        status: 'pendente'
-    };
-    
-    if(!dados.nome || !dados.telefone || !entrada || !saida){
-        alert('Preencha todos os campos obrigatórios!'); return;
-    }
-    if(dias <= 0){ alert('Data de saída deve ser posterior à entrada!'); return; }
-    
-    try {
-        await db.collection('solicitacoes').add(dados);
-        alert(`✅ Solicitação enviada com sucesso!\n\nValor total: ${formatarValor(valorTotal)}\nEntraremos em contato em breve para confirmar. Obrigado! 🏖️`);
-        fecharModalReserva();
-    } catch(erro) {
-        console.error(erro);
-        alert('❌ Erro ao enviar: ' + erro.message);
-    }
-}
-function monitorarSolicitacoes(){
-    db.collection('solicitacoes').orderBy('criadoEm', 'desc').onSnapshot(snapshot => {
-        const lista = document.getElementById('listaSolicitacoes');
-        const badge = document.getElementById('badgeSolicitacoes');
-        document.getElementById('qtdSolicitacoes').textContent = snapshot.size;
-        badge.textContent = snapshot.size;
-        badge.classList.toggle('oculto', snapshot.size === 0);
-        
-        if(snapshot.empty){
-            lista.innerHTML = '<p style="color:var(--cinza); text-align:center; padding:30px;">Nenhuma solicitação recebida.</p>';
-            return;
-        }
-        
-        lista.innerHTML = snapshot.docs.map(doc => {
-            const s = doc.data();
-            return `
-            <div class="solicitacao-item">
-                <h4 style="font-size:16px; margin-bottom:8px;">${casas[s.casa]?.nome || 'Casa'}</h4>
-                <p><strong>Nome:</strong> ${s.nome}</p>
-                <p><strong>Telefone:</strong> 📞 ${s.telefone}</p>
-                <p><strong>Período:</strong> 📅 ${s.entrada} até ${s.saida} (${s.dias} diária(s))</p>
-                <p class="valor-destaque" style="font-size:16px;">Valor Total: ${formatarValor(s.valorTotal)}</p>
-                ${s.obs ? `<p><strong>Observações:</strong> ${s.obs}</p>` : ''}
-                <p style="font-size:12px; color:var(--cinza); margin:8px 0;">Enviado em: ${s.data}</p>
-                <div style="display:flex; gap:8px; margin-top:10px;">
-                    <button class="sucesso" onclick="converterParaReserva('${doc.id}')">✅ Confirmar Reserva</button>
-                    <button class="vermelho" onclick="excluirSolicitacao('${doc.id}')">🗑️ Excluir</button>
-                </div>
-            </div>`;
-        }).join('');
-    });
-}
-async function converterParaReserva(docId){
-    if(!confirm('Converter em reserva confirmada?')) return;
-    const snap = await db.collection('solicitacoes').doc(docId).get();
-    const dados = snap.data();
-    dados.statusPagamento = 'pendente';
-    dados.valorPago = 0;
-    dados.criadoEmReserva = firebase.firestore.Timestamp.now();
-    
-    await db.collection('reservas').doc(docId).set(dados);
-    await db.collection('solicitacoes').doc(docId).delete();
-    await carregarReservasConfirmadas();
-    alert('✅ Reserva criada! Gerencie na aba "Reservas".');
-}
-async function excluirSolicitacao(docId){
-    if(!confirm('Excluir esta solicitação?')) return;
-    await db.collection('solicitacoes').doc(docId).delete();
-}
-function monitorarReservas(){
-    db.collection('reservas').orderBy('criadoEmReserva', 'desc').onSnapshot(snapshot => {
-        reservasConfirmadas = snapshot.docs.map(d => ({id: d.id, ...d.data()}));
-        atualizarListaReservas();
-        atualizarPainel();
-    });
-}
-function configurarFiltros(){
-    document.querySelectorAll('[data-filtro]').forEach(btn => {
-        btn.addEventListener('click', function(){
-            document.querySelectorAll('[data-filtro]').forEach(b => b.classList.remove('ativo'));
-            this.classList.add('ativo');
-            filtroReservas = this.getAttribute('data-filtro');
-            atualizarListaReservas();
+    datasSelecionadas.forEach(dataStr => {
+        const chave = `${casa}_${dataStr}`;
+        valoresDiarias[chave] = valor;
+        lote.set(db.collection('valores').doc(chave), {
+            casa, data: dataStr, valor, atualizadoEm: firebase.firestore.Timestamp.now()
         });
     });
-    document.querySelectorAll('[data-periodo]').forEach(btn => {
-        btn.addEventListener('click', function(){
-            document.querySelectorAll('[data-periodo]').forEach(b => b.classList.remove('ativo'));
-            this.classList.add('ativo');
-            filtroRelatorio = this.getAttribute('data-periodo');
-            gerarRelatorio();
-        });
+    
+    await lote.commit();
+    alert(`✅ Valor R$ ${valor.toFixed(2)} aplicado para ${datasSelecionadas.size} dia(s)!`);
+    datasSelecionadas.clear();
+    document.getElementById('valorDiaria').value = '';
+    atualizarInfoSelecao();
+    renderizarCalendario();
+}
+
+async function removerValor(){
+    if(datasSelecionadas.size === 0){
+        alert('⚠️ Selecione os dias para remover o valor!');
+        return;
+    }
+    if(!confirm(`Remover valor de ${datasSelecionadas.size} dia(s)?`)) return;
+    
+    const casa = document.getElementById('casaCalendario').value;
+    const lote = db.batch();
+    
+    datasSelecionadas.forEach(dataStr => {
+        const chave = `${casa}_${dataStr}`;
+        delete valoresDiarias[chave];
+        lote.delete(db.collection('valores').doc(chave));
+    });
+    
+    await lote.commit();
+    alert('✅ Valores removidos!');
+    datasSelecionadas.clear();
+    atualizarInfoSelecao();
+    renderizarCalendario();
+}
+
+async function carregarValoresDiarias(){
+    const snap = await db.collection('valores').get();
+    valoresDiarias = {};
+    snap.forEach(doc => {
+        valoresDiarias[doc.id] = doc.data().valor;
     });
 }
+
+// Resto das funções...
+function formatarValor(v){
+    return Number(v||0).toLocaleString('pt-BR', {style:'currency', currency:'BRL'});
+}
+
+async function carregarReservasConfirmadas(){
+    const snap = await db.collection('reservas').orderBy('criadoEm', 'desc').get();
+    reservasConfirmadas = snap.docs.map(d => ({id:d.id, ...d.data()}));
+    atualizarListaReservas();
+    atualizarPainel();
+}
+
 function atualizarListaReservas(){
     const lista = document.getElementById('listaReservas');
     let filtradas = reservasConfirmadas;
@@ -771,6 +562,7 @@ function atualizarListaReservas(){
         </div>
     `).join('');
 }
+
 function abrirGerenciarReserva(reservaId){
     const r = reservasConfirmadas.find(x => x.id === reservaId);
     if(!r) return;
@@ -794,16 +586,17 @@ function abrirGerenciarReserva(reservaId){
     `;
     document.getElementById('modalGerenciarReserva').classList.add('aberto');
 }
+
 function fecharModalGerenciar(){
     document.getElementById('modalGerenciarReserva').classList.remove('aberto');
 }
+
 async function salvarAtualizacaoReserva(reservaId){
     const valorPago = parseFloat(document.getElementById('novoValorPago').value) || 0;
     const status = document.getElementById('novoStatus').value;
     
     await db.collection('reservas').doc(reservaId).update({
-        valorPago,
-        statusPagamento: status,
+        valorPago, statusPagamento: status,
         atualizadoEm: firebase.firestore.Timestamp.now()
     });
     
@@ -811,29 +604,32 @@ async function salvarAtualizacaoReserva(reservaId){
     fecharModalGerenciar();
     alert('✅ Reserva atualizada!');
 }
+
 async function excluirReserva(reservaId){
     if(!confirm('Tem certeza? Esta ação não pode ser desfeita!')) return;
     await db.collection('reservas').doc(reservaId).delete();
     await carregarReservasConfirmadas();
     alert('✅ Reserva excluída!');
 }
+
 function atualizarPainel(){
     document.getElementById('qtdReservasAtivas').textContent = reservasConfirmadas.length;
     const totalRecebido = reservasConfirmadas.reduce((s, r) => s + (r.valorPago || 0), 0);
     document.getElementById('totalRecebido').textContent = formatarValor(totalRecebido);
 }
+
 function gerarRelatorio(){
     let dados = reservasConfirmadas;
     const agora = new Date();
     
     if(filtroRelatorio === 'mes'){
         dados = reservasConfirmadas.filter(r => {
-            const d = new Date(r.criadoEmReserva?.toDate ? r.criadoEmReserva.toDate() : r.entrada);
+            const d = r.criadoEm?.toDate ? r.criadoEm.toDate() : new Date(r.entrada);
             return d.getMonth() === agora.getMonth() && d.getFullYear() === agora.getFullYear();
         });
     } else if(filtroRelatorio === 'ano'){
         dados = reservasConfirmadas.filter(r => {
-            const d = new Date(r.criadoEmReserva?.toDate ? r.criadoEmReserva.toDate() : r.entrada);
+            const d = r.criadoEm?.toDate ? r.criadoEm.toDate() : new Date(r.entrada);
             return d.getFullYear() === agora.getFullYear();
         });
     }
@@ -863,7 +659,6 @@ function gerarRelatorio(){
                 <div class="linha-valor"><span>📊 Total Esperado:</span><span>${formatarValor(totalEsperado)}</span></div>
                 <div class="linha-valor" style="color:var(--alerta);"><span>⏳ A Receber:</span><span>${formatarValor(totalPendente)}</span></div>
             </div>
-            
             <h3 style="margin-top:30px;">🏠 Por Casa</h3>
             ${Object.values(porCasa).map(c => `
                 <div style="padding:12px 0; border-bottom:1px solid #eee;">
@@ -876,10 +671,170 @@ function gerarRelatorio(){
         </div>
     `;
 }
+
+// Demais funções auxiliares
+function renderizarCasas(){
+    const container = document.getElementById('gradeCasas');
+    container.innerHTML = Object.entries(casas).map(([id, casa]) => `
+        <div class="card-casa">
+            <div class="card-imagem">${casa.imagem ? `<img src="${casa.imagem}" style="width:100%; height:100%; object-fit:cover;">` : '🏠'}</div>
+            <div class="card-corpo">
+                <h3>${casa.nome}</h3>
+                <p>${casa.desc}</p>
+                <div class="linha-form" style="margin-top:10px;">
+                    <input type="file" accept="image/*" onchange="carregarImagemCasa(event, '${id}')">
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+async function carregarImagemCasa(event, casaId){
+    const arquivo = event.target.files[0];
+    if(!arquivo) return;
+    const leitor = new FileReader();
+    leitor.onload = async function(e){
+        casas[casaId].imagem = e.target.result;
+        await db.collection('configuracoes').doc('casas').set({casas}, {merge:true});
+        renderizarCasas();
+        alert('✅ Imagem salva!');
+    };
+    leitor.readAsDataURL(arquivo);
+}
+
+function renderizarPaginaPublica(){
+    const container = document.getElementById('conteudoPublico');
+    container.innerHTML = `<div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:20px;">` +
+        Object.entries(casas).map(([id, casa]) => `
+            <div style="background:white; border-radius:12px; overflow:hidden; box-shadow:var(--sombra);">
+                <div style="height:180px; background:linear-gradient(135deg, var(--turquesa), var(--marinho)); display:flex; align-items:center; justify-content:center; color:white; font-size:40px;">
+                    ${casa.imagem ? `<img src="${casa.imagem}" style="width:100%; height:100%; object-fit:cover;">` : '🏠'}
+                </div>
+                <div style="padding:18px;">
+                    <h3 style="color:var(--marinho);">${casa.nome}</h3>
+                    <p style="color:var(--cinza); font-size:14px; margin:8px 0;">${casa.desc}</p>
+                    <button class="amarelo" style="width:100%; margin-top:10px;" onclick="abrirModalReserva('${id}')">📝 Solicitar Reserva</button>
+                </div>
+            </div>
+        `).join('') + `</div>`;
+}
+
+let casaSelecionadaParaReserva = null;
+function abrirModalReserva(casaId){
+    casaSelecionadaParaReserva = casaId;
+    document.getElementById('modalReserva').classList.add('aberto');
+}
+function fecharModal(){
+    document.getElementById('modalReserva').classList.remove('aberto');
+}
+
+async function enviarReserva(){
+    const dados = {
+        casa: casaSelecionadaParaReserva,
+        nome: document.getElementById('hospedeNome').value.trim(),
+        telefone: document.getElementById('hospedeTelefone').value.trim(),
+        entrada: document.getElementById('dataEntrada').value,
+        saida: document.getElementById('dataSaida').value,
+        observacao: document.getElementById('obsReserva').value.trim(),
+        valorTotal: 0, valorPago: 0, statusPagamento: 'pendente',
+        criadoEm: firebase.firestore.Timestamp.now()
+    };
+    
+    if(!dados.nome || !dados.entrada || !dados.saida){
+        alert('⚠️ Preencha nome, entrada e saída!');
+        return;
+    }
+    
+    // Calcular valor total
+    const dias = calcularDias(new Date(dados.entrada), new Date(dados.saida));
+    dados.dias = dias;
+    let total = 0;
+    const [anoE, mesE, diaE] = dados.entrada.split('-').map(Number);
+    const dataInicio = new Date(anoE, mesE-1, diaE);
+    const [anoS, mesS, diaS] = dados.saida.split('-').map(Number);
+    const dataFim = new Date(anoS, mesS-1, diaS);
+    
+    for(let d = new Date(dataInicio); d < dataFim; d.setDate(d.getDate() + 1)){
+        const dataStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+        const chave = `${dados.casa}_${dataStr}`;
+        total += valoresDiarias[chave] || 150; // valor padrão
+    }
+    dados.valorTotal = total;
+    
+    await db.collection('reservas').add(dados);
+    alert('✅ Solicitação enviada com sucesso! Obrigado!');
+    fecharModal();
+    
+    // Limpar campos
+    document.getElementById('hospedeNome').value = '';
+    document.getElementById('hospedeTelefone').value = '';
+    document.getElementById('dataEntrada').value = '';
+    document.getElementById('dataSaida').value = '';
+    document.getElementById('obsReserva').value = '';
+}
+
+function calcularDias(inicio, fim){
+    const msPorDia = 1000 * 60 * 60 * 24;
+    return Math.round(Math.abs((fim - inicio) / msPorDia));
+}
+
+// Hóspedes
+async function carregarHospedes(){
+    const snap = await db.collection('hospedes').orderBy('nome').get();
+    hospedesCadastrados = snap.docs.map(d => ({id:d.id, ...d.data()}));
+}
+
+function abrirCadastroHospede(){
+    const nome = prompt('Nome completo:');
+    if(!nome) return;
+    const telefone = prompt('Telefone:');
+    const email = prompt('E-mail (se houver):');
+    const endereco = prompt('Endereço (se houver):');
+    
+    db.collection('hospedes').add({
+        nome, telefone, email, endereco,
+        cadastradoEm: firebase.firestore.Timestamp.now()
+    }).then(() => {
+        alert('✅ Hóspede cadastrado!');
+        carregarHospedes();
+    });
+}
+
+function filtrarHospedes(){
+    const termo = document.getElementById('buscarHospede').value.toLowerCase();
+    const filtrados = hospedesCadastrados.filter(h => h.nome.toLowerCase().includes(termo));
+    const lista = document.getElementById('listaHospedes');
+    if(filtrados.length === 0){
+        lista.innerHTML = '<p style="color:var(--cinza);">Nenhum hóspede encontrado.</p>';
+        return;
+    }
+    lista.innerHTML = filtrados.map(h => `
+        <div style="padding:12px; border-bottom:1px solid #eee;">
+            <strong>${h.nome}</strong>
+            <p style="font-size:13px; color:var(--cinza);">📞 ${h.telefone || 'Não informado'}</p>
+        </div>
+    `).join('');
+}
+
+// Filtros dos botões
+document.addEventListener('click', e => {
+    if(e.target.matches('[data-filtro]')){
+        document.querySelectorAll('[data-filtro]').forEach(b => b.classList.remove('ativo', 'azul'));
+        e.target.classList.add('ativo', 'azul');
+        filtroReservas = e.target.getAttribute('data-filtro');
+        atualizarListaReservas();
+    }
+    if(e.target.matches('[data-periodo]')){
+        document.querySelectorAll('[data-periodo]').forEach(b => b.classList.remove('ativo', 'azul'));
+        e.target.classList.add('ativo', 'azul');
+        filtroRelatorio = e.target.getAttribute('data-periodo');
+        gerarRelatorio();
+    }
+});
+
+// Fechar seleção se soltar o mouse fora
+document.addEventListener('mouseup', finalizarSelecao);
+
 </script>
-<footer style="text-align:center; padding:20px; color:var(--cinza); font-size:13px; margin-top:40px; border-top:1px solid #eee;">
-    ✅ Sistema de Gestão de Locações — Casas na Praia · Araranguá/SC<br>
-    © 2026 — Todos os direitos reservados · Pronto para uso! 🏖️
-</footer>
 </body>
 </html>
