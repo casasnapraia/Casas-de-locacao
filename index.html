@@ -7,6 +7,7 @@
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
     <style>
         *{margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', system-ui, sans-serif;}
         :root{
@@ -127,7 +128,7 @@
 
             <div class="conteudo-aba" id="aba-casas">
                 <h2 class="painel-titulo">📷 Gerenciar Casas & Fotos</h2>
-                <p style="color:var(--cinza); margin-bottom:20px;">Faça upload das fotos que aparecerão para os visitantes.</p>
+                <p style="color:var(--cinza); margin-bottom:20px;">Faça upload das fotos — aparecem em todos os aparelhos!</p>
                 <div class="casas-grid" id="gridAdmin"></div>
             </div>
 
@@ -141,7 +142,7 @@
                 <h2 class="painel-titulo">⚙️ Configurações</h2>
                 <div class="caixa-form">
                     <h3>Alterar Dados de Acesso</h3>
-                    <p style="font-size:13px; color:var(--cinza); margin:10px 0;">Dados padrão: <strong>admin / admin123</strong> — altere após o primeiro acesso.</p>
+                    <p style="font-size:13px; color:var(--cinza); margin:10px 0;">Padrão: <strong>admin / admin123</strong> — altere após o primeiro acesso.</p>
                     <div class="linha-form">
                         <input type="text" id="novoUsuario" placeholder="Novo Usuário">
                         <input type="password" id="novaSenha" placeholder="Nova Senha">
@@ -174,7 +175,7 @@
 
 <script>
 // ==============================================
-// 🔥 SEUS DADOS DO FIREBASE JÁ ESTÃO AQUI!
+// 🔥 SEUS DADOS DO FIREBASE — JÁ ESTÃO CERTOS!
 // ==============================================
 const firebaseConfig = {
   apiKey: "AIzaSyDDxYq7YRcNNLk3pIZWff7i45RNs6kpDtA",
@@ -188,8 +189,9 @@ const firebaseConfig = {
 // Inicializar Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
+const storage = firebase.storage();
 
-// Dados do sistema
+// Dados das casas
 const casas = {
     amarela: {nome:'🟡 Casa Amarela', desc:'Paredes amarelas, janelas marrom, coqueiro na frente — aconchegante e espaçosa.'},
     beje: {nome:'🟤 Casa Beje', desc:'Tom bege, janelas brancas, coqueiro na frente — ideal para famílias.'},
@@ -201,15 +203,40 @@ const USUARIO_PADRAO = 'admin';
 const SENHA_PADRAO = 'admin123';
 let admin = JSON.parse(localStorage.getItem('admin')) || {usuario: USUARIO_PADRAO, senha: SENHA_PADRAO};
 let casaSelecionada = null;
-let unsubscribeSolicitacoes = null;
+let fotosCasas = {};
 
 // ==============================================
 // INICIALIZAÇÃO
 // ==============================================
-document.addEventListener('DOMContentLoaded', function(){
+document.addEventListener('DOMContentLoaded', async function(){
+    await carregarFotosDoStorage();
     renderizarPublico();
     monitorarSolicitacoes();
 });
+
+// ==============================================
+// FOTOS NA NUVEM — APARECEM EM TODOS OS APARELHOS!
+// ==============================================
+async function carregarFotosDoStorage(){
+    for(const [id] of Object.entries(casas)){
+        try {
+            const lista = await storage.ref(`fotos/${id}`).listAll();
+            const urls = await Promise.all(
+                lista.items.map(item => item.getDownloadURL())
+            );
+            fotosCasas[id] = urls;
+        } catch {
+            fotosCasas[id] = [];
+        }
+    }
+}
+
+async function fazerUploadFoto(arquivo, casaId){
+    const nomeArquivo = Date.now() + '_' + arquivo.name;
+    const ref = storage.ref(`fotos/${casaId}/${nomeArquivo}`);
+    await ref.put(arquivo);
+    return await ref.getDownloadURL();
+}
 
 // ==============================================
 // LOGIN
@@ -234,7 +261,6 @@ function sairAdmin(){
     document.getElementById('conteudoAdmin').classList.add('oculto');
     document.getElementById('usuarioLogin').value = '';
     document.getElementById('senhaLogin').value = '';
-    document.getElementById('erroLogin').textContent = '';
 }
 
 function alterarAcesso(){
@@ -265,14 +291,12 @@ document.querySelectorAll('.aba-lateral').forEach(btn => {
 // ==============================================
 function renderizarPublico(){
     const grid = document.getElementById('gridPublico');
-    if(!grid) return;
-    
     grid.innerHTML = Object.entries(casas).map(([id, casa]) => {
-        const fotos = JSON.parse(localStorage.getItem(`fotos-${id}`)) || [];
+        const fotos = fotosCasas[id] || [];
         return `
         <div class="casa-card ${id}">
             <div class="casa-imagens">
-                ${fotos.length ? fotos.map(f => `<img src="${f}" class="foto-galeria">`).join('') : '<div class="sem-foto">📷 Fotos em breve</div>'}
+                ${fotos.length ? fotos.map(f => `<img src="${f}" class="foto-galeria" loading="lazy">`).join('') : '<div class="sem-foto">📷 Fotos em breve</div>'}
             </div>
             <div class="casa-corpo">
                 <h3 class="casa-nome">${casa.nome}</h3>
@@ -285,7 +309,7 @@ function renderizarPublico(){
 }
 
 // ==============================================
-// RESERVA — SALVA NO FIREBASE
+// RESERVA
 // ==============================================
 function abrirFormReserva(casaId){
     casaSelecionada = casaId;
@@ -325,59 +349,53 @@ async function enviarReserva(){
 }
 
 // ==============================================
-// MONITORAR SOLICITAÇÕES EM TEMPO REAL
+// MONITORAR SOLICITAÇÕES
 // ==============================================
 function monitorarSolicitacoes(){
-    unsubscribeSolicitacoes = db.collection('solicitacoes')
-        .orderBy('criadoEm', 'desc')
-        .onSnapshot(snapshot => {
-            const lista = document.getElementById('listaSolicitacoes');
-            const contador = document.getElementById('qtdSolicitacoes');
-            const badge = document.getElementById('badgeSolicitacoes');
-            
-            if(contador) contador.textContent = snapshot.size;
-            if(badge){
-                badge.textContent = snapshot.size;
-                if(snapshot.size > 0) badge.classList.remove('oculto');
-                else badge.classList.add('oculto');
-            }
-            
-            if(!lista) return;
-            
-            if(snapshot.empty){
-                lista.innerHTML = '<p style="color:var(--cinza); text-align:center; padding:30px;">Nenhuma solicitação recebida ainda.</p>';
-                return;
-            }
-            
-            lista.innerHTML = snapshot.docs.map(doc => {
-                const s = doc.data();
-                return `
-                <div class="solicitacao-item">
-                    <h4 style="font-size:16px; margin-bottom:8px;">${casas[s.casa]?.nome || 'Casa'}</h4>
-                    <p><strong>Nome:</strong> ${s.nome}</p>
-                    <p><strong>Telefone:</strong> 📞 ${s.telefone}</p>
-                    <p><strong>Período:</strong> 📅 ${s.entrada} até ${s.saida}</p>
-                    ${s.obs ? `<p><strong>Observações:</strong> 💬 ${s.obs}</p>` : ''}
-                    <p style="font-size:12px; color:var(--cinza); margin-top:8px;">Enviado em: ${s.data}</p>
-                </div>`;
-            }).join('');
-        });
+    db.collection('solicitacoes').orderBy('criadoEm', 'desc').onSnapshot(snapshot => {
+        const lista = document.getElementById('listaSolicitacoes');
+        const contador = document.getElementById('qtdSolicitacoes');
+        const badge = document.getElementById('badgeSolicitacoes');
+        
+        if(contador) contador.textContent = snapshot.size;
+        if(badge){
+            badge.textContent = snapshot.size;
+            badge.classList.toggle('oculto', snapshot.size === 0);
+        }
+        
+        if(!lista) return;
+        if(snapshot.empty){
+            lista.innerHTML = '<p style="color:var(--cinza); text-align:center; padding:30px;">Nenhuma solicitação recebida ainda.</p>';
+            return;
+        }
+        
+        lista.innerHTML = snapshot.docs.map(doc => {
+            const s = doc.data();
+            return `
+            <div class="solicitacao-item">
+                <h4 style="font-size:16px; margin-bottom:8px;">${casas[s.casa]?.nome || 'Casa'}</h4>
+                <p><strong>Nome:</strong> ${s.nome}</p>
+                <p><strong>Telefone:</strong> 📞 ${s.telefone}</p>
+                <p><strong>Período:</strong> 📅 ${s.entrada} até ${s.saida}</p>
+                ${s.obs ? `<p><strong>Observações:</strong> 💬 ${s.obs}</p>` : ''}
+                <p style="font-size:12px; color:var(--cinza); margin-top:8px;">Enviado em: ${s.data}</p>
+            </div>`;
+        }).join('');
+    });
 }
 
 // ==============================================
-// CASAS & FOTOS
+// GERENCIAR CASAS — ADMIN
 // ==============================================
 function renderizarAdminCasas(){
     const grid = document.getElementById('gridAdmin');
-    if(!grid) return;
-    
     grid.innerHTML = Object.entries(casas).map(([id, casa]) => {
-        const fotos = JSON.parse(localStorage.getItem(`fotos-${id}`)) || [];
+        const fotos = fotosCasas[id] || [];
         return `
         <div class="casa-card ${id}">
             <div class="casa-imagens">
                 ${fotos.length ? 
-                    fotos.map((f, i) => `<img src="${f}" class="foto-galeria" title="Duplo clique para remover" ondblclick="removerFoto('${id}',${i})">`).join('') : 
+                    fotos.map(f => `<img src="${f}" class="foto-galeria">`).join('') : 
                     '<div class="sem-foto">📷 Sem fotos</div>'
                 }
                 <label class="upload-area">
@@ -393,26 +411,18 @@ function renderizarAdminCasas(){
     }).join('');
 }
 
-function carregarFoto(evt, casaId){
+async function carregarFoto(evt, casaId){
     const arq = evt.target.files[0]; if(!arq) return;
-    const leitor = new FileReader();
-    leitor.onload = function(e){
-        const fotos = JSON.parse(localStorage.getItem(`fotos-${casaId}`)) || [];
-        fotos.push(e.target.result);
-        localStorage.setItem(`fotos-${casaId}`, JSON.stringify(fotos));
+    try {
+        await fazerUploadFoto(arq, casaId);
+        await carregarFotosDoStorage();
         renderizarPublico();
         renderizarAdminCasas();
-    };
-    leitor.readAsDataURL(arq);
-}
-
-function removerFoto(casaId, indice){
-    if(!confirm('Excluir esta foto?')) return;
-    const fotos = JSON.parse(localStorage.getItem(`fotos-${casaId}`)) || [];
-    fotos.splice(indice, 1);
-    localStorage.setItem(`fotos-${casaId}`, JSON.stringify(fotos));
-    renderizarPublico();
-    renderizarAdminCasas();
+        alert('✅ Foto enviada! Agora aparece no celular também!');
+    } catch(erro) {
+        console.error(erro);
+        alert('❌ Erro ao enviar foto');
+    }
 }
 </script>
 </body>
