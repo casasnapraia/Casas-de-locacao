@@ -38,7 +38,7 @@
         .conteudo-aba{display:none;}
         .conteudo-aba.visivel{display:block;}
         .painel-titulo{color:var(--agua-escura); font-size:24px; margin-bottom:20px;}
-        .casas-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(300px,1fr)); gap:25px; margin-top:30px;}
+        .casas-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(320px,1fr)); gap:25px; margin-top:30px;}
         .casa-card{background:white; border-radius:18px; overflow:hidden; box-shadow:0 6px 20px rgba(0,0,0,0.08); transition:transform .3s;}
         .casa-card:hover{transform:translateY(-5px);}
         .casa-card.amarela{border-top:5px solid var(--amarela);}
@@ -46,7 +46,10 @@
         .casa-card.marrom{border-top:5px solid var(--marrom);}
         .casa-card.branca{border-top:5px solid #ccc;}
         .casa-imagens{display:grid; grid-template-columns:repeat(3,1fr); gap:6px; padding:12px; background:var(--fundo); min-height:140px;}
+        .foto-item{position:relative;}
         .foto-galeria{width:100%; height:90px; object-fit:cover; border-radius:8px;}
+        .btn-apagar-foto{position:absolute; top:4px; right:4px; background:rgba(0,0,0,0.6); color:white; border:none; border-radius:50%; width:24px; height:24px; cursor:pointer; font-size:14px; display:flex; align-items:center; justify-content:center; z-index:10;}
+        .btn-apagar-foto:hover{background:var(--alerta);}
         .sem-foto{grid-column:1/-1; text-align:center; color:var(--cinza); padding:20px;}
         .link-area{padding:10px;}
         .link-area input{width:100%; padding:10px; margin:5px 0; border:2px solid #e2e8f0; border-radius:8px; font-size:13px;}
@@ -70,6 +73,7 @@
         .solicitacao-item:last-child{border-bottom:none;}
         .badge-novo{background:var(--sol); color:#333; font-size:11px; padding:2px 6px; border-radius:10px; margin-left:6px;}
         .dica{font-size:12px; color:var(--cinza); margin-top:5px;}
+        .limpar-btn{background:var(--alerta); color:white; border:none; border-radius:8px; padding:8px 12px; cursor:pointer; font-size:13px; margin-bottom:15px;}
         @media (max-width:900px){.pagina{flex-direction:column;} .lado-esquerdo{width:100%;} .conteudo-principal{padding:20px;}}
     </style>
 </head>
@@ -125,7 +129,8 @@
 
             <div class="conteudo-aba" id="aba-casas">
                 <h2 class="painel-titulo">📷 Gerenciar Casas & Fotos</h2>
-                <p class="dica">💡 Use links DIRETOS de imagem (terminam em .jpg, .png...). Google Fotos: abra a foto → botão direito → "Copiar endereço da imagem"</p>
+                <p class="dica">💡 Use links DIRETOS (.jpg/.png). Clique no ✖️ para remover fotos erradas.</p>
+                <button class="limpar-btn" onclick="limparTodasFotos()">🗑️ Limpar TODAS as fotos (reiniciar)</button>
                 <div class="casas-grid" id="gridAdmin"></div>
             </div>
 
@@ -225,6 +230,25 @@ async function salvarLinkFoto(casaId, link){
         console.error('Erro:', erro);
         return false;
     }
+}
+
+async function removerFoto(casaId, indice){
+    if(!confirm('Remover esta foto?')) return;
+    fotosCasas[casaId].splice(indice, 1);
+    await db.collection('fotosCasas').doc(casaId).set({ urls: fotosCasas[casaId] });
+    renderizarPublico();
+    renderizarAdminCasas();
+}
+
+async function limparTodasFotos(){
+    if(!confirm('Tem CERTEZA? TODAS as fotos serão apagadas!')) return;
+    for(const [id] of Object.entries(casas)){
+        fotosCasas[id] = [];
+        await db.collection('fotosCasas').doc(id).set({ urls: [] });
+    }
+    alert('✅ Limpo! Adicione apenas as fotos corretas agora.');
+    renderizarPublico();
+    renderizarAdminCasas();
 }
 
 function renderizarPublico(){
@@ -380,7 +404,12 @@ function renderizarAdminCasas(){
         const fotos = fotosCasas[id] || [];
         let htmlImagens = '';
         if(fotos.length > 0){
-            htmlImagens = fotos.map(f => `<img src="${f}" class="foto-galeria" alt="Foto da casa">`).join('');
+            htmlImagens = fotos.map((f, indice) => `
+                <div class="foto-item">
+                    <button class="btn-apagar-foto" onclick="removerFoto('${id}', ${indice})" title="Remover foto">✖</button>
+                    <img src="${f}" class="foto-galeria" alt="Foto da casa">
+                </div>
+            `).join('');
         } else {
             htmlImagens = '<div class="sem-foto">📷 Sem fotos</div>';
         }
@@ -390,7 +419,7 @@ function renderizarAdminCasas(){
         card.innerHTML = `
             <div class="casa-imagens">${htmlImagens}</div>
             <div class="link-area">
-                <input type="url" id="link-${id}" placeholder="Cole o link DIRETO da imagem aqui (.jpg, .png...)">
+                <input type="url" id="link-${id}" placeholder="Cole o link DIRETO da imagem (.jpg, .png...)">
                 <button onclick="adicionarFotoPorLink('${id}')">✅ Salvar Link</button>
             </div>
             <div class="casa-corpo">
@@ -423,7 +452,7 @@ async function adicionarFotoPorLink(casaId){
         await carregarFotosDoFirestore();
         renderizarPublico();
         renderizarAdminCasas();
-        alert('✅ Foto adicionada com sucesso!');
+        alert('✅ Foto adicionada!');
     } else {
         alert('❌ Erro ao salvar. Tente novamente.');
     }
