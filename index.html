@@ -13,6 +13,7 @@
             --sucesso:#2f855a; --alerta:#e53e3e; --cinza:#718096; --fundo:#e6f2f8;
             --amarela:#f5c542; --beje:#d9b36c; --marrom:#8c4a2c; --lado-esquerdo:#0f6b8a;
             --pendente:#f59e0b; --pago:#10b981; --parcial:#3b82f6; --cancelado:#ef4444;
+            --indisponivel:#fee2e2; --texto-indisponivel:#991b1b;
         }
         body{background:linear-gradient(180deg, #e6f2f8 0%, #fef9ef 100%); min-height:100vh;}
         .oculto{display:none !important;}
@@ -59,9 +60,8 @@
         .casa-corpo{padding:20px;}
         .casa-nome{font-size:18px; font-weight:bold; margin-bottom:8px;}
         .casa-desc{font-size:14px; color:var(--cinza); margin-bottom:12px; line-height:1.5;}
-        .status{display:inline-block; padding:6px 14px; border-radius:50px; font-weight:bold; font-size:13px; margin-bottom:12px;}
-        .status.ok{background:#e6fffa; color:#047857;}
         .btn-reservar{width:100%; padding:12px; background:linear-gradient(135deg, var(--sol), #e67700); color:white; border:none; border-radius:10px; font-weight:bold; cursor:pointer; font-size:15px;}
+        .btn-reservar:disabled{background:#ccc; cursor:not-allowed;}
         .caixa-form{background:white; padding:25px; border-radius:16px; box-shadow:0 4px 15px rgba(0,0,0,0.06); margin:20px 0;}
         .linha-form{display:grid; grid-template-columns:repeat(auto-fit, minmax(160px,1fr)); gap:12px; margin:8px 0;}
         input, textarea, select{padding:12px; border:2px solid #e2e8f0; border-radius:10px; font-size:14px; width:100%;}
@@ -77,9 +77,7 @@
         .dica{font-size:12px; color:var(--cinza); margin-top:5px;}
         .limpar-btn{background:var(--alerta); color:white; border:none; border-radius:8px; padding:8px 12px; cursor:pointer; font-size:13px; margin-bottom:15px;}
         .valor-destaque{font-size:22px; font-weight:bold; color:var(--sucesso); margin:10px 0;}
-        .valor-diaria{font-size:13px; color:var(--cinza);}
         .resumo-valores{background:#f0fdf4; padding:15px; border-radius:10px; margin:15px 0;}
-        .resumo-valores h4{color:var(--sucesso); margin-bottom:10px;}
         .status-badge{display:inline-block; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:bold;}
         .status-pendente{background:#fef3c7; color:#92400e;}
         .status-pago{background:#d1fae5; color:#065f46;}
@@ -89,6 +87,20 @@
         .filtro-btn.ativo{background:var(--agua); color:white;}
         .total-geral{font-size:20px; font-weight:bold; text-align:right; margin-top:20px; padding:15px; background:#f0fdf4; border-radius:10px;}
         .linha-valor{display:flex; justify-content:space-between; padding:5px 0;}
+        .calendario-container{margin-top:20px;}
+        .calendario-navegacao{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;}
+        .calendario-navegacao button{background:var(--agua); color:white; border:none; border-radius:6px; padding:6px 12px; cursor:pointer;}
+        .calendario-grade{display:grid; grid-template-columns:repeat(7, 1fr); gap:4px; text-align:center;}
+        .calendario-dia-semana{font-weight:bold; font-size:12px; color:var(--cinza); padding:8px 4px;}
+        .calendario-dia{padding:8px 4px; border-radius:6px; cursor:pointer; min-height:40px; display:flex; flex-direction:column; justify-content:center; font-size:13px; border:1px solid transparent;}
+        .calendario-dia:hover{background:#e6f2f8; border-color:var(--agua);}
+        .calendario-dia.vazio{cursor:default; background:transparent; border:none;}
+        .calendario-dia.passado{color:#ddd; cursor:not-allowed;}
+        .calendario-dia.selecionado{background:var(--agua); color:white; font-weight:bold;}
+        .calendario-dia.com-valor{background:#f0fdf4; border-color:var(--sucesso);}
+        .calendario-valor-diaria{font-size:10px; margin-top:2px; font-weight:bold;}
+        .aviso-indisponivel{background:var(--indisponivel); color:var(--texto-indisponivel); padding:12px; border-radius:8px; margin:10px 0; display:none;}
+        .aviso-indisponivel.visivel{display:block;}
         @media (max-width:900px){.pagina{flex-direction:column;} .lado-esquerdo{width:100%;} .conteudo-principal{padding:20px;}}
     </style>
 </head>
@@ -115,7 +127,7 @@
             <p class="navegacao-titulo">Navegação</p>
             <button class="aba-lateral ativa" data-aba="painel">📊 Painel</button>
             <button class="aba-lateral" data-aba="casas">📷 Casas & Fotos</button>
-            <button class="aba-lateral" data-aba="diarias">💰 Valores de Diária</button>
+            <button class="aba-lateral" data-aba="calendario">📅 Valores por Data</button>
             <button class="aba-lateral" data-aba="solicitacoes">📩 Solicitações <span class="badge-novo oculto" id="badgeSolicitacoes">0</span></button>
             <button class="aba-lateral" data-aba="reservas">📅 Reservas</button>
             <button class="aba-lateral" data-aba="relatorios">📈 Relatórios</button>
@@ -128,7 +140,7 @@
         <div id="paginaPublica">
             <div class="cabecalho-publico">
                 <h1>🏡 Conheça Nossas Casas</h1>
-                <p>Verifique a disponibilidade e solicite sua reserva</p>
+                <p>Informe o período desejado para ver o valor total</p>
             </div>
             <div class="casas-grid" id="gridPublico"></div>
         </div>
@@ -155,16 +167,30 @@
 
             <div class="conteudo-aba" id="aba-casas">
                 <h2 class="painel-titulo">📷 Gerenciar Casas & Fotos</h2>
-                <p class="dica">💡 Use links DIRETOS (.jpg/.png). Clique no ✖️ para remover.</p>
+                <p class="dica">💡 Use links diretos de imagens (.jpg/.png). Clique no ✖️ para remover.</p>
                 <button class="limpar-btn" onclick="limparTodasFotos()">🗑️ Limpar TODAS as fotos</button>
                 <div class="casas-grid" id="gridAdmin"></div>
             </div>
 
-            <div class="conteudo-aba" id="aba-diarias">
-                <h2 class="painel-titulo">💰 Valores de Diária por Casa</h2>
-                <p class="dica">💡 Defina o valor da diária. O cálculo é automático com base nos dias.</p>
-                <div id="diariasLista"></div>
-                <button class="sucesso" style="margin-top:20px;" onclick="salvarTodasDiarias()">💾 Salvar Valores</button>
+            <div class="conteudo-aba" id="aba-calendario">
+                <h2 class="painel-titulo">📅 Valores de Diária por Data</h2>
+                <p class="dica">💡 Clique em um dia para definir valor. Valores padrão são usados se não houver definição.</p>
+                <div style="margin-bottom:15px;">
+                    <label><strong>Selecione a Casa:</strong></label>
+                    <select id="casaCalendario" onchange="mudarCalendario()">
+                        <option value="amarela">🟡 Casa Amarela</option>
+                        <option value="beje">🟤 Casa Beje</option>
+                        <option value="marrom">🟫 Casa Marrom</option>
+                        <option value="branca">⚪ Casa Branca</option>
+                    </select>
+                </div>
+                <div class="calendario-container" id="calendarioArea"></div>
+                <div class="valor-edicao" id="edicaoValor" style="display:none; margin-top:15px;">
+                    <label>Valor da Diária (R$):</label>
+                    <input type="number" id="valorDiaSelecionado" step="10" min="0" style="width:120px;">
+                    <button class="sucesso" onclick="salvarValorDia()">💾 Salvar</button>
+                    <button class="vermelho" onclick="removerValorDia()">🗑️ Remover</button>
+                </div>
             </div>
 
             <div class="conteudo-aba" id="aba-solicitacoes">
@@ -213,6 +239,7 @@
 <div class="modal" id="modalReserva">
     <div class="modal-conteudo">
         <h3>📩 Solicitar Reserva — <span id="nomeCasaReserva"></span></h3>
+        <div class="aviso-indisponivel" id="avisoIndisponivel">⚠️ Este período já está reservado. Por favor, escolha outras datas.</div>
         <div class="linha-form">
             <input type="text" id="resNome" placeholder="Seu Nome Completo *">
             <input type="tel" id="resTel" placeholder="WhatsApp / Telefone *">
@@ -222,13 +249,13 @@
             <input type="date" id="resSaida" onchange="calcularValorPublico()">
         </div>
         <div id="resumoValorPublico" class="resumo-valores oculto">
-            <p>Diária: <span id="valorDiariaPub"></span></p>
-            <p>Quantidade de dias: <span id="qtdDiasPub"></span></p>
+            <p>Valor médio/diária: <span id="valorDiariaPub"></span></p>
+            <p>Quantidade de diárias: <span id="qtdDiasPub"></span></p>
             <p class="valor-destaque">Total a pagar: <span id="valorTotalPub"></span></p>
         </div>
         <textarea id="resObs" placeholder="Observações" rows="3"></textarea>
         <div style="display:flex; gap:10px; margin-top:15px;">
-            <button class="sucesso" onclick="enviarReserva()">✅ Enviar Solicitação</button>
+            <button class="sucesso" id="btnEnviarReserva" onclick="enviarReserva()">✅ Enviar Solicitação</button>
             <button class="vermelho" onclick="fecharModalReserva()">Cancelar</button>
         </div>
     </div>
@@ -258,10 +285,10 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
 const casas = {
-    amarela: {nome:'🟡 Casa Amarela', desc:'Paredes amarelas, janelas marrom, coqueiro na frente — aconchegante e espaçosa.', valorDiaria:150},
-    beje: {nome:'🟤 Casa Beje', desc:'Tom bege, janelas brancas, coqueiro na frente — ideal para famílias.', valorDiaria:130},
-    marrom: {nome:'🟫 Casa Marrom', desc:'Madeira escura, redes coloridas na varanda — com varanda ampla e vista.', valorDiaria:180},
-    branca: {nome:'⚪ Casa Branca', desc:'Paredes brancas, janelas marrom, ambiente arejado — perto do mar.', valorDiaria:160}
+    amarela: {nome:'🟡 Casa Amarela', desc:'Paredes amarelas, janelas marrom, coqueiro na frente — aconchegante e espaçosa.', valorPadrao:380},
+    beje: {nome:'🟤 Casa Beje', desc:'Tom bege, janelas brancas, coqueiro na frente — ideal para famílias.', valorPadrao:350},
+    marrom: {nome:'🟫 Casa Marrom', desc:'Madeira escura, redes coloridas na varanda — com varanda ampla e vista.', valorPadrao:350},
+    branca: {nome:'⚪ Casa Branca', desc:'Paredes brancas, janelas marrom, ambiente arejado — perto do mar.', valorPadrao:350}
 };
 
 const USUARIO_PADRAO = 'admin';
@@ -269,16 +296,19 @@ const SENHA_PADRAO = 'admin123';
 let admin = JSON.parse(localStorage.getItem('admin')) || {usuario: USUARIO_PADRAO, senha: SENHA_PADRAO};
 let casaSelecionada = null;
 let fotosCasas = {};
-let valoresDiarias = {};
+let valoresPorData = {};
+let reservasConfirmadas = [];
 let filtroReservas = 'todas';
 let filtroRelatorio = 'todos';
+let mesAtual = new Date();
+let diaSelecionado = null;
 
 document.addEventListener('DOMContentLoaded', async function(){
     console.log('✅ Sistema carregado');
     await carregarFotosDoFirestore();
-    await carregarValoresDiarias();
+    await carregarValoresPorData();
+    await carregarReservasConfirmadas();
     renderizarPublico();
-    renderizarDiarias();
     renderizarAdminCasas();
     monitorarSolicitacoes();
     monitorarReservas();
@@ -325,48 +355,40 @@ async function limparTodasFotos(){
     renderizarAdminCasas();
 }
 
-async function carregarValoresDiarias(){
+async function carregarValoresPorData(){
     try {
-        const doc = await db.collection('configuracoes').doc('valoresDiarias').get();
-        if(doc.exists && doc.data().valores){
-            valoresDiarias = doc.data().valores;
-        } else {
-            Object.keys(casas).forEach(id => {
-                valoresDiarias[id] = casas[id].valorDiaria;
-            });
+        const doc = await db.collection('configuracoes').doc('valoresPorData').get();
+        if(doc.exists && doc.data().dados){
+            valoresPorData = doc.data().dados;
         }
-    } catch (e) {
-        Object.keys(casas).forEach(id => {
-            valoresDiarias[id] = casas[id].valorDiaria;
-        });
+    } catch (e) { valoresPorData = {}; }
+}
+
+async function salvarValoresPorData(){
+    await db.collection('configuracoes').doc('valoresPorData').set({ dados: valoresPorData });
+}
+
+async function carregarReservasConfirmadas(){
+    const snap = await db.collection('reservas').get();
+    reservasConfirmadas = snap.docs.map(d => ({id: d.id, ...d.data()}));
+}
+
+function verificarDisponibilidade(casaId, entrada, saida){
+    if(!entrada || !saida) return {disponivel: true};
+    const e = new Date(entrada);
+    const s = new Date(saida);
+    for(const r of reservasConfirmadas){
+        if(r.casa !== casaId) continue;
+        const re = new Date(r.entrada);
+        const rs = new Date(r.saida);
+        if(e < rs && s > re) return {disponivel: false, reserva: r};
     }
+    return {disponivel: true};
 }
 
-function renderizarDiarias(){
-    const container = document.getElementById('diariasLista');
-    container.innerHTML = '';
-    Object.entries(casas).forEach(([id, casa]) => {
-        const valor = valoresDiarias[id] || casa.valorDiaria;
-        container.innerHTML += `
-            <div class="caixa-form" style="margin:10px 0;">
-                <h4>${casa.nome}</h4>
-                <div class="linha-form">
-                    <label>Valor da Diária (R$):</label>
-                    <input type="number" id="diaria-${id}" value="${valor}" step="10" min="0">
-                </div>
-            </div>
-        `;
-    });
-}
-
-async function salvarTodasDiarias(){
-    Object.keys(casas).forEach(id => {
-        const input = document.getElementById(`diaria-${id}`);
-        if(input) valoresDiarias[id] = parseFloat(input.value) || 0;
-    });
-    await db.collection('configuracoes').doc('valoresDiarias').set({ valores: valoresDiarias });
-    alert('✅ Valores salvos! O cálculo já será atualizado para novas solicitações.');
-    renderizarPublico();
+function obterValorDiaria(casaId, data){
+    const chave = `${casaId}-${data}`;
+    return valoresPorData[chave] || casas[casaId].valorPadrao;
 }
 
 function calcularDias(entrada, saida){
@@ -381,25 +403,54 @@ function formatarValor(valor){
     return new Intl.NumberFormat('pt-BR', {style:'currency', currency:'BRL'}).format(valor || 0);
 }
 
+function formatarDataISO(d){
+    return d.toISOString().split('T')[0];
+}
+
 function calcularValorPublico(){
     const entrada = document.getElementById('resEntrada').value;
     const saida = document.getElementById('resSaida').value;
+    const aviso = document.getElementById('avisoIndisponivel');
+    const resumo = document.getElementById('resumoValorPublico');
+    const btn = document.getElementById('btnEnviarReserva');
+    
     if(!entrada || !saida || !casaSelecionada){
-        document.getElementById('resumoValorPublico').classList.add('oculto');
+        resumo.classList.add('oculto');
+        aviso.classList.remove('visivel');
         return;
     }
+    
     const dias = calcularDias(entrada, saida);
     if(dias <= 0){
-        document.getElementById('resumoValorPublico').classList.add('oculto');
+        resumo.classList.add('oculto');
+        aviso.classList.remove('visivel');
         return;
     }
-    const valorDiaria = valoresDiarias[casaSelecionada] || casas[casaSelecionada].valorDiaria;
-    const total = dias * valorDiaria;
     
-    document.getElementById('valorDiariaPub').textContent = formatarValor(valorDiaria);
+    const disp = verificarDisponibilidade(casaSelecionada, entrada, saida);
+    if(!disp.disponivel){
+        aviso.classList.add('visivel');
+        resumo.classList.add('oculto');
+        btn.disabled = true;
+        return;
+    }
+    
+    aviso.classList.remove('visivel');
+    btn.disabled = false;
+    
+    let valorTotal = 0;
+    let dataAtual = new Date(entrada);
+    const dataFim = new Date(saida);
+    while(dataAtual < dataFim){
+        valorTotal += obterValorDiaria(casaSelecionada, formatarDataISO(dataAtual));
+        dataAtual.setDate(dataAtual.getDate() + 1);
+    }
+    
+    const valorMedio = valorTotal / dias;
+    document.getElementById('valorDiariaPub').textContent = formatarValor(valorMedio);
     document.getElementById('qtdDiasPub').textContent = dias + ' diária(s)';
-    document.getElementById('valorTotalPub').textContent = formatarValor(total);
-    document.getElementById('resumoValorPublico').classList.remove('oculto');
+    document.getElementById('valorTotalPub').textContent = formatarValor(valorTotal);
+    resumo.classList.remove('oculto');
 }
 
 function renderizarPublico(){
@@ -409,7 +460,6 @@ function renderizarPublico(){
     
     Object.entries(casas).forEach(([id, casa]) => {
         const fotos = fotosCasas[id] || [];
-        const valorDiaria = valoresDiarias[id] || casa.valorDiaria;
         const card = document.createElement('div');
         card.className = `casa-card ${id}`;
         
@@ -422,8 +472,6 @@ function renderizarPublico(){
             <div class="casa-corpo">
                 <h3 class="casa-nome">${casa.nome}</h3>
                 <p class="casa-desc">${casa.desc}</p>
-                <p class="valor-diaria">Diária: <strong>${formatarValor(valorDiaria)}</strong></p>
-                <span class="status ok">✅ Disponível</span><br><br>
                 <button class="btn-reservar" onclick="abrirFormReserva('${id}')">📩 Solicitar Reserva</button>
             </div>
         `;
@@ -459,10 +507,112 @@ function renderizarAdminCasas(){
             <div class="casa-corpo">
                 <h3 class="casa-nome">${casa.nome}</h3>
                 <p class="casa-desc">${casa.desc}</p>
+                <p class="dica">Valor padrão: ${formatarValor(casa.valorPadrao)} — personalize por data na aba "Valores por Data"</p>
             </div>
         `;
         grid.appendChild(card);
     });
+}
+
+function mudarCalendario(){
+    mesAtual = new Date();
+    diaSelecionado = null;
+    document.getElementById('edicaoValor').style.display = 'none';
+    renderizarCalendario();
+}
+
+function renderizarCalendario(){
+    const casaId = document.getElementById('casaCalendario').value;
+    const container = document.getElementById('calendarioArea');
+    const ano = mesAtual.getFullYear();
+    const mes = mesAtual.getMonth();
+    const nomeMes = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'][mes];
+    
+    const primeiroDia = new Date(ano, mes, 1);
+    const ultimoDia = new Date(ano, mes + 1, 0);
+    const diasSemana = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+    
+    let html = `
+        <div class="calendario-navegacao">
+            <button onclick="mesAnterior()">&lt; Mês Anterior</button>
+            <h4>${nomeMes} ${ano}</h4>
+            <button onclick="mesProximo()">Próximo Mês &gt;</button>
+        </div>
+        <div class="calendario-grade">
+            ${diasSemana.map(d => `<div class="calendario-dia-semana">${d}</div>`).join('')}
+    `;
+    
+    for(let i = 0; i < primeiroDia.getDay(); i++){
+        html += `<div class="calendario-dia vazio"></div>`;
+    }
+    
+    const hoje = new Date();
+    for(let d = 1; d <= ultimoDia.getDate(); d++){
+        const dataStr = formatarDataISO(new Date(ano, mes, d));
+        const chave = `${casaId}-${dataStr}`;
+        const valor = valoresPorData[chave];
+        const diaCompleto = new Date(ano, mes, d);
+        const passado = diaCompleto < hoje && formatarDataISO(diaCompleto) !== formatarDataISO(hoje);
+        
+        let classes = '';
+        if(passado) classes += ' passado';
+        if(valor) classes += ' com-valor';
+        if(diaSelecionado === dataStr) classes += ' selecionado';
+        
+        html += `
+            <div class="calendario-dia ${classes}" ${passado ? '' : `onclick="selecionarDia('${dataStr}')"`}>
+                <span>${d}</span>
+                ${valor ? `<span class="calendario-valor-diaria">R$ ${valor}</span>` : ''}
+            </div>
+        `;
+    }
+    
+    html += `</div>`;
+    container.innerHTML = html;
+}
+
+function mesAnterior(){
+    mesAtual.setMonth(mesAtual.getMonth() - 1);
+    renderizarCalendario();
+}
+
+function mesProximo(){
+    mesAtual.setMonth(mesAtual.getMonth() + 1);
+    renderizarCalendario();
+}
+
+function selecionarDia(dataStr){
+    diaSelecionado = dataStr;
+    const casaId = document.getElementById('casaCalendario').value;
+    const chave = `${casaId}-${dataStr}`;
+    const valorAtual = valoresPorData[chave] || casas[casaId].valorPadrao;
+    
+    document.getElementById('valorDiaSelecionado').value = valorAtual;
+    document.getElementById('edicaoValor').style.display = 'flex';
+    renderizarCalendario();
+}
+
+async function salvarValorDia(){
+    if(!diaSelecionado) return;
+    const casaId = document.getElementById('casaCalendario').value;
+    const valor = parseFloat(document.getElementById('valorDiaSelecionado').value);
+    if(isNaN(valor) || valor < 0){ alert('Informe um valor válido!'); return; }
+    
+    valoresPorData[`${casaId}-${diaSelecionado}`] = valor;
+    await salvarValoresPorData();
+    renderizarCalendario();
+    alert('✅ Valor salvo!');
+}
+
+async function removerValorDia(){
+    if(!diaSelecionado || !confirm('Remover valor personalizado? Voltará ao padrão.')) return;
+    const casaId = document.getElementById('casaCalendario').value;
+    delete valoresPorData[`${casaId}-${diaSelecionado}`];
+    await salvarValoresPorData();
+    document.getElementById('edicaoValor').style.display = 'none';
+    diaSelecionado = null;
+    renderizarCalendario();
+    alert('✅ Removido!');
 }
 
 function verificarLogin(){
@@ -473,6 +623,7 @@ function verificarLogin(){
         document.getElementById('painelAdmin').classList.remove('oculto');
         document.getElementById('conteudoAdmin').classList.remove('oculto');
         renderizarAdminCasas();
+        renderizarCalendario();
         atualizarPainel();
     } else {
         document.getElementById('erroLogin').textContent = 'Usuário ou senha incorretos!';
@@ -504,7 +655,7 @@ document.querySelectorAll('.aba-lateral').forEach(btn => {
         const abaId = this.getAttribute('data-aba');
         document.getElementById(`aba-${abaId}`).classList.add('visivel');
         if(abaId === 'casas') renderizarAdminCasas();
-        if(abaId === 'diarias') renderizarDiarias();
+        if(abaId === 'calendario') renderizarCalendario();
         if(abaId === 'relatorios') gerarRelatorio();
     });
 });
@@ -514,6 +665,8 @@ function abrirFormReserva(casaId){
     document.getElementById('nomeCasaReserva').textContent = casas[casaId].nome;
     document.getElementById('modalReserva').classList.add('aberto');
     document.getElementById('resumoValorPublico').classList.add('oculto');
+    document.getElementById('avisoIndisponivel').classList.remove('visivel');
+    document.getElementById('btnEnviarReserva').disabled = false;
 }
 
 function fecharModalReserva(){
@@ -525,14 +678,26 @@ async function enviarReserva(){
     const entrada = document.getElementById('resEntrada').value;
     const saida = document.getElementById('resSaida').value;
     const dias = calcularDias(entrada, saida);
-    const valorDiaria = valoresDiarias[casaSelecionada] || casas[casaSelecionada].valorDiaria;
-    const valorTotal = dias * valorDiaria;
+    
+    const disp = verificarDisponibilidade(casaSelecionada, entrada, saida);
+    if(!disp.disponivel){
+        alert('⚠️ Este período já está reservado! Escolha outras datas.');
+        return;
+    }
+    
+    let valorTotal = 0;
+    let dataAtual = new Date(entrada);
+    const dataFim = new Date(saida);
+    while(dataAtual < dataFim){
+        valorTotal += obterValorDiaria(casaSelecionada, formatarDataISO(dataAtual));
+        dataAtual.setDate(dataAtual.getDate() + 1);
+    }
     
     const dados = {
         casa: casaSelecionada,
         nome: document.getElementById('resNome').value.trim(),
         telefone: document.getElementById('resTel').value.trim(),
-        entrada, saida, dias, valorDiaria, valorTotal,
+        entrada, saida, dias, valorTotal,
         obs: document.getElementById('resObs').value.trim(),
         data: new Date().toLocaleString('pt-BR'),
         criadoEm: firebase.firestore.Timestamp.now(),
@@ -546,7 +711,7 @@ async function enviarReserva(){
     
     try {
         await db.collection('solicitacoes').add(dados);
-        alert(`✅ Solicitação enviada com sucesso!\n\nValor total: ${formatarValor(valorTotal)}\nEntraremos em contato em breve para confirmar sua reserva. Obrigado! 🏖️`);
+        alert(`✅ Solicitação enviada com sucesso!\n\nValor total: ${formatarValor(valorTotal)}\nEntraremos em contato em breve para confirmar. Obrigado! 🏖️`);
         fecharModalReserva();
     } catch(erro) {
         console.error(erro);
@@ -575,7 +740,6 @@ function monitorarSolicitacoes(){
                 <p><strong>Nome:</strong> ${s.nome}</p>
                 <p><strong>Telefone:</strong> 📞 ${s.telefone}</p>
                 <p><strong>Período:</strong> 📅 ${s.entrada} até ${s.saida} (${s.dias} diária(s))</p>
-                <p><strong>Valor Diária:</strong> ${formatarValor(s.valorDiaria)}</p>
                 <p class="valor-destaque" style="font-size:16px;">Valor Total: ${formatarValor(s.valorTotal)}</p>
                 ${s.obs ? `<p><strong>Observações:</strong> ${s.obs}</p>` : ''}
                 <p style="font-size:12px; color:var(--cinza); margin:8px 0;">Enviado em: ${s.data}</p>
@@ -598,124 +762,21 @@ async function converterParaReserva(docId){
     
     await db.collection('reservas').doc(docId).set(dados);
     await db.collection('solicitacoes').doc(docId).delete();
-    alert('✅ Reserva criada com sucesso! Agora gerencie na aba "Reservas".');
+    await carregarReservasConfirmadas();
+    alert('✅ Reserva criada! Gerencie na aba "Reservas".');
 }
 
 async function excluirSolicitacao(docId){
     if(!confirm('Excluir esta solicitação?')) return;
     await db.collection('solicitacoes').doc(docId).delete();
-    alert('✅ Solicitação excluída.');
 }
 
 function monitorarReservas(){
     db.collection('reservas').orderBy('criadoEmReserva', 'desc').onSnapshot(snapshot => {
+        reservasConfirmadas = snapshot.docs.map(d => ({id: d.id, ...d.data()}));
+        atual izarListaReservas();
         atualizarPainel();
-        renderizarListaReservas(snapshot.docs);
-        gerarRelatorio(snapshot.docs);
     });
-}
-
-function atualizarPainel(){
-    db.collection('reservas').get().then(snap => {
-        let ativas = 0, totalPago = 0;
-        snap.forEach(doc => {
-            const r = doc.data();
-            if(r.statusPagamento !== 'cancelado') ativas++;
-            if(r.valorPago) totalPago += r.valorPago;
-        });
-        document.getElementById('qtdReservasAtivas').textContent = ativas;
-        document.getElementById('totalRecebido').textContent = formatarValor(totalPago);
-    });
-}
-
-function renderizarListaReservas(docs){
-    const lista = document.getElementById('listaReservas');
-    let filtrado = docs;
-    
-    if(filtroReservas !== 'todas'){
-        filtrado = docs.filter(d => d.data().statusPagamento === filtroReservas);
-    }
-    
-    if(filtrado.length === 0){
-        lista.innerHTML = '<p style="color:var(--cinza); text-align:center; padding:30px;">Nenhuma reserva encontrada.</p>';
-        return;
-    }
-    
-    lista.innerHTML = filtrado.map(doc => {
-        const r = doc.data();
-        const statusClass = {
-            pendente: 'status-pendente',
-            parcial: 'status-parcial',
-            pago: 'status-pago'
-        }[r.statusPagamento] || 'status-pendente';
-        const statusTexto = {
-            pendente: 'Aguardando Pagamento',
-            parcial: 'Pagamento Parcial',
-            pago: 'Totalmente Pago'
-        }[r.statusPagamento] || 'Pendente';
-        
-        return `
-        <div class="reserva-item">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                <h4 style="font-size:16px;">${casas[r.casa]?.nome || 'Casa'}</h4>
-                <span class="status-badge ${statusClass}">${statusTexto}</span>
-            </div>
-            <p><strong>Hóspede:</strong> ${r.nome} | 📞 ${r.telefone}</p>
-            <p><strong>Período:</strong> ${r.entrada} a ${r.saida} (${r.dias} diária(s))</p>
-            <div class="resumo-valores">
-                <div class="linha-valor"><span>Valor Total:</span><span>${formatarValor(r.valorTotal)}</span></div>
-                <div class="linha-valor"><span>Valor Pago:</span><span>${formatarValor(r.valorPago || 0)}</span></div>
-                <div class="linha-valor" style="font-weight:bold; color:var(--alerta);"><span>A Pagar:</span><span>${formatarValor((r.valorTotal || 0) - (r.valorPago || 0))}</span></div>
-            </div>
-            <button class="azul" style="margin-top:10px;" onclick="abrirGerenciarReserva('${doc.id}')">📝 Gerenciar Pagamento</button>
-        </div>`;
-    }).join('');
-}
-
-async function abrirGerenciarReserva(docId){
-    const snap = await db.collection('reservas').doc(docId).get();
-    const r = snap.data();
-    document.getElementById('conteudoGerenciar').innerHTML = `
-        <h4>${casas[r.casa]?.nome || 'Casa'}</h4>
-        <p><strong>Hóspede:</strong> ${r.nome}</p>
-        <p><strong>Período:</strong> ${r.entrada} a ${r.saida}</p>
-        <div class="resumo-valores">
-            <p><strong>Valor Total:</strong> ${formatarValor(r.valorTotal)}</p>
-            <p><strong>Já Pago:</strong> ${formatarValor(r.valorPago || 0)}</p>
-            <p><strong>Restante:</strong> ${formatarValor((r.valorTotal || 0) - (r.valorPago || 0))}</p>
-        </div>
-        <div class="linha-form" style="margin-top:15px;">
-            <label>Registrar valor recebido (R$):</label>
-            <input type="number" id="novoValorPago" value="${r.valorPago || 0}" step="10" min="0">
-        </div>
-        <div class="linha-form" style="margin-top:10px;">
-            <label>Status:</label>
-            <select id="novoStatus">
-                <option value="pendente" ${r.statusPagamento==='pendente'?'selected':''}>Pendente</option>
-                <option value="parcial" ${r.statusPagamento==='parcial'?'selected':''}>Pagamento Parcial</option>
-                <option value="pago" ${r.statusPagamento==='pago'?'selected':''}>Totalmente Pago</option>
-            </select>
-        </div>
-        <button class="sucesso" style="margin-top:15px;" onclick="salvarReserva('${docId}')">💾 Salvar Alterações</button>
-    `;
-    document.getElementById('modalGerenciarReserva').classList.add('aberto');
-}
-
-function fecharModalGerenciar(){
-    document.getElementById('modalGerenciarReserva').classList.remove('aberto');
-}
-
-async function salvarReserva(docId){
-    const valorPago = parseFloat(document.getElementById('novoValorPago').value) || 0;
-    const status = document.getElementById('novoStatus').value;
-    
-    await db.collection('reservas').doc(docId).update({
-        valorPago,
-        statusPagamento: status,
-        atualizadoEm: firebase.firestore.Timestamp.now()
-    });
-    alert('✅ Reserva atualizada com sucesso!');
-    fecharModalGerenciar();
 }
 
 function configurarFiltros(){
@@ -724,9 +785,7 @@ function configurarFiltros(){
             document.querySelectorAll('[data-filtro]').forEach(b => b.classList.remove('ativo'));
             this.classList.add('ativo');
             filtroReservas = this.getAttribute('data-filtro');
-            db.collection('reservas').orderBy('criadoEmReserva', 'desc').get().then(snap => {
-                renderizarListaReservas(snap.docs);
-            });
+            atualizarListaReservas();
         });
     });
     document.querySelectorAll('[data-periodo]').forEach(btn => {
@@ -739,55 +798,138 @@ function configurarFiltros(){
     });
 }
 
-async function gerarRelatorio(){
-    const snap = await db.collection('reservas').orderBy('criadoEmReserva', 'desc').get();
-    let filtrado = snap.docs;
+function atualizarListaReservas(){
+    const lista = document.getElementById('listaReservas');
+    let filtradas = reservasConfirmadas;
+    
+    if(filtroReservas !== 'todas'){
+        filtradas = reservasConfirmadas.filter(r => r.statusPagamento === filtroReservas);
+    }
+    
+    if(filtradas.length === 0){
+        lista.innerHTML = '<p style="color:var(--cinza); text-align:center; padding:30px;">Nenhuma reserva encontrada.</p>';
+        return;
+    }
+    
+    lista.innerHTML = filtradas.map(r => `
+        <div class="reserva-item">
+            <h4 style="font-size:16px; margin-bottom:8px;">${casas[r.casa]?.nome || 'Casa'}</h4>
+            <p><strong>Hóspede:</strong> ${r.nome}</p>
+            <p><strong>Telefone:</strong> 📞 ${r.telefone}</p>
+            <p><strong>Período:</strong> 📅 ${r.entrada} até ${r.saida} (${r.dias} diária(s))</p>
+            <p><strong>Valor Total:</strong> ${formatarValor(r.valorTotal)}</p>
+            <p><strong>Valor Pago:</strong> ${formatarValor(r.valorPago || 0)}</p>
+            <p><strong>A Receber:</strong> ${formatarValor((r.valorTotal || 0) - (r.valorPago || 0))}</p>
+            <span class="status-badge status-${r.statusPagamento || 'pendente'}">${(r.statusPagamento || 'pendente').toUpperCase()}</span>
+            <div style="display:flex; gap:8px; margin-top:12px;">
+                <button class="azul" onclick="abrirGerenciarReserva('${r.id}')">✏️ Gerenciar</button>
+                <button class="vermelho" onclick="excluirReserva('${r.id}')">🗑️ Excluir</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function abrirGerenciarReserva(reservaId){
+    const r = reservasConfirmadas.find(x => x.id === reservaId);
+    if(!r) return;
+    
+    document.getElementById('conteudoGerenciar').innerHTML = `
+        <p><strong>Casa:</strong> ${casas[r.casa]?.nome || '—'}</p>
+        <p><strong>Hóspede:</strong> ${r.nome}</p>
+        <p><strong>Período:</strong> ${r.entrada} → ${r.saida}</p>
+        <p><strong>Valor Total:</strong> ${formatarValor(r.valorTotal)}</p>
+        <hr style="margin:15px 0; border:none; border-top:1px solid #eee;">
+        <h4>Atualizar Pagamento</h4>
+        <div class="linha-form" style="margin:10px 0;">
+            <input type="number" id="novoValorPago" value="${r.valorPago || 0}" min="0" step="10" placeholder="Valor Pago">
+            <select id="novoStatus">
+                <option value="pendente" ${r.statusPagamento==='pendente'?'selected':''}>Pendente</option>
+                <option value="parcial" ${r.statusPagamento==='parcial'?'selected':''}>Pagamento Parcial</option>
+                <option value="pago" ${r.statusPagamento==='pago'?'selected':''}>Pago</option>
+            </select>
+        </div>
+        <button class="sucesso" onclick="salvarAtualizacaoReserva('${reservaId}')">💾 Salvar Alterações</button>
+    `;
+    document.getElementById('modalGerenciarReserva').classList.add('aberto');
+}
+
+function fecharModalGerenciar(){
+    document.getElementById('modalGerenciarReserva').classList.remove('aberto');
+}
+
+async function salvarAtualizacaoReserva(reservaId){
+    const valorPago = parseFloat(document.getElementById('novoValorPago').value) || 0;
+    const status = document.getElementById('novoStatus').value;
+    
+    await db.collection('reservas').doc(reservaId).update({
+        valorPago,
+        statusPagamento: status,
+        atualizadoEm: firebase.firestore.Timestamp.now()
+    });
+    
+    await carregarReservasConfirmadas();
+    fecharModalGerenciar();
+    alert('✅ Reserva atualizada!');
+}
+
+async function excluirReserva(reservaId){
+    if(!confirm('Tem certeza? Esta ação não pode ser desfeita!')) return;
+    await db.collection('reservas').doc(reservaId).delete();
+    await carregarReservasConfirmadas();
+    alert('✅ Reserva excluída!');
+}
+
+function atualizarPainel(){
+    document.getElementById('qtdReservasAtivas').textContent = reservasConfirmadas.length;
+    const totalRecebido = reservasConfirmadas.reduce((s, r) => s + (r.valorPago || 0), 0);
+    document.getElementById('totalRecebido').textContent = formatarValor(totalRecebido);
+}
+
+function gerarRelatorio(){
+    let dados = reservasConfirmadas;
     const agora = new Date();
     
     if(filtroRelatorio === 'mes'){
-        filtrado = snap.docs.filter(d => {
-            const data = d.data().criadoEmReserva?.toDate?.() || new Date();
-            return data.getMonth() === agora.getMonth() && data.getFullYear() === agora.getFullYear();
+        dados = reservasConfirmadas.filter(r => {
+            const d = new Date(r.criadoEmReserva?.toDate ? r.criadoEmReserva.toDate() : r.entrada);
+            return d.getMonth() === agora.getMonth() && d.getFullYear() === agora.getFullYear();
         });
     } else if(filtroRelatorio === 'ano'){
-        filtrado = snap.docs.filter(d => {
-            const data = d.data().criadoEmReserva?.toDate?.() || new Date();
-            return data.getFullYear() === agora.getFullYear();
+        dados = reservasConfirmadas.filter(r => {
+            const d = new Date(r.criadoEmReserva?.toDate ? r.criadoEmReserva.toDate() : r.entrada);
+            return d.getFullYear() === agora.getFullYear();
         });
     }
     
-    const ativas = filtrado.filter(d => d.data().statusPagamento !== 'cancelado');
-    let totalRecebido = 0, totalEsperado = 0, totalPendente = 0;
-    let porCasa = {};
+    const totalRecebido = dados.reduce((s, r) => s + (r.valorPago || 0), 0);
+    const totalEsperado = dados.reduce((s, r) => s + (r.valorTotal || 0), 0);
+    const totalPendente = totalEsperado - totalRecebido;
     
-    ativas.forEach(d => {
-        const r = d.data();
-        totalRecebido += r.valorPago || 0;
-        totalEsperado += r.valorTotal || 0;
-        totalPendente += (r.valorTotal || 0) - (r.valorPago || 0);
-        
-        if(!porCasa[r.casa]){
-            porCasa[r.casa] = {nome: casas[r.casa]?.nome || 'Casa', recebido: 0, esperado: 0, pendente: 0};
-        }
+    const porCasa = {};
+    Object.keys(casas).forEach(id => {
+        porCasa[id] = {nome: casas[id].nome, recebido:0, esperado:0, pendente:0};
+    });
+    dados.forEach(r => {
+        if(!porCasa[r.casa]) return;
         porCasa[r.casa].recebido += r.valorPago || 0;
         porCasa[r.casa].esperado += r.valorTotal || 0;
         porCasa[r.casa].pendente += (r.valorTotal || 0) - (r.valorPago || 0);
     });
     
-    const conteudo = document.getElementById('relatorioConteudo');
-    conteudo.innerHTML = `
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:15px; margin:20px 0;">
-            <div class="caixa-form" style="text-align:center; border-top
-                        </div>
+    document.getElementById('relatorioConteudo').innerHTML = `
+        <div class="caixa-form">
+            <h3>📊 Resumo Geral</h3>
+            <p style="margin:10px 0;"><strong>Período:</strong> ${filtroRelatorio === 'todos' ? 'Todo o período' : filtroRelatorio === 'mes' ? 'Este Mês' : 'Este Ano'}</p>
+            <p style="margin:5px 0;"><strong>Total de Reservas:</strong> ${dados.length}</p>
             <div class="total-geral">
                 <div class="linha-valor"><span>💰 Total Recebido:</span><span>${formatarValor(totalRecebido)}</span></div>
                 <div class="linha-valor"><span>📊 Total Esperado:</span><span>${formatarValor(totalEsperado)}</span></div>
-                <div class="linha-valor" style="font-weight:bold; color:var(--alerta);"><span>⏳ A Receber:</span><span>${formatarValor(totalPendente)}</span></div>
+                <div class="linha-valor" style="color:var(--alerta);"><span>⏳ A Receber:</span><span>${formatarValor(totalPendente)}</span></div>
             </div>
             
             <h3 style="margin-top:30px;">🏠 Por Casa</h3>
             ${Object.values(porCasa).map(c => `
-                <div class="caixa-form" style="margin:10px 0;">
+                <div style="padding:12px 0; border-bottom:1px solid #eee;">
                     <h4>${c.nome}</h4>
                     <div class="linha-valor"><span>✅ Recebido:</span><span>${formatarValor(c.recebido)}</span></div>
                     <div class="linha-valor"><span>📊 Esperado:</span><span>${formatarValor(c.esperado)}</span></div>
@@ -799,7 +941,6 @@ async function gerarRelatorio(){
 }
 </script>
 
-<!-- Mensagem de finalização do sistema -->
 <footer style="text-align:center; padding:20px; color:var(--cinza); font-size:13px; margin-top:40px; border-top:1px solid #eee;">
     ✅ Sistema de Gestão de Locações — Casas na Praia · Araranguá/SC<br>
     © 2026 — Todos os direitos reservados · Pronto para uso! 🏖️
