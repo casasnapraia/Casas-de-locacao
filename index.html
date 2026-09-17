@@ -68,9 +68,6 @@
         button.sucesso{background:linear-gradient(135deg, #2f855a, #276749); color:white; border:none; border-radius:10px; font-weight:bold; cursor:pointer; padding:12px;}
         button.vermelho{background:linear-gradient(135deg, #e53e3e, #c53030); color:white; border:none; border-radius:10px; font-weight:bold; cursor:pointer; padding:12px;}
         button.azul{background:linear-gradient(135deg, #3b82f6, #2563eb); color:white; border:none; border-radius:10px; font-weight:bold; cursor:pointer; padding:10px;}
-        button.pendente{background:var(--pendente); color:white; border:none; border-radius:8px; padding:6px 12px; cursor:pointer; font-size:12px;}
-        button.pago{background:var(--pago); color:white; border:none; border-radius:8px; padding:6px 12px; cursor:pointer; font-size:12px;}
-        button.parcial{background:var(--parcial); color:white; border:none; border-radius:8px; padding:6px 12px; cursor:pointer; font-size:12px;}
         .modal{position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); display:none; align-items:center; justify-content:center; z-index:1000;}
         .modal.aberto{display:flex;}
         .modal-conteudo{background:white; padding:30px; border-radius:16px; max-width:600px; width:90%; max-height:90vh; overflow-y:auto;}
@@ -87,7 +84,6 @@
         .status-pendente{background:#fef3c7; color:#92400e;}
         .status-pago{background:#d1fae5; color:#065f46;}
         .status-parcial{background:#dbeafe; color:#1e40af;}
-        .status-cancelado{background:#fee2e2; color:#991b1b;}
         .filtros{display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap;}
         .filtro-btn{padding:8px 16px; border:none; border-radius:8px; cursor:pointer; background:#e5e7eb;}
         .filtro-btn.ativo{background:var(--agua); color:white;}
@@ -138,7 +134,6 @@
         </div>
 
         <div id="conteudoAdmin" class="oculto">
-            <!-- PAINEL -->
             <div class="conteudo-aba visivel" id="aba-painel">
                 <h2 class="painel-titulo">📊 Painel Administrativo</h2>
                 <p>Bem-vindo! Use os botões ao lado para gerenciar tudo.</p>
@@ -158,7 +153,6 @@
                 </div>
             </div>
 
-            <!-- CASAS & FOTOS -->
             <div class="conteudo-aba" id="aba-casas">
                 <h2 class="painel-titulo">📷 Gerenciar Casas & Fotos</h2>
                 <p class="dica">💡 Use links DIRETOS (.jpg/.png). Clique no ✖️ para remover.</p>
@@ -166,22 +160,19 @@
                 <div class="casas-grid" id="gridAdmin"></div>
             </div>
 
-            <!-- VALORES DE DIÁRIA -->
             <div class="conteudo-aba" id="aba-diarias">
                 <h2 class="painel-titulo">💰 Valores de Diária por Casa</h2>
-                <p class="dica">💡 Defina o valor da diária para cada casa. O cálculo é feito automaticamente com base nos dias.</p>
+                <p class="dica">💡 Defina o valor da diária. O cálculo é automático com base nos dias.</p>
                 <div id="diariasLista"></div>
                 <button class="sucesso" style="margin-top:20px;" onclick="salvarTodasDiarias()">💾 Salvar Valores</button>
             </div>
 
-            <!-- SOLICITAÇÕES -->
             <div class="conteudo-aba" id="aba-solicitacoes">
                 <h2 class="painel-titulo">📩 Solicitações de Reserva</h2>
                 <p style="color:var(--cinza); margin-bottom:20px;">Avalie e converta em reserva confirmada.</p>
                 <div id="listaSolicitacoes"></div>
             </div>
 
-            <!-- RESERVAS -->
             <div class="conteudo-aba" id="aba-reservas">
                 <h2 class="painel-titulo">📅 Reservas Confirmadas</h2>
                 <div class="filtros">
@@ -193,7 +184,6 @@
                 <div id="listaReservas"></div>
             </div>
 
-            <!-- RELATÓRIOS -->
             <div class="conteudo-aba" id="aba-relatorios">
                 <h2 class="painel-titulo">📈 Relatório de Recebimentos</h2>
                 <div class="filtros">
@@ -204,7 +194,6 @@
                 <div id="relatorioConteudo"></div>
             </div>
 
-            <!-- CONFIGURAÇÕES -->
             <div class="conteudo-aba" id="aba-config">
                 <h2 class="painel-titulo">⚙️ Configurações</h2>
                 <div class="caixa-form">
@@ -221,7 +210,6 @@
     </div>
 </div>
 
-<!-- MODAL RESERVA PÚBLICA -->
 <div class="modal" id="modalReserva">
     <div class="modal-conteudo">
         <h3>📩 Solicitar Reserva — <span id="nomeCasaReserva"></span></h3>
@@ -236,7 +224,7 @@
         <div id="resumoValorPublico" class="resumo-valores oculto">
             <p>Diária: <span id="valorDiariaPub"></span></p>
             <p>Quantidade de dias: <span id="qtdDiasPub"></span></p>
-            <p class="valor-destaque">Total: <span id="valorTotalPub"></span></p>
+            <p class="valor-destaque">Total a pagar: <span id="valorTotalPub"></span></p>
         </div>
         <textarea id="resObs" placeholder="Observações" rows="3"></textarea>
         <div style="display:flex; gap:10px; margin-top:15px;">
@@ -246,7 +234,6 @@
     </div>
 </div>
 
-<!-- MODAL GERENCIAR RESERVA -->
 <div class="modal" id="modalGerenciarReserva">
     <div class="modal-conteudo">
         <h3>📋 Gerenciar Reserva</h3>
@@ -292,12 +279,12 @@ document.addEventListener('DOMContentLoaded', async function(){
     await carregarValoresDiarias();
     renderizarPublico();
     renderizarDiarias();
+    renderizarAdminCasas();
     monitorarSolicitacoes();
     monitorarReservas();
     configurarFiltros();
 });
 
-// --- FOTOS ---
 async function carregarFotosDoFirestore(){
     for(const [id] of Object.entries(casas)){
         try {
@@ -313,6 +300,8 @@ async function salvarLinkFoto(casaId, link){
         fotosAtuais.push(link.trim());
         await db.collection('fotosCasas').doc(casaId).set({ urls: fotosAtuais });
         fotosCasas[casaId] = fotosAtuais;
+        renderizarPublico();
+        renderizarAdminCasas();
         return true;
     } catch (erro) { console.error('Erro:', erro); return false; }
 }
@@ -336,7 +325,6 @@ async function limparTodasFotos(){
     renderizarAdminCasas();
 }
 
-// --- VALORES DE DIÁRIA ---
 async function carregarValoresDiarias(){
     try {
         const doc = await db.collection('configuracoes').doc('valoresDiarias').get();
@@ -414,7 +402,6 @@ function calcularValorPublico(){
     document.getElementById('resumoValorPublico').classList.remove('oculto');
 }
 
-// --- RENDERIZAÇÃO PÚBLICA ---
 function renderizarPublico(){
     const grid = document.getElementById('gridPublico');
     if(!grid) return;
@@ -444,7 +431,40 @@ function renderizarPublico(){
     });
 }
 
-// --- LOGIN ---
+function renderizarAdminCasas(){
+    const grid = document.getElementById('gridAdmin');
+    if(!grid) return;
+    grid.innerHTML = '';
+    
+    Object.entries(casas).forEach(([id, casa]) => {
+        const fotos = fotosCasas[id] || [];
+        const card = document.createElement('div');
+        card.className = `casa-card ${id}`;
+        
+        let htmlImagens = fotos.length > 0 
+            ? fotos.map((f, i) => `
+                <div class="foto-item">
+                    <img src="${f}" class="foto-galeria">
+                    <button class="btn-apagar-foto" onclick="removerFoto('${id}', ${i})">✖</button>
+                </div>
+              `).join('')
+            : '<div class="sem-foto">📷 Sem fotos ainda</div>';
+        
+        card.innerHTML = `
+            <div class="casa-imagens">${htmlImagens}</div>
+            <div class="link-area">
+                <input type="text" id="linkFoto-${id}" placeholder="Cole o link da foto (.jpg, .png)">
+                <button onclick="salvarLinkFoto('${id}', document.getElementById('linkFoto-${id}').value)">📤 Adicionar Foto</button>
+            </div>
+            <div class="casa-corpo">
+                <h3 class="casa-nome">${casa.nome}</h3>
+                <p class="casa-desc">${casa.desc}</p>
+            </div>
+        `;
+        grid.appendChild(card);
+    });
+}
+
 function verificarLogin(){
     const usu = document.getElementById('usuarioLogin').value.trim();
     const sen = document.getElementById('senhaLogin').value.trim();
@@ -476,7 +496,6 @@ function alterarAcesso(){
     alert('✅ Salvo!');
 }
 
-// --- NAVEGAÇÃO ---
 document.querySelectorAll('.aba-lateral').forEach(btn => {
     btn.addEventListener('click', function(){
         document.querySelectorAll('.aba-lateral').forEach(b => b.classList.remove('ativa'));
@@ -490,7 +509,6 @@ document.querySelectorAll('.aba-lateral').forEach(btn => {
     });
 });
 
-// --- RESERVA PÚBLICA ---
 function abrirFormReserva(casaId){
     casaSelecionada = casaId;
     document.getElementById('nomeCasaReserva').textContent = casas[casaId].nome;
@@ -528,7 +546,7 @@ async function enviarReserva(){
     
     try {
         await db.collection('solicitacoes').add(dados);
-        alert(`✅ Solicitação enviada!\nValor total: ${formatarValor(valorTotal)}\nEntraremos em contato.`);
+        alert(`✅ Solicitação enviada com sucesso!\n\nValor total: ${formatarValor(valorTotal)}\nEntraremos em contato em breve para confirmar sua reserva. Obrigado! 🏖️`);
         fecharModalReserva();
     } catch(erro) {
         console.error(erro);
@@ -536,7 +554,6 @@ async function enviarReserva(){
     }
 }
 
-// --- SOLICITAÇÕES ---
 function monitorarSolicitacoes(){
     db.collection('solicitacoes').orderBy('criadoEm', 'desc').onSnapshot(snapshot => {
         const lista = document.getElementById('listaSolicitacoes');
@@ -581,15 +598,15 @@ async function converterParaReserva(docId){
     
     await db.collection('reservas').doc(docId).set(dados);
     await db.collection('solicitacoes').doc(docId).delete();
-    alert('✅ Reserva criada! Agora gerencie na aba "Reservas".');
+    alert('✅ Reserva criada com sucesso! Agora gerencie na aba "Reservas".');
 }
 
 async function excluirSolicitacao(docId){
     if(!confirm('Excluir esta solicitação?')) return;
     await db.collection('solicitacoes').doc(docId).delete();
+    alert('✅ Solicitação excluída.');
 }
 
-// --- RESERVAS ---
 function monitorarReservas(){
     db.collection('reservas').orderBy('criadoEmReserva', 'desc').onSnapshot(snapshot => {
         atualizarPainel();
@@ -599,7 +616,7 @@ function monitorarReservas(){
 }
 
 function atualizarPainel(){
-    db.collection('reservas').where('statusPagamento', 'in', ['pendente','parcial','pago']).get().then(snap => {
+    db.collection('reservas').get().then(snap => {
         let ativas = 0, totalPago = 0;
         snap.forEach(doc => {
             const r = doc.data();
@@ -629,14 +646,12 @@ function renderizarListaReservas(docs){
         const statusClass = {
             pendente: 'status-pendente',
             parcial: 'status-parcial',
-            pago: 'status-pago',
-            cancelado: 'status-cancelado'
+            pago: 'status-pago'
         }[r.statusPagamento] || 'status-pendente';
         const statusTexto = {
             pendente: 'Aguardando Pagamento',
             parcial: 'Pagamento Parcial',
-            pago: 'Total Pago',
-            cancelado: 'Cancelada'
+            pago: 'Totalmente Pago'
         }[r.statusPagamento] || 'Pendente';
         
         return `
@@ -679,7 +694,6 @@ async function abrirGerenciarReserva(docId){
                 <option value="pendente" ${r.statusPagamento==='pendente'?'selected':''}>Pendente</option>
                 <option value="parcial" ${r.statusPagamento==='parcial'?'selected':''}>Pagamento Parcial</option>
                 <option value="pago" ${r.statusPagamento==='pago'?'selected':''}>Totalmente Pago</option>
-                <option value="cancelado" ${r.statusPagamento==='cancelado'?'selected':''}>Cancelada</option>
             </select>
         </div>
         <button class="sucesso" style="margin-top:15px;" onclick="salvarReserva('${docId}')">💾 Salvar Alterações</button>
@@ -700,11 +714,10 @@ async function salvarReserva(docId){
         statusPagamento: status,
         atualizadoEm: firebase.firestore.Timestamp.now()
     });
-    alert('✅ Reserva atualizada!');
+    alert('✅ Reserva atualizada com sucesso!');
     fecharModalGerenciar();
 }
 
-// --- FILTROS ---
 function configurarFiltros(){
     document.querySelectorAll('[data-filtro]').forEach(btn => {
         btn.addEventListener('click', function(){
@@ -726,47 +739,71 @@ function configurarFiltros(){
     });
 }
 
-// --- RELATÓRIO ---
-async function gerarRelatorio(docs = null){
-    if(!docs){
-        const snap = await db.collection('reservas').orderBy('criadoEmReserva', 'desc').get();
-        docs = snap.docs;
-    }
-    
-    let filtrado = docs;
+async function gerarRelatorio(){
+    const snap = await db.collection('reservas').orderBy('criadoEmReserva', 'desc').get();
+    let filtrado = snap.docs;
     const agora = new Date();
     
     if(filtroRelatorio === 'mes'){
-        filtrado = docs.filter(d => {
+        filtrado = snap.docs.filter(d => {
             const data = d.data().criadoEmReserva?.toDate?.() || new Date();
             return data.getMonth() === agora.getMonth() && data.getFullYear() === agora.getFullYear();
         });
     } else if(filtroRelatorio === 'ano'){
-        filtrado = docs.filter(d => {
+        filtrado = snap.docs.filter(d => {
             const data = d.data().criadoEmReserva?.toDate?.() || new Date();
             return data.getFullYear() === agora.getFullYear();
         });
     }
     
-    const pagas = filtrado.filter(d => d.data().statusPagamento === 'pago');
-    const parciais = filtrado.filter(d => d.data().statusPagamento === 'parcial');
-    const todas = filtrado.filter(d => d.data().statusPagamento !== 'cancelado');
-    
+    const ativas = filtrado.filter(d => d.data().statusPagamento !== 'cancelado');
     let totalRecebido = 0, totalEsperado = 0, totalPendente = 0;
-    todas.forEach(d => {
+    let porCasa = {};
+    
+    ativas.forEach(d => {
         const r = d.data();
         totalRecebido += r.valorPago || 0;
         totalEsperado += r.valorTotal || 0;
         totalPendente += (r.valorTotal || 0) - (r.valorPago || 0);
+        
+        if(!porCasa[r.casa]){
+            porCasa[r.casa] = {nome: casas[r.casa]?.nome || 'Casa', recebido: 0, esperado: 0, pendente: 0};
+        }
+        porCasa[r.casa].recebido += r.valorPago || 0;
+        porCasa[r.casa].esperado += r.valorTotal || 0;
+        porCasa[r.casa].pendente += (r.valorTotal || 0) - (r.valorPago || 0);
     });
     
     const conteudo = document.getElementById('relatorioConteudo');
     conteudo.innerHTML = `
-        <div class="caixa-form" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px,1fr)); gap:15px;">
-            <div>
-                <p style="color:var(--cinza); font-size:13px;">📊 Reservas no Período</p>
-                <p style="font-size:24px; font-weight:bold;">${todas.length}</p>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:15px; margin:20px 0;">
+            <div class="caixa-form" style="text-align:center; border-top
+                        </div>
+            <div class="total-geral">
+                <div class="linha-valor"><span>💰 Total Recebido:</span><span>${formatarValor(totalRecebido)}</span></div>
+                <div class="linha-valor"><span>📊 Total Esperado:</span><span>${formatarValor(totalEsperado)}</span></div>
+                <div class="linha-valor" style="font-weight:bold; color:var(--alerta);"><span>⏳ A Receber:</span><span>${formatarValor(totalPendente)}</span></div>
             </div>
-            <div>
-                <p style="color:var(--cinza); font-size:13px;">✅ Total Recebido</p>
-               
+            
+            <h3 style="margin-top:30px;">🏠 Por Casa</h3>
+            ${Object.values(porCasa).map(c => `
+                <div class="caixa-form" style="margin:10px 0;">
+                    <h4>${c.nome}</h4>
+                    <div class="linha-valor"><span>✅ Recebido:</span><span>${formatarValor(c.recebido)}</span></div>
+                    <div class="linha-valor"><span>📊 Esperado:</span><span>${formatarValor(c.esperado)}</span></div>
+                    <div class="linha-valor" style="color:var(--alerta);"><span>⏳ A Receber:</span><span>${formatarValor(c.pendente)}</span></div>
+                </div>
+            `).join('')}
+        </div>
+    `;
+}
+</script>
+
+<!-- Mensagem de finalização do sistema -->
+<footer style="text-align:center; padding:20px; color:var(--cinza); font-size:13px; margin-top:40px; border-top:1px solid #eee;">
+    ✅ Sistema de Gestão de Locações — Casas na Praia · Araranguá/SC<br>
+    © 2026 — Todos os direitos reservados · Pronto para uso! 🏖️
+</footer>
+
+</body>
+</html>
