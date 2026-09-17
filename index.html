@@ -349,29 +349,65 @@ const db = firebase.firestore();
 
 // Casas com Galeria de Fotos e Taxa de Limpeza
 // Casas com Galeria de Fotos e Taxa de Limpeza
+// Casas com Galeria de Fotos, Características e Taxa de Limpeza
 const casas = {
     amarela: {
-        nome: 'Casa Amarela', 
-        desc: 'Casa com 3 quartos, 2 banheiros e meio, espaço gourmet com churrasqueira e mesa de sinuca, garagem coberta para 3 carros, a poucos passos da praia.', 
-        fotos: [], 
+        nome: 'Casa Amarela',
+        desc: 'Casa com excelente estrutura para sua temporada.',
+        caracteristicas: [
+            '🛏️ 3 quartos',
+            '🚿 2 banheiros e meio',
+            '🍖 Espaço gourmet com churrasqueira',
+            '🎱 Mesa de sinuca',
+            '🚗 Garagem coberta para 3 carros',
+            '🏖️ A poucos passos da praia'
+        ],
+        fotos: [],
         taxaLimpeza: 0
     },
+
     bege: {
-        nome: 'Casa Bege', 
-        desc: 'Casa com 2 quartos, 2 banheiros, espaço gourmet com churrasqueira e mesa de sinuca, pátio fechado, a poucos passos da praia.', 
-        fotos: [], 
+        nome: 'Casa Bege',
+        desc: 'Conforto e praticidade para sua temporada.',
+        caracteristicas: [
+            '🛏️ 2 quartos',
+            '🚿 2 banheiros',
+            '🍖 Espaço gourmet com churrasqueira',
+            '🎱 Mesa de sinuca',
+            '🏡 Pátio fechado',
+            '🏖️ A poucos passos da praia'
+        ],
+        fotos: [],
         taxaLimpeza: 0
     },
+
     marrom: {
-        nome: 'Casa Marrom', 
-        desc: 'Casa com 3 quartos, 2 banheiros, espaço gourmet com churrasqueira e mesa de sinuca, pátio fechado, a poucos passos da praia.', 
-        fotos: [], 
+        nome: 'Casa Marrom',
+        desc: 'Casa aconchegante e completa para sua temporada.',
+        caracteristicas: [
+            '🛏️ 3 quartos',
+            '🚿 2 banheiros',
+            '🍖 Espaço gourmet com churrasqueira',
+            '🎱 Mesa de sinuca',
+            '🏡 Pátio fechado',
+            '🏖️ A poucos passos da praia'
+        ],
+        fotos: [],
         taxaLimpeza: 0
     },
+
     branca: {
-        nome: 'Casa Branca', 
-        desc: 'Casa com 3 quartos, 2 banheiros e meio, espaço gourmet com churrasqueira e mesa de sinuca, garagem coberta para 3 carros, a poucos passos da praia.', 
-        fotos: [], 
+        nome: 'Casa Branca',
+        desc: 'Casa ampla e completa, ideal para famílias.',
+        caracteristicas: [
+            '🛏️ 3 quartos',
+            '🚿 2 banheiros e meio',
+            '🍖 Espaço gourmet com churrasqueira',
+            '🎱 Mesa de sinuca',
+            '🚗 Garagem coberta para 3 carros',
+            '🏖️ A poucos passos da praia'
+        ],
+        fotos: [],
         taxaLimpeza: 0
     }
 };
