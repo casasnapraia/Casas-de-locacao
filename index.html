@@ -7,6 +7,7 @@
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging-compat.js"></script>
 
 <style>
 :root{
@@ -1190,6 +1191,18 @@ select,textarea{
 </div>
 
 <!-- PAINEL ADMIN -->
+ <button
+ id="btnNotificacoes"
+ class="azul"
+ onclick="ativarNotificacoes()"
+ style="
+  width:100%;
+  margin:10px 0;
+  font-size:16px;
+  padding:12px;
+ ">
+ 🔔 Ativar notificações neste dispositivo
+</button>
 
 <div id="painelAdmin" class="oculto">
 
@@ -1520,7 +1533,257 @@ ADM_SENHA='praia2026';
 
 firebase.initializeApp(firebaseConfig);
 
-const db=firebase.firestore();
+const db = firebase.firestore();
+
+/* =========================================================
+   FIREBASE CLOUD MESSAGING
+   NOTIFICAÇÕES NO CELULAR DO ADMINISTRADOR
+   ========================================================= */
+
+const VAPID_KEY =
+'BAfcZVun5WZPKsrtcd2ciWUKFll11MWrQA5oUDA2IcbN07hHHGGqC1CgaVa8IvxOrKd2zgr_6sb_qeyjY8ROkEM';
+
+let messaging = null;
+let notificacaoServiceWorker = null;
+
+/*
+ * Registra o Service Worker específico do GitHub Pages.
+ *
+ * Seu site está em:
+ * /Casas-de-locacao/
+ *
+ * Por isso não usamos simplesmente:
+ * firebase-messaging-sw.js
+ */
+
+async function prepararNotificacoes(){
+
+ try{
+
+  if(
+   !('serviceWorker' in navigator) ||
+   !('Notification' in window)
+  ){
+
+   console.warn(
+    'Este navegador não suporta notificações Web.'
+   );
+
+   return null;
+
+  }
+
+  notificacaoServiceWorker =
+   await navigator.serviceWorker.register(
+    '/Casas-de-locacao/firebase-messaging-sw.js',
+    {
+     scope:'/Casas-de-locacao/'
+    }
+   );
+
+  console.log(
+   '✅ Service Worker registrado:',
+   notificacaoServiceWorker
+  );
+
+  messaging = firebase.messaging();
+
+  return notificacaoServiceWorker;
+
+ }catch(e){
+
+  console.error(
+   '❌ Erro ao registrar Service Worker:',
+   e
+  );
+
+  return null;
+
+ }
+
+}
+
+
+/*
+ * Ativa as notificações neste dispositivo.
+ *
+ * Essa função NÃO é executada para visitantes.
+ * Será chamada pelo administrador.
+ */
+
+async function ativarNotificacoes(){
+
+ try{
+
+  if(!messaging){
+
+   await prepararNotificacoes();
+
+  }
+
+  if(!messaging){
+
+   alert(
+    '❌ Não foi possível inicializar as notificações.'
+   );
+
+   return;
+
+  }
+
+  /*
+   * Solicita autorização do navegador.
+   */
+
+  const permissao =
+   await Notification.requestPermission();
+
+  console.log(
+   'Permissão de notificações:',
+   permissao
+  );
+
+  if(permissao!=='granted'){
+
+   alert(
+    '⚠️ As notificações não foram autorizadas neste navegador.'
+   );
+
+   return;
+
+  }
+
+  /*
+   * Obtém o token FCM.
+   *
+   * O Service Worker é informado explicitamente porque
+   * o site está em um subdiretório do GitHub Pages.
+   */
+
+  const token =
+   await messaging.getToken({
+
+    vapidKey:VAPID_KEY,
+
+    serviceWorkerRegistration:
+     notificacaoServiceWorker
+
+   });
+
+  if(!token){
+
+   alert(
+    '⚠️ O Firebase não retornou o token do dispositivo.'
+   );
+
+   return;
+
+  }
+
+  console.log(
+   '===================================='
+  );
+
+  console.log(
+   'TOKEN FCM DO DISPOSITIVO:'
+  );
+
+  console.log(token);
+
+  console.log(
+   '===================================='
+  );
+
+  /*
+   * Salva somente o dispositivo autorizado.
+   *
+   * Não altera reservas, hóspedes ou casas.
+   */
+
+  await db
+   .collection('dispositivos_notificacao')
+   .doc(token)
+   .set({
+
+    token,
+
+    ativo:true,
+
+    plataforma:
+     /Android/i.test(navigator.userAgent)
+     ?'Android'
+     :'Web',
+
+    navegador:navigator.userAgent,
+
+    criadoEm:
+     firebase.firestore.Timestamp.now(),
+
+    atualizadoEm:
+     firebase.firestore.Timestamp.now()
+
+   },{
+
+    merge:true
+
+   });
+
+  alert(
+   '✅ NOTIFICAÇÕES ATIVADAS!\n\n' +
+   'Este dispositivo agora está cadastrado para receber avisos de novas reservas.'
+  );
+
+  const botao=$('btnNotificacoes');
+
+  if(botao){
+
+   botao.textContent=
+    '🔔 Notificações ATIVADAS';
+
+   botao.classList.add('sucesso');
+
+  }
+
+ }catch(e){
+
+  console.error(
+   '❌ Erro ao ativar notificações:',
+   e
+  );
+
+  alert(
+   '❌ Não foi possível ativar as notificações.\n\n' +
+   'Abra o Console (F12) para verificar o erro.'
+  );
+
+ }
+
+}
+
+
+/*
+ * Inicializa o Messaging sem pedir permissão.
+ *
+ * Isso permite que o Service Worker fique preparado,
+ * mas o usuário só recebe o pedido quando clicar no botão.
+ */
+
+document.addEventListener(
+ 'DOMContentLoaded',
+ async()=>{
+
+  try{
+
+   await prepararNotificacoes();
+
+  }catch(e){
+
+   console.error(e);
+
+  }
+
+ }
+);
 
 /* CASAS */
 
