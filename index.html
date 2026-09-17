@@ -9,7 +9,6 @@
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
     body { background: linear-gradient(135deg, #e0f7fa, #fff9c4); min-height: 100vh; }
@@ -19,14 +18,12 @@
     
     .tela { display: none; }
     .ativa { display: block; }
-
     .card { background: white; border-radius: 12px; padding: 20px; margin: 15px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
     .card-casa { border-left: 5px solid #ff9800; }
     .card-amarela { border-color: #ffc107; }
     .card-bege { border-color: #d4a574; }
     .card-marrom { border-color: #795548; }
     .card-branca { border-color: #eceff1; }
-
     input, button, select, textarea { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #ddd; font-size: 16px; }
     button { background: #00796b; color: white; border: none; cursor: pointer; font-weight: bold; transition: 0.3s; }
     button:hover { background: #004d40; }
@@ -36,7 +33,6 @@
     .btn-azul:hover { background: #0d47a1; }
     .btn-amarelo { background: #f9a825; }
     .btn-amarelo:hover { background: #f57f17; }
-
     .grade { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
     .foto-casa { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; background: #e0e0e0; }
     .disponivel { color: #2e7d32; font-weight: bold; }
@@ -44,19 +40,16 @@
     .aba { display: inline-block; padding: 10px 20px; background: #ddd; cursor: pointer; border-radius: 8px 8px 0 0; margin-right: 5px; }
     .aba.ativa { background: white; font-weight: bold; }
     .painel-abas { background: white; border-radius: 0 0 12px 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-
     .linha { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
     .linha button { flex: 1; min-width: 120px; }
     .etiqueta { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 13px; margin: 2px; }
     .etiqueta-verde { background: #c8e6c9; color: #2e7d32; }
     .etiqueta-vermelha { background: #ffcdd2; color: #c62828; }
     .etiqueta-azul { background: #bbdefb; color: #1565c0; }
-
     .esconder { display: none !important; }
   </style>
 </head>
 <body>
-
 <!-- Tela de Login -->
 <div id="tela-login" class="container ativa">
   <div class="praia-bg">
@@ -197,9 +190,6 @@
   </div>
 </div>
 
-<script>
-// ================= CONFIGURAÇÃO FIREBASE =================
-// SUBSTITUA ESTAS INFORMAÇÕES PELAS SUAS DO FIREBASE
 <script>
 // ================= CONFIGURAÇÃO FIREBASE =================
 const configFirebase = {
@@ -370,7 +360,6 @@ async function cadastrarHospede(){
   };
   await db.collection('hospedes').add(dados);
   alert('Hóspede cadastrado!');
-  // Limpar formulário corretamente
   document.getElementById('h-nome').value = '';
   document.getElementById('h-cpf').value = '';
   document.getElementById('h-telefone').value = '';
@@ -535,3 +524,5 @@ async function carregarTudo(){
   mostrarGaleria('amarela');
 }
 </script>
+</body>
+</html>
