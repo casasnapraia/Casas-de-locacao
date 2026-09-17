@@ -7,7 +7,6 @@
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
@@ -19,37 +18,32 @@
     .tela { display: none; }
     .ativa { display: block; }
     .card { background: white; border-radius: 12px; padding: 20px; margin: 15px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-    .card-casa { border-left: 5px solid #ff9800; }
-    .card-amarela { border-color: #ffc107; }
-    .card-bege { border-color: #d4a574; }
-    .card-marrom { border-color: #795548; }
-    .card-branca { border-color: #eceff1; }
+    .card-amarela { border-left: 5px solid #ffc107; }
+    .card-bege { border-left: 5px solid #d4a574; }
+    .card-marrom { border-left: 5px solid #795548; }
+    .card-branca { border-left: 5px solid #eceff1; }
     input, button, select, textarea { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #ddd; font-size: 16px; }
     button { background: #00796b; color: white; border: none; cursor: pointer; font-weight: bold; transition: 0.3s; }
     button:hover { background: #004d40; }
     .btn-vermelho { background: #e53935; }
     .btn-vermelho:hover { background: #c62828; }
-    .btn-azul { background: #1976d2; }
-    .btn-azul:hover { background: #0d47a1; }
     .btn-amarelo { background: #f9a825; }
     .btn-amarelo:hover { background: #f57f17; }
     .grade { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
     .foto-casa { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; background: #e0e0e0; }
     .disponivel { color: #2e7d32; font-weight: bold; }
-    .ocupado { color: #c62828; font-weight: bold; }
+    .etiqueta { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 13px; margin: 2px; }
+    .etiqueta-verde { background: #c8e6c9; color: #2e7d32; }
+    .etiqueta-azul { background: #bbdefb; color: #1565c0; }
+    .esconder { display: none !important; }
     .aba { display: inline-block; padding: 10px 20px; background: #ddd; cursor: pointer; border-radius: 8px 8px 0 0; margin-right: 5px; }
     .aba.ativa { background: white; font-weight: bold; }
     .painel-abas { background: white; border-radius: 0 0 12px 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-    .linha { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
-    .linha button { flex: 1; min-width: 120px; }
-    .etiqueta { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 13px; margin: 2px; }
-    .etiqueta-verde { background: #c8e6c9; color: #2e7d32; }
-    .etiqueta-vermelha { background: #ffcdd2; color: #c62828; }
-    .etiqueta-azul { background: #bbdefb; color: #1565c0; }
-    .esconder { display: none !important; }
+    .link-img { font-size: 13px; color: #666; }
   </style>
 </head>
 <body>
+
 <!-- Tela de Login -->
 <div id="tela-login" class="container ativa">
   <div class="praia-bg">
@@ -97,30 +91,31 @@
   </div>
   <button onclick="fazerLogout()" class="btn-vermelho" style="width: auto; margin-bottom: 15px;">Sair</button>
 
-  <!-- Abas -->
   <div>
-    <span class="aba ativa" data-painel="casas">🏠 Casas</span>
+    <span class="aba ativa" data-painel="casas">🏠 Casas e Fotos</span>
     <span class="aba" data-painel="hospedes">👤 Hóspedes</span>
     <span class="aba" data-painel="reservas">📋 Solicitações</span>
-    <span class="aba" data-painel="financeiro">💰 Financeiro / Relatórios</span>
+    <span class="aba" data-painel="financeiro">💰 Financeiro</span>
     <span class="aba" data-painel="calendario">📅 Calendário</span>
   </div>
 
   <div class="painel-abas">
-    <!-- Aba Casas -->
     <div id="painel-casas" class="sub-painel">
-      <h3>Gerenciar Casas e Fotos</h3>
+      <h3>Adicionar Fotos (Links do Imgur)</h3>
       <select id="selecionar-casa">
         <option value="amarela">Casa Amarela</option>
         <option value="bege">Casa Bege</option>
         <option value="marrom">Casa Marrom</option>
         <option value="branca">Casa Branca</option>
       </select>
-      <input type="file" id="upload-foto" accept="image/*">
-      <button onclick="enviarFoto()">📤 Enviar Foto</button>
-      <div id="galeria-casa" class="grade" style="margin-top:20px;"></div>
+      <input type="url" id="link-foto" placeholder="Cole aqui o link da foto do Imgur" class="link-img">
+      <p style="font-size:12px; color:#888;">💡 No Imgur: faça upload → clique na foto → copie o link direto da imagem (.jpg, .png)</p>
+      <button onclick="salvarFotoLink()">✅ Salvar Foto</button>
       <hr style="margin:25px 0;">
-      <h4>Definir Valor de Diária por Período</h4>
+      <h4>Galeria da Casa Selecionada</h4>
+      <div id="galeria-casa" class="grade"></div>
+      <hr style="margin:25px 0;">
+      <h4>Definir Valor de Diária</h4>
       <select id="casa-valor">
         <option value="amarela">Casa Amarela</option>
         <option value="bege">Casa Bege</option>
@@ -133,11 +128,10 @@
       <button onclick="cadastrarValor()">Salvar Valor</button>
     </div>
 
-    <!-- Aba Hóspedes -->
     <div id="painel-hospedes" class="sub-painel esconder">
       <h3>Cadastro de Hóspedes</h3>
       <input type="text" id="h-nome" placeholder="Nome Completo">
-      <input type="tel" id="h-cpf" placeholder="CPF">
+      <input type="text" id="h-cpf" placeholder="CPF">
       <input type="tel" id="h-telefone" placeholder="Telefone/WhatsApp">
       <input type="email" id="h-email" placeholder="E-mail">
       <textarea id="h-endereco" placeholder="Endereço completo" rows="2"></textarea>
@@ -147,7 +141,6 @@
       <div id="lista-hospedes"></div>
     </div>
 
-    <!-- Aba Solicitações/Reservas -->
     <div id="painel-reservas" class="sub-painel esconder">
       <h3>Solicitações de Reserva</h3>
       <div id="lista-solicitacoes"></div>
@@ -160,9 +153,9 @@
         <option value="branca">Casa Branca</option>
       </select>
       <select id="res-hospede-selecionado">
-        <option value="">-- Selecionar Hóspede Cadastrado --</option>
+        <option value="">-- Selecionar Hóspede --</option>
       </select>
-      <input type="text" id="res-nome-manual" placeholder="Ou digite o nome do hóspede">
+      <input type="text" id="res-nome-manual" placeholder="Ou digite o nome">
       <input type="date" id="res-entrada-manual">
       <input type="date" id="res-saida-manual">
       <input type="number" id="res-valor-manual" placeholder="Valor Total R$" step="0.01">
@@ -173,7 +166,6 @@
       <button onclick="lancarReserva()">Lançar Reserva</button>
     </div>
 
-    <!-- Aba Financeiro -->
     <div id="painel-financeiro" class="sub-painel esconder">
       <h3>Relatório Financeiro</h3>
       <input type="date" id="rel-data-inicio">
@@ -182,7 +174,6 @@
       <div id="resultado-relatorio" style="margin-top:20px;"></div>
     </div>
 
-    <!-- Aba Calendário -->
     <div id="painel-calendario" class="sub-painel esconder">
       <h3>Ocupação / Disponibilidade</h3>
       <div id="visual-calendario" style="margin-top:15px;"></div>
@@ -191,7 +182,7 @@
 </div>
 
 <script>
-// ================= CONFIGURAÇÃO FIREBASE =================
+// ========== CONFIGURAÇÃO FIREBASE ==========
 const configFirebase = {
   apiKey: "AIzaSyDDxYq7YRcNNLk3pIZWff7i45RNs6kpDtA",
   authDomain: "casas-na-praia.firebaseapp.com",
@@ -203,7 +194,6 @@ const configFirebase = {
 
 firebase.initializeApp(configFirebase);
 const db = firebase.firestore();
-const armazenamento = firebase.storage();
 const auth = firebase.auth();
 
 let usuarioLogado = null;
@@ -214,7 +204,7 @@ const nomesCasas = {
   branca: "Casa Branca"
 };
 
-// ================= AUTENTICAÇÃO =================
+// ========== LOGIN ==========
 async function fazerLogin(){
   const email = document.getElementById('email-admin').value;
   const senha = document.getElementById('senha-admin').value;
@@ -224,7 +214,7 @@ async function fazerLogin(){
     mostrarTela('tela-admin');
     carregarTudo();
   }catch(e){
-    alert('Erro no login: ' + e.message);
+    alert('ERRO: ' + e.message + '\n\nVerifique e-mail e senha cadastrados no Firebase');
   }
 }
 
@@ -235,11 +225,14 @@ function fazerLogout(){
 }
 
 auth.onAuthStateChanged(u => {
-  if(u){ usuarioLogado = u; }
-  else { usuarioLogado = null; }
+  usuarioLogado = u;
+  if(u && document.getElementById('tela-login').classList.contains('ativa')){
+    mostrarTela('tela-admin');
+    carregarTudo();
+  }
 });
 
-// ================= NAVEGAÇÃO =================
+// ========== NAVEGAÇÃO ==========
 function mostrarTela(id){
   document.querySelectorAll('.container').forEach(c => c.classList.remove('ativa'));
   document.getElementById(id).classList.add('ativa');
@@ -256,10 +249,60 @@ document.querySelectorAll('.aba').forEach(aba => {
     if(aba.dataset.painel === 'calendario') carregarCalendario();
     if(aba.dataset.painel === 'reservas') carregarSolicitacoes();
     if(aba.dataset.painel === 'hospedes') carregarHospedesSelect();
+    if(aba.dataset.painel === 'casas') mostrarGaleria(document.getElementById('selecionar-casa').value);
   });
 });
 
-// ================= CASAS E FOTOS =================
+// ========== FOTOS VIA LINK IMGUR ==========
+async function salvarFotoLink(){
+  if(!usuarioLogado) return alert('Faça login primeiro');
+  const casa = document.getElementById('selecionar-casa').value;
+  const link = document.getElementById('link-foto').value.trim();
+  if(!link) return alert('Cole o link da foto!');
+  
+  await db.collection('fotosCasas').add({
+    casa: casa,
+    url: link,
+    data: new Date()
+  });
+  
+  alert('✅ Foto salva! Vai aparecer na página pública');
+  document.getElementById('link-foto').value = '';
+  mostrarGaleria(casa);
+}
+
+async function carregarFotosCasa(casa){
+  const snap = await db.collection('fotosCasas').where('casa', '==', casa).orderBy('data').get();
+  const urls = [];
+  snap.forEach(doc => urls.push(doc.data().url));
+  return urls;
+}
+
+async function mostrarGaleria(casa){
+  const div = document.getElementById('galeria-casa');
+  const fotos = await carregarFotosCasa(casa);
+  if(fotos.length === 0){
+    div.innerHTML = '<p style="color:#888;">Nenhuma foto cadastrada ainda. Cole o link do Imgur acima.</p>';
+    return;
+  }
+  div.innerHTML = fotos.map((f, i) => `
+    <div style="position:relative;">
+      <img src="${f}" class="foto-casa" alt="Foto da casa">
+      <button class="btn-vermelho" style="position:absolute;top:5px;right:5px;width:auto;padding:4px 8px;font-size:12px;" onclick="excluirFoto('${f}')">🗑️</button>
+    </div>
+  `).join('');
+}
+
+async function excluirFoto(url){
+  if(!confirm('Excluir esta foto?')) return;
+  const snap = await db.collection('fotosCasas').where('url', '==', url).get();
+  snap.forEach(async doc => await doc.ref.delete());
+  mostrarGaleria(document.getElementById('selecionar-casa').value);
+}
+
+document.getElementById('selecionar-casa').addEventListener('change', e => mostrarGaleria(e.target.value));
+
+// ========== CASAS PÚBLICAS ==========
 async function carregarCasasPublicas(){
   const lista = document.getElementById('lista-casas-publicas');
   lista.innerHTML = '';
@@ -269,7 +312,9 @@ async function carregarCasasPublicas(){
     card.className = `card card-${chave}`;
     card.innerHTML = `
       <h3>${nome}</h3>
-      <div>${fotos.length ? fotos.map(f => `<img src="${f}" class="foto-casa">`).join('') : '<div class="foto-casa" style="display:flex;align-items:center;justify-content:center;color:#777;">Sem fotos ainda</div>'}</div>
+      <div style="display:flex;overflow-x:auto;gap:8px;padding:5px 0;">
+        ${fotos.length ? fotos.map(f => `<img src="${f}" class="foto-casa" style="width:200px;height:150px;">`).join('') : '<div class="foto-casa" style="display:flex;align-items:center;justify-content:center;color:#777;min-width:100%;">Fotos em breve</div>'}
+      </div>
       <p style="margin-top:10px;">Disponível: <span class="disponivel">✅ Sim</span></p>
       <button onclick="iniciarReserva('${chave}')">Solicitar Reserva</button>
     `;
@@ -277,51 +322,18 @@ async function carregarCasasPublicas(){
   }
 }
 
-async function carregarFotosCasa(casa){
-  try{
-    const ref = armazenamento.ref(`fotos/${casa}/`);
-    const itens = await ref.listAll();
-    const urls = [];
-    for(const item of itens.items){
-      urls.push(await item.getDownloadURL());
-    }
-    return urls;
-  }catch{ return []; }
-}
-
-async function enviarFoto(){
-  if(!usuarioLogado) return alert('Faça login primeiro');
-  const casa = document.getElementById('selecionar-casa').value;
-  const arquivo = document.getElementById('upload-foto').files[0];
-  if(!arquivo) return alert('Selecione uma foto');
-  const ref = armazenamento.ref(`fotos/${casa}/${Date.now()}_${arquivo.name}`);
-  await ref.put(arquivo);
-  alert('Foto enviada!');
-  mostrarGaleria(casa);
-}
-
-async function mostrarGaleria(casa){
-  const div = document.getElementById('galeria-casa');
-  const fotos = await carregarFotosCasa(casa);
-  div.innerHTML = fotos.map(f => `<img src="${f}" class="foto-casa">`).join('');
-}
-
-document.getElementById('selecionar-casa').addEventListener('change', e => mostrarGaleria(e.target.value));
-
-// ================= VALORES =================
 async function cadastrarValor(){
-  const dados = {
+  await db.collection('valores').add({
     casa: document.getElementById('casa-valor').value,
     inicio: document.getElementById('valor-inicio').value,
     fim: document.getElementById('valor-fim').value,
     valor: parseFloat(document.getElementById('valor-diaria').value),
     criadoEm: new Date()
-  };
-  await db.collection('valores').add(dados);
+  });
   alert('Valor cadastrado!');
 }
 
-// ================= RESERVAS PÚBLICAS =================
+// ========== RESERVAS PÚBLICAS ==========
 function iniciarReserva(casa){
   document.getElementById('nome-casa-reserva').textContent = nomesCasas[casa];
   document.getElementById('form-reserva-publica').classList.remove('esconder');
@@ -330,7 +342,7 @@ function iniciarReserva(casa){
 
 async function enviarReserva(){
   const casa = document.getElementById('form-reserva-publica').dataset.casa;
-  const dados = {
+  await db.collection('solicitacoes').add({
     casa,
     nome: document.getElementById('res-nome').value,
     telefone: document.getElementById('res-telefone').value,
@@ -341,32 +353,29 @@ async function enviarReserva(){
     obs: document.getElementById('res-obs').value,
     status: 'solicitacao',
     dataSolicitacao: new Date()
-  };
-  await db.collection('solicitacoes').add(dados);
-  alert('Solicitação enviada com sucesso! Obrigado 💛');
+  });
+  alert('✅ Solicitação enviada!');
   document.getElementById('form-reserva-publica').classList.add('esconder');
   document.getElementById('form-reserva-publica').reset();
 }
 
-// ================= HÓSPEDES =================
+// ========== HÓSPEDES ==========
 async function cadastrarHospede(){
-  const dados = {
+  await db.collection('hospedes').add({
     nome: document.getElementById('h-nome').value,
     cpf: document.getElementById('h-cpf').value,
     telefone: document.getElementById('h-telefone').value,
     email: document.getElementById('h-email').value,
     endereco: document.getElementById('h-endereco').value,
     cadastradoEm: new Date()
-  };
-  await db.collection('hospedes').add(dados);
-  alert('Hóspede cadastrado!');
+  });
+  alert('✅ Hóspede cadastrado!');
   document.getElementById('h-nome').value = '';
   document.getElementById('h-cpf').value = '';
   document.getElementById('h-telefone').value = '';
   document.getElementById('h-email').value = '';
   document.getElementById('h-endereco').value = '';
-  carregarHospedes();
-  carregarHospedesSelect();
+  carregarHospedes(); carregarHospedesSelect();
 }
 
 async function carregarHospedes(){
@@ -375,24 +384,18 @@ async function carregarHospedes(){
   div.innerHTML = '';
   snap.forEach(doc => {
     const h = doc.data();
-    div.innerHTML += `
-      <div class="card" style="padding:10px;margin:5px 0;">
-        <strong>${h.nome}</strong> — ${h.telefone} — ${h.cpf || 'Sem CPF'}
-      </div>`;
+    div.innerHTML += `<div class="card" style="padding:10px;"><strong>${h.nome}</strong> — ${h.telefone} — ${h.cpf || 'Sem CPF'}</div>`;
   });
 }
 
 async function carregarHospedesSelect(){
   const snap = await db.collection('hospedes').orderBy('nome').get();
   const sel = document.getElementById('res-hospede-selecionado');
-  sel.innerHTML = '<option value="">-- Selecionar Hóspede Cadastrado --</option>';
-  snap.forEach(doc => {
-    const h = doc.data();
-    sel.innerHTML += `<option value="${doc.id}">${h.nome}</option>`;
-  });
+  sel.innerHTML = '<option value="">-- Selecionar Hóspede --</option>';
+  snap.forEach(doc => sel.innerHTML += `<option value="${doc.id}">${doc.data().nome}</option>`);
 }
 
-// ================= LANÇAR RESERVA =================
+// ========== LANÇAR RESERVA ==========
 async function lancarReserva(){
   const idHospede = document.getElementById('res-hospede-selecionado').value;
   let nomeHospede = document.getElementById('res-nome-manual').value;
@@ -400,7 +403,7 @@ async function lancarReserva(){
     const dh = await db.collection('hospedes').doc(idHospede).get();
     if(dh.exists) nomeHospede = dh.data().nome;
   }
-  const dados = {
+  await db.collection('reservas').add({
     casa: document.getElementById('res-casa').value,
     nomeHospede,
     idHospede: idHospede || null,
@@ -409,13 +412,12 @@ async function lancarReserva(){
     valor: parseFloat(document.getElementById('res-valor-manual').value),
     status: document.getElementById('res-status').value,
     lancadoEm: new Date()
-  };
-  await db.collection('reservas').add(dados);
-  alert('Reserva registrada ✅');
+  });
+  alert('✅ Reserva registrada!');
   carregarCalendario();
 }
 
-// ================= SOLICITAÇÕES =================
+// ========== SOLICITAÇÕES ==========
 async function carregarSolicitacoes(){
   const div = document.getElementById('lista-solicitacoes');
   div.innerHTML = '<h4>Solicitações Recebidas</h4>';
@@ -451,7 +453,7 @@ async function aceitarReserva(id){
     aceitoEm: new Date()
   });
   await sref.delete();
-  alert('Reserva aceita e lançada no sistema ✅');
+  alert('✅ Reserva aceita!');
   carregarSolicitacoes();
 }
 
@@ -460,7 +462,7 @@ async function recusarReserva(id){
   carregarSolicitacoes();
 }
 
-// ================= RELATÓRIOS =================
+// ========== RELATÓRIOS ==========
 async function gerarRelatorio(){
   const inicio = document.getElementById('rel-data-inicio').value;
   const fim = document.getElementById('rel-data-fim').value;
@@ -492,12 +494,12 @@ async function gerarRelatorio(){
     <h4>VALORES GERAIS</h4>
     <p>✅ Total Recebido: R$ ${totRec.toFixed(2)}</p>
     <p>⏳ Total Pendente: R$ ${totPen.toFixed(2)}</p>
-    <p><strong>Valor Geral do Período: R$ ${totGeral.toFixed(2)}</strong></p>
+    <p><strong>Valor Geral: R$ ${totGeral.toFixed(2)}</strong></p>
   </div>`;
   document.getElementById('resultado-relatorio').innerHTML = html;
 }
 
-// ================= CALENDÁRIO =================
+// ========== CALENDÁRIO ==========
 async function carregarCalendario(){
   const snap = await db.collection('reservas').get();
   const div = document.getElementById('visual-calendario');
@@ -516,7 +518,6 @@ async function carregarCalendario(){
   }
 }
 
-// ================= GERAL =================
 async function carregarTudo(){
   carregarHospedes();
   carregarHospedesSelect();
