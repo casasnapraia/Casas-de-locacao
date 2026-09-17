@@ -930,15 +930,22 @@ async function carregarDadosCasas(){
 
         Object.keys(casas).forEach(id => {
             if(dadosSalvos[id]){
-                // Mantém fotos e taxa de limpeza já cadastradas
+                // Mantém as fotos já cadastradas
                 casas[id].fotos = dadosSalvos[id].fotos || [];
+
+                // Mantém a taxa de limpeza já cadastrada
                 casas[id].taxaLimpeza = dadosSalvos[id].taxaLimpeza || 0;
 
-                // A descrição definida no código é a descrição oficial.
-                // Não recupera mais a descrição antiga do Firebase.
+                // NÃO substitui mais as características
+                // pelas informações antigas do Firebase.
             }
         });
     }
+
+    // Salva as novas descrições e características
+    // preservando fotos e taxas existentes.
+    await salvarTodasCasas();
+}
 
     // Atualiza o Firebase com as novas descrições,
     // preservando fotos e taxas de limpeza existentes.
