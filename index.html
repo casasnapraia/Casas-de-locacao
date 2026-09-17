@@ -922,30 +922,54 @@ function calcularDias(inicio, fim){
 // CADASTRO AUTOMÁT// ==============================================
 // GERENCIAMENTO DE CASAS E GALERIA DE FOTOS — ADMIN
 // ==============================================
+// ==============================================
+// GERENCIAMENTO DE CASAS E GALERIA DE FOTOS
+// ==============================================
 async function carregarDadosCasas(){
-    const doc = await db.collection('configuracoes').doc('casas').get();
+    try {
+        const doc = await db.collection('configuracoes').doc('casas').get();
 
-    if(doc.exists && doc.data().casas){
-        const dadosSalvos = doc.data().casas;
+        if(doc.exists && doc.data().casas){
+            const dadosSalvos = doc.data().casas;
 
-        Object.keys(casas).forEach(id => {
-            if(dadosSalvos[id]){
-                // Mantém as fotos já cadastradas
-                casas[id].fotos = dadosSalvos[id].fotos || [];
+            Object.keys(casas).forEach(id => {
+                if(dadosSalvos[id]){
+                    // Mantém as fotos cadastradas
+                    casas[id].fotos = Array.isArray(dadosSalvos[id].fotos)
+                        ? dadosSalvos[id].fotos
+                        : [];
 
-                // Mantém a taxa de limpeza já cadastrada
-                casas[id].taxaLimpeza = dadosSalvos[id].taxaLimpeza || 0;
+                    // Mantém a taxa de limpeza
+                    casas[id].taxaLimpeza =
+                        Number(dadosSalvos[id].taxaLimpeza) || 0;
+                }
+            });
+        }
 
-                // NÃO substitui mais as características
-                // pelas informações antigas do Firebase.
-            }
-        });
+        // Atualiza o Firebase mantendo as informações atuais
+        // das casas, inclusive fotos e taxas.
+        await salvarTodasCasas();
+
+    } catch(erro){
+        console.error('Erro ao carregar dados das casas:', erro);
+        console.error('Detalhes:', erro.message);
     }
-
-    // Salva as novas descrições e características
-    // preservando fotos e taxas existentes.
-    await salvarTodasCasas();
 }
+
+async function salvarTodasCasas(){
+    try {
+        await db.collection('configuracoes')
+            .doc('casas')
+            .set({ casas }, { merge: true });
+
+        console.log('✅ Dados das casas salvos no Firebase.');
+    } catch(erro){
+        console.error('❌ Erro ao salvar casas:', erro);
+        alert('❌ Não foi possível salvar as configurações das casas.');
+    }
+}
+
+    
 
     // Atualiza o Firebase com as novas descrições,
     // preservando fotos e taxas de limpeza existentes.
