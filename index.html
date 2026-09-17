@@ -17,7 +17,6 @@
         }
         body{background:linear-gradient(180deg, #e6f2f8 0%, #fef9ef 100%); min-height:100vh;}
         .oculto{display:none !important;}
-        .visivel{display:block !important;}
 
         /* LAYOUT */
         .pagina{display:flex; min-height:100vh;}
@@ -29,8 +28,9 @@
 
         /* LOGIN */
         .login-caixa{margin-top:40px;}
-        .login-caixa input{width:100%; padding:12px; margin:6px 0; border:none; border-radius:8px; background:rgba(255,255,255,0.2); color:white;}
-        .login-btn{width:100%; padding:12px; background:white; color:var(--agua-escura); border:none; border-radius:8px; font-weight:bold; cursor:pointer; margin-top:8px;}
+        .login-caixa input{width:100%; padding:12px; margin:6px 0; border:none; border-radius:8px; background:rgba(255,255,255,0.2); color:white; font-size:14px;}
+        .login-caixa input::placeholder{color:rgba(255,255,255,0.7);}
+        .login-btn{width:100%; padding:12px; background:white; color:var(--agua-escura); border:none; border-radius:8px; font-weight:bold; cursor:pointer; margin-top:8px; font-size:15px;}
         .erro-login{color:#ffcccb; margin-top:10px; font-size:13px; text-align:center;}
 
         /* NAVEGAÇÃO */
@@ -38,7 +38,7 @@
         .aba-lateral{display:block; width:100%; text-align:left; padding:12px 15px; margin:4px 0; background:transparent; color:white; border:none; border-radius:8px; cursor:pointer; font-size:14px;}
         .aba-lateral:hover{background:rgba(255,255,255,0.15);}
         .aba-lateral.ativa{background:rgba(255,255,255,0.25); font-weight:bold;}
-        .sair-btn{margin-top:30px; width:100%; padding:12px; background:rgba(220,50,50,0.3); color:white; border:none; border-radius:8px; cursor:pointer;}
+        .sair-btn{margin-top:30px; width:100%; padding:12px; background:rgba(220,50,50,0.3); color:white; border:none; border-radius:8px; cursor:pointer; font-size:14px;}
 
         /* CONTEÚDO */
         .conteudo-aba{display:none;}
@@ -52,7 +52,7 @@
         .casa-card.marrom{border-top:5px solid var(--marrom);}
         .casa-card.branca{border-top:5px solid #ccc;}
         .casa-imagens{display:grid; grid-template-columns:repeat(3,1fr); gap:6px; padding:12px; background:var(--fundo); min-height:140px;}
-        .foto-galeria{width:100%; height:90px; object-fit:cover; border-radius:8px; cursor:pointer;}
+        .foto-galeria{width:100%; height:90px; object-fit:cover; border-radius:8px;}
         .sem-foto{grid-column:1/-1; text-align:center; color:var(--cinza); padding:20px;}
         .upload-area{border:2px dashed var(--agua); border-radius:8px; padding:10px; text-align:center; cursor:pointer; font-size:12px; color:var(--agua);}
         .upload-area input{display:none;}
@@ -106,14 +106,18 @@
     </div>
 
     <div class="conteudo-principal">
+        <!-- PÁGINA PÚBLICA — VISITANTES -->
         <div id="paginaPublica">
             <div class="cabecalho-publico">
                 <h1>🏡 Conheça Nossas Casas</h1>
                 <p>Verifique a disponibilidade e solicite sua reserva</p>
             </div>
-            <div class="casas-grid" id="gridPublico"></div>
+            <div class="casas-grid" id="gridPublico">
+                <!-- Casas aparecem aqui -->
+            </div>
         </div>
 
+        <!-- ÁREA ADMINISTRATIVA -->
         <div id="conteudoAdmin" class="oculto">
             <div class="conteudo-aba visivel" id="aba-painel">
                 <h2 class="painel-titulo">📊 Painel Administrativo</h2>
@@ -142,18 +146,19 @@
                 <h2 class="painel-titulo">⚙️ Configurações</h2>
                 <div class="caixa-form">
                     <h3>Alterar Dados de Acesso</h3>
-                    <p style="font-size:13px; color:var(--cinza); margin:10px 0;">Padrão: <strong>admin / admin123</strong> — altere após o primeiro acesso.</p>
+                    <p style="font-size:13px; color:var(--cinza); margin:10px 0;">Padrão: <strong>admin / admin123</strong></p>
                     <div class="linha-form">
                         <input type="text" id="novoUsuario" placeholder="Novo Usuário">
                         <input type="password" id="novaSenha" placeholder="Nova Senha">
                     </div>
-                    <button class="sucesso" onclick="alterarAcesso()">Salvar Novos Dados</button>
+                    <button class="sucesso" onclick="alterarAcesso()">Salvar</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<!-- MODAL DE RESERVA -->
 <div class="modal" id="modalReserva">
     <div class="modal-conteudo">
         <h3>📩 Solicitar Reserva — <span id="nomeCasaReserva"></span></h3>
@@ -167,7 +172,7 @@
         </div>
         <textarea id="resObs" placeholder="Observações" rows="3"></textarea>
         <div style="display:flex; gap:10px; margin-top:15px;">
-            <button class="sucesso" onclick="enviarReserva()">✅ Enviar Solicitação</button>
+            <button class="sucesso" onclick="enviarReserva()">✅ Enviar</button>
             <button class="vermelho" onclick="fecharModalReserva()">Cancelar</button>
         </div>
     </div>
@@ -175,7 +180,7 @@
 
 <script>
 // ==============================================
-// 🔥 SEUS DADOS DO FIREBASE — JÁ ESTÃO CERTOS!
+// FIREBASE — JÁ CONFIGURADO
 // ==============================================
 const firebaseConfig = {
   apiKey: "AIzaSyDDxYq7YRcNNLk3pIZWff7i45RNs6kpDtA",
@@ -186,7 +191,6 @@ const firebaseConfig = {
   appId: "1:593715521697:web:30f1329a325e2444b9e8e0"
 };
 
-// Inicializar Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const storage = firebase.storage();
@@ -206,16 +210,17 @@ let casaSelecionada = null;
 let fotosCasas = {};
 
 // ==============================================
-// INICIALIZAÇÃO
+// INICIALIZAÇÃO — CARREGA TUDO
 // ==============================================
 document.addEventListener('DOMContentLoaded', async function(){
+    console.log('✅ Página carregada');
     await carregarFotosDoStorage();
     renderizarPublico();
     monitorarSolicitacoes();
 });
 
 // ==============================================
-// FOTOS NA NUVEM — APARECEM EM TODOS OS APARELHOS!
+// CARREGAR FOTOS DA NUVEM
 // ==============================================
 async function carregarFotosDoStorage(){
     for(const [id] of Object.entries(casas)){
@@ -229,13 +234,41 @@ async function carregarFotosDoStorage(){
             fotosCasas[id] = [];
         }
     }
+    console.log('✅ Fotos carregadas');
 }
 
-async function fazerUploadFoto(arquivo, casaId){
-    const nomeArquivo = Date.now() + '_' + arquivo.name;
-    const ref = storage.ref(`fotos/${casaId}/${nomeArquivo}`);
-    await ref.put(arquivo);
-    return await ref.getDownloadURL();
+// ==============================================
+// PÁGINA PÚBLICA — MOSTRA AS CASAS
+// ==============================================
+function renderizarPublico(){
+    const grid = document.getElementById('gridPublico');
+    if(!grid) return;
+    
+    grid.innerHTML = '';
+    
+    Object.entries(casas).forEach(([id, casa]) => {
+        const fotos = fotosCasas[id] || [];
+        
+        const card = document.createElement('div');
+        card.className = `casa-card ${id}`;
+        card.innerHTML = `
+            <div class="casa-imagens">
+                ${fotos.length ? 
+                    fotos.map(f => `<img src="${f}" class="foto-galeria" loading="lazy">`).join('') : 
+                    '<div class="sem-foto">📷 Fotos em breve</div>'
+                }
+            </div>
+            <div class="casa-corpo">
+                <h3 class="casa-nome">${casa.nome}</h3>
+                <p class="casa-desc">${casa.desc}</p>
+                <span class="status ok">✅ Disponível</span><br><br>
+                <button class="btn-reservar" onclick="abrirFormReserva('${id}')">📩 Solicitar Reserva</button>
+            </div>
+        `;
+        grid.appendChild(card);
+    });
+    
+    console.log('✅ Casas públicas renderizadas');
 }
 
 // ==============================================
@@ -269,11 +302,11 @@ function alterarAcesso(){
     if(!u || !s){ alert('Preencha usuário e senha!'); return; }
     admin = {usuario: u, senha: s};
     localStorage.setItem('admin', JSON.stringify(admin));
-    alert('✅ Acesso alterado! Anote seus dados.');
+    alert('✅ Salvo!');
 }
 
 // ==============================================
-// NAVEGAÇÃO
+// NAVEGAÇÃO ADMIN
 // ==============================================
 document.querySelectorAll('.aba-lateral').forEach(btn => {
     btn.addEventListener('click', function(){
@@ -285,28 +318,6 @@ document.querySelectorAll('.aba-lateral').forEach(btn => {
         if(abaId === 'casas') renderizarAdminCasas();
     });
 });
-
-// ==============================================
-// PÁGINA PÚBLICA
-// ==============================================
-function renderizarPublico(){
-    const grid = document.getElementById('gridPublico');
-    grid.innerHTML = Object.entries(casas).map(([id, casa]) => {
-        const fotos = fotosCasas[id] || [];
-        return `
-        <div class="casa-card ${id}">
-            <div class="casa-imagens">
-                ${fotos.length ? fotos.map(f => `<img src="${f}" class="foto-galeria" loading="lazy">`).join('') : '<div class="sem-foto">📷 Fotos em breve</div>'}
-            </div>
-            <div class="casa-corpo">
-                <h3 class="casa-nome">${casa.nome}</h3>
-                <p class="casa-desc">${casa.desc}</p>
-                <span class="status ok">✅ Disponível</span><br><br>
-                <button class="btn-reservar" onclick="abrirFormReserva('${id}')">📩 Solicitar Reserva</button>
-            </div>
-        </div>`;
-    }).join('');
-}
 
 // ==============================================
 // RESERVA
@@ -340,7 +351,7 @@ async function enviarReserva(){
     
     try {
         await db.collection('solicitacoes').add(dados);
-        alert('✅ Solicitação enviada! Entraremos em contato em breve.');
+        alert('✅ Enviado! Entraremos em contato.');
         fecharModalReserva();
     } catch(erro) {
         console.error(erro);
@@ -385,14 +396,20 @@ function monitorarSolicitacoes(){
 }
 
 // ==============================================
-// GERENCIAR CASAS — ADMIN
+// ADMIN — GERENCIAR FOTOS
 // ==============================================
 function renderizarAdminCasas(){
     const grid = document.getElementById('gridAdmin');
-    grid.innerHTML = Object.entries(casas).map(([id, casa]) => {
+    if(!grid) return;
+    
+    grid.innerHTML = '';
+    
+    Object.entries(casas).forEach(([id, casa]) => {
         const fotos = fotosCasas[id] || [];
-        return `
-        <div class="casa-card ${id}">
+        
+        const card = document.createElement('div');
+        card.className = `casa-card ${id}`;
+        card.innerHTML = `
             <div class="casa-imagens">
                 ${fotos.length ? 
                     fotos.map(f => `<img src="${f}" class="foto-galeria">`).join('') : 
@@ -400,28 +417,42 @@ function renderizarAdminCasas(){
                 }
                 <label class="upload-area">
                     ⬆️ Adicionar Foto
-                    <input type="file" accept="image/*" onchange="carregarFoto(event, '${id}')">
+                    <input type="file" accept="image/*" data-casa="${id}">
                 </label>
             </div>
             <div class="casa-corpo">
                 <h3 class="casa-nome">${casa.nome}</h3>
                 <p class="casa-desc">${casa.desc}</p>
             </div>
-        </div>`;
-    }).join('');
+        `;
+        grid.appendChild(card);
+        
+        // Conectar evento de upload
+        const input = card.querySelector(`input[data-casa="${id}"]`);
+        input.addEventListener('change', (e) => carregarFoto(e, id));
+    });
 }
 
 async function carregarFoto(evt, casaId){
-    const arq = evt.target.files[0]; if(!arq) return;
+    const arq = evt.target.files[0]; 
+    if(!arq) return;
+    
     try {
-        await fazerUploadFoto(arq, casaId);
-        await carregarFotosDoStorage();
+        const nomeArquivo = Date.now() + '_' + arq.name;
+        const ref = storage.ref(`fotos/${casaId}/${nomeArquivo}`);
+        await ref.put(arq);
+        const url = await ref.getDownloadURL();
+        
+        if(!fotosCasas[casaId]) fotosCasas[casaId] = [];
+        fotosCasas[casaId].push(url);
+        
         renderizarPublico();
         renderizarAdminCasas();
-        alert('✅ Foto enviada! Agora aparece no celular também!');
+        
+        alert('✅ Foto enviada! Aparece no celular também!');
     } catch(erro) {
         console.error(erro);
-        alert('❌ Erro ao enviar foto');
+        alert('❌ Erro: ' + erro.message);
     }
 }
 </script>
