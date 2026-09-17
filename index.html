@@ -125,7 +125,7 @@
 
             <div class="conteudo-aba" id="aba-casas">
                 <h2 class="painel-titulo">📷 Gerenciar Casas & Fotos</h2>
-                <p class="dica">💡 Cole o link da imagem e clique em "Salvar Link". Funciona em todos os aparelhos!</p>
+                <p class="dica">💡 Use links DIRETOS de imagem (terminam em .jpg, .png...). Google Fotos: abra a foto → botão direito → "Copiar endereço da imagem"</p>
                 <div class="casas-grid" id="gridAdmin"></div>
             </div>
 
@@ -209,29 +209,20 @@ async function carregarFotosDoFirestore(){
             const doc = await db.collection('fotosCasas').doc(id).get();
             fotosCasas[id] = doc.exists ? (doc.data().urls || []) : [];
         } catch (e) {
-            console.log(`Sem fotos para ${id}`, e);
             fotosCasas[id] = [];
         }
     }
-    console.log('✅ Fotos carregadas:', fotosCasas);
 }
 
 async function salvarLinkFoto(casaId, link){
     try {
         const fotosAtuais = fotosCasas[casaId] || [];
         fotosAtuais.push(link.trim());
-        
-        await db.collection('fotosCasas').doc(casaId).set({ 
-            urls: fotosAtuais,
-            atualizadoEm: firebase.firestore.Timestamp.now()
-        });
-        
+        await db.collection('fotosCasas').doc(casaId).set({ urls: fotosAtuais });
         fotosCasas[casaId] = fotosAtuais;
-        console.log('✅ Link salvo com sucesso!');
         return true;
     } catch (erro) {
-        console.error('❌ Erro detalhado:', erro);
-        alert('Erro: ' + erro.message);
+        console.error('Erro:', erro);
         return false;
     }
 }
@@ -245,13 +236,18 @@ function renderizarPublico(){
         const fotos = fotosCasas[id] || [];
         const card = document.createElement('div');
         card.className = `casa-card ${id}`;
+        
+        let htmlImagens = '';
+        if(fotos.length > 0){
+            htmlImagens = fotos.map(f => {
+                return `<img src="${f}" class="foto-galeria" loading="lazy" alt="Foto da casa">`;
+            }).join('');
+        } else {
+            htmlImagens = '<div class="sem-foto">📷 Fotos em breve</div>';
+        }
+        
         card.innerHTML = `
-            <div class="casa-imagens">
-                ${fotos.length ? 
-                    fotos.map(f => `<img src="${f}" class="foto-galeria" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'sem-foto\\'>Link inválido</div>'">`).join('') : 
-                    '<div class="sem-foto">📷 Fotos em breve</div>'
-                }
-            </div>
+            <div class="casa-imagens">${htmlImagens}</div>
             <div class="casa-corpo">
                 <h3 class="casa-nome">${casa.nome}</h3>
                 <p class="casa-desc">${casa.desc}</p>
@@ -382,17 +378,19 @@ function renderizarAdminCasas(){
     
     Object.entries(casas).forEach(([id, casa]) => {
         const fotos = fotosCasas[id] || [];
+        let htmlImagens = '';
+        if(fotos.length > 0){
+            htmlImagens = fotos.map(f => `<img src="${f}" class="foto-galeria" alt="Foto da casa">`).join('');
+        } else {
+            htmlImagens = '<div class="sem-foto">📷 Sem fotos</div>';
+        }
+        
         const card = document.createElement('div');
         card.className = `casa-card ${id}`;
         card.innerHTML = `
-            <div class="casa-imagens">
-                ${fotos.length ? 
-                    fotos.map(f => `<img src="${f}" class="foto-galeria">`).join('') : 
-                    '<div class="sem-foto">📷 Sem fotos</div>'
-                }
-            </div>
+            <div class="casa-imagens">${htmlImagens}</div>
             <div class="link-area">
-                <input type="url" id="link-${id}" placeholder="Cole o link da imagem aqui">
+                <input type="url" id="link-${id}" placeholder="Cole o link DIRETO da imagem aqui (.jpg, .png...)">
                 <button onclick="adicionarFotoPorLink('${id}')">✅ Salvar Link</button>
             </div>
             <div class="casa-corpo">
@@ -422,10 +420,12 @@ async function adicionarFotoPorLink(casaId){
     
     if(salvo){
         input.value = '';
-        await carregarFotosDoFirestore(); // Recarrega do banco
+        await carregarFotosDoFirestore();
         renderizarPublico();
         renderizarAdminCasas();
-        alert('✅ Foto adicionada! Aparece no celular também!');
+        alert('✅ Foto adicionada com sucesso!');
+    } else {
+        alert('❌ Erro ao salvar. Tente novamente.');
     }
 }
 </script>
