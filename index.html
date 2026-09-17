@@ -200,22 +200,22 @@
 <script>
 // ================= CONFIGURAÇÃO FIREBASE =================
 // SUBSTITUA ESTAS INFORMAÇÕES PELAS SUAS DO FIREBASE
+<script>
+// ================= CONFIGURAÇÃO FIREBASE =================
 const configFirebase = {
-  apiKey: "AIzaSyDDxYq7YRcNNlk3pIZWff7i45RNs6kpDtA",
+  apiKey: "AIzaSyDDxYq7YRcNNLk3pIZWff7i45RNs6kpDtA",
   authDomain: "casas-na-praia.firebaseapp.com",
   projectId: "casas-na-praia",
   storageBucket: "casas-na-praia.firebasestorage.app",
   messagingSenderId: "593715521697",
-  appId: "1:593715521697:web:5cf3fcc1ebd5bf4db9e8e0"
+  appId: "1:593715521697:web:5cf3fcc1ebd4db9e8e0"
 };
 
-// Inicializar
 firebase.initializeApp(configFirebase);
 const db = firebase.firestore();
 const armazenamento = firebase.storage();
 const auth = firebase.auth();
 
-// Estado
 let usuarioLogado = null;
 const nomesCasas = {
   amarela: "Casa Amarela",
@@ -237,11 +237,13 @@ async function fazerLogin(){
     alert('Erro no login: ' + e.message);
   }
 }
+
 function fazerLogout(){
   auth.signOut();
   usuarioLogado = null;
   mostrarTela('tela-login');
 }
+
 auth.onAuthStateChanged(u => {
   if(u){ usuarioLogado = u; }
   else { usuarioLogado = null; }
@@ -254,6 +256,7 @@ function mostrarTela(id){
   if(id === 'tela-publica') carregarCasasPublicas();
   if(id === 'tela-admin' && usuarioLogado) carregarTudo();
 }
+
 document.querySelectorAll('.aba').forEach(aba => {
   aba.addEventListener('click', () => {
     document.querySelectorAll('.aba').forEach(a => a.classList.remove('ativa'));
@@ -283,6 +286,7 @@ async function carregarCasasPublicas(){
     lista.appendChild(card);
   }
 }
+
 async function carregarFotosCasa(casa){
   try{
     const ref = armazenamento.ref(`fotos/${casa}/`);
@@ -294,6 +298,7 @@ async function carregarFotosCasa(casa){
     return urls;
   }catch{ return []; }
 }
+
 async function enviarFoto(){
   if(!usuarioLogado) return alert('Faça login primeiro');
   const casa = document.getElementById('selecionar-casa').value;
@@ -304,11 +309,13 @@ async function enviarFoto(){
   alert('Foto enviada!');
   mostrarGaleria(casa);
 }
+
 async function mostrarGaleria(casa){
   const div = document.getElementById('galeria-casa');
   const fotos = await carregarFotosCasa(casa);
   div.innerHTML = fotos.map(f => `<img src="${f}" class="foto-casa">`).join('');
 }
+
 document.getElementById('selecionar-casa').addEventListener('change', e => mostrarGaleria(e.target.value));
 
 // ================= VALORES =================
@@ -330,6 +337,7 @@ function iniciarReserva(casa){
   document.getElementById('form-reserva-publica').classList.remove('esconder');
   document.getElementById('form-reserva-publica').dataset.casa = casa;
 }
+
 async function enviarReserva(){
   const casa = document.getElementById('form-reserva-publica').dataset.casa;
   const dados = {
@@ -362,10 +370,16 @@ async function cadastrarHospede(){
   };
   await db.collection('hospedes').add(dados);
   alert('Hóspede cadastrado!');
-  document.getElementById('painel-hospedes').reset;
+  // Limpar formulário corretamente
+  document.getElementById('h-nome').value = '';
+  document.getElementById('h-cpf').value = '';
+  document.getElementById('h-telefone').value = '';
+  document.getElementById('h-email').value = '';
+  document.getElementById('h-endereco').value = '';
   carregarHospedes();
   carregarHospedesSelect();
 }
+
 async function carregarHospedes(){
   const snap = await db.collection('hospedes').orderBy('nome').get();
   const div = document.getElementById('lista-hospedes');
@@ -378,6 +392,7 @@ async function carregarHospedes(){
       </div>`;
   });
 }
+
 async function carregarHospedesSelect(){
   const snap = await db.collection('hospedes').orderBy('nome').get();
   const sel = document.getElementById('res-hospede-selecionado');
@@ -431,6 +446,7 @@ async function carregarSolicitacoes(){
       </div>`;
   });
 }
+
 async function aceitarReserva(id){
   const sref = db.collection('solicitacoes').doc(id);
   const snap = await sref.get();
@@ -449,6 +465,7 @@ async function aceitarReserva(id){
   alert('Reserva aceita e lançada no sistema ✅');
   carregarSolicitacoes();
 }
+
 async function recusarReserva(id){
   if(confirm('Tem certeza?')) await db.collection('solicitacoes').doc(id).delete();
   carregarSolicitacoes();
@@ -518,5 +535,3 @@ async function carregarTudo(){
   mostrarGaleria('amarela');
 }
 </script>
-</body>
-</html>
