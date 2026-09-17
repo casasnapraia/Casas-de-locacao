@@ -828,16 +828,25 @@ function calcularDias(inicio, fim){
 // ==============================================
 async function carregarDadosCasas(){
     const doc = await db.collection('configuracoes').doc('casas').get();
+
     if(doc.exists && doc.data().casas){
         const dadosSalvos = doc.data().casas;
+
         Object.keys(casas).forEach(id => {
             if(dadosSalvos[id]){
+                // Mantém fotos e taxa de limpeza já cadastradas
                 casas[id].fotos = dadosSalvos[id].fotos || [];
                 casas[id].taxaLimpeza = dadosSalvos[id].taxaLimpeza || 0;
-                if(dadosSalvos[id].desc) casas[id].desc = dadosSalvos[id].desc;
+
+                // A descrição definida no código é a descrição oficial.
+                // Não recupera mais a descrição antiga do Firebase.
             }
         });
     }
+
+    // Atualiza o Firebase com as novas descrições,
+    // preservando fotos e taxas de limpeza existentes.
+    await salvarTodasCasas();
 }
 
 function renderizarCasasAdmin(){
