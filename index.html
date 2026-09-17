@@ -99,6 +99,8 @@ body{background:linear-gradient(120deg, #e0f0f5, #fef9ed); color:var(--texto); m
 .oculto{display:none !important;}
 .aviso-bloqueio{color:var(--perigo); background:#fde8e8; padding:10px; border-radius:6px; margin:10px 0; display:none;}
 .input-imgur{background:#f9f9f9; border:1px dashed #ccc;}
+.taxa-limpeza-info{font-size:13px; color:var(--cinza); margin-top:5px;}
+.valor-destaque{font-weight:bold; color:var(--marinho);}
 </style>
 </head>
 <body>
@@ -143,7 +145,7 @@ body{background:linear-gradient(120deg, #e0f0f5, #fef9ed); color:var(--texto); m
         <div class="logo">🏖️ Gestão</div>
         <div class="menu-lateral">
             <button class="item-menu ativo" data-pagina="calendario">📅 Calendário & Valores</button>
-            <button class="item-menu" data-pagina="casas">🏠 Gerenciar Casas / Fotos</button>
+            <button class="item-menu" data-pagina="casas">🏠 Gerenciar Casas / Fotos / Taxas</button>
             <button class="item-menu" data-pagina="hospedes">👤 Hóspedes</button>
             <button class="item-menu" data-pagina="reservas">📋 Reservas</button>
             <button class="item-menu" data-pagina="relatorios">📊 Relatórios</button>
@@ -182,10 +184,10 @@ body{background:linear-gradient(120deg, #e0f0f5, #fef9ed); color:var(--texto); m
             <p id="infoSelecao" style="margin-top:10px; color:var(--cinza);">Nenhum dia selecionado</p>
         </div>
 
-        <!-- Casas com Imgur -->
+        <!-- Casas com Imgur e Taxa de Limpeza -->
         <div id="pagina-casas" class="pagina">
-            <h2>🏠 Gerenciar Casas e Fotos</h2>
-            <p style="color:var(--cinza); margin:10px 0;">Cole o link direto da imagem do Imgur abaixo de cada casa.</p>
+            <h2>🏠 Gerenciar Casas, Fotos & Taxa de Limpeza</h2>
+            <p style="color:var(--cinza); margin:10px 0;">Configure a taxa de limpeza por casa — será incluída automaticamente no valor total da reserva.</p>
             <div class="grade-casas" id="gradeCasas"></div>
             <div style="margin-top:25px; padding:15px; background:#f0f9fc; border-radius:8px;">
                 <h4>📷 Como pegar o link no Imgur:</h4>
@@ -201,14 +203,16 @@ body{background:linear-gradient(120deg, #e0f0f5, #fef9ed); color:var(--texto); m
         <!-- Hóspedes -->
         <div id="pagina-hospedes" class="pagina">
             <h2>👤 Cadastro de Hóspedes</h2>
+            <p style="color:var(--sucesso); margin:8px 0;">✅ Hóspedes das reservas públicas são adicionados automaticamente!</p>
             <div class="linha-form">
                 <input type="text" id="buscarHospede" placeholder="Buscar por nome..." oninput="filtrarHospedes()">
                 <button class="azul" onclick="abrirCadastroHospede()">+ Novo Cadastro</button>
+                <button class="azul" onclick="sincronizarHospedesReservas()">🔄 Sincronizar das Reservas</button>
             </div>
             <div id="listaHospedes" style="margin-top:20px;"></div>
         </div>
 
-        <!-- Reservas com Botão Confirmar -->
+        <!-- Reservas -->
         <div id="pagina-reservas" class="pagina">
             <h2>📋 Solicitações e Reservas</h2>
             <div style="display:flex; gap:10px; margin:15px 0; flex-wrap:wrap;">
@@ -261,8 +265,16 @@ body{background:linear-gradient(120deg, #e0f0f5, #fef9ed); color:var(--texto); m
             </div>
         </div>
         <div class="grupo-input">
-            <label>Valor Estimado</label>
-            <input type="text" id="valorEstimado" readonly style="background:#f9f9f9;">
+            <label>Valor da Estadia</label>
+            <input type="text" id="valorDiarias" readonly style="background:#f9f9f9;">
+        </div>
+        <div class="grupo-input taxa-limpeza-info">
+            <span>🧹 Taxa de Limpeza:</span>
+            <span id="valorTaxaLimpeza" class="valor-destaque">R$ 0,00</span>
+        </div>
+        <div class="grupo-input">
+            <label>Valor Total (inclui taxa de limpeza)</label>
+            <input type="text" id="valorEstimado" readonly style="background:#fef9e7; font-weight:bold;">
         </div>
         <div class="grupo-input">
             <label>Observações</label>
@@ -297,17 +309,17 @@ const firebaseConfig = {
 };
 
 const ADM_USUARIO = 'admin';
-const ADM_SENHA = 'praia2026'; // Altere sua senha aqui
+const ADM_SENHA = 'praia2026';
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// Casas com campos para Imgur
+// Casas com taxa de limpeza
 const casas = {
-    amarela: {nome: 'Casa Amarela', desc: 'Janela marrom, com coqueiro na frente', imgurUrl: ''},
-    bege: {nome: 'Casa Bege', desc: 'Com coqueiro na frente e janelas brancas', imgurUrl: ''},
-    marrom: {nome: 'Casa Marrom', desc: 'Madeira com redes coloridas', imgurUrl: ''},
-    branca: {nome: 'Casa Branca', desc: 'Paredes brancas, janelas marrom, ambiente arejado — perto do mar', imgurUrl: ''}
+    amarela: {nome: 'Casa Amarela', desc: 'Janela marrom, com coqueiro na frente', imgurUrl: '', taxaLimpeza: 0},
+    bege: {nome: 'Casa Bege', desc: 'Com coqueiro na frente e janelas brancas', imgurUrl: '', taxaLimpeza: 0},
+    marrom: {nome: 'Casa Marrom', desc: 'Madeira com redes coloridas', imgurUrl: '', taxaLimpeza: 0},
+    branca: {nome: 'Casa Branca', desc: 'Paredes brancas, janelas marrom, ambiente arejado — perto do mar', imgurUrl: '', taxaLimpeza: 0}
 };
 
 let dataAtual = new Date();
@@ -321,7 +333,7 @@ let datasSelecionadas = new Set();
 let casaSelecionadaParaReserva = null;
 
 // ==============================================
-// INICIALIZAÇÃO — PÚBLICA JÁ CARREGA
+// INICIALIZAÇÃO
 // ==============================================
 document.addEventListener('DOMContentLoaded', async () => {
     await carregarValoresDiarias();
@@ -331,14 +343,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 // ==============================================
-// FUNÇÕES DE BLOQUEIO DE DATAS
+// BLOQUEIO DE DATAS
 // ==============================================
 function verificarDisponibilidade(){
     const entrada = document.getElementById('dataEntrada').value;
     const saida = document.getElementById('dataSaida').value;
     const aviso = document.getElementById('avisoBloqueio');
     const btn = document.getElementById('btnEnviarReserva');
-    const valorInput = document.getElementById('valorEstimado');
     
     if(!entrada || !saida || !casaSelecionadaParaReserva) return;
     
@@ -347,13 +358,21 @@ function verificarDisponibilidade(){
     if(bloqueado){
         aviso.style.display = 'block';
         btn.disabled = true; btn.classList.add('cinza');
-        valorInput.value = '';
+        document.getElementById('valorDiarias').value = '';
+        document.getElementById('valorTaxaLimpeza').textContent = 'R$ 0,00';
+        document.getElementById('valorEstimado').value = '';
         return false;
     } else {
         aviso.style.display = 'none';
         btn.disabled = false; btn.classList.remove('cinza');
-        const valor = calcularValorPeriodo(casaSelecionadaParaReserva, entrada, saida);
-        valorInput.value = 'R$ ' + valor.toFixed(2).replace('.', ',');
+        
+        const valorDiarias = calcularValorDiarias(casaSelecionadaParaReserva, entrada, saida);
+        const taxaLimpeza = casas[casaSelecionadaParaReserva].taxaLimpeza || 0;
+        const valorTotal = valorDiarias + taxaLimpeza;
+        
+        document.getElementById('valorDiarias').value = 'R$ ' + valorDiarias.toFixed(2).replace('.', ',');
+        document.getElementById('valorTaxaLimpeza').textContent = 'R$ ' + taxaLimpeza.toFixed(2).replace('.', ',');
+        document.getElementById('valorEstimado').value = 'R$ ' + valorTotal.toFixed(2).replace('.', ',');
         return true;
     }
 }
@@ -362,7 +381,6 @@ function verificarPeriodoBloqueado(casaId, dataInicioStr, dataFimStr){
     const inicio = new Date(dataInicioStr);
     const fim = new Date(dataFimStr);
     
-    // Verifica se há sobreposição com qualquer reserva CONFIRMADA ou PAGA
     return reservasConfirmadas.some(r => {
         if(r.casa !== casaId) return false;
         if(!['confirmada', 'pago'].includes(r.statusPagamento)) return false;
@@ -370,12 +388,11 @@ function verificarPeriodoBloqueado(casaId, dataInicioStr, dataFimStr){
         const rInicio = new Date(r.entrada);
         const rFim = new Date(r.saida);
         
-        // Lógica de sobreposição: novo período começa antes do fim reserva E termina depois do início reserva
         return (inicio < rFim) && (fim > rInicio);
     });
 }
 
-function calcularValorPeriodo(casaId, dataInicioStr, dataFimStr){
+function calcularValorDiarias(casaId, dataInicioStr, dataFimStr){
     let total = 0;
     const inicio = new Date(dataInicioStr);
     const fim = new Date(dataFimStr);
@@ -383,7 +400,7 @@ function calcularValorPeriodo(casaId, dataInicioStr, dataFimStr){
     for(let d = new Date(inicio); d < fim; d.setDate(d.getDate() + 1)){
         const dataStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
         const chave = `${casaId}_${dataStr}`;
-        total += valoresDiarias[chave] || 150; // valor padrão
+        total += valoresDiarias[chave] || 150;
     }
     return total;
 }
@@ -439,6 +456,7 @@ function renderizarPaginaPublica(){
             <div class="card-corpo">
                 <h3>${casa.nome}</h3>
                 <p style="color:var(--cinza); margin:8px 0;">${casa.desc}</p>
+                <p class="taxa-limpeza-info">🧹 Taxa de limpeza: R$ ${(casa.taxaLimpeza || 0).toFixed(2).replace('.', ',')}</p>
                 <button class="amarelo" onclick="abrirModalReserva('${id}')">📝 Solicitar Reserva</button>
             </div>
         </div>
@@ -458,12 +476,13 @@ function configurarNavegacao(){
             document.getElementById(paginaId).classList.add('ativa');
             if(paginaId === 'pagina-reservas') atualizarListaReservas();
             if(paginaId === 'pagina-calendario') renderizarCalendario();
+            if(paginaId === 'pagina-hospedes') filtrarHospedes();
         });
     });
 }
 
 // ==============================================
-// CALENDÁRIO COM BLOQUEIO VISUAL
+// CALENDÁRIO
 // ==============================================
 function mudarMes(delta){
     dataAtual.setMonth(dataAtual.getMonth() + delta);
@@ -648,6 +667,7 @@ function abrirModalReserva(casaId){
     document.getElementById('modalReserva').classList.add('aberto');
     document.getElementById('avisoBloqueio').style.display = 'none';
     document.getElementById('btnEnviarReserva').disabled = false;
+    document.getElementById('valorTaxaLimpeza').textContent = 'R$ ' + (casas[casaId].taxaLimpeza || 0).toFixed(2).replace('.', ',');
 }
 function fecharModal(){
     document.getElementById('modalReserva').classList.remove('aberto');
@@ -655,6 +675,8 @@ function fecharModal(){
     document.getElementById('hospedeTelefone').value = '';
     document.getElementById('dataEntrada').value = '';
     document.getElementById('dataSaida').value = '';
+    document.getElementById('valorDiarias').value = '';
+    document.getElementById('valorTaxaLimpeza').textContent = 'R$ 0,00';
     document.getElementById('valorEstimado').value = '';
     document.getElementById('obsReserva').value = '';
 }
@@ -668,18 +690,22 @@ async function enviarReserva(){
     
     if(!nome || !entrada || !saida){alert('⚠️ Preencha nome, entrada e saída!'); return;}
     
-    // Verificação final
     if(!verificarDisponibilidade()){alert('❌ Este período já está reservado! Escolha outras datas.'); return;}
     
-    const valorTotal = calcularValorPeriodo(casaSelecionadaParaReserva, entrada, saida);
+    const valorDiarias = calcularValorDiarias(casaSelecionadaParaReserva, entrada, saida);
+    const taxaLimpeza = casas[casaSelecionadaParaReserva].taxaLimpeza || 0;
+    const valorTotal = valorDiarias + taxaLimpeza;
     const dias = calcularDias(new Date(entrada), new Date(saida));
     
     await db.collection('reservas').add({
         casa: casaSelecionadaParaReserva,
         nome, telefone, entrada, saida, observacao: obs,
-        dias, valorTotal, valorPago: 0, statusPagamento: 'pendente',
+        dias, valorDiarias, taxaLimpeza, valorTotal, valorPago: 0, statusPagamento: 'pendente',
         criadoEm: firebase.firestore.Timestamp.now()
     });
+    
+    // ✅ Cadastra/atualiza hóspede automaticamente
+    await cadastrarOuAtualizarHospede(nome, telefone);
     
     alert('✅ Solicitação enviada com sucesso! Obrigado!');
     fecharModal();
@@ -692,7 +718,62 @@ function calcularDias(inicio, fim){
 }
 
 // ==============================================
-// RESERVAS — ADMINISTRATIVO COM BOTÃO CONFIRMAR
+// CADASTRO AUTOMÁTICO DE HÓSPEDES
+// ==============================================
+async function cadastrarOuAtualizarHospede(nome, telefone){
+    if(!nome) return;
+    
+    // Procura se já existe
+    const existe = hospedesCadastrados.find(h => 
+        h.nome.trim().toLowerCase() === nome.trim().toLowerCase() ||
+        (telefone && h.telefone === telefone)
+    );
+    
+    if(existe){
+        // Atualiza se houver novo telefone
+        if(telefone && !existe.telefone){
+            await db.collection('hospedes').doc(existe.id).update({
+                telefone, atualizadoEm: firebase.firestore.Timestamp.now()
+            });
+            existe.telefone = telefone;
+        }
+        return;
+    }
+    
+    // Cadastra novo
+    await db.collection('hospedes').add({
+        nome: nome.trim(),
+        telefone: telefone?.trim() || '',
+        cadastradoEm: firebase.firestore.Timestamp.now()
+    });
+    
+    await carregarHospedes();
+}
+
+// Sincronizar manualmente das reservas
+async function sincronizarHospedesReservas(){
+    let contador = 0;
+    for(const reserva of reservasConfirmadas){
+        if(reserva.nome){
+            const existe = hospedesCadastrados.find(h => 
+                h.nome.trim().toLowerCase() === reserva.nome.trim().toLowerCase()
+            );
+            if(!existe){
+                await db.collection('hospedes').add({
+                    nome: reserva.nome.trim(),
+                    telefone: reserva.telefone || '',
+                    cadastradoEm: firebase.firestore.Timestamp.now()
+                });
+                contador++;
+            }
+        }
+    }
+    await carregarHospedes();
+    alert(`✅ Sincronização concluída! ${contador} novo(s) hóspede(s) adicionado(s).`);
+}
+
+// ==============================================
+// RESERVAS — ADMINISTRATIVO
 // ==============================================
 async function carregarReservasConfirmadas(){
     const snap = await db.collection('reservas').orderBy('criadoEm', 'desc').get();
@@ -719,6 +800,7 @@ function atualizarListaReservas(){
             <p><strong>Hóspede:</strong> ${r.nome}</p>
             <p><strong>Telefone:</strong> ${r.telefone || 'Não informado'}</p>
             <p><strong>Período:</strong> ${r.entrada} até ${r.saida} (${r.dias} diárias)</p>
+            ${r.taxaLimpeza ? `<p><strong>Diárias:</strong> R$ ${(r.valorDiarias || 0).toFixed(2).replace('.', ',')}</p><p><strong>Taxa de Limpeza:</strong> R$ ${(r.taxaLimpeza || 0).toFixed(2).replace('.', ',')}</p>` : ''}
             <p><strong>Total:</strong> R$ ${(r.valorTotal || 0).toFixed(2).replace('.', ',')}</p>
             <p><strong>Pago:</strong> R$ ${(r.valorPago || 0).toFixed(2).replace('.', ',')}</p>
             <p><strong>A Receber:</strong> R$ ${((r.valorTotal || 0) - (r.valorPago || 0)).toFixed(2).replace('.', ',')}</p>
@@ -734,7 +816,6 @@ function atualizarListaReservas(){
     }).join('');
 }
 
-// ✅ BOTÃO CONFIRMAR RESERVA — BLOQUEIA DATAS
 async function confirmarReserva(reservaId){
     if(!confirm('✅ Confirmar reserva? As datas serão BLOQUEADAS no site público!')) return;
     
@@ -754,8 +835,12 @@ function abrirEditarReserva(id){
     
     document.getElementById('conteudoEditar').innerHTML = `
         <p><strong>Casa:</strong> ${casas[r.casa]?.nome}</p>
-        <p><strong>Hóspede:</strong> ${r.nome}</p>
+        <p><strong>Hóspede:</strong> ${r.n.nome}</p>
         <p><strong>Período:</strong> ${r.entrada} → ${r.saida}</p>
+        ${r.taxaLimpeza ? `
+        <p><strong>Valor Diárias:</strong> R$ ${(r.valorDiarias || 0).toFixed(2).replace('.', ',')}</p>
+        <p><strong>Taxa de Limpeza:</strong> R$ ${(r.taxaLimpeza || 0).toFixed(2).replace('.', ',')}</p>
+        ` : ''}
         <p><strong>Valor Total:</strong> R$ ${(r.valorTotal || 0).toFixed(2).replace('.', ',')}</p>
         <hr style="margin:15px 0;">
         <h4>Atualizar Status & Pagamento</h4>
@@ -801,7 +886,7 @@ async function excluirReserva(id){
 }
 
 // ==============================================
-// IMGUR — GERENCIAR FOTOS DAS CASAS
+// IMGUR + TAXA DE LIMPEZA POR CASA
 // ==============================================
 async function carregarDadosCasas(){
     const doc = await db.collection('configuracoes').doc('casas').get();
@@ -820,24 +905,33 @@ function renderizarCasasAdmin(){
             <div class="card-corpo">
                 <h3>${casa.nome}</h3>
                 <p style="font-size:13px; color:var(--cinza); margin-bottom:10px;">${casa.desc}</p>
+                
                 <label style="font-size:13px; font-weight:600;">Link da imagem (Imgur):</label>
                 <input type="url" class="input-imgur" id="imgur-${id}" value="${casa.imgurUrl || ''}" placeholder="https://i.imgur.com/xxxxxx.jpg">
-                <button class="azul" style="margin-top:8px; width:100%;" onclick="salvarImgur('${id}')">💾 Salvar Foto</button>
+                
+                <label style="font-size:13px; font-weight:600; margin-top:10px; display:block;">🧹 Taxa de Limpeza (R$):</label>
+                <input type="number" id="limpeza-${id}" value="${casa.taxaLimpeza || 0}" min="0" step="10" placeholder="0,00">
+                
+                <button class="azul" style="margin-top:10px; width:100%;" onclick="salvarCasa('${id}')">💾 Salvar Casa</button>
             </div>
         </div>
     `).join('');
 }
 
-async function salvarImgur(casaId){
+async function salvarCasa(casaId){
     const url = document.getElementById(`imgur-${casaId}`).value.trim();
-    if(!url){alert('⚠️ Cole o link da imagem!'); return;}
-    if(!url.includes('imgur.com')){alert('ℹ️ O link deve ser do Imgur (ex: i.imgur.com/abc.jpg)');}
+    const taxa = parseFloat(document.getElementById(`limpeza-${casaId}`).value) || 0;
+    
+    if(url && !url.includes('imgur.com')){
+        alert('ℹ️ O link deve ser do Imgur (ex: i.imgur.com/abc.jpg)');
+    }
     
     casas[casaId].imgurUrl = url;
+    casas[casaId].taxaLimpeza = taxa;
     
     await db.collection('configuracoes').doc('casas').set({ casas }, { merge: true });
     
-    alert(`✅ Foto da ${casas[casaId].nome} atualizada!`);
+    alert(`✅ ${casas[casaId].nome} atualizada!\nTaxa de limpeza: R$ ${taxa.toFixed(2).replace('.', ',')}`);
     renderizarCasasAdmin();
     renderizarPaginaPublica();
 }
@@ -878,21 +972,31 @@ function gerarRelatorio(){
     
     const recebido = dados.reduce((s, r) => s + (r.valorPago || 0), 0);
     const esperado = dados.reduce((s, r) => s + (r.valorTotal || 0), 0);
+    const totalTaxaLimpeza = dados.reduce((s, r) => s + (r.taxaLimpeza || 0), 0);
     const pendente = esperado - recebido;
     
     const porCasa = {};
-    Object.keys(casas).forEach(id => porCasa[id] = {nome: casas[id].nome, recebido:0, esperado:0, pendente:0});
+    Object.keys(casas).forEach(id => porCasa[id] = {
+        nome: casas[id].nome, 
+        recebido: 0, 
+        esperado: 0, 
+        pendente: 0,
+        taxaLimpeza: 0
+    });
+    
     dados.forEach(r => {
         if(!porCasa[r.casa]) return;
         porCasa[r.casa].recebido += r.valorPago || 0;
         porCasa[r.casa].esperado += r.valorTotal || 0;
         porCasa[r.casa].pendente += (r.valorTotal || 0) - (r.valorPago || 0);
+        porCasa[r.casa].taxaLimpeza += r.taxaLimpeza || 0;
     });
     
     document.getElementById('relatorioConteudo').innerHTML = `
         <h3>📊 Resumo — ${filtroRelatorio === 'todos' ? 'Todo o Período' : filtroRelatorio === 'mes' ? 'Este Mês' : 'Este Ano'}</h3>
         <p><strong>Total de Reservas:</strong> ${dados.length}</p>
         <div class="total-geral">
+            <div class="linha-valor"><span>🧹 Total Taxa de Limpeza:</span><span>R$ ${totalTaxaLimpeza.toFixed(2).replace('.', ',')}</span></div>
             <div class="linha-valor"><span>💰 Total Recebido:</span><span>R$ ${recebido.toFixed(2).replace('.', ',')}</span></div>
             <div class="linha-valor"><span>📊 Total Esperado:</span><span>R$ ${esperado.toFixed(2).replace('.', ',')}</span></div>
             <div class="linha-valor" style="color:var(--alerta);"><span>⏳ A Receber:</span><span>R$ ${pendente.toFixed(2).replace('.', ',')}</span></div>
@@ -901,6 +1005,7 @@ function gerarRelatorio(){
         ${Object.values(porCasa).map(c => `
             <div style="padding:12px 0; border-bottom:1px solid #eee;">
                 <h4>${c.nome}</h4>
+                <div class="linha-valor"><span>🧹 Taxa de Limpeza:</span><span>R$ ${c.taxaLimpeza.toFixed(2).replace('.', ',')}</span></div>
                 <div class="linha-valor"><span>✅ Recebido:</span><span>R$ ${c.recebido.toFixed(2).replace('.', ',')}</span></div>
                 <div class="linha-valor"><span>📊 Esperado:</span><span>R$ ${c.esperado.toFixed(2).replace('.', ',')}</span></div>
                 <div class="linha-valor" style="color:var(--alerta);"><span>⏳ A Receber:</span><span>R$ ${c.pendente.toFixed(2).replace('.', ',')}</span></div>
@@ -923,16 +1028,7 @@ function abrirCadastroHospede(){
     const telefone = prompt('Telefone com WhatsApp:');
     if(!telefone) return;
     
-    db.collection('hospedes').add({
-        nome: nome.trim(),
-        telefone: telefone.trim(),
-        cadastradoEm: firebase.firestore.Timestamp.now()
-    }).then(() => {
-        alert('✅ Hóspede cadastrado com sucesso!');
-        carregarHospedes();
-    }).catch(err => {
-        alert('❌ Erro ao cadastrar: ' + err.message);
-    });
+    cadastrarOuAtualizarHospede(nome, telefone);
 }
 
 function filtrarHospedes(){
@@ -945,12 +1041,33 @@ function filtrarHospedes(){
     const container = document.getElementById('listaHospedes');
     container.innerHTML = listaFiltrada.length 
         ? listaFiltrada.map(h => `
-            <div style="padding:12px 0; border-bottom:1px solid #ddd;">
-                <strong>${h.nome}</strong><br>
-                📞 ${h.telefone || 'Não informado'}
+            <div style="padding:12px; border-bottom:1px solid #ddd; display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                    <strong>${h.nome}</strong><br>
+                    📞 ${h.telefone || 'Não informado'}<br>
+                    <small style="color:var(--cinza);">Cadastrado: ${h.cadastradoEm?.toDate ? h.cadastradoEm.toDate().toLocaleDateString('pt-BR') : ''}</small>
+                </div>
+                <button class="azul" onclick="editarHospede('${h.id}', '${h.nome.replace(/'/g, "\\'")}', '${(h.telefone||'').replace(/'/g, "\\'")}')">✏️ Editar</button>
             </div>
         `).join('')
         : '<p style="color:var(--cinza); padding:10px;">Nenhum hóspede encontrado.</p>';
+}
+
+async function editarHospede(id, nomeAtual, telAtual){
+    const novoNome = prompt('Editar nome:', nomeAtual);
+    if(novoNome === null) return;
+    const novoTel = prompt('Editar telefone:', telAtual);
+    if(novoTel === null) return;
+    
+    await db.collection('hospedes').doc(id).update({
+        nome: novoNome.trim(),
+        telefone: novoTel.trim(),
+        atualizadoEm: firebase.firestore.Timestamp.now()
+    });
+    
+    await carregarHospedes();
+    filtrarHospedes();
+    alert('✅ Cadastro atualizado!');
 }
 </script>
 </body>
