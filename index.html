@@ -599,22 +599,68 @@ async function inicializarPainel(){
 // ==============================================
 function renderizarPaginaPublica(){
     const container = document.getElementById('listaCasasPublica');
+
     container.innerHTML = Object.entries(casas).map(([id, casa]) => {
         const fotoPrincipal = casa.fotos.length > 0 ? casa.fotos[0] : null;
+
         return `
         <div class="card-casa">
+
             <div class="card-imagem" onclick="abrirGaleria('${id}', 0)">
-                ${fotoPrincipal ? `<img src="${fotoPrincipal}" alt="${casa.nome}">` : '🏠'}
+                ${
+                    fotoPrincipal
+                    ? `<img src="${fotoPrincipal}" alt="${casa.nome}">`
+                    : '🏠'
+                }
             </div>
+
             <div class="card-corpo">
+
                 <h3>${casa.nome}</h3>
-                <p style="color:var(--cinza); margin:8px 0;">${casa.desc}</p>
-                <p class="taxa-limpeza-info">🧹 Taxa de limpeza: R$ ${(casa.taxaLimpeza || 0).toFixed(2).replace('.', ',')}</p>
-                ${casa.fotos.length > 1 ? `<button class="botao-galeria" onclick="abrirGaleria('${id}', 0)">📷 Ver Galeria (${casa.fotos.length} fotos)</button>` : ''}
-                <button class="amarelo" onclick="abrirModalReserva('${id}')">📝 Solicitar Reserva</button>
+
+                <p class="descricao-casa">
+                    ${casa.desc}
+                </p>
+
+                <div class="caracteristicas-casa">
+                    ${
+                        (casa.caracteristicas || []).map(item => `
+                            <div class="caracteristica-item">
+                                ${item}
+                            </div>
+                        `).join('')
+                    }
+                </div>
+
+                <p class="taxa-limpeza-info">
+                    🧹 Taxa de limpeza:
+                    <strong>
+                        R$ ${(casa.taxaLimpeza || 0).toFixed(2).replace('.', ',')}
+                    </strong>
+                </p>
+
+                ${
+                    casa.fotos.length > 1
+                    ? `
+                    <button
+                        class="botao-galeria"
+                        onclick="abrirGaleria('${id}', 0)">
+                        📷 Ver Galeria (${casa.fotos.length} fotos)
+                    </button>
+                    `
+                    : ''
+                }
+
+                <button
+                    class="amarelo"
+                    onclick="abrirModalReserva('${id}')">
+                    📝 Solicitar Reserva
+                </button>
+
             </div>
         </div>
-    `}).join('');
+        `;
+    }).join('');
 }
 
 // ==============================================
