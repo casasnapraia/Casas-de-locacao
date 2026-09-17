@@ -23,10 +23,10 @@ body{background:linear-gradient(120deg, #e0f0f5, #fef9ed); color:var(--texto); m
 
 /* Área Pública */
 .area-publica{padding:30px;}
-.grade-casas{display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:25px; margin-top:20px;}
+.grade-casas{display:grid; grid-template-columns:repeat(auto-fit, minmax(340px, 1fr)); gap:25px; margin-top:20px;}
 .card-casa{background:white; border-radius:12px; overflow:hidden; box-shadow:var(--sombra); transition:.3s;}
 .card-casa:hover{transform:translateY(-5px);}
-.card-imagem{height:200px; background:linear-gradient(135deg, var(--turquesa), var(--marinho)); display:flex; align-items:center; justify-content:center; color:white; font-size:40px; overflow:hidden;}
+.card-imagem{height:220px; background:linear-gradient(135deg, var(--turquesa), var(--marinho)); display:flex; align-items:center; justify-content:center; color:white; font-size:40px; overflow:hidden; cursor:pointer;}
 .card-imagem img{width:100%; height:100%; object-fit:cover;}
 .card-corpo{padding:20px;}
 .amarelo{background:var(--ouro); color:#212529; padding:10px 18px; font-weight:bold; border:none; border-radius:6px; cursor:pointer; width:100%; margin-top:10px; font-size:16px;}
@@ -38,6 +38,22 @@ body{background:linear-gradient(120deg, #e0f0f5, #fef9ed); color:var(--texto); m
 .azul{background:var(--turquesa); color:white; padding:8px 14px; border:none; border-radius:6px; cursor:pointer; border-radius:6px;}
 .azul:hover{background:#138496;}
 .cinza{background:var(--cinza); color:white; padding:8px 14px; border:none; border-radius:6px; cursor:not-allowed; opacity:.7;}
+.botao-galeria{background:transparent; color:var(--turquesa); border:1px solid var(--turquesa); padding:8px 12px; border-radius:6px; cursor:pointer; width:100%; margin-top:8px; font-size:14px; transition:.2s;}
+.botao-galeria:hover{background:var(--turquesa); color:white;}
+
+/* Galeria em Tela Cheia */
+.overlay-galeria{position:fixed; inset:0; background:rgba(0,0,0,.92); z-index:400; display:flex; align-items:center; justify-content:center; opacity:0; visibility:hidden; transition:.3s;}
+.overlay-galeria.aberto{opacity:1; visibility:visible;}
+.galeria-conteudo{position:relative; width:95%; max-width:900px;}
+.galeria-foto-principal{width:100%; height:70vh; object-fit:contain; background:#000; border-radius:8px;}
+.galeria-navegacao{display:flex; justify-content:space-between; align-items:center; margin-top:15px;}
+.galeria-botao-nav{background:rgba(255,255,255,.2); color:white; border:none; padding:10px 16px; border-radius:6px; cursor:pointer; font-size:18px;}
+.galeria-botao-nav:hover{background:rgba(255,255,255,.4);}
+.galeria-contador{color:white; font-size:15px;}
+.galeria-miniaturas{display:flex; gap:8px; margin-top:15px; overflow-x:auto; padding-bottom:5px;}
+.miniatura{width:80px; height:60px; object-fit:cover; border-radius:4px; cursor:pointer; border:2px solid transparent; opacity:.7; transition:.2s;}
+.miniatura:hover, .miniatura.ativa{border-color:var(--ouro); opacity:1;}
+.fechar-galeria{position:absolute; top:-40px; right:0; background:none; border:none; color:white; font-size:28px; cursor:pointer;}
 
 /* Painel Admin */
 .barra-lateral{position:fixed; left:0; top:0; width:260px; height:100vh; background:linear-gradient(180deg, var(--marinho), #0f6694); color:white; padding:25px 20px; z-index:100; box-shadow:2px 0 15px rgba(0,0,0,.1);}
@@ -99,6 +115,10 @@ body{background:linear-gradient(120deg, #e0f0f5, #fef9ed); color:var(--texto); m
 .oculto{display:none !important;}
 .aviso-bloqueio{color:var(--perigo); background:#fde8e8; padding:10px; border-radius:6px; margin:10px 0; display:none;}
 .input-imgur{background:#f9f9f9; border:1px dashed #ccc;}
+.lista-fotos-galeria{margin-top:10px;}
+.item-foto-galeria{display:flex; align-items:center; gap:8px; margin:8px 0; padding:8px; background:#f9f9f9; border-radius:6px;}
+.item-foto-galeria img{width:60px; height:45px; object-fit:cover; border-radius:4px;}
+.remover-foto{background:var(--perigo); color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer; margin-left:auto;}
 .taxa-limpeza-info{font-size:13px; color:var(--cinza); margin-top:5px;}
 .valor-destaque{font-weight:bold; color:var(--marinho);}
 </style>
@@ -120,6 +140,20 @@ body{background:linear-gradient(120deg, #e0f0f5, #fef9ed); color:var(--texto); m
         <div id="avisoBloqueioPublico" class="aviso-bloqueio"></div>
         <div class="grade-casas" id="listaCasasPublica"></div>
     </main>
+</div>
+
+<!-- GALERIA DE FOTOS - TELA CHEIA -->
+<div id="overlayGaleria" class="overlay-galeria" onclick="if(event.target === this) fecharGaleria()">
+    <div class="galeria-conteudo">
+        <button class="fechar-galeria" onclick="fecharGaleria()">&times;</button>
+        <img id="fotoPrincipalGaleria" class="galeria-foto-principal" src="" alt="">
+        <div class="galeria-navegacao">
+            <button class="galeria-botao-nav" onclick="fotoAnterior()">&#10094;</button>
+            <span id="contadorGaleria" class="galeria-contador">1 de 3</span>
+            <button class="galeria-botao-nav" onclick="proximaFoto()">&#10095;</button>
+        </div>
+        <div id="miniaturasGaleria" class="galeria-miniaturas"></div>
+    </div>
 </div>
 
 <!-- LOGIN -->
@@ -184,18 +218,17 @@ body{background:linear-gradient(120deg, #e0f0f5, #fef9ed); color:var(--texto); m
             <p id="infoSelecao" style="margin-top:10px; color:var(--cinza);">Nenhum dia selecionado</p>
         </div>
 
-        <!-- Casas com Imgur e Taxa de Limpeza -->
+        <!-- Casas com Galeria de Fotos -->
         <div id="pagina-casas" class="pagina">
-            <h2>🏠 Gerenciar Casas, Fotos & Taxa de Limpeza</h2>
-            <p style="color:var(--cinza); margin:10px 0;">Configure a taxa de limpeza por casa — será incluída automaticamente no valor total da reserva.</p>
+            <h2>🏠 Gerenciar Casas, Galeria de Fotos & Taxa de Limpeza</h2>
+            <p style="color:var(--cinza); margin:10px 0;">📸 Adicione várias fotos por casa — serão exibidas na galeria pública.</p>
             <div class="grade-casas" id="gradeCasas"></div>
             <div style="margin-top:25px; padding:15px; background:#f0f9fc; border-radius:8px;">
                 <h4>📷 Como pegar o link no Imgur:</h4>
                 <ol style="margin:10px 20px; font-size:14px; color:var(--texto);">
                     <li>Acesse <a href="https://imgur.com" target="_blank" style="color:var(--turquesa);">imgur.com</a></li>
-                    <li>Faça upload da foto da casa</li>
-                    <li>Clique na imagem → "Copiar link direto" (terminado em .jpg ou .png)</li>
-                    <li>Cole o link no campo abaixo da casa</li>
+                    <li>Faça upload da foto → clique nela → "Copiar link direto" (terminado em .jpg ou .png)</li>
+                    <li>Cole o link no campo abaixo e clique em "Adicionar à Galeria"</li>
                 </ol>
             </div>
         </div>
@@ -314,13 +347,37 @@ const ADM_SENHA = 'praia2026';
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// Casas com taxa de limpeza
+// Casas com Galeria de Fotos e Taxa de Limpeza
 const casas = {
-    amarela: {nome: 'Casa Amarela', desc: 'Janela marrom, com coqueiro na frente', imgurUrl: '', taxaLimpeza: 0},
-    bege: {nome: 'Casa Bege', desc: 'Com coqueiro na frente e janelas brancas', imgurUrl: '', taxaLimpeza: 0},
-    marrom: {nome: 'Casa Marrom', desc: 'Madeira com redes coloridas', imgurUrl: '', taxaLimpeza: 0},
-    branca: {nome: 'Casa Branca', desc: 'Paredes brancas, janelas marrom, ambiente arejado — perto do mar', imgurUrl: '', taxaLimpeza: 0}
+    amarela: {
+        nome: 'Casa Amarela', 
+        desc: 'Janela marrom, com coqueiro na frente', 
+        fotos: [], 
+        taxaLimpeza: 0
+    },
+    bege: {
+        nome: 'Casa Bege', 
+        desc: 'Com coqueiro na frente e janelas brancas', 
+        fotos: [], 
+        taxaLimpeza: 0
+    },
+    marrom: {
+        nome: 'Casa Marrom', 
+        desc: 'Madeira com redes coloridas', 
+        fotos: [], 
+        taxaLimpeza: 0
+    },
+    branca: {
+        nome: 'Casa Branca', 
+        desc: 'Paredes brancas, janelas marrom, ambiente arejado — perto do mar', 
+        fotos: [], 
+        taxaLimpeza: 0
+    }
 };
+
+// Variáveis da Galeria
+let casaGaleriaAtual = null;
+let indiceFotoAtual = 0;
 
 let dataAtual = new Date();
 let valoresDiarias = {};
@@ -341,6 +398,49 @@ document.addEventListener('DOMContentLoaded', async () => {
     await carregarDadosCasas();
     renderizarPaginaPublica();
 });
+
+// ==============================================
+// GALERIA DE FOTOS - PÚBLICO
+// ==============================================
+function abrirGaleria(casaId, indice = 0){
+    casaGaleriaAtual = casaId;
+    indiceFotoAtual = indice;
+    atualizarFotoGaleria();
+    document.getElementById('overlayGaleria').classList.add('aberto');
+}
+
+function fecharGaleria(){
+    document.getElementById('overlayGaleria').classList.remove('aberto');
+    casaGaleriaAtual = null;
+}
+
+function atualizarFotoGaleria(){
+    const fotos = casas[casaGaleriaAtual].fotos;
+    if(fotos.length === 0) return;
+    
+    if(indiceFotoAtual < 0) indiceFotoAtual = fotos.length - 1;
+    if(indiceFotoAtual >= fotos.length) indiceFotoAtual = 0;
+    
+    document.getElementById('fotoPrincipalGaleria').src = fotos[indiceFotoAtual];
+    document.getElementById('contadorGaleria').textContent = `${indiceFotoAtual + 1} de ${fotos.length}`;
+    
+    // Miniaturas
+    const miniaturas = document.getElementById('miniaturasGaleria');
+    miniaturas.innerHTML = fotos.map((foto, i) => `
+        <img src="${foto}" alt="" class="miniatura ${i === indiceFotoAtual ? 'ativa' : ''}" 
+             onclick="indiceFotoAtual = ${i}; atualizarFotoGaleria()">
+    `).join('');
+}
+
+function fotoAnterior(){
+    indiceFotoAtual--;
+    atualizarFotoGaleria();
+}
+
+function proximaFoto(){
+    indiceFotoAtual++;
+    atualizarFotoGaleria();
+}
 
 // ==============================================
 // BLOQUEIO DE DATAS
@@ -448,19 +548,22 @@ async function inicializarPainel(){
 // ==============================================
 function renderizarPaginaPublica(){
     const container = document.getElementById('listaCasasPublica');
-    container.innerHTML = Object.entries(casas).map(([id, casa]) => `
+    container.innerHTML = Object.entries(casas).map(([id, casa]) => {
+        const fotoPrincipal = casa.fotos.length > 0 ? casa.fotos[0] : null;
+        return `
         <div class="card-casa">
-            <div class="card-imagem">
-                ${casa.imgurUrl ? `<img src="${casa.imgurUrl}" alt="${casa.nome}" onerror="this.parentElement.innerHTML='🏠'">` : '🏠'}
+            <div class="card-imagem" onclick="abrirGaleria('${id}', 0)">
+                ${fotoPrincipal ? `<img src="${fotoPrincipal}" alt="${casa.nome}">` : '🏠'}
             </div>
             <div class="card-corpo">
                 <h3>${casa.nome}</h3>
                 <p style="color:var(--cinza); margin:8px 0;">${casa.desc}</p>
                 <p class="taxa-limpeza-info">🧹 Taxa de limpeza: R$ ${(casa.taxaLimpeza || 0).toFixed(2).replace('.', ',')}</p>
+                ${casa.fotos.length > 1 ? `<button class="botao-galeria" onclick="abrirGaleria('${id}', 0)">📷 Ver Galeria (${casa.fotos.length} fotos)</button>` : ''}
                 <button class="amarelo" onclick="abrirModalReserva('${id}')">📝 Solicitar Reserva</button>
             </div>
         </div>
-    `).join('');
+    `}).join('');
 }
 
 // ==============================================
@@ -477,6 +580,7 @@ function configurarNavegacao(){
             if(paginaId === 'pagina-reservas') atualizarListaReservas();
             if(paginaId === 'pagina-calendario') renderizarCalendario();
             if(paginaId === 'pagina-hospedes') filtrarHospedes();
+            if(paginaId === 'pagina-casas') renderizarCasasAdmin();
         });
     });
 }
@@ -718,124 +822,165 @@ function calcularDias(inicio, fim){
 }
 
 // ==============================================
-// CADASTRO AUTOMÁTICO DE HÓSPEDES
+// CADASTRO AUTOMÁT// ==============================================
+// GERENCIAMENTO DE CASAS E GALERIA DE FOTOS — ADMIN
 // ==============================================
-async function cadastrarOuAtualizarHospede(nome, telefone){
-    if(!nome) return;
+async function carregarDadosCasas(){
+    const doc = await db.collection('configuracoes').doc('casas').get();
+    if(doc.exists && doc.data().casas){
+        const dadosSalvos = doc.data().casas;
+        Object.keys(casas).forEach(id => {
+            if(dadosSalvos[id]){
+                casas[id].fotos = dadosSalvos[id].fotos || [];
+                casas[id].taxaLimpeza = dadosSalvos[id].taxaLimpeza || 0;
+                if(dadosSalvos[id].desc) casas[id].desc = dadosSalvos[id].desc;
+            }
+        });
+    }
+}
+
+function renderizarCasasAdmin(){
+    const container = document.getElementById('gradeCasas');
+    container.innerHTML = Object.entries(casas).map(([id, casa]) => `
+        <div class="card-casa">
+            <div class="card-imagem">
+                ${casa.fotos.length > 0 
+                    ? `<img src="${casa.fotos[0]}" alt="${casa.nome}">` 
+                    : '🏠'}
+            </div>
+            <div class="card-corpo">
+                <h3>${casa.nome}</h3>
+                <p style="font-size:13px; color:var(--cinza); margin-bottom:10px;">${casa.desc}</p>
+                
+                <!-- Galeria de Fotos -->
+                <label style="font-size:13px; font-weight:600;">📷 Link da foto (Imgur):</label>
+                <input type="url" id="fotoNova-${id}" placeholder="https://i.imgur.com/xxxxxx.jpg" 
+                       style="background:#f9f9f9; border:1px dashed #ccc; padding:8px; border-radius:4px; width:100%; margin:5px 0;">
+                <button class="azul" style="margin:5px 0; width:100%;" onclick="adicionarFotoGaleria('${id}')">
+                    ➕ Adicionar à Galeria
+                </button>
+                
+                <div class="lista-fotos-galeria">
+                    <strong>Fotos da galeria (${casa.fotos.length}):</strong>
+                    ${casa.fotos.length === 0 
+                        ? '<p style="font-size:12px; color:var(--cinza); margin-top:5px;">Nenhuma foto adicionada ainda</p>'
+                        : casa.fotos.map((foto, indice) => `
+                            <div class="item-foto-galeria">
+                                <img src="${foto}" alt="">
+                                <span style="font-size:12px; color:var(--cinza);">Foto ${indice + 1}</span>
+                                <button class="remover-foto" onclick="removerFotoGaleria('${id}', ${indice})">✕</button>
+                            </div>
+                        `).join('')
+                    }
+                </div>
+                
+                <!-- Taxa de Limpeza -->
+                <label style="font-size:13px; font-weight:600; margin-top:15px; display:block;">🧹 Taxa de Limpeza (R$):</label>
+                <input type="number" id="limpeza-${id}" value="${casa.taxaLimpeza || 0}" min="0" step="10" 
+                       placeholder="0,00" style="margin:5px 0; width:100%; padding:8px;">
+                
+                <button class="sucesso" style="margin-top:10px; width:100%;" onclick="salvarConfiguracoesCasa('${id}')">
+                    💾 Salvar Casa
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+async function adicionarFotoGaleria(casaId){
+    const campo = document.getElementById(`fotoNova-${casaId}`);
+    const url = campo.value.trim();
     
-    // Procura se já existe
-    const existe = hospedesCadastrados.find(h => 
-        h.nome.trim().toLowerCase() === nome.trim().toLowerCase() ||
-        (telefone && h.telefone === telefone)
-    );
-    
-    if(existe){
-        // Atualiza se houver novo telefone
-        if(telefone && !existe.telefone){
-            await db.collection('hospedes').doc(existe.id).update({
-                telefone, atualizadoEm: firebase.firestore.Timestamp.now()
-            });
-            existe.telefone = telefone;
-        }
+    if(!url){
+        alert('⚠️ Cole o link da foto primeiro!');
+        return;
+    }
+    if(!url.includes('imgur.com')){
+        alert('ℹ️ Use links do Imgur (ex: i.imgur.com/abc123.jpg)');
         return;
     }
     
-    // Cadastra novo
-    await db.collection('hospedes').add({
-        nome: nome.trim(),
-        telefone: telefone?.trim() || '',
-        cadastradoEm: firebase.firestore.Timestamp.now()
-    });
-    
-    await carregarHospedes();
+    casas[casaId].fotos.push(url);
+    await salvarTodasCasas();
+    campo.value = '';
+    alert(`✅ Foto adicionada! Galeria tem agora ${casas[casaId].fotos.length} foto(s)`);
+    renderizarCasasAdmin();
+    renderizarPaginaPublica();
 }
 
-// Sincronizar manualmente das reservas
-async function sincronizarHospedesReservas(){
-    let contador = 0;
-    for(const reserva of reservasConfirmadas){
-        if(reserva.nome){
-            const existe = hospedesCadastrados.find(h => 
-                h.nome.trim().toLowerCase() === reserva.nome.trim().toLowerCase()
-            );
-            if(!existe){
-                await db.collection('hospedes').add({
-                    nome: reserva.nome.trim(),
-                    telefone: reserva.telefone || '',
-                    cadastradoEm: firebase.firestore.Timestamp.now()
-                });
-                contador++;
-            }
-        }
-    }
-    await carregarHospedes();
-    alert(`✅ Sincronização concluída! ${contador} novo(s) hóspede(s) adicionado(s).`);
+async function removerFotoGaleria(casaId, indice){
+    if(!confirm('Remover esta foto da galeria?')) return;
+    casas[casaId].fotos.splice(indice, 1);
+    await salvarTodasCasas();
+    alert('✅ Foto removida!');
+    renderizarCasasAdmin();
+    renderizarPaginaPublica();
+}
+
+async function salvarConfiguracoesCasa(casaId){
+    const taxa = parseFloat(document.getElementById(`limpeza-${casaId}`).value) || 0;
+    casas[casaId].taxaLimpeza = taxa;
+    await salvarTodasCasas();
+    alert(`✅ ${casas[casaId].nome} salva!\nTaxa de limpeza: R$ ${taxa.toFixed(2).replace('.', ',')}`);
+    renderizarPaginaPublica();
+}
+
+async function salvarTodasCasas(){
+    await db.collection('configuracoes').doc('casas').set({ casas }, { merge: true });
 }
 
 // ==============================================
-// RESERVAS — ADMINISTRATIVO
+// RESERVAS — LISTA E GERENCIAMENTO
 // ==============================================
 async function carregarReservasConfirmadas(){
     const snap = await db.collection('reservas').orderBy('criadoEm', 'desc').get();
-    reservasConfirmadas = snap.docs.map(d => ({id:d.id, ...d.data()}));
+    reservasConfirmadas = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     atualizarListaReservas();
 }
 
 function atualizarListaReservas(){
-    const lista = document.getElementById('listaReservas');
-    let filtradas = filtroReservas === 'todas' 
-        ? reservasConfirmadas 
-        : reservasConfirmadas.filter(r => r.statusPagamento === filtroReservas);
+    const container = document.getElementById('listaReservas');
+    let dados = reservasConfirmadas;
     
-    if(filtradas.length === 0){
-        lista.innerHTML = '<p style="color:var(--cinza); padding:20px;">Nenhuma reserva encontrada.</p>';
-        return;
+    if(filtroReservas !== 'todas'){
+        dados = dados.filter(r => r.statusPagamento === filtroReservas);
     }
     
-    lista.innerHTML = filtradas.map(r => {
-        const bloqueada = ['confirmada', 'pago'].includes(r.statusPagamento);
-        return `
-        <div class="reserva-item">
-            <h4>${casas[r.casa]?.nome || 'Casa'}</h4>
-            <p><strong>Hóspede:</strong> ${r.nome}</p>
-            <p><strong>Telefone:</strong> ${r.telefone || 'Não informado'}</p>
-            <p><strong>Período:</strong> ${r.entrada} até ${r.saida} (${r.dias} diárias)</p>
-            ${r.taxaLimpeza ? `<p><strong>Diárias:</strong> R$ ${(r.valorDiarias || 0).toFixed(2).replace('.', ',')}</p><p><strong>Taxa de Limpeza:</strong> R$ ${(r.taxaLimpeza || 0).toFixed(2).replace('.', ',')}</p>` : ''}
-            <p><strong>Total:</strong> R$ ${(r.valorTotal || 0).toFixed(2).replace('.', ',')}</p>
-            <p><strong>Pago:</strong> R$ ${(r.valorPago || 0).toFixed(2).replace('.', ',')}</p>
-            <p><strong>A Receber:</strong> R$ ${((r.valorTotal || 0) - (r.valorPago || 0)).toFixed(2).replace('.', ',')}</p>
-            <span class="status-badge status-${r.statusPagamento}">${(r.statusPagamento || 'pendente').toUpperCase()}</span>
-            ${bloqueada ? '<span style="color:var(--sucesso); font-size:13px;">🔒 Datas bloqueadas no site público</span>' : ''}
-            <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;">
-                ${r.statusPagamento === 'pendente' ? `<button class="sucesso" onclick="confirmarReserva('${r.id}')">✅ Confirmar & Bloquear Datas</button>` : ''}
-                <button class="azul" onclick="abrirEditarReserva('${r.id}')">✏️ Gerenciar Pagamento</button>
-                <button class="vermelho" onclick="excluirReserva('${r.id}')">🗑️ Excluir</button>
-            </div>
-        </div>
-    `;
-    }).join('');
+    container.innerHTML = dados.length === 0 
+        ? '<p style="color:var(--cinza); padding:20px;">Nenhuma reserva encontrada.</p>'
+        : dados.map(r => {
+            const statusClasse = `status-${r.statusPagamento}`;
+            const statusTexto = {
+                pendente: '⏳ Pendente',
+                confirmada: '✅ Confirmada',
+                parcial: '💵 Parcial',
+                pago: '💰 Pago'
+            }[r.statusPagamento] || r.statusPagamento;
+            
+            return `
+                <div class="reserva-item">
+                    <h4>${casas[r.casa]?.nome || r.casa}</h4>
+                    <p><strong>Hóspede:</strong> ${r.nome}</p>
+                    <p><strong>Telefone:</strong> ${r.telefone || 'Não informado'}</p>
+                    <p><strong>Período:</strong> ${r.entrada} → ${r.saida} (${r.dias} dias)</p>
+                    <span class="status-badge ${statusClasse}">${statusTexto}</span>
+                    <p>💰 Total: R$ ${(r.valorTotal || 0).toFixed(2).replace('.', ',')} 
+                       | Pago: R$ ${(r.valorPago || 0).toFixed(2).replace('.', ',')}</p>
+                    <button class="azul" onclick="abrirEditarReserva('${r.id}')" style="margin-top:8px;">
+                        ✏️ Editar / Confirmar
+                    </button>
+                </div>
+            `;
+        }).join('');
 }
 
-async function confirmarReserva(reservaId){
-    if(!confirm('✅ Confirmar reserva? As datas serão BLOQUEADAS no site público!')) return;
-    
-    await db.collection('reservas').doc(reservaId).update({
-        statusPagamento: 'confirmada',
-        confirmadaEm: firebase.firestore.Timestamp.now()
-    });
-    
-    await carregarReservasConfirmadas();
-    renderizarCalendario();
-    alert('✅ Reserva CONFIRMADA! Datas bloqueadas para o público!');
-}
-
-function abrirEditarReserva(id){
+async function abrirEditarReserva(id){
     const r = reservasConfirmadas.find(x => x.id === id);
     if(!r) return;
     
     document.getElementById('conteudoEditar').innerHTML = `
-        <p><strong>Casa:</strong> ${casas[r.casa]?.nome}</p>
-        <p><strong>Hóspede:</strong> ${r.n.nome}</p>
+        <p><strong>Casa:</strong> ${casas[r.casa]?.nome || r.casa}</p>
+        <p><strong>Hóspede:</strong> ${r.nome}</p>
         <p><strong>Período:</strong> ${r.entrada} → ${r.saida}</p>
         ${r.taxaLimpeza ? `
         <p><strong>Valor Diárias:</strong> R$ ${(r.valorDiarias || 0).toFixed(2).replace('.', ',')}</p>
@@ -854,6 +999,7 @@ function abrirEditarReserva(id){
             </select>
         </div>
         <button class="sucesso" onclick="salvarEdicao('${id}')" style="margin-top:10px;">💾 Salvar Alterações</button>
+        <button class="vermelho" onclick="excluirReserva('${id}')" style="margin-top:8px;">🗑️ Excluir / Liberar Datas</button>
     `;
     document.getElementById('modalEditarReserva').classList.add('aberto');
 }
@@ -874,7 +1020,7 @@ async function salvarEdicao(id){
     await carregarReservasConfirmadas();
     renderizarCalendario();
     fecharModalEditar();
-    alert('✅ Atualizado! As datas são bloqueadas automaticamente para status "Confirmada" e "Pago".');
+    alert('✅ Atualizado! Datas bloqueadas automaticamente para "Confirmada" e "Pago".');
 }
 
 async function excluirReserva(id){
@@ -882,58 +1028,8 @@ async function excluirReserva(id){
     await db.collection('reservas').doc(id).delete();
     await carregarReservasConfirmadas();
     renderizarCalendario();
-    alert('✅ Excluído! As datas foram liberadas.');
-}
-
-// ==============================================
-// IMGUR + TAXA DE LIMPEZA POR CASA
-// ==============================================
-async function carregarDadosCasas(){
-    const doc = await db.collection('configuracoes').doc('casas').get();
-    if(doc.exists && doc.data().casas){
-        Object.assign(casas, doc.data().casas);
-    }
-}
-
-function renderizarCasasAdmin(){
-    const container = document.getElementById('gradeCasas');
-    container.innerHTML = Object.entries(casas).map(([id, casa]) => `
-        <div class="card-casa">
-            <div class="card-imagem">
-                ${casa.imgurUrl ? `<img src="${casa.imgurUrl}" alt="${casa.nome}" onerror="this.parentElement.innerHTML='🏠'">` : '🏠'}
-            </div>
-            <div class="card-corpo">
-                <h3>${casa.nome}</h3>
-                <p style="font-size:13px; color:var(--cinza); margin-bottom:10px;">${casa.desc}</p>
-                
-                <label style="font-size:13px; font-weight:600;">Link da imagem (Imgur):</label>
-                <input type="url" class="input-imgur" id="imgur-${id}" value="${casa.imgurUrl || ''}" placeholder="https://i.imgur.com/xxxxxx.jpg">
-                
-                <label style="font-size:13px; font-weight:600; margin-top:10px; display:block;">🧹 Taxa de Limpeza (R$):</label>
-                <input type="number" id="limpeza-${id}" value="${casa.taxaLimpeza || 0}" min="0" step="10" placeholder="0,00">
-                
-                <button class="azul" style="margin-top:10px; width:100%;" onclick="salvarCasa('${id}')">💾 Salvar Casa</button>
-            </div>
-        </div>
-    `).join('');
-}
-
-async function salvarCasa(casaId){
-    const url = document.getElementById(`imgur-${casaId}`).value.trim();
-    const taxa = parseFloat(document.getElementById(`limpeza-${casaId}`).value) || 0;
-    
-    if(url && !url.includes('imgur.com')){
-        alert('ℹ️ O link deve ser do Imgur (ex: i.imgur.com/abc.jpg)');
-    }
-    
-    casas[casaId].imgurUrl = url;
-    casas[casaId].taxaLimpeza = taxa;
-    
-    await db.collection('configuracoes').doc('casas').set({ casas }, { merge: true });
-    
-    alert(`✅ ${casas[casaId].nome} atualizada!\nTaxa de limpeza: R$ ${taxa.toFixed(2).replace('.', ',')}`);
-    renderizarCasasAdmin();
-    renderizarPaginaPublica();
+    fecharModalEditar();
+    alert('✅ Excluído! Datas liberadas.');
 }
 
 // ==============================================
@@ -978,10 +1074,7 @@ function gerarRelatorio(){
     const porCasa = {};
     Object.keys(casas).forEach(id => porCasa[id] = {
         nome: casas[id].nome, 
-        recebido: 0, 
-        esperado: 0, 
-        pendente: 0,
-        taxaLimpeza: 0
+        recebido: 0, esperado: 0, pendente: 0, taxaLimpeza: 0
     });
     
     dados.forEach(r => {
@@ -996,19 +1089,43 @@ function gerarRelatorio(){
         <h3>📊 Resumo — ${filtroRelatorio === 'todos' ? 'Todo o Período' : filtroRelatorio === 'mes' ? 'Este Mês' : 'Este Ano'}</h3>
         <p><strong>Total de Reservas:</strong> ${dados.length}</p>
         <div class="total-geral">
-            <div class="linha-valor"><span>🧹 Total Taxa de Limpeza:</span><span>R$ ${totalTaxaLimpeza.toFixed(2).replace('.', ',')}</span></div>
-            <div class="linha-valor"><span>💰 Total Recebido:</span><span>R$ ${recebido.toFixed(2).replace('.', ',')}</span></div>
-            <div class="linha-valor"><span>📊 Total Esperado:</span><span>R$ ${esperado.toFixed(2).replace('.', ',')}</span></div>
-            <div class="linha-valor" style="color:var(--alerta);"><span>⏳ A Receber:</span><span>R$ ${pendente.toFixed(2).replace('.', ',')}</span></div>
+            <div class="linha-valor">
+                <span>🧹 Total Taxa de Limpeza:</span>
+                <span>R$ ${totalTaxaLimpeza.toFixed(2).replace('.', ',')}</span>
+            </div>
+            <div class="linha-valor">
+                <span>💰 Total Recebido:</span>
+                <span>R$ ${recebido.toFixed(2).replace('.', ',')}</span>
+            </div>
+            <div class="linha-valor">
+                <span>📊 Total Esperado:</span>
+                <span>R$ ${esperado.toFixed(2).replace('.', ',')}</span>
+            </div>
+            <div class="linha-valor" style="color:var(--alerta);">
+                <span>⏳ A Receber:</span>
+                <span>R$ ${pendente.toFixed(2).replace('.', ',')}</span>
+            </div>
         </div>
         <h3 style="margin-top:30px;">🏠 Por Casa</h3>
         ${Object.values(porCasa).map(c => `
             <div style="padding:12px 0; border-bottom:1px solid #eee;">
                 <h4>${c.nome}</h4>
-                <div class="linha-valor"><span>🧹 Taxa de Limpeza:</span><span>R$ ${c.taxaLimpeza.toFixed(2).replace('.', ',')}</span></div>
-                <div class="linha-valor"><span>✅ Recebido:</span><span>R$ ${c.recebido.toFixed(2).replace('.', ',')}</span></div>
-                <div class="linha-valor"><span>📊 Esperado:</span><span>R$ ${c.esperado.toFixed(2).replace('.', ',')}</span></div>
-                <div class="linha-valor" style="color:var(--alerta);"><span>⏳ A Receber:</span><span>R$ ${c.pendente.toFixed(2).replace('.', ',')}</span></div>
+                <div class="linha-valor">
+                    <span>🧹 Taxa de Limpeza:</span>
+                    <span>R$ ${c.taxaLimpeza.toFixed(2).replace('.', ',')}</span>
+                </div>
+                <div class="linha-valor">
+                    <span>✅ Recebido:</span>
+                    <span>R$ ${c.recebido.toFixed(2).replace('.', ',')}</span>
+                </div>
+                <div class="linha-valor">
+                    <span>📊 Esperado:</span>
+                    <span>R$ ${c.esperado.toFixed(2).replace('.', ',')}</span>
+                </div>
+                <div class="linha-valor" style="color:var(--alerta);">
+                    <span>⏳ A Receber:</span>
+                    <span>R$ ${c.pendente.toFixed(2).replace('.', ',')}</span>
+                </div>
             </div>
         `).join('')}
     `;
@@ -1017,18 +1134,33 @@ function gerarRelatorio(){
 // ==============================================
 // CADASTRO DE HÓSPEDES
 // ==============================================
-async function carregarHospedes(){
-    const snap = await db.collection('hospedes').orderBy('nome').get();
-    hospedesCadastrados = snap.docs.map(d => ({id:d.id, ...d.data()}));
+async function cadastrarOuAtualizarHospede(nome, telefone){
+    if(!nome) return;
+    const nomeNormalizado = nome.trim().toLowerCase();
+    
+    const snap = await db.collection('hospedes')
+        .where('nomeNormalizado', '==', nomeNormalizado)
+        .limit(1).get();
+    
+    if(snap.empty){
+        await db.collection('hospedes').add({
+            nome: nome.trim(),
+            telefone: telefone?.trim() || '',
+            nomeNormalizado,
+            cadastradoEm: firebase.firestore.Timestamp.now()
+        });
+    } else {
+        const doc = snap.docs[0];
+        await db.collection('hospedes').doc(doc.id).update({
+            telefone: telefone?.trim() || doc.data().telefone || '',
+            atualizadoEm: firebase.firestore.Timestamp.now()
+        });
+    }
 }
 
-function abrirCadastroHospede(){
-    const nome = prompt('Nome completo do hóspede:');
-    if(!nome) return;
-    const telefone = prompt('Telefone com WhatsApp:');
-    if(!telefone) return;
-    
-    cadastrarOuAtualizarHospede(nome, telefone);
+async function carregarHospedes(){
+    const snap = await db.collection('hospedes').orderBy('nome').get();
+    hospedesCadastrados = snap.docs.map(d => ({ id: d.id, ...d.data() }));
 }
 
 function filtrarHospedes(){
@@ -1045,9 +1177,13 @@ function filtrarHospedes(){
                 <div>
                     <strong>${h.nome}</strong><br>
                     📞 ${h.telefone || 'Não informado'}<br>
-                    <small style="color:var(--cinza);">Cadastrado: ${h.cadastradoEm?.toDate ? h.cadastradoEm.toDate().toLocaleDateString('pt-BR') : ''}</small>
+                    <small style="color:var(--cinza);">
+                        Cadastrado: ${h.cadastradoEm?.toDate ? h.cadastradoEm.toDate().toLocaleDateString('pt-BR') : ''}
+                    </small>
                 </div>
-                <button class="azul" onclick="editarHospede('${h.id}', '${h.nome.replace(/'/g, "\\'")}', '${(h.telefone||'').replace(/'/g, "\\'")}')">✏️ Editar</button>
+                <button class="azul" onclick="editarHospede('${h.id}', '${h.nome.replace(/'/g, "\\'")}', '${(h.telefone||'').replace(/'/g, "\\'")}')">
+                    ✏️ Editar
+                </button>
             </div>
         `).join('')
         : '<p style="color:var(--cinza); padding:10px;">Nenhum hóspede encontrado.</p>';
@@ -1061,6 +1197,7 @@ async function editarHospede(id, nomeAtual, telAtual){
     
     await db.collection('hospedes').doc(id).update({
         nome: novoNome.trim(),
+        nomeNormalizado: novoNome.trim().toLowerCase(),
         telefone: novoTel.trim(),
         atualizadoEm: firebase.firestore.Timestamp.now()
     });
@@ -1069,6 +1206,30 @@ async function editarHospede(id, nomeAtual, telAtual){
     filtrarHospedes();
     alert('✅ Cadastro atualizado!');
 }
+
+async function sincronizarHospedesReservas(){
+    if(!confirm('Importar nomes de todas as reservas para a lista de hóspedes?')) return;
+    let contador = 0;
+    
+    for(const r of reservasConfirmadas){
+        await cadastrarOuAtualizarHospede(r.nome, r.telefone);
+        contador++;
+    }
+    
+    await carregarHospedes();
+    filtrarHospedes();
+    alert(`✅ Sincronizado! ${contador} registro(s) processado(s).`);
+}
+
+// Fechar galeria com tecla ESC
+document.addEventListener('keydown', e => {
+    if(e.key === 'Escape'){
+        fecharGaleria();
+        fecharModal();
+        fecharModalEditar();
+        fecharLogin();
+    }
+});
 </script>
 </body>
 </html>
