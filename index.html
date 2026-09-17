@@ -26,14 +26,18 @@ body{background:linear-gradient(120deg, #e0f0f5, #fef9ed); color:var(--texto); m
 .grade-casas{display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:25px; margin-top:20px;}
 .card-casa{background:white; border-radius:12px; overflow:hidden; box-shadow:var(--sombra); transition:.3s;}
 .card-casa:hover{transform:translateY(-5px);}
-.card-imagem{height:200px; background:linear-gradient(135deg, var(--turquesa), var(--marinho)); display:flex; align-items:center; justify-content:center; color:white; font-size:40px;}
+.card-imagem{height:200px; background:linear-gradient(135deg, var(--turquesa), var(--marinho)); display:flex; align-items:center; justify-content:center; color:white; font-size:40px; overflow:hidden;}
 .card-imagem img{width:100%; height:100%; object-fit:cover;}
 .card-corpo{padding:20px;}
-.etiqueta-status{display:inline-block; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:bold; margin:8px 0;}
-.etiqueta-status.disponivel{background:#d4edda; color:#155724;}
-.etiqueta-status.ocupado{background:#f8d7da; color:#721c24;}
 .amarelo{background:var(--ouro); color:#212529; padding:10px 18px; font-weight:bold; border:none; border-radius:6px; cursor:pointer; width:100%; margin-top:10px; font-size:16px;}
 .amarelo:hover{background:#e0ac00;}
+.sucesso{background:var(--sucesso); color:white; padding:10px 18px; border:none; border-radius:6px; cursor:pointer; border-radius:6px;}
+.sucesso:hover{background:#218838;}
+.vermelho{background:var(--perigo); color:white; padding:10px 18px; border:none; border-radius:6px; cursor:pointer; border-radius:6px;}
+.vermelho:hover{background:#c82333;}
+.azul{background:var(--turquesa); color:white; padding:8px 14px; border:none; border-radius:6px; cursor:pointer; border-radius:6px;}
+.azul:hover{background:#138496;}
+.cinza{background:var(--cinza); color:white; padding:8px 14px; border:none; border-radius:6px; cursor:not-allowed; opacity:.7;}
 
 /* Painel Admin */
 .barra-lateral{position:fixed; left:0; top:0; width:260px; height:100vh; background:linear-gradient(180deg, var(--marinho), #0f6694); color:white; padding:25px 20px; z-index:100; box-shadow:2px 0 15px rgba(0,0,0,.1);}
@@ -51,7 +55,7 @@ body{background:linear-gradient(120deg, #e0f0f5, #fef9ed); color:var(--texto); m
 .caixa-login h2{text-align:center; margin-bottom:25px; color:var(--marinho);}
 .grupo-input{margin-bottom:15px;}
 .grupo-input label{display:block; margin-bottom:5px; font-weight:500; font-size:14px;}
-.grupo-input input, select{width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:6px; font-size:15px;}
+.grupo-input input, select, textarea{width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:6px; font-size:15px;}
 .btn-primario{background:var(--turquesa); color:white; width:100%; padding:12px; font-size:16px; border:none; border-radius:6px; cursor:pointer; transition:.2s;}
 .btn-primario:hover{background:#138496;}
 .fechar-login{margin-top:15px; width:100%; background:transparent; border:none; color:var(--cinza); cursor:pointer; text-decoration:underline;}
@@ -67,12 +71,11 @@ body{background:linear-gradient(120deg, #e0f0f5, #fef9ed); color:var(--texto); m
 .dia.no-intervalo{background:#fff3cd; border-color:#ffd90080;}
 .dia.passado{color:#ccc; cursor:not-allowed;}
 .dia.com-valor{border-color:var(--sucesso); background:#e8f5e9;}
+.dia.bloqueado{background:#f8d7da; color:#721c24; cursor:not-allowed; border-color:#f5c6cb;}
+.dia.bloqueado:hover{background:#f1b0b7;}
 .rotulo-dia-semana{text-align:center; font-weight:600; padding:8px; color:var(--cinza); font-size:14px;}
 .linha-form{display:flex; gap:10px; align-items:center; margin:15px 0; flex-wrap:wrap;}
 .linha-form input, .linha-form select{flex:1; min-width:140px; padding:10px; border:1px solid #ddd; border-radius:6px;}
-.sucesso{background:var(--sucesso); color:white; padding:10px 18px; border:none; border-radius:6px; cursor:pointer; border-radius:6px;}
-.vermelho{background:var(--perigo); color:white; padding:10px 18px; border:none; border-radius:6px; cursor:pointer; border-radius:6px;}
-.azul{background:var(--turquesa); color:white; padding:8px 14px; border:none; border-radius:6px; cursor:pointer; border-radius:6px;}
 .ativo{background:var(--ouro) !important; color:#212529 !important;}
 
 /* Modal Reserva */
@@ -84,8 +87,9 @@ body{background:linear-gradient(120deg, #e0f0f5, #fef9ed); color:var(--texto); m
 
 /* Listas e Relatórios */
 .reserva-item{border:1px solid #eee; border-radius:8px; padding:15px; margin-bottom:10px;}
-.status-badge{display:inline-block; padding:3px 10px; border-radius:12px; font-size:12px; font-weight:bold; margin-top:8px;}
+.status-badge{display:inline-block; padding:4px 10px; border-radius:12px; font-size:12px; font-weight:bold; margin:8px 8px 8px 0;}
 .status-pendente{background:#fff3cd; color:#856404;}
+.status-confirmada{background:#d4edda; color:#155724;}
 .status-parcial{background:#d1ecf1; color:#0c5460;}
 .status-pago{background:#d4edda; color:#155724;}
 .total-geral{background:var(--concha); padding:20px; border-radius:8px; margin:15px 0;}
@@ -93,12 +97,14 @@ body{background:linear-gradient(120deg, #e0f0f5, #fef9ed); color:var(--texto); m
 .pagina{display:none;}
 .pagina.ativa{display:block;}
 .oculto{display:none !important;}
+.aviso-bloqueio{color:var(--perigo); background:#fde8e8; padding:10px; border-radius:6px; margin:10px 0; display:none;}
+.input-imgur{background:#f9f9f9; border:1px dashed #ccc;}
 </style>
 </head>
 <body>
 
 <!-- ============================================== -->
-<!-- ÁREA PÚBLICA — VISÍVEL PARA TODOS DE IMEDIATO -->
+<!-- ÁREA PÚBLICA -->
 <!-- ============================================== -->
 <div id="areaPublica">
     <header class="cabecalho-publico">
@@ -109,41 +115,35 @@ body{background:linear-gradient(120deg, #e0f0f5, #fef9ed); color:var(--texto); m
     <main class="area-publica">
         <h2>Encontre sua casa para temporada ☀️</h2>
         <p style="color:var(--cinza); margin:10px 0 20px;">Selecione uma casa e solicite sua reserva diretamente.</p>
-        
-        <div class="grade-casas" id="listaCasasPublica">
-            <!-- Casas carregadas pelo JS -->
-        </div>
+        <div id="avisoBloqueioPublico" class="aviso-bloqueio"></div>
+        <div class="grade-casas" id="listaCasasPublica"></div>
     </main>
 </div>
 
-<!-- ============================================== -->
-<!-- TELA DE LOGIN (sobreposta) -->
-<!-- ============================================== -->
+<!-- LOGIN -->
 <div id="overlayLogin" class="overlay-login">
     <div class="caixa-login">
         <h2>🔐 Acesso Administrativo</h2>
         <div class="grupo-input">
             <label>Usuário</label>
-            <input type="text" id="usuario" placeholder="Digite seu usuário">
+            <input type="text" id="usuario" placeholder="admin">
         </div>
         <div class="grupo-input">
             <label>Senha</label>
-            <input type="password" id="senha" placeholder="Digite sua senha">
+            <input type="password" id="senha" placeholder="••••••">
         </div>
         <button class="btn-primario" onclick="fazerLogin()">Entrar no Sistema</button>
         <button class="fechar-login" onclick="fecharLogin()">Voltar para página</button>
     </div>
 </div>
 
-<!-- ============================================== -->
-<!-- PAINEL ADMINISTRATIVO (após login) -->
-<!-- ============================================== -->
+<!-- PAINEL ADMIN -->
 <div id="painelAdmin" class="oculto">
     <div class="barra-lateral">
         <div class="logo">🏖️ Gestão</div>
         <div class="menu-lateral">
             <button class="item-menu ativo" data-pagina="calendario">📅 Calendário & Valores</button>
-            <button class="item-menu" data-pagina="casas">🏠 Gerenciar Casas</button>
+            <button class="item-menu" data-pagina="casas">🏠 Gerenciar Casas / Fotos</button>
             <button class="item-menu" data-pagina="hospedes">👤 Hóspedes</button>
             <button class="item-menu" data-pagina="reservas">📋 Reservas</button>
             <button class="item-menu" data-pagina="relatorios">📊 Relatórios</button>
@@ -152,13 +152,12 @@ body{background:linear-gradient(120deg, #e0f0f5, #fef9ed); color:var(--texto); m
     </div>
 
     <div class="conteudo-admin">
-        <!-- Calendário com seleção de intervalo -->
+        <!-- Calendário -->
         <div id="pagina-calendario" class="pagina ativa">
-            <h2>📅 Calendário de Disponibilidade & Valores</h2>
-            <p style="color:var(--cinza); margin:10px 0;">💡 Clique e arraste para selecionar um período → defina o valor e salve para todos os dias.</p>
-            
+            <h2>📅 Calendário — Valores & Disponibilidade</h2>
+            <p style="color:var(--cinza); margin:10px 0;">💡 Dias em vermelho = reservas confirmadas (bloqueadas). Clique e arraste para definir valores de diária.</p>
             <div class="linha-form">
-                <label style="font-weight:600;">Selecione a Casa:</label>
+                <label style="font-weight:600;">Casa:</label>
                 <select id="casaCalendario">
                     <option value="amarela">🏡 Casa Amarela</option>
                     <option value="bege">🌾 Casa Bege</option>
@@ -166,7 +165,6 @@ body{background:linear-gradient(120deg, #e0f0f5, #fef9ed); color:var(--texto); m
                     <option value="branca">☁️ Casa Branca</option>
                 </select>
             </div>
-
             <div class="calendario">
                 <div class="calendario-cabecalho">
                     <button onclick="mudarMes(-1)">&lt; Mês Anterior</button>
@@ -175,9 +173,8 @@ body{background:linear-gradient(120deg, #e0f0f5, #fef9ed); color:var(--texto); m
                 </div>
                 <div class="calendario-grade" id="gradeCalendario"></div>
             </div>
-
             <div class="linha-form">
-                <label>Valor da Diária (R$):</label>
+                <label>Valor Diária (R$):</label>
                 <input type="number" id="valorDiaria" min="0" step="5" placeholder="0,00">
                 <button class="sucesso" onclick="salvarValorPeriodo()">💾 Salvar</button>
                 <button class="vermelho" onclick="removerValor()">🗑️ Remover</button>
@@ -185,32 +182,46 @@ body{background:linear-gradient(120deg, #e0f0f5, #fef9ed); color:var(--texto); m
             <p id="infoSelecao" style="margin-top:10px; color:var(--cinza);">Nenhum dia selecionado</p>
         </div>
 
+        <!-- Casas com Imgur -->
         <div id="pagina-casas" class="pagina">
-            <h2>🏠 Gerenciar Casas</h2>
-            <p style="color:var(--cinza); margin:10px 0;">Faça upload de fotos e edite as informações.</p>
+            <h2>🏠 Gerenciar Casas e Fotos</h2>
+            <p style="color:var(--cinza); margin:10px 0;">Cole o link direto da imagem do Imgur abaixo de cada casa.</p>
             <div class="grade-casas" id="gradeCasas"></div>
+            <div style="margin-top:25px; padding:15px; background:#f0f9fc; border-radius:8px;">
+                <h4>📷 Como pegar o link no Imgur:</h4>
+                <ol style="margin:10px 20px; font-size:14px; color:var(--texto);">
+                    <li>Acesse <a href="https://imgur.com" target="_blank" style="color:var(--turquesa);">imgur.com</a></li>
+                    <li>Faça upload da foto da casa</li>
+                    <li>Clique na imagem → "Copiar link direto" (terminado em .jpg ou .png)</li>
+                    <li>Cole o link no campo abaixo da casa</li>
+                </ol>
+            </div>
         </div>
 
+        <!-- Hóspedes -->
         <div id="pagina-hospedes" class="pagina">
             <h2>👤 Cadastro de Hóspedes</h2>
             <div class="linha-form">
-                <input type="text" id="buscarHospede" placeholder="Buscar hóspede..." oninput="filtrarHospedes()">
-                <button class="azul" onclick="abrirCadastroHospede()">+ Novo</button>
+                <input type="text" id="buscarHospede" placeholder="Buscar por nome..." oninput="filtrarHospedes()">
+                <button class="azul" onclick="abrirCadastroHospede()">+ Novo Cadastro</button>
             </div>
             <div id="listaHospedes" style="margin-top:20px;"></div>
         </div>
 
+        <!-- Reservas com Botão Confirmar -->
         <div id="pagina-reservas" class="pagina">
-            <h2>📋 Reservas</h2>
-            <div style="display:flex; gap:10px; margin:15px 0;">
+            <h2>📋 Solicitações e Reservas</h2>
+            <div style="display:flex; gap:10px; margin:15px 0; flex-wrap:wrap;">
                 <button data-filtro="todas" class="azul ativo">Todas</button>
                 <button data-filtro="pendente">Pendentes</button>
-                <button data-filtro="parcial">Parcial</button>
-                <button data-filtro="pago">Pagas</button>
+                <button data-filtro="confirmada">✅ Confirmadas</button>
+                <button data-filtro="parcial">Pagamento Parcial</button>
+                <button data-filtro="pago">💰 Pagas</button>
             </div>
             <div id="listaReservas"></div>
         </div>
 
+        <!-- Relatórios -->
         <div id="pagina-relatorios" class="pagina">
             <h2>📊 Relatórios</h2>
             <div style="display:flex; gap:10px; margin:15px 0;">
@@ -223,13 +234,14 @@ body{background:linear-gradient(120deg, #e0f0f5, #fef9ed); color:var(--texto); m
     </div>
 </div>
 
-<!-- Modal de Reserva -->
+<!-- Modal Reserva Público -->
 <div id="modalReserva" class="modal">
     <div class="modal-conteudo">
         <div class="cabecalho-modal">
-            <h3>Solicitar Reserva</h3>
+            <h3>Solicitar Reserva — <span id="nomeCasaReserva"></span></h3>
             <button class="fechar" onclick="fecharModal()">&times;</button>
         </div>
+        <div id="avisoBloqueio" class="aviso-bloqueio">⚠️ Período já reservado ou indisponível!</div>
         <div class="grupo-input">
             <label>Nome Completo</label>
             <input type="text" id="hospedeNome">
@@ -241,26 +253,30 @@ body{background:linear-gradient(120deg, #e0f0f5, #fef9ed); color:var(--texto); m
         <div class="linha-form">
             <div class="grupo-input" style="flex:1;">
                 <label>Data Entrada</label>
-                <input type="date" id="dataEntrada">
+                <input type="date" id="dataEntrada" onchange="verificarDisponibilidade()">
             </div>
             <div class="grupo-input" style="flex:1;">
                 <label>Data Saída</label>
-                <input type="date" id="dataSaida">
+                <input type="date" id="dataSaida" onchange="verificarDisponibilidade()">
             </div>
         </div>
         <div class="grupo-input">
-            <label>Observações</label>
-            <textarea id="obsReserva" rows="3" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px;"></textarea>
+            <label>Valor Estimado</label>
+            <input type="text" id="valorEstimado" readonly style="background:#f9f9f9;">
         </div>
-        <button class="amarelo" onclick="enviarReserva()">📤 Enviar Solicitação</button>
+        <div class="grupo-input">
+            <label>Observações</label>
+            <textarea id="obsReserva" rows="3"></textarea>
+        </div>
+        <button class="amarelo" id="btnEnviarReserva" onclick="enviarReserva()">📤 Enviar Solicitação</button>
     </div>
 </div>
 
-<!-- Modal Editar Reserva -->
+<!-- Modal Editar/Confirmar -->
 <div id="modalEditarReserva" class="modal">
     <div class="modal-conteudo">
         <div class="cabecalho-modal">
-            <h3>Editar Reserva</h3>
+            <h3>Gestão de Reserva</h3>
             <button class="fechar" onclick="fecharModalEditar()">&times;</button>
         </div>
         <div id="conteudoEditar"></div>
@@ -269,7 +285,7 @@ body{background:linear-gradient(120deg, #e0f0f5, #fef9ed); color:var(--texto); m
 
 <script>
 // ==============================================
-// CONFIGURAÇÃO — ALTERE AQUI SE PRECISAR
+// CONFIGURAÇÃO
 // ==============================================
 const firebaseConfig = {
     apiKey: "AIzaSyC8ZtXwPnUa9WnqLdKfYbXzYbXzYbXzYbXzYbXzYbX",
@@ -280,23 +296,20 @@ const firebaseConfig = {
     appId: "1:123456789012:web:abc123def456"
 };
 
-// 🔑 DADOS DE ACESSO — ALTERE AQUI!
 const ADM_USUARIO = 'admin';
-const ADM_SENHA = 'praia2026'; // Troque pela sua senha!
+const ADM_SENHA = 'praia2026'; // Altere sua senha aqui
 
-// Inicializar Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// Dados das Casas
+// Casas com campos para Imgur
 const casas = {
-    amarela: {nome: 'Casa Amarela', desc: 'Janela marrom, com coqueiro na frente', imagem: ''},
-    bege: {nome: 'Casa Bege', desc: 'Com coqueiro na frente e janelas brancas', imagem: ''},
-    marrom: {nome: 'Casa Marrom', desc: 'Madeira com redes coloridas', imagem: ''},
-    branca: {nome: 'Casa Branca', desc: 'Paredes brancas, janelas marrom, ambiente arejado — perto do mar', imagem: ''}
+    amarela: {nome: 'Casa Amarela', desc: 'Janela marrom, com coqueiro na frente', imgurUrl: ''},
+    bege: {nome: 'Casa Bege', desc: 'Com coqueiro na frente e janelas brancas', imgurUrl: ''},
+    marrom: {nome: 'Casa Marrom', desc: 'Madeira com redes coloridas', imgurUrl: ''},
+    branca: {nome: 'Casa Branca', desc: 'Paredes brancas, janelas marrom, ambiente arejado — perto do mar', imgurUrl: ''}
 };
 
-// Variáveis globais
 let dataAtual = new Date();
 let valoresDiarias = {};
 let reservasConfirmadas = [];
@@ -308,20 +321,77 @@ let datasSelecionadas = new Set();
 let casaSelecionadaParaReserva = null;
 
 // ==============================================
-// INICIALIZAÇÃO — PÁGINA PÚBLICA JÁ CARREGA!
+// INICIALIZAÇÃO — PÚBLICA JÁ CARREGA
 // ==============================================
 document.addEventListener('DOMContentLoaded', async () => {
     await carregarValoresDiarias();
     await carregarReservasConfirmadas();
+    await carregarDadosCasas();
     renderizarPaginaPublica();
 });
 
 // ==============================================
+// FUNÇÕES DE BLOQUEIO DE DATAS
+// ==============================================
+function verificarDisponibilidade(){
+    const entrada = document.getElementById('dataEntrada').value;
+    const saida = document.getElementById('dataSaida').value;
+    const aviso = document.getElementById('avisoBloqueio');
+    const btn = document.getElementById('btnEnviarReserva');
+    const valorInput = document.getElementById('valorEstimado');
+    
+    if(!entrada || !saida || !casaSelecionadaParaReserva) return;
+    
+    const bloqueado = verificarPeriodoBloqueado(casaSelecionadaParaReserva, entrada, saida);
+    
+    if(bloqueado){
+        aviso.style.display = 'block';
+        btn.disabled = true; btn.classList.add('cinza');
+        valorInput.value = '';
+        return false;
+    } else {
+        aviso.style.display = 'none';
+        btn.disabled = false; btn.classList.remove('cinza');
+        const valor = calcularValorPeriodo(casaSelecionadaParaReserva, entrada, saida);
+        valorInput.value = 'R$ ' + valor.toFixed(2).replace('.', ',');
+        return true;
+    }
+}
+
+function verificarPeriodoBloqueado(casaId, dataInicioStr, dataFimStr){
+    const inicio = new Date(dataInicioStr);
+    const fim = new Date(dataFimStr);
+    
+    // Verifica se há sobreposição com qualquer reserva CONFIRMADA ou PAGA
+    return reservasConfirmadas.some(r => {
+        if(r.casa !== casaId) return false;
+        if(!['confirmada', 'pago'].includes(r.statusPagamento)) return false;
+        
+        const rInicio = new Date(r.entrada);
+        const rFim = new Date(r.saida);
+        
+        // Lógica de sobreposição: novo período começa antes do fim reserva E termina depois do início reserva
+        return (inicio < rFim) && (fim > rInicio);
+    });
+}
+
+function calcularValorPeriodo(casaId, dataInicioStr, dataFimStr){
+    let total = 0;
+    const inicio = new Date(dataInicioStr);
+    const fim = new Date(dataFimStr);
+    
+    for(let d = new Date(inicio); d < fim; d.setDate(d.getDate() + 1)){
+        const dataStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+        const chave = `${casaId}_${dataStr}`;
+        total += valoresDiarias[chave] || 150; // valor padrão
+    }
+    return total;
+}
+
+// ==============================================
 // LOGIN
 // ==============================================
-function abrirLogin(){
-    document.getElementById('overlayLogin').classList.add('aberto');
-}
+function abrirLogin(){document.getElementById('overlayLogin').classList.add('aberto');}
 function fecharLogin(){
     document.getElementById('overlayLogin').classList.remove('aberto');
     document.getElementById('usuario').value = '';
@@ -349,6 +419,7 @@ async function inicializarPainel(){
     await carregarValoresDiarias();
     await carregarReservasConfirmadas();
     await carregarHospedes();
+    await carregarDadosCasas();
     renderizarCalendario();
     configurarNavegacao();
     renderizarCasasAdmin();
@@ -363,7 +434,7 @@ function renderizarPaginaPublica(){
     container.innerHTML = Object.entries(casas).map(([id, casa]) => `
         <div class="card-casa">
             <div class="card-imagem">
-                ${casa.imagem ? `<img src="${casa.imagem}" alt="${casa.nome}">` : '🏠'}
+                ${casa.imgurUrl ? `<img src="${casa.imgurUrl}" alt="${casa.nome}" onerror="this.parentElement.innerHTML='🏠'">` : '🏠'}
             </div>
             <div class="card-corpo">
                 <h3>${casa.nome}</h3>
@@ -386,12 +457,13 @@ function configurarNavegacao(){
             document.querySelectorAll('.pagina').forEach(p => p.classList.remove('ativa'));
             document.getElementById(paginaId).classList.add('ativa');
             if(paginaId === 'pagina-reservas') atualizarListaReservas();
+            if(paginaId === 'pagina-calendario') renderizarCalendario();
         });
     });
 }
 
 // ==============================================
-// CALENDÁRIO COM SELEÇÃO DE INTERVALO
+// CALENDÁRIO COM BLOQUEIO VISUAL
 // ==============================================
 function mudarMes(delta){
     dataAtual.setMonth(dataAtual.getMonth() + delta);
@@ -426,26 +498,40 @@ function renderizarCalendario(){
         const passou = dataDia < hoje;
         const temValor = valoresDiarias[chave];
         const estaSelecionado = datasSelecionadas.has(dataStr);
+        const estaBloqueado = verificarDiaBloqueado(casaSelecionada, dataStr);
         
         let classes = 'dia';
         if(passou) classes += ' passado';
+        if(estaBloqueado) classes += ' bloqueado';
         if(temValor) classes += ' com-valor';
-        if(estaSelecionado) classes += ' selecionado';
+        if(estaSelecionado && !estaBloqueado) classes += ' selecionado';
         
         grade.innerHTML += `
             <div class="${classes}" 
                  data-data="${dataStr}"
-                 onmousedown="iniciarSelecao('${dataStr}')"
-                 onmouseover="estenderSelecao('${dataStr}')"
+                 ${!estaBloqueado ? `onmousedown="iniciarSelecao('${dataStr}')" onmouseover="estenderSelecao('${dataStr}')"` : ''}
                  onmouseup="finalizarSelecao()">
                 ${dia}
                 ${temValor ? `<div style="font-size:10px; color:var(--sucesso); font-weight:bold;">R$${valoresDiarias[chave]}</div>` : ''}
+                ${estaBloqueado ? `<div style="font-size:9px; color:var(--perigo); font-weight:bold;">BLOQ</div>` : ''}
             </div>
         `;
     }
 }
 
+function verificarDiaBloqueado(casaId, dataStr){
+    return reservasConfirmadas.some(r => {
+        if(r.casa !== casaId) return false;
+        if(!['confirmada', 'pago'].includes(r.statusPagamento)) return false;
+        const dataCheck = new Date(dataStr);
+        const inicio = new Date(r.entrada);
+        const fim = new Date(r.saida);
+        return dataCheck >= inicio && dataCheck < fim;
+    });
+}
+
 function iniciarSelecao(dataStr){
+    if(verificarDiaBloqueado(document.getElementById('casaCalendario').value, dataStr)) return;
     selecionando = true;
     datasSelecionadas.clear();
     datasSelecionadas.add(dataStr);
@@ -455,6 +541,8 @@ function iniciarSelecao(dataStr){
 
 function estenderSelecao(dataStr){
     if(!selecionando) return;
+    const casa = document.getElementById('casaCalendario').value;
+    if(verificarDiaBloqueado(casa, dataStr)) return;
     
     const arr = Array.from(datasSelecionadas).sort();
     const dataInicio = arr.length ? arr[0] : dataStr;
@@ -471,7 +559,9 @@ function estenderSelecao(dataStr){
     let percorrendo = new Date(ordemInicio);
     while(percorrendo <= ordemFim){
         const s = `${percorrendo.getFullYear()}-${String(percorrendo.getMonth()+1).padStart(2,'0')}-${String(percorrendo.getDate()).padStart(2,'0')}`;
-        datasSelecionadas.add(s);
+        if(!verificarDiaBloqueado(casa, s)){
+            datasSelecionadas.add(s);
+        }
         percorrendo.setDate(percorrendo.getDate() + 1);
     }
     
@@ -479,10 +569,7 @@ function estenderSelecao(dataStr){
     renderizarCalendario();
 }
 
-function finalizarSelecao(){
-    selecionando = false;
-}
-
+function finalizarSelecao(){selecionando = false;}
 document.addEventListener('mouseup', finalizarSelecao);
 
 function atualizarInfoSelecao(){
@@ -502,14 +589,8 @@ function formatarDataBr(dataStr){
 
 async function salvarValorPeriodo(){
     const valor = parseFloat(document.getElementById('valorDiaria').value);
-    if(isNaN(valor) || valor <= 0){
-        alert('⚠️ Digite um valor válido!');
-        return;
-    }
-    if(datasSelecionadas.size === 0){
-        alert('⚠️ Selecione os dias no calendário!');
-        return;
-    }
+    if(isNaN(valor) || valor <= 0){alert('⚠️ Digite um valor válido!'); return;}
+    if(datasSelecionadas.size === 0){alert('⚠️ Selecione os dias no calendário!'); return;}
     
     const casa = document.getElementById('casaCalendario').value;
     const lote = db.batch();
@@ -518,21 +599,17 @@ async function salvarValorPeriodo(){
         const chave = `${casa}_${dataStr}`;
         valoresDiarias[chave] = valor;
         lote.set(db.collection('valores').doc(chave), {
-            casa, data: dataStr, valor,
-            atualizadoEm: firebase.firestore.Timestamp.now()
+            casa, data: dataStr, valor, atualizadoEm: firebase.firestore.Timestamp.now()
         });
     });
     
     await lote.commit();
-    alert(`✅ Valor aplicado para ${datasSelecionadas.size} dia(s)!`);
+    alert(`✅ Valor R$ ${valor.toFixed(2).replace('.', ',')} aplicado para ${datasSelecionadas.size} dia(s)!`);
     limparSelecao();
 }
 
 async function removerValor(){
-    if(datasSelecionadas.size === 0){
-        alert('⚠️ Selecione os dias!');
-        return;
-    }
+    if(datasSelecionadas.size === 0){alert('⚠️ Selecione os dias!'); return;}
     if(!confirm(`Remover valor de ${datasSelecionadas.size} dia(s)?`)) return;
     
     const casa = document.getElementById('casaCalendario').value;
@@ -559,20 +636,27 @@ function limparSelecao(){
 async function carregarValoresDiarias(){
     const snap = await db.collection('valores').get();
     valoresDiarias = {};
-    snap.forEach(doc => {
-        valoresDiarias[doc.id] = doc.data().valor;
-    });
+    snap.forEach(doc => {valoresDiarias[doc.id] = doc.data().valor;});
 }
 
 // ==============================================
-// RESERVAS
+// RESERVAS — PÚBLICO
 // ==============================================
 function abrirModalReserva(casaId){
     casaSelecionadaParaReserva = casaId;
+    document.getElementById('nomeCasaReserva').textContent = casas[casaId].nome;
     document.getElementById('modalReserva').classList.add('aberto');
+    document.getElementById('avisoBloqueio').style.display = 'none';
+    document.getElementById('btnEnviarReserva').disabled = false;
 }
 function fecharModal(){
     document.getElementById('modalReserva').classList.remove('aberto');
+    document.getElementById('hospedeNome').value = '';
+    document.getElementById('hospedeTelefone').value = '';
+    document.getElementById('dataEntrada').value = '';
+    document.getElementById('dataSaida').value = '';
+    document.getElementById('valorEstimado').value = '';
+    document.getElementById('obsReserva').value = '';
 }
 
 async function enviarReserva(){
@@ -582,39 +666,23 @@ async function enviarReserva(){
     const saida = document.getElementById('dataSaida').value;
     const obs = document.getElementById('obsReserva').value.trim();
     
-    if(!nome || !entrada || !saida){
-        alert('⚠️ Preencha nome, entrada e saída!');
-        return;
-    }
+    if(!nome || !entrada || !saida){alert('⚠️ Preencha nome, entrada e saída!'); return;}
     
+    // Verificação final
+    if(!verificarDisponibilidade()){alert('❌ Este período já está reservado! Escolha outras datas.'); return;}
+    
+    const valorTotal = calcularValorPeriodo(casaSelecionadaParaReserva, entrada, saida);
     const dias = calcularDias(new Date(entrada), new Date(saida));
-    let total = 0;
-    const [anoE, mesE, diaE] = entrada.split('-').map(Number);
-    const dataInicio = new Date(anoE, mesE-1, diaE);
-    const [anoS, mesS, diaS] = saida.split('-').map(Number);
-    const dataFim = new Date(anoS, mesS-1, diaS);
-    
-    for(let d = new Date(dataInicio); d < dataFim; d.setDate(d.getDate() + 1)){
-        const dataStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-        const chave = `${casaSelecionadaParaReserva}_${dataStr}`;
-        total += valoresDiarias[chave] || 150;
-    }
     
     await db.collection('reservas').add({
         casa: casaSelecionadaParaReserva,
         nome, telefone, entrada, saida, observacao: obs,
-        dias, valorTotal: total, valorPago: 0, statusPagamento: 'pendente',
+        dias, valorTotal, valorPago: 0, statusPagamento: 'pendente',
         criadoEm: firebase.firestore.Timestamp.now()
     });
     
-    alert('✅ Solicitação enviada! Obrigado!');
+    alert('✅ Solicitação enviada com sucesso! Obrigado!');
     fecharModal();
-    document.getElementById('hospedeNome').value = '';
-    document.getElementById('hospedeTelefone').value = '';
-    document.getElementById('dataEntrada').value = '';
-    document.getElementById('dataSaida').value = '';
-    document.getElementById('obsReserva').value = '';
-    
     await carregarReservasConfirmadas();
 }
 
@@ -623,6 +691,9 @@ function calcularDias(inicio, fim){
     return Math.round(Math.abs((fim - inicio) / msPorDia));
 }
 
+// ==============================================
+// RESERVAS — ADMINISTRATIVO COM BOTÃO CONFIRMAR
+// ==============================================
 async function carregarReservasConfirmadas(){
     const snap = await db.collection('reservas').orderBy('criadoEm', 'desc').get();
     reservasConfirmadas = snap.docs.map(d => ({id:d.id, ...d.data()}));
@@ -640,7 +711,9 @@ function atualizarListaReservas(){
         return;
     }
     
-    lista.innerHTML = filtradas.map(r => `
+    lista.innerHTML = filtradas.map(r => {
+        const bloqueada = ['confirmada', 'pago'].includes(r.statusPagamento);
+        return `
         <div class="reserva-item">
             <h4>${casas[r.casa]?.nome || 'Casa'}</h4>
             <p><strong>Hóspede:</strong> ${r.nome}</p>
@@ -650,12 +723,29 @@ function atualizarListaReservas(){
             <p><strong>Pago:</strong> R$ ${(r.valorPago || 0).toFixed(2).replace('.', ',')}</p>
             <p><strong>A Receber:</strong> R$ ${((r.valorTotal || 0) - (r.valorPago || 0)).toFixed(2).replace('.', ',')}</p>
             <span class="status-badge status-${r.statusPagamento}">${(r.statusPagamento || 'pendente').toUpperCase()}</span>
-            <div style="display:flex; gap:8px; margin-top:10px;">
-                <button class="azul" onclick="abrirEditarReserva('${r.id}')">✏️ Editar</button>
+            ${bloqueada ? '<span style="color:var(--sucesso); font-size:13px;">🔒 Datas bloqueadas no site público</span>' : ''}
+            <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;">
+                ${r.statusPagamento === 'pendente' ? `<button class="sucesso" onclick="confirmarReserva('${r.id}')">✅ Confirmar & Bloquear Datas</button>` : ''}
+                <button class="azul" onclick="abrirEditarReserva('${r.id}')">✏️ Gerenciar Pagamento</button>
                 <button class="vermelho" onclick="excluirReserva('${r.id}')">🗑️ Excluir</button>
             </div>
         </div>
-    `).join('');
+    `;
+    }).join('');
+}
+
+// ✅ BOTÃO CONFIRMAR RESERVA — BLOQUEIA DATAS
+async function confirmarReserva(reservaId){
+    if(!confirm('✅ Confirmar reserva? As datas serão BLOQUEADAS no site público!')) return;
+    
+    await db.collection('reservas').doc(reservaId).update({
+        statusPagamento: 'confirmada',
+        confirmadaEm: firebase.firestore.Timestamp.now()
+    });
+    
+    await carregarReservasConfirmadas();
+    renderizarCalendario();
+    alert('✅ Reserva CONFIRMADA! Datas bloqueadas para o público!');
 }
 
 function abrirEditarReserva(id){
@@ -668,16 +758,17 @@ function abrirEditarReserva(id){
         <p><strong>Período:</strong> ${r.entrada} → ${r.saida}</p>
         <p><strong>Valor Total:</strong> R$ ${(r.valorTotal || 0).toFixed(2).replace('.', ',')}</p>
         <hr style="margin:15px 0;">
-        <h4>Atualizar Pagamento</h4>
+        <h4>Atualizar Status & Pagamento</h4>
         <div class="linha-form">
-            <input type="number" id="novoValorPago" value="${r.valorPago || 0}" min="0" step="10">
+            <input type="number" id="novoValorPago" value="${r.valorPago || 0}" min="0" step="10" placeholder="Valor pago">
             <select id="novoStatus">
                 <option value="pendente" ${r.statusPagamento==='pendente'?'selected':''}>Pendente</option>
-                <option value="parcial" ${r.statusPagamento==='parcial'?'selected':''}>Parcial</option>
-                <option value="pago" ${r.statusPagamento==='pago'?'selected':''}>Pago</option>
+                <option value="confirmada" ${r.statusPagamento==='confirmada'?'selected':''}>✅ Confirmada (Bloquear datas)</option>
+                <option value="parcial" ${r.statusPagamento==='parcial'?'selected':''}>Pagamento Parcial</option>
+                <option value="pago" ${r.statusPagamento==='pago'?'selected':''}>💰 Pago (Bloquear datas)</option>
             </select>
         </div>
-        <button class="sucesso" onclick="salvarEdicao('${id}')">💾 Salvar</button>
+        <button class="sucesso" onclick="salvarEdicao('${id}')" style="margin-top:10px;">💾 Salvar Alterações</button>
     `;
     document.getElementById('modalEditarReserva').classList.add('aberto');
 }
@@ -696,15 +787,59 @@ async function salvarEdicao(id){
     });
     
     await carregarReservasConfirmadas();
+    renderizarCalendario();
     fecharModalEditar();
-    alert('✅ Atualizado!');
+    alert('✅ Atualizado! As datas são bloqueadas automaticamente para status "Confirmada" e "Pago".');
 }
 
 async function excluirReserva(id){
-    if(!confirm('Tem certeza?')) return;
+    if(!confirm('Tem certeza? Esta ação libera as datas!')) return;
     await db.collection('reservas').doc(id).delete();
     await carregarReservasConfirmadas();
-    alert('✅ Excluído!');
+    renderizarCalendario();
+    alert('✅ Excluído! As datas foram liberadas.');
+}
+
+// ==============================================
+// IMGUR — GERENCIAR FOTOS DAS CASAS
+// ==============================================
+async function carregarDadosCasas(){
+    const doc = await db.collection('configuracoes').doc('casas').get();
+    if(doc.exists && doc.data().casas){
+        Object.assign(casas, doc.data().casas);
+    }
+}
+
+function renderizarCasasAdmin(){
+    const container = document.getElementById('gradeCasas');
+    container.innerHTML = Object.entries(casas).map(([id, casa]) => `
+        <div class="card-casa">
+            <div class="card-imagem">
+                ${casa.imgurUrl ? `<img src="${casa.imgurUrl}" alt="${casa.nome}" onerror="this.parentElement.innerHTML='🏠'">` : '🏠'}
+            </div>
+            <div class="card-corpo">
+                <h3>${casa.nome}</h3>
+                <p style="font-size:13px; color:var(--cinza); margin-bottom:10px;">${casa.desc}</p>
+                <label style="font-size:13px; font-weight:600;">Link da imagem (Imgur):</label>
+                <input type="url" class="input-imgur" id="imgur-${id}" value="${casa.imgurUrl || ''}" placeholder="https://i.imgur.com/xxxxxx.jpg">
+                <button class="azul" style="margin-top:8px; width:100%;" onclick="salvarImgur('${id}')">💾 Salvar Foto</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+async function salvarImgur(casaId){
+    const url = document.getElementById(`imgur-${casaId}`).value.trim();
+    if(!url){alert('⚠️ Cole o link da imagem!'); return;}
+    if(!url.includes('imgur.com')){alert('ℹ️ O link deve ser do Imgur (ex: i.imgur.com/abc.jpg)');}
+    
+    casas[casaId].imgurUrl = url;
+    
+    await db.collection('configuracoes').doc('casas').set({ casas }, { merge: true });
+    
+    alert(`✅ Foto da ${casas[casaId].nome} atualizada!`);
+    renderizarCasasAdmin();
+    renderizarPaginaPublica();
 }
 
 // ==============================================
@@ -775,62 +910,47 @@ function gerarRelatorio(){
 }
 
 // ==============================================
-// CASAS E HÓSPEDES
+// CADASTRO DE HÓSPEDES
 // ==============================================
-function renderizarCasasAdmin(){
-    const container = document.getElementById('gradeCasas');
-    container.innerHTML = Object.entries(casas).map(([id, casa]) => `
-        <div class="card-casa">
-            <div class="card-imagem">
-                ${casa.imagem ? `<img src="${casa.imagem}">` : '🏠'}
-            </div>
-            <div class="card-corpo">
-                <h3>${casa.nome}</h3>
-                <p>${casa.desc}</p>
-                <input type="file" accept="image/*" onchange="carregarFoto(event, '${id}')" style="margin-top:10px;">
-            </div>
-        </div>
-    `).join('');
-}
-
-function carregarFoto(event, casaId){
-    const arq = event.target.files[0];
-    if(!arq) return;
-    const leitor = new FileReader();
-    leitor.onload = async e => {
-        casas[casaId].imagem = e.target.result;
-        await db.collection('configuracoes').doc('dados').set({casas}, {merge:true});
-        renderizarCasasAdmin();
-        renderizarPaginaPublica();
-        alert('✅ Foto atualizada!');
-    };
-    leitor.readAsDataURL(arq);
-}
-
 async function carregarHospedes(){
     const snap = await db.collection('hospedes').orderBy('nome').get();
     hospedesCadastrados = snap.docs.map(d => ({id:d.id, ...d.data()}));
 }
 
 function abrirCadastroHospede(){
-    const nome = prompt('Nome completo:');
+    const nome = prompt('Nome completo do hóspede:');
     if(!nome) return;
-    const telefone = prompt('Telefone:');
+    const telefone = prompt('Telefone com WhatsApp:');
+    if(!telefone) return;
+    
     db.collection('hospedes').add({
-        nome, telefone,
+        nome: nome.trim(),
+        telefone: telefone.trim(),
         cadastradoEm: firebase.firestore.Timestamp.now()
     }).then(() => {
-        alert('✅ Cadastrado!');
+        alert('✅ Hóspede cadastrado com sucesso!');
         carregarHospedes();
+    }).catch(err => {
+        alert('❌ Erro ao cadastrar: ' + err.message);
     });
 }
 
 function filtrarHospedes(){
-    const termo = document.getElementById('buscarHospede').value.toLowerCase();
-    const lista = hospedesCadastrados.filter(h => h.nome.toLowerCase().includes(termo));
-    document.getElementById('listaHospedes').innerHTML = lista.length 
-        ? lista.map(h => `<div style="padding:10px 0; border-bottom:1px solid #ddd;"><strong>${h.nome}</strong><br>📞 ${h.telefone || 'Não informado'}</div>`).join('')
-        : '<p style="color:var(--cinza);">Nenhum encontrado.</p>';
+    const termo = document.getElementById('buscarHospede').value.toLowerCase().trim();
+    const listaFiltrada = hospedesCadastrados.filter(h => 
+        h.nome.toLowerCase().includes(termo) || 
+        (h.telefone && h.telefone.includes(termo))
+    );
+    
+    const container = document.getElementById('listaHospedes');
+    container.innerHTML = listaFiltrada.length 
+        ? listaFiltrada.map(h => `
+            <div style="padding:12px 0; border-bottom:1px solid #ddd;">
+                <strong>${h.nome}</strong><br>
+                📞 ${h.telefone || 'Não informado'}
+            </div>
+        `).join('')
+        : '<p style="color:var(--cinza); padding:10px;">Nenhum hóspede encontrado.</p>';
 }
 </script>
 </body>
