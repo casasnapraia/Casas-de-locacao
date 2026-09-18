@@ -1128,6 +1128,24 @@ textarea{
 
 
 /* =========================
+   FORMULÁRIO DE HÓSPEDES
+========================= */
+.grade-formulario{
+ display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:0 14px;
+}
+
+@media(max-width:600px){
+ .grade-formulario{
+  grid-template-columns:1fr;
+ }
+ .grade-formulario .grupo-input{
+  grid-column:1/-1!important;
+ }
+}
+
+/* =========================
    RESPONSIVO
 ========================= */
 
@@ -1689,7 +1707,7 @@ textarea{
  <div class="linha-form">
 
   <input id="buscarHospede"
-   placeholder="Buscar nome ou telefone..."
+   placeholder="Buscar nome, telefone, CPF ou e-mail..."
    oninput="filtrarHospedes()">
 
   <button class="azul"
@@ -2089,6 +2107,104 @@ textarea{
  <div id="conteudoEditar"></div>
 
 </div>
+
+</div>
+
+<!-- =====================================================
+     MODAL CADASTRO / EDIÇÃO DE HÓSPEDE
+===================================================== -->
+
+<div id="modalHospede" class="modal">
+
+ <div class="modal-conteudo">
+
+  <div class="cabecalho-modal">
+
+   <h3 id="tituloModalHospede">Novo Cadastro de Hóspede</h3>
+
+   <button class="fechar" onclick="fecharModalHospede()">
+    ×
+   </button>
+
+  </div>
+
+  <input type="hidden" id="hospedeEdicaoId">
+
+  <div class="grade-formulario">
+
+   <div class="grupo-input" style="grid-column:1/-1">
+    <label>Nome completo *</label>
+    <input id="cadHospedeNome" type="text" autocomplete="name">
+   </div>
+
+   <div class="grupo-input">
+    <label>Telefone *</label>
+    <input id="cadHospedeTelefone" type="tel" autocomplete="tel">
+   </div>
+
+   <div class="grupo-input">
+    <label>E-mail</label>
+    <input id="cadHospedeEmail" type="email" autocomplete="email">
+   </div>
+
+   <div class="grupo-input">
+    <label>CPF</label>
+    <input id="cadHospedeCpf" type="text" inputmode="numeric">
+   </div>
+
+   <div class="grupo-input">
+    <label>Data de nascimento</label>
+    <input id="cadHospedeNascimento" type="date">
+   </div>
+
+   <div class="grupo-input">
+    <label>CEP</label>
+    <input id="cadHospedeCep" type="text" inputmode="numeric">
+   </div>
+
+   <div class="grupo-input" style="grid-column:span 2">
+    <label>Endereço</label>
+    <input id="cadHospedeEndereco" type="text" autocomplete="street-address">
+   </div>
+
+   <div class="grupo-input">
+    <label>Número</label>
+    <input id="cadHospedeNumero" type="text">
+   </div>
+
+   <div class="grupo-input">
+    <label>Complemento</label>
+    <input id="cadHospedeComplemento" type="text">
+   </div>
+
+   <div class="grupo-input">
+    <label>Bairro</label>
+    <input id="cadHospedeBairro" type="text">
+   </div>
+
+   <div class="grupo-input">
+    <label>Cidade</label>
+    <input id="cadHospedeCidade" type="text" autocomplete="address-level2">
+   </div>
+
+   <div class="grupo-input">
+    <label>Estado</label>
+    <input id="cadHospedeEstado" type="text" maxlength="2" placeholder="SC">
+   </div>
+
+   <div class="grupo-input" style="grid-column:1/-1">
+    <label>Observações</label>
+    <textarea id="cadHospedeObservacoes" rows="3" placeholder="Informações adicionais sobre o hóspede..."></textarea>
+   </div>
+
+  </div>
+
+  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:10px">
+   <button type="button" class="cinza" onclick="fecharModalHospede()">Cancelar</button>
+   <button type="button" class="sucesso" onclick="salvarHospedeFormulario()">💾 Salvar Cadastro</button>
+  </div>
+
+ </div>
 
 </div>
 
@@ -7200,263 +7316,201 @@ function gerarRelatorio(){
    HÓSPEDES
 ===================================================== */
 
-async function cadastrarOuAtualizarHospede(
- nome,
- telefone
-){
+function obterDadosFormularioHospede(){
+ return {
+  nome:$('cadHospedeNome').value.trim(),
+  telefone:$('cadHospedeTelefone').value.trim(),
+  email:$('cadHospedeEmail').value.trim(),
+  cpf:$('cadHospedeCpf').value.trim(),
+  nascimento:$('cadHospedeNascimento').value||'',
+  cep:$('cadHospedeCep').value.trim(),
+  endereco:$('cadHospedeEndereco').value.trim(),
+  numero:$('cadHospedeNumero').value.trim(),
+  complemento:$('cadHospedeComplemento').value.trim(),
+  bairro:$('cadHospedeBairro').value.trim(),
+  cidade:$('cadHospedeCidade').value.trim(),
+  estado:$('cadHospedeEstado').value.trim().toUpperCase(),
+  observacoes:$('cadHospedeObservacoes').value.trim()
+ };
+}
 
- const n=
-  normalizar(nome);
+async function cadastrarOuAtualizarHospede(nome,telefone,extras={}){
 
+ const n=normalizar(nome);
  if(!n)return;
 
+ const q=await db.collection('hospedes')
+  .where('nomeNormalizado','==',n)
+  .limit(1)
+  .get();
 
- const q=
-  await db.collection('hospedes')
-   .where(
-    'nomeNormalizado',
-    '==',
-    n
-   )
-   .limit(1)
-   .get();
-
-
- if(q.empty){
-
-  await db.collection('hospedes')
-   .add({
-
-    nome,
-    telefone,
-    nomeNormalizado:n,
-
-    cadastradoEm:
-     firebase.firestore.FieldValue
-      .serverTimestamp(),
-
-    atualizadoEm:
-     firebase.firestore.FieldValue
-      .serverTimestamp()
-
-   });
-
- }else{
-
-  await q.docs[0].ref.update({
-
-   nome,
-   telefone,
-
-   atualizadoEm:
-    firebase.firestore.FieldValue
-     .serverTimestamp()
-
-  });
-
- }
-
-}
-
-
-async function carregarHospedes(){
-
- hospedesCadastrados=[];
-
- const s=
-  await db.collection('hospedes')
-   .orderBy('nome')
-   .get();
-
-
- s.forEach(d=>
-  hospedesCadastrados.push({
-   id:d.id,
-   ...d.data()
-  })
- );
-
-
- filtrarHospedes();
-
-}
-
-
-function filtrarHospedes(){
-
- const el=$('listaHospedes');
-
- if(!el)return;
-
-
- const q=
-  normalizar(
-   $('buscarHospede')
-    ?.value||''
-  );
-
-
- const arr=
-  hospedesCadastrados.filter(h=>
-   !q ||
-   normalizar(h.nome)
-    .includes(q) ||
-   String(h.telefone||'')
-    .includes(q)
-  );
-
-
- el.innerHTML=
-  arr.length
-   ?arr.map(h=>`
-
-    <div class="reserva-item">
-
-     <strong>
-      👤 ${h.nome}
-     </strong>
-
-     <p>
-      📱 ${h.telefone||'—'}
-     </p>
-
-     <button
-      class="azul"
-      onclick="editarHospede('${h.id}')">
-
-      ✏️ Editar
-
-     </button>
-
-    </div>
-
-   `).join('')
-   :`
-    <p style="color:var(--cinza)">
-     Nenhum hóspede encontrado.
-    </p>
-   `;
-
-}
-
-
-function abrirCadastroHospede(){
-
- const nome=
-  prompt(
-   'Nome completo:'
-  );
-
- if(!nome)return;
-
-
- const telefone=
-  prompt(
-   'Telefone:'
-  );
-
- if(!telefone)return;
-
-
- cadastrarOuAtualizarHospede(
+ const dados={
   nome,
-  telefone
- )
- .then(carregarHospedes)
- .catch(e=>{
+  telefone,
+  nomeNormalizado:n,
+  atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()
+ };
 
-  console.error(e);
-
-  alert(
-   '❌ Erro ao cadastrar.'
-  );
-
+ // Os campos complementares só são enviados quando informados.
+ // Assim, a sincronização das reservas públicas não apaga dados
+ // que já foram preenchidos manualmente no cadastro do hóspede.
+ Object.keys(extras||{}).forEach(k=>{
+  if(extras[k]!==undefined && extras[k]!==null && String(extras[k]).trim()!=='')
+   dados[k]=extras[k];
  });
 
-}
-
-
-async function editarHospede(id){
-
- const h=
-  hospedesCadastrados.find(
-   x=>x.id===id
-  );
-
- if(!h)return;
-
-
- const nome=
-  prompt(
-   'Nome:',
-   h.nome
-  );
-
- if(!nome)return;
-
-
- const telefone=
-  prompt(
-   'Telefone:',
-   h.telefone||''
-  );
-
-
- await db.collection('hospedes')
-  .doc(id)
-  .update({
-
-   nome,
-   telefone,
-
-   nomeNormalizado:
-    normalizar(nome),
-
-   atualizadoEm:
-    firebase.firestore.FieldValue
-     .serverTimestamp()
-
-  });
-
-
- await carregarHospedes();
-
-}
-
-
-async function sincronizarHospedesReservas(){
-
- for(
-  const r of reservasConfirmadas
- ){
-
-  if(r.nome){
-
-   try{
-
-    await cadastrarOuAtualizarHospede(
-     r.nome,
-     r.telefone||''
-    );
-
-   }catch(e){
-
-    console.error(e);
-
-   }
-
-  }
-
+ if(q.empty){
+  dados.cadastradoEm=firebase.firestore.FieldValue.serverTimestamp();
+  await db.collection('hospedes').add(dados);
+ }else{
+  await q.docs[0].ref.update(dados);
  }
+}
 
+async function carregarHospedes(){
+ hospedesCadastrados=[];
+ const s=await db.collection('hospedes').orderBy('nome').get();
+ s.forEach(d=>hospedesCadastrados.push({id:d.id,...d.data()}));
+ filtrarHospedes();
+}
 
- await carregarHospedes();
+function filtrarHospedes(){
+ const el=$('listaHospedes');
+ if(!el)return;
 
-
- alert(
-  '✅ Sincronização concluída!'
+ const q=normalizar($('buscarHospede')?.value||'');
+ const arr=hospedesCadastrados.filter(h=>
+  !q ||
+  normalizar(h.nome).includes(q) ||
+  String(h.telefone||'').includes(q) ||
+  normalizar(h.email).includes(q) ||
+  String(h.cpf||'').includes(q)
  );
 
+ el.innerHTML=arr.length
+  ?arr.map(h=>`
+   <div class="reserva-item">
+    <strong>👤 ${h.nome}</strong>
+    <p>📱 ${h.telefone||'—'} ${h.email?` · ✉️ ${h.email}`:''}</p>
+    ${h.cpf?`<p>🪪 CPF: ${h.cpf}</p>`:''}
+    ${h.cidade||h.estado?`<p>📍 ${[h.cidade,h.estado].filter(Boolean).join(' - ')}</p>`:''}
+    <button class="azul" onclick="editarHospede('${h.id}')">✏️ Editar Cadastro</button>
+   </div>
+  `).join('')
+  :`<p style="color:var(--cinza)">Nenhum hóspede encontrado.</p>`;
+}
+
+function limparFormularioHospede(){
+ ['hospedeEdicaoId','cadHospedeNome','cadHospedeTelefone','cadHospedeEmail','cadHospedeCpf','cadHospedeNascimento','cadHospedeCep','cadHospedeEndereco','cadHospedeNumero','cadHospedeComplemento','cadHospedeBairro','cadHospedeCidade','cadHospedeEstado','cadHospedeObservacoes']
+  .forEach(id=>{if($(id))$(id).value='';});
+}
+
+function preencherFormularioHospede(h={}){
+ $('hospedeEdicaoId').value=h.id||'';
+ $('cadHospedeNome').value=h.nome||'';
+ $('cadHospedeTelefone').value=h.telefone||'';
+ $('cadHospedeEmail').value=h.email||'';
+ $('cadHospedeCpf').value=h.cpf||'';
+ $('cadHospedeNascimento').value=h.nascimento||'';
+ $('cadHospedeCep').value=h.cep||'';
+ $('cadHospedeEndereco').value=h.endereco||'';
+ $('cadHospedeNumero').value=h.numero||'';
+ $('cadHospedeComplemento').value=h.complemento||'';
+ $('cadHospedeBairro').value=h.bairro||'';
+ $('cadHospedeCidade').value=h.cidade||'';
+ $('cadHospedeEstado').value=h.estado||'';
+ $('cadHospedeObservacoes').value=h.observacoes||'';
+}
+
+function abrirCadastroHospede(){
+ limparFormularioHospede();
+ $('tituloModalHospede').textContent='Novo Cadastro de Hóspede';
+ $('modalHospede').classList.add('aberto');
+ setTimeout(()=>$('cadHospedeNome')?.focus(),100);
+}
+
+async function editarHospede(id){
+ const h=hospedesCadastrados.find(x=>x.id===id);
+ if(!h)return;
+ preencherFormularioHospede(h);
+ $('tituloModalHospede').textContent='Editar Cadastro de Hóspede';
+ $('modalHospede').classList.add('aberto');
+ setTimeout(()=>$('cadHospedeNome')?.focus(),100);
+}
+
+function fecharModalHospede(){
+ $('modalHospede')?.classList.remove('aberto');
+}
+
+async function salvarHospedeFormulario(){
+ const dados=obterDadosFormularioHospede();
+ const id=$('hospedeEdicaoId').value;
+
+ if(!dados.nome || !dados.telefone)
+  return alert('⚠️ Informe pelo menos o nome completo e o telefone.');
+
+ try{
+  const btn=document.querySelector('#modalHospede button.sucesso');
+  if(btn){btn.disabled=true;btn.innerText='⏳ Salvando...';}
+
+  const payload={
+   nome:dados.nome,
+   telefone:dados.telefone,
+   email:dados.email,
+   cpf:dados.cpf,
+   nascimento:dados.nascimento,
+   cep:dados.cep,
+   endereco:dados.endereco,
+   numero:dados.numero,
+   complemento:dados.complemento,
+   bairro:dados.bairro,
+   cidade:dados.cidade,
+   estado:dados.estado,
+   observacoes:dados.observacoes,
+   nomeNormalizado:normalizar(dados.nome),
+   atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()
+  };
+
+  if(id){
+   await db.collection('hospedes').doc(id).update(payload);
+  }else{
+   // Evita criar outro cadastro para o mesmo nome normalizado.
+   const q=await db.collection('hospedes')
+    .where('nomeNormalizado','==',payload.nomeNormalizado)
+    .limit(1).get();
+   if(q.empty){
+    payload.cadastradoEm=firebase.firestore.FieldValue.serverTimestamp();
+    await db.collection('hospedes').add(payload);
+   }else{
+    await q.docs[0].ref.update(payload);
+   }
+  }
+
+  await carregarHospedes();
+  fecharModalHospede();
+  alert('✅ Cadastro de hóspede salvo com sucesso!');
+
+ }catch(e){
+  console.error(e);
+  alert('❌ Erro ao salvar o cadastro do hóspede.');
+ }finally{
+  const btn=document.querySelector('#modalHospede button.sucesso');
+  if(btn){btn.disabled=false;btn.innerText='💾 Salvar Cadastro';}
+ }
+}
+
+async function sincronizarHospedesReservas(){
+ for(const r of reservasConfirmadas){
+  if(r.nome){
+   try{
+    await cadastrarOuAtualizarHospede(r.nome,r.telefone||'');
+   }catch(e){
+    console.error(e);
+   }
+  }
+ }
+ await carregarHospedes();
+ alert('✅ Sincronização concluída!');
 }
 
 
