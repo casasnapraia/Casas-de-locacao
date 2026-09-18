@@ -2003,6 +2003,17 @@ textarea{
 
  <div class="grupo-input">
 
+  <label>Desconto por quantidade de diárias</label>
+
+  <strong id="valorDescontoReserva">
+   Sem desconto
+  </strong>
+
+ </div>
+
+
+ <div class="grupo-input">
+
   <label>Valor Total</label>
 
   <input id="valorEstimado"
@@ -4075,6 +4086,13 @@ async function verificarDisponibilidade(){
  const taxa=
   Number(casas[c].taxaLimpeza||0);
 
+ const calculoFinal=
+  calcularValorFinalReserva(
+   x.dias,
+   x.valor,
+   taxa
+  );
+
 
  $('avisoBloqueio')
   .style.display=
@@ -4113,8 +4131,16 @@ async function verificarDisponibilidade(){
 
  $('valorEstimado').value=
   x.dias
-   ?moeda(x.valor+taxa)
+   ?moeda(calculoFinal.total)
    :'';
+
+ const campoDesconto=$('valorDescontoReserva');
+ if(campoDesconto){
+  campoDesconto.textContent=
+   calculoFinal.percentualDesconto>0
+    ?`-${moeda(calculoFinal.desconto)} (${calculoFinal.percentualDesconto}% de desconto)`
+    :'Sem desconto';
+ }
 
 }
 
@@ -4158,6 +4184,7 @@ function obterDadosReservaWhatsApp(){
 
  const calc=calcularValorDiariasLocal(casaId,entrada,saida);
  const taxa=Number(casas[casaId].taxaLimpeza||0);
+ const calculoFinal=calcularValorFinalReserva(calc.dias,calc.valor,taxa);
 
  return{
   ok:true,
@@ -4172,7 +4199,9 @@ function obterDadosReservaWhatsApp(){
   dias:calc.dias,
   valorDiarias:calc.valor,
   taxa,
-  total:calc.valor+taxa
+  desconto:calculoFinal.desconto,
+  percentualDesconto:calculoFinal.percentualDesconto,
+  total:calculoFinal.total
  };
 }
 
@@ -4204,6 +4233,7 @@ function enviarReservaWhatsApp(numero){
   '',
   `💰 *Valor das diárias:* ${moeda(dados.valorDiarias)}`,
   `🧹 *Taxa de limpeza:* ${moeda(dados.taxa)}`,
+  ...(dados.percentualDesconto>0 ? [`🏷️ *Desconto:* ${dados.percentualDesconto}% (-${moeda(dados.desconto)})`] : []),
   `💵 *Valor total:* ${moeda(dados.total)}`,
   '',
   `📝 *Observações:* ${dados.observacoes||'Nenhuma'}`
@@ -4258,6 +4288,8 @@ async function enviarNotificacaoEmailReserva(dados){
    taxa_limpeza:dados.taxaLimpeza||0,
 
    desconto:dados.desconto||0,
+   percentualDesconto:dados.percentualDesconto||0,
+   percentual_desconto:dados.percentualDesconto||0,
    acrescimoValor:dados.acrescimoValor||0,
 
    valorTotal:dados.valorTotal||0,
@@ -4401,6 +4433,13 @@ async function enviarReserva(){
  const taxa=
   Number(casas[c].taxaLimpeza||0);
 
+ const calculoFinal=
+  calcularValorFinalReserva(
+   calc.dias,
+   calc.valor,
+   taxa
+  );
+
 
  try{
 
@@ -4424,11 +4463,12 @@ async function enviarReserva(){
    valorDiarias:calc.valor,
    taxaLimpeza:taxa,
 
-   desconto:0,
+   desconto:calculoFinal.desconto,
+   percentualDesconto:calculoFinal.percentualDesconto,
    acrescimoValor:0,
 
    valorTotal:
-    calc.valor+taxa,
+    calculoFinal.total,
 
    valorPago:0,
 
@@ -4458,9 +4498,10 @@ async function enviarReserva(){
    dias:calc.dias,
    valorDiarias:calc.valor,
    taxaLimpeza:taxa,
-   desconto:0,
+   desconto:calculoFinal.desconto,
+   percentualDesconto:calculoFinal.percentualDesconto,
    acrescimoValor:0,
-   valorTotal:calc.valor+taxa,
+   valorTotal:calculoFinal.total,
    valorPago:0,
    status:'pendente',
    observacao:obs,
@@ -6079,21 +6120,28 @@ async function recalcularTotalEdicao(){
   );
 
 
- const desconto=
-  Number(
-   $('editDesconto').value||0
-  );
-
- const acrescimo=
-  Number(
-   $('editAcrescimo').value||0
-  );
-
  const taxa=
   Number(
    casas[r.casa]?.taxaLimpeza||
    r.taxaLimpeza||
    0
+  );
+
+ const descontoAutomatico=
+  calcularDescontoReserva(
+   x.dias,
+   x.valor+taxa
+  );
+
+ $('editDesconto').value=
+  descontoAutomatico.valor.toFixed(2);
+
+ const desconto=
+  descontoAutomatico.valor;
+
+ const acrescimo=
+  Number(
+   $('editAcrescimo').value||0
   );
 
 
@@ -6238,6 +6286,51 @@ function atualizarResumoEdicao(){
 
 }
 
+
+// CONFIGURAÇÃO DE DESCONTOS AUTOMÁTICOS POR QUANTIDADE DE DIÁRIAS
+// Mais de 5 noites = 10% | Mais de 10 noites = 20%
+const DESCONTO_ACIMA_DE_5_DIARIAS=10;
+const DESCONTO_ACIMA_DE_10_DIARIAS=20;
+
+function obterPercentualDesconto(dias){
+
+ if(Number(dias)>10){
+  return DESCONTO_ACIMA_DE_10_DIARIAS;
+ }
+
+ if(Number(dias)>5){
+  return DESCONTO_ACIMA_DE_5_DIARIAS;
+ }
+
+ return 0;
+
+}
+
+function calcularDescontoReserva(dias, valorBase){
+
+ const percentual=obterPercentualDesconto(dias);
+ const desconto=Number(valorBase||0)*(percentual/100);
+
+ return{
+  percentual,
+  valor:desconto
+ };
+
+}
+
+function calcularValorFinalReserva(dias, valorDiarias, taxa, acrescimo=0){
+
+ const bruto=Number(valorDiarias||0)+Number(taxa||0);
+ const descontoInfo=calcularDescontoReserva(dias, bruto);
+
+ return{
+  bruto,
+  percentualDesconto:descontoInfo.percentual,
+  desconto:descontoInfo.valor,
+  total:Math.max(0, bruto+Number(acrescimo||0)-descontoInfo.valor)
+ };
+
+}
 
 function calcularValorDiariasLocal(
  casa,
