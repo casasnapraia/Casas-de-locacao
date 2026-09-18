@@ -1855,6 +1855,11 @@ textarea{
   🖨️ Imprimir / Salvar PDF
  </button>
 
+ <button class="btn-verde"
+  onclick="exportarRelatorioCSV()">
+  📊 Exportar Excel / CSV
+ </button>
+
  <button class="vermelho botao-imprimir"
   onclick="limparFiltrosRelatorio()">
   ✖ Limpar filtros
@@ -2211,6 +2216,9 @@ let dataAtual=new Date();
 let valoresDiarias={};
 let reservasConfirmadas=[];
 let hospedesCadastrados=[];
+
+// Últimas reservas exibidas no relatório, usadas pela exportação CSV.
+let ultimasReservasFiltradas=[];
 
 let filtroReservas='todas';
 let datasSelecionadas=new Set();
@@ -5385,6 +5393,32 @@ function emitirRecibo(id){
  const pendenteExtenso=
   valorPorExtenso(pendente);
 
+ const desconto=
+  Number(r.desconto||0);
+
+ const valorDiarias=
+  Number(r.valorDiarias||0);
+
+ const taxaLimpeza=
+  Number(r.taxaLimpeza||0);
+
+ const textoWhatsApp=encodeURIComponent(
+  `*RECIBO DE PAGAMENTO - CASAS NA PRAIA*\n\n`+
+  `Hóspede: ${nome}\n`+
+  `Acomodação: ${casa}\n`+
+  `Período: ${dataBr(r.entrada)} a ${dataBr(r.saida)} (${noites} diárias)\n`+
+  `Valor das diárias: ${moeda(valorDiarias)}\n`+
+  `Desconto: ${moeda(desconto)}\n`+
+  `Taxa de limpeza: ${moeda(taxaLimpeza)}\n`+
+  `Valor total da reserva: ${moeda(total)}\n`+
+  `Valor Pago: ${moeda(pago)}\n`+
+  `Saldo Pendente: ${moeda(pendente)}\n\n`+
+  `Obrigado pela preferência! 🏖️`
+ );
+
+ const telefoneWhatsApp=
+  String(r.telefone||'').replace(/\D/g,'');
+
 
  const janela=
   window.open(
@@ -5665,6 +5699,36 @@ body{
 
   <div class="linha">
 
+   <span>Valor das diárias</span>
+
+   <strong>
+    ${moeda(valorDiarias)}
+   </strong>
+
+  </div>
+
+  <div class="linha">
+
+   <span>Desconto</span>
+
+   <strong>
+    - ${moeda(desconto)}
+   </strong>
+
+  </div>
+
+  <div class="linha">
+
+   <span>Taxa de limpeza</span>
+
+   <strong>
+    ${moeda(taxaLimpeza)}
+   </strong>
+
+  </div>
+
+  <div class="linha">
+
    <span>Valor total da reserva</span>
 
    <strong>
@@ -5750,6 +5814,12 @@ body{
  <button onclick="window.print()">
   🖨️ Imprimir / Salvar PDF
  </button>
+
+ ${telefoneWhatsApp ? `
+ <button onclick="window.open('https://wa.me/55${telefoneWhatsApp}?text=${textoWhatsApp}','_blank','noopener')">
+  📲 Enviar WhatsApp
+ </button>
+ ` : ''}
 
  <button onclick="window.close()">
   ✖ Fechar
@@ -6833,6 +6903,49 @@ function obterReservasRelatorio(){
 }
 
 
+function exportarRelatorioCSV(){
+ if(!ultimasReservasFiltradas || !ultimasReservasFiltradas.length){
+  return alert('Nenhum dado filtrado para exportar.');
+ }
+
+ let csv='Casa;Hospede;Telefone;Entrada;Saida;Noites;Status;Diarias;Desconto;Taxa Limpeza;Total;Pago;Pendente\n';
+
+ ultimasReservasFiltradas.forEach(r=>{
+  const t=Number(r.valorTotal||0);
+  const p=Number(r.valorPago||0);
+  const pend=Math.max(0,t-p);
+  const noites=Number(r.dias||dias(dataLocal(r.entrada),dataLocal(r.saida))||0);
+  const diarias=Number(r.valorDiarias||0);
+  const desconto=Number(r.desconto||0);
+  const taxa=Number(r.taxaLimpeza||0);
+
+  csv+=`"${casas[r.casa]?.nome||r.casa||''}";`+
+       `"${String(r.nome||'').replace(/"/g,'""')}";`+
+       `"${String(r.telefone||'').replace(/"/g,'""')}";`+
+       `"${dataBr(r.entrada)}";`+
+       `"${dataBr(r.saida)}";`+
+       `"${noites}";`+
+       `"${r.statusPagamento||''}";`+
+       `"${diarias.toFixed(2)}";`+
+       `"${desconto.toFixed(2)}";`+
+       `"${taxa.toFixed(2)}";`+
+       `"${t.toFixed(2)}";`+
+       `"${p.toFixed(2)}";`+
+       `"${pend.toFixed(2)}"\n`;
+ });
+
+ const blob=new Blob(["\ufeff"+csv],{type:'text/csv;charset=utf-8;'});
+ const url=URL.createObjectURL(blob);
+ const link=document.createElement('a');
+ link.href=url;
+ link.download='relatorio_reservas.csv';
+ document.body.appendChild(link);
+ link.click();
+ document.body.removeChild(link);
+ URL.revokeObjectURL(url);
+}
+
+
 function gerarRelatorio(){
 
  const el=
@@ -6843,6 +6956,9 @@ function gerarRelatorio(){
 
  const arr=
   obterReservasRelatorio();
+
+ // Mantém exatamente os registros atualmente filtrados para exportação.
+ ultimasReservasFiltradas=[...arr];
 
 
  const total=
