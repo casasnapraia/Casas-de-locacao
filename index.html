@@ -9,6 +9,7 @@
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
 <style>
@@ -2224,8 +2225,9 @@ const firebaseConfig={
  appId:"1:123456789012:web:abc123def456"
 };
 
-const ADM_USUARIO='admin';
-const ADM_SENHA='praia2026';
+// UID autorizado para o painel administrativo. A senha NÃO fica armazenada no HTML.
+const ADMIN_UID='KycYQuRxLWPxB7rDIe7x6sKvve';
+const auth=firebase.auth();
 
 firebase.initializeApp(firebaseConfig);
 
@@ -2427,62 +2429,107 @@ document.addEventListener('DOMContentLoaded',async()=>{
 
  renderizarPaginaPublica();
 
+ // Mantém a sessão administrativa controlada pelo Firebase Authentication.
+ if(typeof firebase!=='undefined' && firebase.auth){
+  firebase.auth().onAuthStateChanged(async user=>{
+
+   if(user && user.uid===ADMIN_UID){
+    $('areaPublica').classList.add('oculto');
+    $('painelAdmin').classList.remove('oculto');
+
+    try{
+     await inicializarPainel();
+     setTimeout(verificarNotificacoesJaAtivas,300);
+    }catch(e){
+     console.error(e);
+    }
+   }else{
+    $('painelAdmin').classList.add('oculto');
+    $('areaPublica').classList.remove('oculto');
+   }
+
+  });
+ }
+
 });
 
 
 /* =====================================================
-   LOGIN
+   LOGIN — FIREBASE AUTHENTICATION
 ===================================================== */
 
 function abrirLogin(){
  $('overlayLogin').classList.add('aberto');
+ setTimeout(()=>{
+  $('usuario')?.focus();
+ },100);
 }
 
 function fecharLogin(){
-
  $('overlayLogin').classList.remove('aberto');
-
  $('usuario').value='';
  $('senha').value='';
-
 }
 
-function fazerLogin(){
+async function fazerLogin(){
 
- if(
-  $('usuario').value.trim()===ADM_USUARIO &&
-  $('senha').value.trim()===ADM_SENHA
- ){
+ const email=$('usuario').value.trim().toLowerCase();
+ const senha=$('senha').value;
+
+ if(!email || !senha){
+  return alert('⚠️ Informe o e-mail e a senha.');
+ }
+
+ if(!firebase.auth){
+  return alert('❌ Firebase Authentication não está disponível.');
+ }
+
+ try{
+
+  const cred=await firebase.auth().signInWithEmailAndPassword(
+   email,
+   senha
+  );
+
+  if(!cred.user || cred.user.uid!==ADMIN_UID){
+   await firebase.auth().signOut();
+   return alert('❌ Esta conta não possui acesso administrativo.');
+  }
 
   fecharLogin();
 
-  $('areaPublica').classList.add('oculto');
-  $('painelAdmin').classList.remove('oculto');
+ }catch(e){
 
-  inicializarPainel();
+  console.error('Erro no login Firebase:',e);
 
-  setTimeout(
-   verificarNotificacoesJaAtivas,
-   300
-  );
+  let msg='❌ E-mail ou senha incorretos.';
 
- }else{
+  if(e && e.code==='auth/too-many-requests')
+   msg='⚠️ Muitas tentativas. Aguarde alguns minutos e tente novamente.';
+  else if(e && e.code==='auth/user-disabled')
+   msg='❌ Esta conta foi desativada no Firebase Authentication.';
+  else if(e && e.code==='auth/invalid-email')
+   msg='❌ O e-mail informado é inválido.';
 
-  alert('❌ Usuário ou senha incorretos!');
-
+  alert(msg);
  }
-
 }
 
-function fazerLogout(){
+async function fazerLogout(){
 
  pararMonitoramentoDeReservas();
 
+ try{
+  if(firebase.auth){
+   await firebase.auth().signOut();
+  }
+ }catch(e){
+  console.error('Erro ao sair:',e);
+ }
+
  $('painelAdmin').classList.add('oculto');
  $('areaPublica').classList.remove('oculto');
-
  renderizarPaginaPublica();
-
 }
 
 
