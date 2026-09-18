@@ -3,7 +3,7 @@
 <head>
  <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <title>Gestão - Casas na Praia</title>
+ <title>Casas na Praia - Balneário Arroio do Silva/SC</title>
  <style>
   :root {
    --primaria: #0a4b6e;
@@ -14,32 +14,51 @@
    --fundo: #f4f6f8;
   }
   body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--fundo); margin: 0; padding: 20px; color: #333; }
-  .container { max-width: 1000px; margin: 0 auto; background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-  h1, h2 { color: var(--primaria); margin-top: 0; }
-  .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; }
-  .modal.aberto { display: flex; }
-  .modal-conteudo { background: #fff; padding: 25px; border-radius: 8px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto; }
+  .container { max-width: 1100px; margin: 0 auto; background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
+  
+  /* Cabeçalho e Abas */
+  .cabecalho { text-align: center; border-bottom: 2px solid var(--primaria); padding-bottom: 15px; margin-bottom: 20px; }
+  .cabecalho h1 { color: var(--primaria); margin: 0; font-size: 28px; }
+  .cabecalho p { color: var(--cinza); margin: 5px 0 0 0; }
+  
+  .nav-tabs { display: flex; gap: 10px; border-bottom: 1px solid #ddd; margin-bottom: 25px; }
+  .nav-tab { padding: 10px 20px; cursor: pointer; border: 1px solid transparent; border-bottom: none; border-radius: 6px 6px 0 0; font-weight: bold; color: var(--primaria); }
+  .nav-tab.ativa { background: var(--primaria); color: #fff; }
+  
+  .aba-conteudo { display: none; }
+  .aba-conteudo.ativa { display: block; }
+
+  /* Elementos Gerais */
   .grupo-input { margin-bottom: 15px; }
   .grupo-input label { display: block; margin-bottom: 5px; font-weight: bold; }
-  .grupo-input input, .grupo-input select, .grupo-input textarea { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+  .grupo-input input, .grupo-input select, .grupo-input textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
   .linha-form { display: flex; gap: 10px; }
-  button { padding: 10px 15px; border: none; border-radius: 4px; background: var(--primaria); color: #fff; cursor: pointer; font-weight: bold; }
+  
+  button { padding: 10px 18px; border: none; border-radius: 6px; background: var(--primaria); color: #fff; cursor: pointer; font-weight: bold; transition: background 0.2s; }
   button:hover { opacity: 0.9; }
   button:disabled { background: var(--cinza) !important; cursor: not-allowed; }
   button.sucesso { background: var(--sucesso); }
   button.vermelho { background: var(--perigo); }
+
+  /* Modais e Tabelas */
+  .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
+  .modal.aberto { display: flex; }
+  .modal-conteudo { background: #fff; padding: 25px; border-radius: 8px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto; }
+  
   .tabela-relatorio { width: 100%; border-collapse: collapse; margin-top: 15px; }
-  .tabela-relatorio th, .tabela-relatorio td { border: 1px solid #ddd; padding: 10px; text-align: left; }
-  .tabela-relatorio th { background: #f8f9fa; }
-  .status-badge { padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; color: #fff; }
+  .tabela-relatorio th, .tabela-relatorio td { border: 1px solid #e1e8ed; padding: 10px; text-align: left; }
+  .tabela-relatorio th { background: #f8f9fa; color: var(--primaria); }
+  
+  .status-badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; color: #fff; text-transform: uppercase; }
   .status-pago { background: var(--sucesso); }
   .status-parcial { background: #ffc107; color: #000; }
   .status-pendente { background: var(--perigo); }
   .status-confirmada { background: var(--secundaria); }
-  .relatorio-resumo { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 20px; }
-  .resumo-card { background: #f8f9fa; padding: 15px; border-radius: 6px; text-align: center; border: 1px solid #e9ecef; }
-  .resumo-card small { display: block; color: var(--cinza); margin-bottom: 5px; }
-  .resumo-card strong { font-size: 18px; }
+
+  .relatorio-resumo { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 20px; }
+  .resumo-card { background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: center; border: 1px solid #e1e8ed; }
+  .resumo-card small { display: block; color: var(--cinza); margin-bottom: 5px; font-weight: 500; }
+  .resumo-card strong { font-size: 20px; }
  </style>
 
  <!-- SDKs do Firebase (v8) -->
@@ -49,49 +68,99 @@
 <body>
 
 <div class="container">
- <h1>🏖️ Gestão - Casas na Praia</h1>
- <p>Balneário Arroio do Silva / SC</p>
- <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
-
- <!-- Painel de Ações Rápidas -->
- <div style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
-  <button onclick="sincronizarHospedesReservas()">🔄 Sincronizar Hóspedes</button>
-  <button onclick="gerarRelatorio()">📊 Atualizar Relatório</button>
+ <div class="cabecalho">
+  <h1>🏖️ Casas na Praia</h1>
+  <p>Balneário Arroio do Silva / SC</p>
  </div>
 
- <!-- Área do Relatório -->
- <h2>Relatório de Reservas</h2>
- <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
-  <select id="filtroCasaRelatorio" onchange="gerarRelatorio()">
-   <option value="todas">Todas as Casas</option>
-   <option value="casa1">Casa 1</option>
-   <option value="casa2">Casa 2</option>
-  </select>
-  <select id="filtroPeriodoRelatorio" onchange="gerarRelatorio()">
-   <option value="todos">Todo o Período</option>
-   <option value="hoje">Hoje</option>
-   <option value="mes">Este Mês</option>
-  </select>
-  <select id="filtroStatusRelatorio" onchange="gerarRelatorio()">
-   <option value="todos">Todos os Status</option>
-   <option value="pago">Pago Total</option>
-   <option value="parcial">Parcial</option>
-   <option value="pendente">Pendente</option>
-  </select>
-  <input type="text" id="filtroHospedeRelatorio" placeholder="Buscar por hóspede..." oninput="gerarRelatorio()">
-  <input type="date" id="relatorioDataInicial" onchange="gerarRelatorio()">
-  <input type="date" id="relatorioDataFinal" onchange="gerarRelatorio()">
+ <!-- NAVEGAÇÃO ENTRE ÁREA PÚBLICA E ADMIN -->
+ <div class="nav-tabs">
+  <div class="nav-tab ativa" onclick="mudarAba('publico')">📅 Reservas & Calendário</div>
+  <div class="nav-tab" onclick="mudarAba('admin')">⚙️ Painel Administrativo</div>
  </div>
 
- <div id="relatorioConteudo"></div>
+ <!-- =====================================================
+      ÁREA PÚBLICA (CALENDÁRIO E VITRINE)
+ ===================================================== -->
+ <div id="aba-publico" class="aba-conteudo ativa">
+  <h2>Solicitar Reserva</h2>
+  <p style="color: var(--cinza);">Consulte a disponibilidade e selecione o período desejado.</p>
+  
+  <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #e1e8ed; margin-top: 15px;">
+   <div class="grupo-input">
+    <label>Acomodação</label>
+    <select id="pubCasa">
+     <option value="casa1">Casa 1</option>
+     <option value="casa2">Casa 2</option>
+    </select>
+   </div>
+   <div class="linha-form">
+    <div class="grupo-input" style="flex:1;">
+     <label>Entrada (Check-in)</label>
+     <input type="date" id="pubEntrada">
+    </div>
+    <div class="grupo-input" style="flex:1;">
+     <label>Saída (Check-out)</label>
+     <input type="date" id="pubSaida">
+    </div>
+   </div>
+   <div class="grupo-input">
+    <label>Seu Nome Completo</label>
+    <input type="text" id="pubNome" placeholder="Digite seu nome">
+   </div>
+   <div class="grupo-input">
+    <label>Telefone / WhatsApp</label>
+    <input type="tel" id="pubTelefone" placeholder="(48) 99999-9999">
+   </div>
+   <button class="sucesso" style="width: 100%; padding: 12px; font-size: 16px;" onclick="enviarSolicitacaoPublica()">📲 Enviar Pedido de Reserva</button>
+  </div>
+ </div>
 
- <!-- Lista de Hóspedes -->
- <h2 style="margin-top: 30px;">Hóspedes Cadastrados</h2>
- <input type="text" id="buscarHospede" placeholder="Buscar hóspede por nome ou telefone..." oninput="filtrarHospedes()" style="width: 100%; padding: 8px; margin-bottom: 10px;">
- <div id="listaHospedes"></div>
+ <!-- =====================================================
+      ÁREA ADMINISTRATIVA (GESTOR)
+ ===================================================== -->
+ <div id="aba-admin" class="aba-conteudo">
+  <h2>Gestão Financeira & Relatórios</h2>
+  
+  <!-- Ações Rápidas -->
+  <div style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+   <button onclick="sincronizarHospedesReservas()">🔄 Sincronizar Hóspedes</button>
+   <button onclick="gerarRelatorio()">📊 Atualizar Relatório</button>
+  </div>
+
+  <!-- Filtros do Relatório -->
+  <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+   <select id="filtroCasaRelatorio" onchange="gerarRelatorio()">
+    <option value="todas">Todas as Casas</option>
+    <option value="casa1">Casa 1</option>
+    <option value="casa2">Casa 2</option>
+   </select>
+   <select id="filtroPeriodoRelatorio" onchange="gerarRelatorio()">
+    <option value="todos">Todo o Período</option>
+    <option value="hoje">Hoje</option>
+    <option value="mes">Este Mês</option>
+   </select>
+   <select id="filtroStatusRelatorio" onchange="gerarRelatorio()">
+    <option value="todos">Todos os Status</option>
+    <option value="pago">Pago Total</option>
+    <option value="parcial">Parcial</option>
+    <option value="pendente">Pendente</option>
+   </select>
+   <input type="text" id="filtroHospedeRelatorio" placeholder="Buscar hóspede..." oninput="gerarRelatorio()" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+   <input type="date" id="relatorioDataInicial" onchange="gerarRelatorio()" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+   <input type="date" id="relatorioDataFinal" onchange="gerarRelatorio()" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+  </div>
+
+  <div id="relatorioConteudo"></div>
+
+  <!-- Lista de Hóspedes -->
+  <h2 style="margin-top: 35px;">Base de Hóspedes Cadastrados</h2>
+  <input type="text" id="buscarHospede" placeholder="Buscar hóspede por nome ou telefone..." oninput="filtrarHospedes()" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 6px;">
+  <div id="listaHospedes"></div>
+ </div>
 </div>
 
-<!-- Modal para Editar Reserva -->
+<!-- MODAL DE EDIÇÃO DA RESERVA (ADMIN) -->
 <div id="modalEditarReserva" class="modal">
  <div class="modal-conteudo">
   <h2>Editar Reserva</h2>
@@ -102,7 +171,7 @@
 
 <script>
 /* =====================================================
-   CONFIGURAÇÃO DO FIREBASE (Substitua com suas chaves)
+   CONFIGURAÇÃO DO FIREBASE
 ===================================================== */
 const firebaseConfig = {
  apiKey: "SUA_API_KEY",
@@ -119,12 +188,13 @@ if (!firebase.apps.length) {
 const db = firebase.firestore();
 
 /* =====================================================
-   VARIÁVEIS GLOBAIS E AUXILIARES
+   VARIÁVEIS GLOBAIS E NAVEGAÇÃO
 ===================================================== */
 const $ = id => document.getElementById(id);
 let reservasConfirmadas = [];
 let hospedesCadastrados = [];
-let valoresDiarias = {};
+let ultimasReservasFiltradas = [];
+
 const casas = {
  casa1: { nome: 'Casa 1' },
  casa2: { nome: 'Casa 2' }
@@ -137,8 +207,55 @@ const hoje = () => new Date();
 const dataLocal = s => s ? new Date(s + 'T00:00:00') : null;
 const normalizar = s => (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
+function mudarAba(aba) {
+ document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('ativa'));
+ document.querySelectorAll('.aba-conteudo').forEach(c => c.classList.remove('ativa'));
+ 
+ if (aba === 'publico') {
+  document.querySelectorAll('.nav-tab')[0].classList.add('ativa');
+  $('aba-publico').classList.add('ativa');
+ } else {
+  document.querySelectorAll('.nav-tab')[1].classList.add('ativa');
+  $('aba-admin').classList.add('ativa');
+  gerarRelatorio();
+  filtrarHospedes();
+ }
+}
+
 /* =====================================================
-   IMPRESSÃO E ENVIO DE RECIBO
+   ENVIO DE RESERVA (ÁREA PÚBLICA)
+===================================================== */
+async function enviarSolicitacaoPublica() {
+ const casa = $('pubCasa').value;
+ const entrada = $('pubEntrada').value;
+ const saida = $('pubSaida').value;
+ const nome = $('pubNome').value.trim();
+ const telefone = $('pubTelefone').value.trim();
+
+ if (!entrada || !saida || !nome || !telefone) {
+  return alert('Preencha todos os campos para solicitar a reserva.');
+ }
+
+ try {
+  await db.collection('reservas').add({
+   casa, entrada, saida, nome, telefone,
+   statusPagamento: 'pendente',
+   valorTotal: 0,
+   valorPago: 0,
+   criadoEm: firebase.firestore.FieldValue.serverTimestamp()
+  });
+
+  alert('✅ Pedido de reserva enviado com sucesso! Entraremos em contacto para confirmação.');
+  $('pubNome').value = '';$('pubTelefone').value = '';
+  await carregarReservasConfirmadas();
+ } catch(e) {
+  console.error(e);
+  alert('❌ Erro ao enviar reserva.');
+ }
+}
+
+/* =====================================================
+   GERAÇÃO E ENVIO DE RECIBO COM WHATSAPP
 ===================================================== */
 function gerarReciboHTML(r, nome, pago, pagoExtenso, casa, noites, total, pendente, pendenteExtenso, dataEmissao) {
  const janela = window.open('', '_blank');
@@ -221,7 +338,7 @@ function gerarReciboHTML(r, nome, pago, pagoExtenso, casa, noites, total, penden
 }
 
 /* =====================================================
-   GERENCIAMENTO DE RESERVAS
+   GERENCIAMENTO E EDIÇÃO DE RESERVAS (ADMIN)
 ===================================================== */
 async function carregarReservasConfirmadas() {
  reservasConfirmadas = [];
@@ -252,6 +369,10 @@ function abrirEditarReserva(id){
    </select>
   </div>
   <div class="grupo-input">
+   <label>Valor Total (R$)</label>
+   <input type="number" id="editValorTotal" value="${total}" step="10" min="0">
+  </div>
+  <div class="grupo-input">
    <label>Valor Já Pago (R$)</label>
    <input type="number" id="editValorPago" value="${pago}" step="10" min="0">
   </div>
@@ -277,21 +398,22 @@ async function salvarEdicaoReserva(id){
  const btn = $('btnSalvarReserva');
  if (btn) { btn.disabled = true; btn.innerText = '⏳ Salvando...'; }
 
- const status=$('editStatus').value;
- const pago=Number($('editValorPago').value||0);
- const obs=$('editObs').value.trim();
+ const status = $('editStatus').value;
+ const total = Number($('editValorTotal').value||0);
+ const pago = Number($('editValorPago').value||0);
+ const obs = $('editObs').value.trim();
 
- const r=reservasConfirmadas.find(x=>x.id===id);
+ const r = reservasConfirmadas.find(x=>x.id===id);
  if(!r) return;
 
- const total=Number(r.valorTotal||0);
- let novoStatus=status;
- if(pago>=total && total>0){ novoStatus='pago'; }
- else if(pago>0 && pago<total){ novoStatus='parcial'; }
+ let novoStatus = status;
+ if(pago >= total && total > 0){ novoStatus = 'pago'; }
+ else if(pago > 0 && pago < total){ novoStatus = 'parcial'; }
 
- try{
+ try {
   await db.collection('reservas').doc(id).update({
    statusPagamento: novoStatus,
+   valorTotal: total,
    valorPago: pago,
    observacao: obs,
    atualizadoEm: firebase.firestore.FieldValue.serverTimestamp()
@@ -300,7 +422,7 @@ async function salvarEdicaoReserva(id){
   await carregarReservasConfirmadas();
   fecharModalEditar();
   alert('✅ Reserva atualizada!');
- }catch(e){
+ } catch(e) {
   console.error(e);
   alert('❌ Erro ao atualizar reserva.');
  } finally {
@@ -314,12 +436,12 @@ async function excluirReserva(id){
  const btn = $('btnExcluirReserva');
  if (btn) { btn.disabled = true; btn.innerText = '⏳ Excluindo...'; }
 
- try{
+ try {
   await db.collection('reservas').doc(id).delete();
   await carregarReservasConfirmadas();
   fecharModalEditar();
   alert('🗑️ Reserva excluída!');
- }catch(e){
+ } catch(e) {
   console.error(e);
   alert('❌ Erro ao excluir reserva.');
  } finally {
@@ -328,15 +450,15 @@ async function excluirReserva(id){
 }
 
 /* =====================================================
-   GERENCIAMENTO DE HÓSPEDES
+   GERENCIAMENTO DE HÓSPEDES (ADMIN)
 ===================================================== */
 async function carregarHospedes(){
- hospedesCadastrados=[];
- try{
-  const s=await db.collection('hospedes').get();
-  s.forEach(d=>hospedesCadastrados.push({id:d.id, ...d.data()}));
+ hospedesCadastrados = [];
+ try {
+  const s = await db.collection('hospedes').get();
+  s.forEach(d => hospedesCadastrados.push({id: d.id, ...d.data()}));
   filtrarHospedes();
- }catch(e){
+ } catch(e) {
   console.error('Erro hóspedes:', e);
  }
 }
@@ -379,24 +501,24 @@ async function sincronizarHospedesReservas(){
 }
 
 function filtrarHospedes(){
- const c=$('listaHospedes');
+ const c = $('listaHospedes');
  if(!c) return;
 
- const busca=normalizar($('buscarHospede')?.value||'');
- const lista=hospedesCadastrados.filter(h=>
+ const busca = normalizar($('buscarHospede')?.value||'');
+ const lista = hospedesCadastrados.filter(h =>
   normalizar(h.nome).includes(busca) || normalizar(h.telefone).includes(busca)
  );
 
  if(!lista.length){
-  c.innerHTML='<p style="color:var(--cinza);margin-top:10px">Nenhum hóspede encontrado.</p>';
+  c.innerHTML = '<p style="color:var(--cinza);margin-top:10px">Nenhum hóspede encontrado.</p>';
   return;
  }
 
- c.innerHTML=`
+ c.innerHTML = `
   <table class="tabela-relatorio">
    <thead><tr><th>Nome</th><th>Telefone / WhatsApp</th><th>Ações</th></tr></thead>
    <tbody>
-    ${lista.map(h=>`
+    ${lista.map(h => `
      <tr>
       <td><strong>${h.nome}</strong></td>
       <td>${h.telefone}</td>
@@ -413,59 +535,57 @@ function filtrarHospedes(){
 }
 
 /* =====================================================
-   RELATÓRIOS E EXPORTAÇÃO CSV
+   RELATÓRIOS E EXPORTAÇÃO CSV (ADMIN)
 ===================================================== */
-let ultimasReservasFiltradas = [];
-
 function gerarRelatorio(){
- const container=$('relatorioConteudo');
+ const container = $('relatorioConteudo');
  if(!container) return;
 
- const fCasa=$('filtroCasaRelatorio').value;
- const fPeriodo=$('filtroPeriodoRelatorio').value;
- const fStatus=$('filtroStatusRelatorio').value;
- const fHospede=normalizar($('filtroHospedeRelatorio').value);
- const dIni=$('relatorioDataInicial').value;
- const dFim=$('relatorioDataFinal').value;
+ const fCasa = $('filtroCasaRelatorio').value;
+ const fPeriodo = $('filtroPeriodoRelatorio').value;
+ const fStatus = $('filtroStatusRelatorio').value;
+ const fHospede = normalizar($('filtroHospedeRelatorio').value);
+ const dIni = $('relatorioDataInicial').value;
+ const dFim = $('relatorioDataFinal').value;
 
- let filtradas=[...reservasConfirmadas];
+ let filtradas = [...reservasConfirmadas];
 
- if(fCasa!=='todas') filtradas=filtradas.filter(r=>r.casa===fCasa);
- if(fStatus!=='todos') filtradas=filtradas.filter(r=>r.statusPagamento===fStatus);
+ if(fCasa !== 'todas') filtradas = filtradas.filter(r => r.casa === fCasa);
+ if(fStatus !== 'todos') filtradas = filtradas.filter(r => r.statusPagamento === fStatus);
  if(fHospede){
-  filtradas=filtradas.filter(r=>
+  filtradas = filtradas.filter(r =>
    normalizar(r.nome).includes(fHospede) || normalizar(r.telefone).includes(fHospede)
   );
  }
 
- const hj=hoje();
- if(fPeriodo==='hoje'){
-  const sHj=dataStr(hj);
-  filtradas=filtradas.filter(r=>r.entrada<=sHj && r.saida>=sHj);
- } else if(fPeriodo==='mes'){
-  const m=hj.getMonth();
-  const y=hj.getFullYear();
-  filtradas=filtradas.filter(r=>{
-   const d=dataLocal(r.entrada);
-   return d && d.getMonth()===m && d.getFullYear()===y;
+ const hj = hoje();
+ if(fPeriodo === 'hoje'){
+  const sHj = dataStr(hj);
+  filtradas = filtradas.filter(r => r.entrada <= sHj && r.saida >= sHj);
+ } else if(fPeriodo === 'mes'){
+  const m = hj.getMonth();
+  const y = hj.getFullYear();
+  filtradas = filtradas.filter(r => {
+   const d = dataLocal(r.entrada);
+   return d && d.getMonth() === m && d.getFullYear() === y;
   });
- } else if(fPeriodo==='personalizado' && dIni && dFim){
-  filtradas=filtradas.filter(r=>r.entrada>=dIni && r.saida<=dFim);
+ } else if(fPeriodo === 'personalizado' && dIni && dFim){
+  filtradas = filtradas.filter(r => r.entrada >= dIni && r.saida <= dFim);
  }
 
  ultimasReservasFiltradas = filtradas;
 
- let totalFaturado=0, totalPago=0, totalPendente=0;
+ let totalFaturado = 0, totalPago = 0, totalPendente = 0;
 
- filtradas.forEach(r=>{
-  const t=Number(r.valorTotal||0);
-  const p=Number(r.valorPago||0);
-  totalFaturado+=t;
-  totalPago+=p;
-  totalPendente+=Math.max(0, t-p);
+ filtradas.forEach(r => {
+  const t = Number(r.valorTotal||0);
+  const p = Number(r.valorPago||0);
+  totalFaturado += t;
+  totalPago += p;
+  totalPendente += Math.max(0, t - p);
  });
 
- container.innerHTML=`
+ container.innerHTML = `
   <div style="text-align:right; margin-bottom:15px;">
    <button onclick="exportarRelatorioCSV()" style="background:#28a745;">📊 Exportar Excel / CSV</button>
   </div>
@@ -482,9 +602,9 @@ function gerarRelatorio(){
     </tr>
    </thead>
    <tbody>
-    ${filtradas.length ? filtradas.map(r=>{
-     const t=Number(r.valorTotal||0);
-     const p=Number(r.valorPago||0);
+    ${filtradas.length ? filtradas.map(r => {
+     const t = Number(r.valorTotal||0);
+     const p = Number(r.valorPago||0);
      return `
       <tr>
        <td>${casas[r.casa]?.nome||r.casa}</td>
@@ -508,10 +628,10 @@ function exportarRelatorioCSV(){
  if(!ultimasReservasFiltradas.length) return alert('Nenhum dado para exportar.');
 
  let csv = 'Casa;Hospede;Telefone;Entrada;Saida;Status;Total;Pago;Pendente\n';
- ultimasReservasFiltradas.forEach(r=>{
-  const t=Number(r.valorTotal||0);
-  const p=Number(r.valorPago||0);
-  const pend=Math.max(0, t-p);
+ ultimasReservasFiltradas.forEach(r => {
+  const t = Number(r.valorTotal||0);
+  const p = Number(r.valorPago||0);
+  const pend = Math.max(0, t - p);
   csv += `"${casas[r.casa]?.nome||r.casa}";"${r.nome}";"${r.telefone}";"${dataBr(r.entrada)}";"${dataBr(r.saida)}";"${r.statusPagamento}";"${t.toFixed(2)}";"${p.toFixed(2)}";"${pend.toFixed(2)}"\n`;
  });
 
@@ -525,7 +645,7 @@ function exportarRelatorioCSV(){
  document.body.removeChild(link);
 }
 
-// Inicialização
+// Inicialização ao carregar a página
 window.onload = () => {
  carregarReservasConfirmadas();
  carregarHospedes();
