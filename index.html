@@ -4,34 +4,179 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Casas na Praia - Disponibilidade e Reservas</title>
+
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <style>
 :root{--marinho:#0a4b6e;--marinho2:#063b57;--turquesa:#17a2b8;--turquesa2:#0e8196;--areia:#f8f5e6;--ouro:#ffc107;--ouro2:#f5a900;--concha:#fff8e7;--texto:#2c3e50;--cinza:#7f8c8d;--sucesso:#28a745;--alerta:#ffc107;--perigo:#dc3545;--branco:#fff;--sombra:0 8px 25px rgba(0,0,0,.10);--sombra-forte:0 15px 40px rgba(0,0,0,.18)}
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
-html{scroll-behavior:smooth}body{background:linear-gradient(120deg,#e0f0f5,#fef9ed);color:var(--texto);min-height:100vh}
-button{font-family:inherit;cursor:pointer}.azul,.sucesso,.vermelho,.amarelo,.cinza{border:0;padding:10px 15px;border-radius:6px;font-size:14px;transition:.2s}.azul{background:var(--marinho);color:#fff}.azul:hover{background:#083b57}.sucesso{background:var(--sucesso);color:#fff}.sucesso:hover{background:#218838}.vermelho{background:var(--perigo);color:#fff}.vermelho:hover{background:#c82333}.amarelo{background:var(--ouro);color:#212529}.amarelo:hover{background:#e0a800}.cinza{background:#6c757d!important;color:#fff!important}button:disabled{opacity:.55;cursor:not-allowed}
-#areaPublica{background:#fff}.cabecalho-publico{position:absolute;top:0;left:0;right:0;z-index:50;background:linear-gradient(180deg,rgba(0,35,55,.82),rgba(0,35,55,.25));color:#fff;padding:20px 35px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.18);backdrop-filter:blur(4px)}.cabecalho-publico h1{font-size:22px;font-weight:700;text-shadow:0 2px 5px rgba(0,0,0,.35)}
-.botao-login{background:rgba(255,255,255,.16);color:#fff;border:1px solid rgba(255,255,255,.45);padding:11px 20px;border-radius:25px;font-size:14px;transition:.25s;backdrop-filter:blur(5px)}.botao-login:hover{background:#fff;color:var(--marinho);transform:translateY(-2px)}
-.hero-praia{min-height:650px;height:78vh;max-height:800px;position:relative;display:flex;align-items:center;justify-content:center;text-align:center;color:#fff;overflow:hidden;background-image:linear-gradient(180deg,rgba(0,45,70,.18),rgba(0,55,75,.08) 35%,rgba(0,35,55,.72)),url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2200&q=90");background-size:cover;background-position:center}.hero-praia:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 35%,rgba(255,255,255,.18),transparent 35%);pointer-events:none}
-.hero-conteudo{position:relative;z-index:2;max-width:850px;padding:30px 20px;animation:aparecerHero .9s ease}@keyframes aparecerHero{from{opacity:0;transform:translateY(25px)}to{opacity:1;transform:translateY(0)}}.hero-icone{font-size:65px;margin-bottom:5px;filter:drop-shadow(0 4px 5px rgba(0,0,0,.35))}.hero-conteudo h1{font-size:clamp(44px,7vw,78px);line-height:1;margin-bottom:12px;font-weight:800;text-shadow:0 4px 12px rgba(0,0,0,.45)}.hero-conteudo h2{font-size:clamp(23px,4vw,38px);font-weight:400;margin-bottom:18px;text-shadow:0 3px 8px rgba(0,0,0,.4)}.hero-conteudo p{font-size:18px;line-height:1.6;max-width:650px;margin:0 auto 28px;text-shadow:0 2px 5px rgba(0,0,0,.45)}
-.hero-botao{border:0;background:var(--ouro);color:#263238;padding:15px 30px;border-radius:30px;font-size:16px;font-weight:700;box-shadow:0 7px 20px rgba(0,0,0,.25);transition:.25s}.hero-botao:hover{transform:translateY(-3px) scale(1.02);background:#ffd34e}
-.area-publica{padding:65px 35px 70px;max-width:1400px;margin:auto;background:#fff}.introducao-publica{text-align:center;max-width:800px;margin:0 auto 35px}.selo-praia{display:inline-block;background:#e6f7fa;color:var(--turquesa2);padding:8px 16px;border-radius:25px;font-size:12px;font-weight:800;letter-spacing:1px;margin-bottom:12px}.introducao-publica h2{color:var(--marinho);font-size:36px;margin-bottom:10px}.introducao-publica p{color:var(--cinza);font-size:16px;line-height:1.6}
-.aviso-bloqueio{color:var(--perigo);background:#fde8e8;padding:10px;border-radius:6px;margin:10px 0;display:none}.grade-casas{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:28px;margin-top:30px}.card-casa{background:#fff;border-radius:18px;overflow:hidden;box-shadow:var(--sombra);transition:.35s;border:1px solid rgba(0,0,0,.05)}.card-casa:hover{transform:translateY(-7px);box-shadow:var(--sombra-forte)}
-.card-imagem{height:250px;background:linear-gradient(135deg,var(--turquesa),var(--marinho));display:flex;align-items:center;justify-content:center;color:#fff;font-size:55px;overflow:hidden;cursor:pointer;position:relative}.card-imagem:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 65%,rgba(0,0,0,.28));pointer-events:none}.card-imagem img{width:100%;height:100%;object-fit:cover;transition:.5s}.card-casa:hover .card-imagem img{transform:scale(1.05)}
-.card-corpo{padding:22px}.card-corpo h3{color:var(--marinho);font-size:24px;margin-bottom:5px}.descricao-casa{color:var(--cinza);margin:8px 0 15px;font-size:14px;line-height:1.5}.caracteristicas-casa{display:grid;gap:7px;margin:12px 0 15px}.caracteristica-item{background:#f7fafb;border-radius:8px;padding:9px 10px;font-size:14px;border-left:3px solid var(--turquesa)}.capacidade{background:#e8f5e9;color:#176b2c;padding:9px 10px;border-radius:8px;font-size:14px;margin:10px 0;font-weight:600}.aviso-capacidade{background:#fff3cd;color:#856404;border:1px solid #ffe69c;padding:10px;border-radius:6px;margin:8px 0;font-size:13px}.aviso-excesso{background:#fde8e8;color:#842029;border:1px solid #f5c2c7;padding:10px;border-radius:6px;margin:8px 0;font-size:13px;font-weight:600}.botao-galeria{width:100%;margin:8px 0;padding:11px;border:0;border-radius:8px;background:var(--marinho);color:#fff}.botao-galeria:hover{background:var(--marinho2);transform:translateY(-1px)}
-.faixa-praia{min-height:330px;display:flex;align-items:center;justify-content:center;text-align:center;color:#fff;position:relative;background-image:linear-gradient(rgba(0,55,75,.30),rgba(0,35,55,.65)),url("https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1800&q=85");background-size:cover;background-position:center}.faixa-praia-conteudo{max-width:800px;padding:40px 20px;text-shadow:0 3px 8px rgba(0,0,0,.45)}.faixa-praia-conteudo h2{font-size:clamp(28px,5vw,44px);margin-bottom:12px}.faixa-praia-conteudo p{font-size:17px;line-height:1.6}
-.info-praia{padding:55px 25px;background:#f7fbfc;text-align:center}.info-praia h2{color:var(--marinho);font-size:30px;margin-bottom:30px}.info-blocos{max-width:1050px;margin:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:20px}.info-bloco{background:#fff;padding:25px 20px;border-radius:15px;box-shadow:0 5px 18px rgba(0,0,0,.06)}.info-bloco .icone{font-size:38px;margin-bottom:10px}.info-bloco h3{color:var(--marinho);margin-bottom:8px}.info-bloco p{color:var(--cinza);font-size:14px;line-height:1.5}.rodape-publico{background:linear-gradient(90deg,var(--marinho2),var(--marinho));color:#fff;padding:30px 20px;text-align:center}.rodape-publico h3{font-size:20px;margin-bottom:8px}.rodape-publico p{color:rgba(255,255,255,.82);font-size:13px;margin-top:5px}
-.overlay-galeria,.overlay-login,.modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:.3s}.overlay-galeria{background:rgba(0,0,0,.92);z-index:400}.overlay-galeria.aberto,.overlay-login.aberto,.modal.aberto{opacity:1;visibility:visible}.galeria-conteudo{position:relative;width:95%;max-width:900px}.galeria-foto-principal{width:100%;height:70vh;object-fit:contain;background:#000;border-radius:8px}.galeria-navegacao{display:flex;justify-content:space-between;align-items:center;margin-top:15px}.galeria-botao-nav{background:rgba(255,255,255,.2);color:#fff;border:0;padding:10px 16px;border-radius:6px;font-size:18px}.galeria-contador{color:#fff}.galeria-miniaturas{display:flex;gap:8px;margin-top:15px;overflow-x:auto}.miniatura{width:80px;height:60px;object-fit:cover;border-radius:4px;cursor:pointer;border:2px solid transparent;opacity:.7}.miniatura.ativa,.miniatura:hover{border-color:var(--ouro);opacity:1}.fechar-galeria{position:absolute;top:-40px;right:0;background:none;border:0;color:#fff;font-size:28px}
-.barra-lateral{position:fixed;left:0;top:0;width:260px;height:100vh;background:linear-gradient(180deg,var(--marinho),#0f6694);color:#fff;padding:25px 20px;z-index:100;box-shadow:2px 0 15px rgba(0,0,0,.1);overflow-y:auto}.conteudo-admin{margin-left:260px;padding:30px;min-height:100vh;background:#fff}.logo{font-size:22px;font-weight:700;text-align:center;margin-bottom:35px;padding-bottom:20px;border-bottom:1px solid rgba(255,255,255,.2)}.menu-lateral{display:flex;flex-direction:column;gap:8px;margin-top:20px}.item-menu,.voltar-publico{background:transparent;border:0;color:rgba(255,255,255,.85);padding:12px 15px;text-align:left;border-radius:8px;font-size:15px}.item-menu:hover,.item-menu.ativo{background:rgba(255,255,255,.15);color:#fff}.voltar-publico{margin-top:20px;background:rgba(255,255,255,.1);width:100%}.btn-notificacoes{width:100%;margin-top:20px;font-size:14px;padding:12px;line-height:1.4}.btn-notificacoes.ativado{background:#28a745!important;color:#fff!important}
-.overlay-login{background:rgba(0,0,0,.5);z-index:300}.caixa-login,.modal-conteudo{background:#fff;padding:25px;border-radius:12px;box-shadow:var(--sombra);width:90%;max-width:500px;max-height:90vh;overflow-y:auto}.caixa-login{max-width:340px;padding:30px}.caixa-login h2{text-align:center;margin-bottom:25px;color:var(--marinho)}.grupo-input{margin-bottom:15px}.grupo-input label{display:block;margin-bottom:5px;font-weight:500;font-size:14px}.grupo-input input,.grupo-input select,.grupo-input textarea,select,textarea{width:100%;padding:10px 12px;border:1px solid #ddd;border-radius:6px;font-size:15px}.btn-primario{background:var(--turquesa);color:#fff;width:100%;padding:12px;font-size:16px;border:0;border-radius:6px}.fechar-login{margin-top:15px;width:100%;background:transparent;border:0;color:var(--cinza);text-decoration:underline}
-.calendario{background:#fff;padding:25px;border-radius:12px;box-shadow:var(--sombra);margin:20px 0}.calendario-cabecalho{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.calendario-cabecalho button{background:var(--turquesa);color:#fff;padding:8px 16px;border:0;border-radius:6px}.calendario-grade{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.dia{padding:12px 8px;text-align:center;border-radius:8px;border:2px solid transparent;user-select:none}.dia:hover{background:var(--areia)}.dia.selecionado{background:var(--ouro);font-weight:bold;border-color:#d4a000}.dia.passado{color:#ccc;background:#f5f5f5}.dia.com-valor{border-color:var(--sucesso);background:#e8f5e9}.dia.bloqueado{background:#f8d7da;color:#721c24;border-color:#f5c6cb}.rotulo-dia-semana{text-align:center;font-weight:600;padding:8px;color:var(--cinza);font-size:14px}.linha-form{display:flex;gap:10px;align-items:center;margin:15px 0;flex-wrap:wrap}.linha-form input,.linha-form select{flex:1;min-width:140px;padding:10px;border:1px solid #ddd;border-radius:6px}.ativo{background:var(--ouro)!important;color:#212529!important}
-.modal{background:rgba(0,0,0,.5);z-index:200}.cabecalho-modal{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.fechar{background:none;border:0;font-size:24px;color:var(--cinza)}.reserva-item{border:1px solid #eee;border-radius:8px;padding:15px;margin-bottom:10px}.status-badge{display:inline-block;padding:4px 10px;border-radius:12px;font-size:12px;font-weight:bold;margin:8px 8px 8px 0}.status-pendente{background:#fff3cd;color:#856404}.status-confirmada,.status-pago{background:#d4edda;color:#155724}.status-parcial{background:#d1ecf1;color:#0c5460}.total-geral{background:var(--concha);padding:20px;border-radius:8px;margin:15px 0}.linha-valor{display:flex;justify-content:space-between;padding:6px 0}.pagina{display:none}.pagina.ativa{display:block}.oculto{display:none!important}.lista-fotos-galeria{margin-top:10px}.item-foto-galeria{display:flex;align-items:center;gap:8px;margin:8px 0;padding:8px;background:#f9f9f9;border-radius:6px}.item-foto-galeria img{width:60px;height:45px;object-fit:cover;border-radius:4px}.remover-foto{background:var(--perigo);color:#fff;border:0;padding:4px 8px;border-radius:4px;margin-left:auto}.taxa-limpeza-info{font-size:13px;color:var(--cinza);margin-top:5px}.valor-destaque{font-weight:bold;color:var(--marinho)}
-.caixa-valores-reserva{background:#f7fafb;border:1px solid #e3eaed;border-radius:8px;padding:14px;margin:15px 0}.caixa-valores-reserva .linha-valor{border-bottom:1px solid #e5e5e5;padding:8px 0}.caixa-valores-reserva .linha-valor:last-child{border-bottom:0}.linha-desconto{background:#fff8e1;margin:8px -5px;padding:10px!important;border-radius:6px;border:1px solid #ffe082}.campo-desconto{width:100%;padding:10px 12px;border:1px solid #e0b84f;border-radius:6px;font-size:15px;background:#fff}.total-reserva-destaque{font-size:18px;font-weight:700;color:var(--marinho)}.a-receber-destaque{font-size:17px;font-weight:700;color:var(--sucesso)}.desconto-info{color:#9a6b00;font-size:13px}
-@media(max-width:900px){.info-blocos{grid-template-columns:1fr}.hero-praia{min-height:600px;height:72vh}.hero-conteudo h1{font-size:52px}.area-publica{padding:50px 20px}}
-@media(max-width:800px){.cabecalho-publico{position:absolute;flex-direction:column;gap:12px;text-align:center;padding:15px 20px}.cabecalho-publico h1{font-size:18px}.botao-login{padding:8px 16px}.hero-praia{min-height:620px;height:85vh;background-position:center}.hero-icone{font-size:48px}.hero-conteudo h1{font-size:45px}.hero-conteudo h2{font-size:25px}.hero-conteudo p{font-size:15px;padding:0 10px}.grade-casas{grid-template-columns:1fr}.barra-lateral{position:relative;width:100%;height:auto}.conteudo-admin{margin-left:0;padding:15px}.menu-lateral{display:grid;grid-template-columns:1fr 1fr}.area-publica{padding:40px 15px}.calendario{padding:10px;overflow-x:auto}.calendario-grade{min-width:650px}}
-@media(max-width:500px){.menu-lateral{grid-template-columns:1fr}.hero-conteudo h1{font-size:38px}.hero-conteudo h2{font-size:22px}.hero-botao{padding:13px 22px}.introducao-publica h2{font-size:29px}.card-imagem{height:220px}.info-praia{padding:40px 15px}}
+html{scroll-behavior:smooth}
+body{background:linear-gradient(120deg,#e0f0f5,#fef9ed);color:var(--texto);min-height:100vh}
+button{font-family:inherit;cursor:pointer}
+.azul,.sucesso,.vermelho,.amarelo,.cinza{border:0;padding:10px 15px;border-radius:6px;font-size:14px;transition:.2s}
+.azul{background:var(--marinho);color:#fff}.azul:hover{background:#083b57}
+.sucesso{background:var(--sucesso);color:#fff}.sucesso:hover{background:#218838}
+.vermelho{background:var(--perigo);color:#fff}.vermelho:hover{background:#c82333}
+.amarelo{background:var(--ouro);color:#212529}.amarelo:hover{background:#e0a800}
+.cinza{background:#6c757d!important;color:#fff!important}
+button:disabled{opacity:.55;cursor:not-allowed}
+
+#areaPublica{background:#fff}
+.cabecalho-publico{position:absolute;top:0;left:0;right:0;z-index:50;background:linear-gradient(180deg,rgba(0,35,55,.82),rgba(0,35,55,.25));color:#fff;padding:20px 35px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.18);backdrop-filter:blur(4px)}
+.cabecalho-publico h1{font-size:22px;font-weight:700;text-shadow:0 2px 5px rgba(0,0,0,.35)}
+.botao-login{background:rgba(255,255,255,.16);color:#fff;border:1px solid rgba(255,255,255,.45);padding:11px 20px;border-radius:25px;font-size:14px;transition:.25s;backdrop-filter:blur(5px)}
+.botao-login:hover{background:#fff;color:var(--marinho);transform:translateY(-2px)}
+
+.hero-praia{min-height:650px;height:78vh;max-height:800px;position:relative;display:flex;align-items:center;justify-content:center;text-align:center;color:#fff;overflow:hidden;background-image:linear-gradient(180deg,rgba(0,45,70,.18),rgba(0,55,75,.08) 35%,rgba(0,35,55,.72)),url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2200&q=90");background-size:cover;background-position:center}
+.hero-praia:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 35%,rgba(255,255,255,.18),transparent 35%);pointer-events:none}
+.hero-conteudo{position:relative;z-index:2;max-width:850px;padding:30px 20px;animation:aparecerHero .9s ease}
+@keyframes aparecerHero{from{opacity:0;transform:translateY(25px)}to{opacity:1;transform:translateY(0)}}
+.hero-icone{font-size:65px;margin-bottom:5px;filter:drop-shadow(0 4px 5px rgba(0,0,0,.35))}
+.hero-conteudo h1{font-size:clamp(44px,7vw,78px);line-height:1;margin-bottom:12px;font-weight:800;text-shadow:0 4px 12px rgba(0,0,0,.45)}
+.hero-conteudo h2{font-size:clamp(23px,4vw,38px);font-weight:400;margin-bottom:18px;text-shadow:0 3px 8px rgba(0,0,0,.4)}
+.hero-conteudo p{font-size:18px;line-height:1.6;max-width:650px;margin:0 auto 28px;text-shadow:0 2px 5px rgba(0,0,0,.45)}
+.hero-botao{border:0;background:var(--ouro);color:#263238;padding:15px 30px;border-radius:30px;font-size:16px;font-weight:700;box-shadow:0 7px 20px rgba(0,0,0,.25);transition:.25s}
+.hero-botao:hover{transform:translateY(-3px) scale(1.02);background:#ffd34e}
+
+.area-publica{padding:65px 35px 70px;max-width:1400px;margin:auto;background:#fff}
+.introducao-publica{text-align:center;max-width:800px;margin:0 auto 35px}
+.selo-praia{display:inline-block;background:#e6f7fa;color:var(--turquesa2);padding:8px 16px;border-radius:25px;font-size:12px;font-weight:800;letter-spacing:1px;margin-bottom:12px}
+.introducao-publica h2{color:var(--marinho);font-size:36px;margin-bottom:10px}
+.introducao-publica p{color:var(--cinza);font-size:16px;line-height:1.6}
+.aviso-bloqueio{color:var(--perigo);background:#fde8e8;padding:10px;border-radius:6px;margin:10px 0;display:none}
+
+.grade-casas{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:28px;margin-top:30px}
+.card-casa{background:#fff;border-radius:18px;overflow:hidden;box-shadow:var(--sombra);transition:.35s;border:1px solid rgba(0,0,0,.05)}
+.card-casa:hover{transform:translateY(-7px);box-shadow:var(--sombra-forte)}
+.card-imagem{height:250px;background:linear-gradient(135deg,var(--turquesa),var(--marinho));display:flex;align-items:center;justify-content:center;color:#fff;font-size:55px;overflow:hidden;cursor:pointer;position:relative}
+.card-imagem:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 65%,rgba(0,0,0,.28));pointer-events:none}
+.card-imagem img{width:100%;height:100%;object-fit:cover;transition:.5s}
+.card-casa:hover .card-imagem img{transform:scale(1.05)}
+.card-corpo{padding:22px}
+.card-corpo h3{color:var(--marinho);font-size:24px;margin-bottom:5px}
+.descricao-casa{color:var(--cinza);margin:8px 0 15px;font-size:14px;line-height:1.5}
+.caracteristicas-casa{display:grid;gap:7px;margin:12px 0 15px}
+.caracteristica-item{background:#f7fafb;border-radius:8px;padding:9px 10px;font-size:14px;border-left:3px solid var(--turquesa)}
+.capacidade{background:#e8f5e9;color:#176b2c;padding:9px 10px;border-radius:8px;font-size:14px;margin:10px 0;font-weight:600}
+.aviso-capacidade{background:#fff3cd;color:#856404;border:1px solid #ffe69c;padding:10px;border-radius:6px;margin:8px 0;font-size:13px}
+.aviso-excesso{background:#fde8e8;color:#842029;border:1px solid #f5c2c7;padding:10px;border-radius:6px;margin:8px 0;font-size:13px;font-weight:600}
+.botao-galeria{width:100%;margin:8px 0;padding:11px;border:0;border-radius:8px;background:var(--marinho);color:#fff}
+.botao-galeria:hover{background:var(--marinho2);transform:translateY(-1px)}
+
+.faixa-praia{min-height:330px;display:flex;align-items:center;justify-content:center;text-align:center;color:#fff;position:relative;background-image:linear-gradient(rgba(0,55,75,.30),rgba(0,35,55,.65)),url("https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1800&q=85");background-size:cover;background-position:center}
+.faixa-praia-conteudo{max-width:800px;padding:40px 20px;text-shadow:0 3px 8px rgba(0,0,0,.45)}
+.faixa-praia-conteudo h2{font-size:clamp(28px,5vw,44px);margin-bottom:12px}
+.faixa-praia-conteudo p{font-size:17px;line-height:1.6}
+.info-praia{padding:55px 25px;background:#f7fbfc;text-align:center}
+.info-praia h2{color:var(--marinho);font-size:30px;margin-bottom:30px}
+.info-blocos{max-width:1050px;margin:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.info-bloco{background:#fff;padding:25px 20px;border-radius:15px;box-shadow:0 5px 18px rgba(0,0,0,.06)}
+.info-bloco .icone{font-size:38px;margin-bottom:10px}
+.info-bloco h3{color:var(--marinho);margin-bottom:8px}
+.info-bloco p{color:var(--cinza);font-size:14px;line-height:1.5}
+.rodape-publico{background:linear-gradient(90deg,var(--marinho2),var(--marinho));color:#fff;padding:30px 20px;text-align:center}
+.rodape-publico h3{font-size:20px;margin-bottom:8px}
+.rodape-publico p{color:rgba(255,255,255,.82);font-size:13px;margin-top:5px}
+
+.overlay-galeria,.overlay-login,.modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:.3s}
+.overlay-galeria{background:rgba(0,0,0,.92);z-index:400}
+.overlay-galeria.aberto,.overlay-login.aberto,.modal.aberto{opacity:1;visibility:visible}
+.galeria-conteudo{position:relative;width:95%;max-width:900px}
+.galeria-foto-principal{width:100%;height:70vh;object-fit:contain;background:#000;border-radius:8px}
+.galeria-navegacao{display:flex;justify-content:space-between;align-items:center;margin-top:15px}
+.galeria-botao-nav{background:rgba(255,255,255,.2);color:#fff;border:0;padding:10px 16px;border-radius:6px;font-size:18px}
+.galeria-contador{color:#fff}
+.galeria-miniaturas{display:flex;gap:8px;margin-top:15px;overflow-x:auto}
+.miniatura{width:80px;height:60px;object-fit:cover;border-radius:4px;cursor:pointer;border:2px solid transparent;opacity:.7}
+.miniatura.ativa,.miniatura:hover{border-color:var(--ouro);opacity:1}
+.fechar-galeria{position:absolute;top:-40px;right:0;background:none;border:0;color:#fff;font-size:28px}
+
+.barra-lateral{position:fixed;left:0;top:0;width:260px;height:100vh;background:linear-gradient(180deg,var(--marinho),#0f6694);color:#fff;padding:25px 20px;z-index:100;box-shadow:2px 0 15px rgba(0,0,0,.1);overflow-y:auto}
+.conteudo-admin{margin-left:260px;padding:30px;min-height:100vh;background:#fff}
+.logo{font-size:22px;font-weight:700;text-align:center;margin-bottom:35px;padding-bottom:20px;border-bottom:1px solid rgba(255,255,255,.2)}
+.menu-lateral{display:flex;flex-direction:column;gap:8px;margin-top:20px}
+.item-menu,.voltar-publico{background:transparent;border:0;color:rgba(255,255,255,.85);padding:12px 15px;text-align:left;border-radius:8px;font-size:15px}
+.item-menu:hover,.item-menu.ativo{background:rgba(255,255,255,.15);color:#fff}
+.voltar-publico{margin-top:20px;background:rgba(255,255,255,.1);width:100%}
+.btn-notificacoes{width:100%;margin-top:20px;font-size:14px;padding:12px;line-height:1.4}
+.btn-notificacoes.ativado{background:#28a745!important;color:#fff!important}
+
+.overlay-login{background:rgba(0,0,0,.5);z-index:300}
+.caixa-login,.modal-conteudo{background:#fff;padding:25px;border-radius:12px;box-shadow:var(--sombra);width:90%;max-width:500px;max-height:90vh;overflow-y:auto}
+.caixa-login{max-width:340px;padding:30px}
+.caixa-login h2{text-align:center;margin-bottom:25px;color:var(--marinho)}
+.grupo-input{margin-bottom:15px}
+.grupo-input label{display:block;margin-bottom:5px;font-weight:500;font-size:14px}
+.grupo-input input,.grupo-input select,.grupo-input textarea,select,textarea{width:100%;padding:10px 12px;border:1px solid #ddd;border-radius:6px;font-size:15px}
+.btn-primario{background:var(--turquesa);color:#fff;width:100%;padding:12px;font-size:16px;border:0;border-radius:6px}
+.fechar-login{margin-top:15px;width:100%;background:transparent;border:0;color:var(--cinza);text-decoration:underline}
+
+.calendario{background:#fff;padding:25px;border-radius:12px;box-shadow:var(--sombra);margin:20px 0}
+.calendario-cabecalho{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.calendario-cabecalho button{background:var(--turquesa);color:#fff;padding:8px 16px;border:0;border-radius:6px}
+.calendario-grade{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.dia{padding:12px 8px;text-align:center;border-radius:8px;border:2px solid transparent;user-select:none}
+.dia:hover{background:var(--areia)}
+.dia.selecionado{background:var(--ouro);font-weight:bold;border-color:#d4a000}
+.dia.passado{color:#ccc;background:#f5f5f5}
+.dia.com-valor{border-color:var(--sucesso);background:#e8f5e9}
+.dia.bloqueado{background:#f8d7da;color:#721c24;border-color:#f5c6cb}
+.rotulo-dia-semana{text-align:center;font-weight:600;padding:8px;color:var(--cinza);font-size:14px}
+.linha-form{display:flex;gap:10px;align-items:center;margin:15px 0;flex-wrap:wrap}
+.linha-form input,.linha-form select{flex:1;min-width:140px;padding:10px;border:1px solid #ddd;border-radius:6px}
+.ativo{background:var(--ouro)!important;color:#212529!important}
+
+.modal{background:rgba(0,0,0,.5);z-index:200}
+.cabecalho-modal{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.fechar{background:none;border:0;font-size:24px;color:var(--cinza)}
+.reserva-item{border:1px solid #eee;border-radius:8px;padding:15px;margin-bottom:10px}
+.status-badge{display:inline-block;padding:4px 10px;border-radius:12px;font-size:12px;font-weight:bold;margin:8px 8px 8px 0}
+.status-pendente{background:#fff3cd;color:#856404}
+.status-confirmada,.status-pago{background:#d4edda;color:#155724}
+.status-parcial{background:#d1ecf1;color:#0c5460}
+.total-geral{background:var(--concha);padding:20px;border-radius:8px;margin:15px 0}
+.linha-valor{display:flex;justify-content:space-between;padding:6px 0}
+.pagina{display:none}
+.pagina.ativa{display:block}
+.oculto{display:none!important}
+.lista-fotos-galeria{margin-top:10px}
+.item-foto-galeria{display:flex;align-items:center;gap:8px;margin:8px 0;padding:8px;background:#f9f9f9;border-radius:6px}
+.item-foto-galeria img{width:60px;height:45px;object-fit:cover;border-radius:4px}
+.remover-foto{background:var(--perigo);color:#fff;border:0;padding:4px 8px;border-radius:4px;margin-left:auto}
+.taxa-limpeza-info{font-size:13px;color:var(--cinza);margin-top:5px}
+.valor-destaque{font-weight:bold;color:var(--marinho)}
+
+.caixa-valores-reserva{background:#f7fafb;border:1px solid #e3eaed;border-radius:8px;padding:14px;margin:15px 0}
+.caixa-valores-reserva .linha-valor{border-bottom:1px solid #e5e5e5;padding:8px 0}
+.caixa-valores-reserva .linha-valor:last-child{border-bottom:0}
+.linha-desconto{background:#fff8e1;margin:8px -5px;padding:10px!important;border-radius:6px;border:1px solid #ffe082}
+.campo-desconto{width:100%;padding:10px 12px;border:1px solid #e0b84f;border-radius:6px;font-size:15px;background:#fff}
+.total-reserva-destaque{font-size:18px;font-weight:700;color:var(--marinho)}
+.a-receber-destaque{font-size:17px;font-weight:700;color:var(--sucesso)}
+.desconto-info{color:#9a6b00;font-size:13px}
+
+.acrescimo-box{background:#eef9f1;border:1px solid #b8dfc1;padding:12px;border-radius:8px;margin:15px 0}
+.acrescimo-botoes{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.acrescimo-botoes button{padding:7px 12px;border:0;border-radius:6px;background:#198754;color:#fff}
+.valor-total-editavel{background:#fff8df!important;border:2px solid #e0b000!important;font-weight:700;font-size:17px}
+
+@media(max-width:900px){
+.info-blocos{grid-template-columns:1fr}.hero-praia{min-height:600px;height:72vh}.hero-conteudo h1{font-size:52px}.area-publica{padding:50px 20px}
+}
+@media(max-width:800px){
+.cabecalho-publico{position:absolute;flex-direction:column;gap:12px;text-align:center;padding:15px 20px}
+.cabecalho-publico h1{font-size:18px}.botao-login{padding:8px 16px}.hero-praia{min-height:620px;height:85vh;background-position:center}
+.hero-icone{font-size:48px}.hero-conteudo h1{font-size:45px}.hero-conteudo h2{font-size:25px}
+.hero-conteudo p{font-size:15px;padding:0 10px}.grade-casas{grid-template-columns:1fr}
+.barra-lateral{position:relative;width:100%;height:auto}.conteudo-admin{margin-left:0;padding:15px}
+.menu-lateral{display:grid;grid-template-columns:1fr 1fr}.area-publica{padding:40px 15px}
+.calendario{padding:10px;overflow-x:auto}.calendario-grade{min-width:650px}
+}
+@media(max-width:500px){
+.menu-lateral{grid-template-columns:1fr}.hero-conteudo h1{font-size:38px}.hero-conteudo h2{font-size:22px}
+.hero-botao{padding:13px 22px}.introducao-publica h2{font-size:29px}.card-imagem{height:220px}.info-praia{padding:40px 15px}
+}
 </style>
 </head>
 
@@ -43,49 +188,71 @@ button{font-family:inherit;cursor:pointer}.azul,.sucesso,.vermelho,.amarelo,.cin
 <button class="botao-login" onclick="abrirLogin()">🔐 Acesso Administrativo</button>
 </header>
 
-<section class="hero-praia"><div class="hero-conteudo">
-<div class="hero-icone">🌴</div><h1>Casas na Praia</h1><h2>Seu descanso começa aqui</h2>
+<section class="hero-praia">
+<div class="hero-conteudo">
+<div class="hero-icone">🌴</div>
+<h1>Casas na Praia</h1>
+<h2>Seu descanso começa aqui</h2>
 <p>Conforto, tranquilidade e a praia pertinho de você. Encontre a casa ideal para aproveitar momentos especiais com sua família e amigos.</p>
 <button class="hero-botao" onclick="document.getElementById('nossasCasas').scrollIntoView({behavior:'smooth'})">🏖️ Conheça nossas casas</button>
-</div></section>
+</div>
+</section>
 
 <main class="area-publica">
 <div class="introducao-publica" id="nossasCasas">
-<div class="selo-praia">🌊 TEMPORADA NA PRAIA</div><h2>Escolha sua casa</h2>
+<div class="selo-praia">🌊 TEMPORADA NA PRAIA</div>
+<h2>Escolha sua casa</h2>
 <p>Casas aconchegantes, completas e localizadas a poucos passos da praia. Confira as opções disponíveis e solicite sua reserva.</p>
 </div>
 <div id="avisoBloqueioPublico" class="aviso-bloqueio"></div>
 <div class="grade-casas" id="listaCasasPublica"></div>
 </main>
 
-<section class="faixa-praia"><div class="faixa-praia-conteudo">
+<section class="faixa-praia">
+<div class="faixa-praia-conteudo">
 <h2>☀️ Dias de praia começam com uma boa escolha</h2>
 <p>Reúna a família, convide os amigos e aproveite o melhor da temporada em Balneário Arroio do Silva/SC.</p>
-</div></section>
+</div>
+</section>
 
-<section class="info-praia"><h2>Por que escolher nossas casas?</h2><div class="info-blocos">
+<section class="info-praia">
+<h2>Por que escolher nossas casas?</h2>
+<div class="info-blocos">
 <div class="info-bloco"><div class="icone">🏖️</div><h3>Perto da praia</h3><p>Casas localizadas a poucos passos da praia, para você aproveitar muito mais seu tempo.</p></div>
 <div class="info-bloco"><div class="icone">🏡</div><h3>Conforto</h3><p>Estrutura completa para receber famílias e grupos durante a temporada.</p></div>
 <div class="info-bloco"><div class="icone">📅</div><h3>Reserve sua estadia</h3><p>Escolha a casa, informe suas datas e envie sua solicitação de reserva diretamente pelo site.</p></div>
-</div></section>
+</div>
+</section>
 
-<footer class="rodape-publico"><h3>🏖️ Casas na Praia — Balneário Arroio do Silva/SC</h3><p>Conforto, tranquilidade e momentos especiais perto do mar.</p><p>© 2026 — Todos os direitos reservados.</p></footer>
+<footer class="rodape-publico">
+<h3>🏖️ Casas na Praia — Balneário Arroio do Silva/SC</h3>
+<p>Conforto, tranquilidade e momentos especiais perto do mar.</p>
+<p>© 2026 — Todos os direitos reservados.</p>
+</footer>
 </div>
 
 <div id="overlayGaleria" class="overlay-galeria" onclick="if(event.target===this)fecharGaleria()">
-<div class="galeria-conteudo"><button class="fechar-galeria" onclick="fecharGaleria()">&times;</button>
+<div class="galeria-conteudo">
+<button class="fechar-galeria" onclick="fecharGaleria()">&times;</button>
 <img id="fotoPrincipalGaleria" class="galeria-foto-principal" src="" alt="">
-<div class="galeria-navegacao"><button class="galeria-botao-nav" onclick="fotoAnterior()">&#10094;</button><span id="contadorGaleria" class="galeria-contador">1 de 1</span><button class="galeria-botao-nav" onclick="proximaFoto()">&#10095;</button></div>
+<div class="galeria-navegacao">
+<button class="galeria-botao-nav" onclick="fotoAnterior()">&#10094;</button>
+<span id="contadorGaleria" class="galeria-contador">1 de 1</span>
+<button class="galeria-botao-nav" onclick="proximaFoto()">&#10095;</button>
+</div>
 <div id="miniaturasGaleria" class="galeria-miniaturas"></div>
-</div></div>
+</div>
+</div>
 
-<div id="overlayLogin" class="overlay-login"><div class="caixa-login">
+<div id="overlayLogin" class="overlay-login">
+<div class="caixa-login">
 <h2>🔐 Acesso Administrativo</h2>
 <div class="grupo-input"><label>Usuário</label><input id="usuario" type="text" placeholder="admin"></div>
 <div class="grupo-input"><label>Senha</label><input id="senha" type="password" placeholder="••••••"></div>
 <button class="btn-primario" onclick="fazerLogin()">Entrar no Sistema</button>
 <button class="fechar-login" onclick="fecharLogin()">Voltar para página</button>
-</div></div>
+</div>
+</div>
 
 <div id="painelAdmin" class="oculto">
 <div class="barra-lateral">
@@ -105,341 +272,1565 @@ button{font-family:inherit;cursor:pointer}.azul,.sucesso,.vermelho,.amarelo,.cin
 
 <div id="pagina-calendario" class="pagina ativa">
 <h2>📅 Calendário — Valores & Disponibilidade</h2>
-<p style="color:var(--cinza);margin:10px 0">💡 Dias em vermelho = reservas confirmadas. Clique e arraste para definir valores.</p>
-<div class="linha-form"><label style="font-weight:600">Casa:</label>
+<p style="color:var(--cinza);margin:10px 0">💡 Dias em vermelho = reservas confirmadas ou pagas. Clique e arraste para definir valores.</p>
+
+<div class="linha-form">
+<label style="font-weight:600">Casa:</label>
 <select id="casaCalendario" onchange="trocarCasaCalendario()">
-<option value="amarela">🏡 Casa Amarela</option><option value="bege">🌾 Casa Bege</option><option value="marrom">🪵 Casa Marrom</option><option value="branca">☁️ Casa Branca</option>
-</select></div>
-<div class="calendario"><div class="calendario-cabecalho"><button onclick="mudarMes(-1)">&lt; Mês Anterior</button><h3 id="nomeMes">Mês</h3><button onclick="mudarMes(1)">Próximo Mês &gt;</button></div><div class="calendario-grade" id="gradeCalendario"></div></div>
-<div class="linha-form"><label>Valor Diária (R$):</label><input type="number" id="valorDiaria" min="0" step="5" placeholder="0,00"><button class="sucesso" onclick="salvarValorPeriodo()">💾 Salvar</button><button class="vermelho" onclick="removerValor()">🗑️ Remover</button></div>
+<option value="amarela">🏡 Casa Amarela</option>
+<option value="bege">🌾 Casa Bege</option>
+<option value="marrom">🪵 Casa Marrom</option>
+<option value="branca">☁️ Casa Branca</option>
+</select>
+</div>
+
+<div class="calendario">
+<div class="calendario-cabecalho">
+<button onclick="mudarMes(-1)">&lt; Mês Anterior</button>
+<h3 id="nomeMes">Mês</h3>
+<button onclick="mudarMes(1)">Próximo Mês &gt;</button>
+</div>
+<div class="calendario-grade" id="gradeCalendario"></div>
+</div>
+
+<div class="linha-form">
+<label>Valor Diária (R$):</label>
+<input type="number" id="valorDiaria" min="0" step="5" placeholder="0,00">
+<button class="sucesso" onclick="salvarValorPeriodo()">💾 Salvar</button>
+<button class="vermelho" onclick="removerValor()">🗑️ Remover</button>
+</div>
 <p id="infoSelecao" style="color:var(--cinza)">Nenhum dia selecionado</p>
 </div>
 
 <div id="pagina-casas" class="pagina">
-<h2>🏠 Gerenciar Casas, Galeria de Fotos & Taxa de Limpeza</h2><p style="color:var(--cinza);margin:10px 0">📸 Adicione várias fotos por casa.</p>
+<h2>🏠 Gerenciar Casas, Galeria de Fotos & Taxa de Limpeza</h2>
+<p style="color:var(--cinza);margin:10px 0">📸 Adicione várias fotos por casa.</p>
 <div class="grade-casas" id="gradeCasas"></div>
-<div style="margin-top:25px;padding:15px;background:#f0f9fc;border-radius:8px"><h4>📷 Como pegar o link no Imgur:</h4><ol style="margin:10px 20px;font-size:14px"><li>Acesse <a href="https://imgur.com" target="_blank">imgur.com</a></li><li>Faça upload da foto → clique nela → copie o link direto.</li><li>Cole o link no cadastro da galeria.</li></ol></div>
+<div style="margin-top:25px;padding:15px;background:#f0f9fc;border-radius:8px">
+<h4>📷 Como pegar o link no Imgur:</h4>
+<ol style="margin:10px 20px;font-size:14px">
+<li>Acesse <a href="https://imgur.com" target="_blank">imgur.com</a></li>
+<li>Faça upload da foto → clique nela → copie o link direto.</li>
+<li>Cole o link no cadastro da galeria.</li>
+</ol>
+</div>
 </div>
 
 <div id="pagina-hospedes" class="pagina">
-<h2>👤 Cadastro de Hóspedes</h2><p style="color:var(--sucesso);margin:8px 0">✅ Hóspedes das reservas públicas são adicionados automaticamente!</p>
-<div class="linha-form"><input id="buscarHospede" placeholder="Buscar por nome..." oninput="filtrarHospedes()"><button class="azul" onclick="abrirCadastroHospede()">+ Novo Cadastro</button><button class="azul" onclick="sincronizarHospedesReservas()">🔄 Sincronizar</button></div>
+<h2>👤 Cadastro de Hóspedes</h2>
+<p style="color:var(--sucesso);margin:8px 0">✅ Hóspedes das reservas públicas são adicionados automaticamente!</p>
+<div class="linha-form">
+<input id="buscarHospede" placeholder="Buscar por nome..." oninput="filtrarHospedes()">
+<button class="azul" onclick="abrirCadastroHospede()">+ Novo Cadastro</button>
+<button class="azul" onclick="sincronizarHospedesReservas()">🔄 Sincronizar</button>
+</div>
 <div id="listaHospedes" style="margin-top:20px"></div>
 </div>
 
 <div id="pagina-reservas" class="pagina">
 <h2>📋 Solicitações e Reservas</h2>
 <div style="display:flex;gap:10px;margin:15px 0;flex-wrap:wrap">
-<button data-filtro="todas" class="azul ativo">Todas</button><button data-filtro="pendente" class="azul">Pendentes</button><button data-filtro="confirmada" class="azul">✅ Confirmadas</button><button data-filtro="parcial" class="azul">Pagamento Parcial</button><button data-filtro="pago" class="azul">💰 Pagas</button>
-</div><div id="listaReservas"></div>
+<button data-filtro="todas" class="azul ativo">Todas</button>
+<button data-filtro="pendente" class="azul">Pendentes</button>
+<button data-filtro="confirmada" class="azul">✅ Confirmadas</button>
+<button data-filtro="parcial" class="azul">Pagamento Parcial</button>
+<button data-filtro="pago" class="azul">💰 Pagas</button>
+</div>
+<div id="listaReservas"></div>
 </div>
 
 <div id="pagina-relatorios" class="pagina">
 <h2>📊 Relatórios</h2>
-<div style="display:flex;gap:10px;margin:15px 0"><button data-periodo="todos" class="azul ativo">Todo o Período</button><button data-periodo="mes" class="azul">Este Mês</button><button data-periodo="ano" class="azul">Este Ano</button></div>
+<div style="display:flex;gap:10px;margin:15px 0">
+<button data-periodo="todos" class="azul ativo">Todo o Período</button>
+<button data-periodo="mes" class="azul">Este Mês</button>
+<button data-periodo="ano" class="azul">Este Ano</button>
+</div>
 <div id="relatorioConteudo"></div>
 </div>
 
-</div></div>
+</div>
+</div>
 
-<div id="modalReserva" class="modal"><div class="modal-conteudo">
-<div class="cabecalho-modal"><h3>Solicitar Reserva — <span id="nomeCasaReserva"></span></h3><button class="fechar" onclick="fecharModal()">&times;</button></div>
+<div id="modalReserva" class="modal">
+<div class="modal-conteudo">
+<div class="cabecalho-modal">
+<h3>Solicitar Reserva — <span id="nomeCasaReserva"></span></h3>
+<button class="fechar" onclick="fecharModal()">&times;</button>
+</div>
+
 <div id="avisoBloqueio" class="aviso-bloqueio">⚠️ Período já reservado ou indisponível!</div>
+
 <div class="grupo-input"><label>Nome Completo</label><input id="hospedeNome"></div>
 <div class="grupo-input"><label>Telefone com WhatsApp</label><input id="hospedeTelefone" type="tel"></div>
 <div class="grupo-input"><label>Capacidade da casa</label><div id="infoCapacidadeReserva" class="capacidade"></div></div>
-<div class="linha-form"><div class="grupo-input" style="flex:1"><label>Data Entrada</label><input type="date" id="dataEntrada" onchange="verificarDisponibilidade()"></div><div class="grupo-input" style="flex:1"><label>Data Saída</label><input type="date" id="dataSaida" onchange="verificarDisponibilidade()"></div></div>
-<div class="linha-form"><div class="grupo-input" style="flex:1"><label>👨 Adultos</label><input type="number" id="qtdAdultos" min="0" max="30" value="1" onchange="atualizarTotalPessoas()"></div><div class="grupo-input" style="flex:1"><label>👧 Crianças</label><input type="number" id="qtdCriancas" min="0" max="30" value="0" onchange="atualizarTotalPessoas()"></div></div>
-<div id="avisoCapacidadeReserva" class="aviso-capacidade">Informe a quantidade de adultos e crianças.</div>
-<div class="grupo-input"><label>Valor da Estadia</label><input id="valorDiarias" readonly style="background:#f9f9f9"></div>
-<div class="grupo-input taxa-limpeza-info">🧹 Taxa de Limpeza: <span id="valorTaxaLimpeza" class="valor-destaque">R$ 0,00</span></div>
-<div class="grupo-input"><label>Valor Total (inclui taxa de limpeza)</label><input id="valorEstimado" readonly style="background:#fef9e7;font-weight:bold"></div>
-<div class="grupo-input"><label>Observações</label><textarea id="obsReserva" rows="3" placeholder="Se ultrapassar a capacidade máxima, explique aqui a situação."></textarea></div>
-<button class="amarelo" id="btnEnviarReserva" onclick="enviarReserva()" style="width:100%">📤 Enviar Solicitação</button>
-</div></div>
 
-<div id="modalEditarReserva" class="modal"><div class="modal-conteudo"><div class="cabecalho-modal"><h3>Gestão de Reserva</h3><button class="fechar" onclick="fecharModalEditar()">&times;</button></div><div id="conteudoEditar"></div></div></div>
+<div class="linha-form">
+<div class="grupo-input" style="flex:1">
+<label>Data Entrada</label>
+<input type="date" id="dataEntrada" onchange="verificarDisponibilidade()">
+</div>
+<div class="grupo-input" style="flex:1">
+<label>Data Saída</label>
+<input type="date" id="dataSaida" onchange="verificarDisponibilidade()">
+</div>
+</div>
+
+<div class="linha-form">
+<div class="grupo-input" style="flex:1">
+<label>👨 Adultos</label>
+<input type="number" id="qtdAdultos" min="0" max="30" value="1" onchange="atualizarTotalPessoas()">
+</div>
+<div class="grupo-input" style="flex:1">
+<label>👧 Crianças</label>
+<input type="number" id="qtdCriancas" min="0" max="30" value="0" onchange="atualizarTotalPessoas()">
+</div>
+</div>
+
+<div id="avisoCapacidadeReserva" class="aviso-capacidade">Informe a quantidade de adultos e crianças.</div>
+
+<div class="grupo-input">
+<label>Valor da Estadia</label>
+<input id="valorDiarias" readonly style="background:#f9f9f9">
+</div>
+
+<div class="grupo-input taxa-limpeza-info">
+🧹 Taxa de Limpeza:
+<span id="valorTaxaLimpeza" class="valor-destaque">R$ 0,00</span>
+</div>
+
+<div class="grupo-input">
+<label>Valor Total (inclui taxa de limpeza)</label>
+<input id="valorEstimado" readonly style="background:#fef9e7;font-weight:bold">
+</div>
+
+<div class="grupo-input">
+<label>Observações</label>
+<textarea id="obsReserva" rows="3" placeholder="Se ultrapassar a capacidade máxima, explique aqui a situação."></textarea>
+</div>
+
+<button class="amarelo" id="btnEnviarReserva" onclick="enviarReserva()" style="width:100%">📤 Enviar Solicitação</button>
+</div>
+</div>
+
+<div id="modalEditarReserva" class="modal">
+<div class="modal-conteudo">
+<div class="cabecalho-modal">
+<h3>Gestão de Reserva</h3>
+<button class="fechar" onclick="fecharModalEditar()">&times;</button>
+</div>
+<div id="conteudoEditar"></div>
+</div>
+</div>
 
 <script>
-const firebaseConfig={apiKey:"AIzaSyC8ZtXwPnUa9WnqLdKfYbXzYbXzYbXzYbXzYbXzYbX",authDomain:"casas-na-praia.firebaseapp.com",projectId:"casas-na-praia",storageBucket:"casas-na-praia.appspot.com",messagingSenderId:"123456789012",appId:"1:123456789012:web:abc123def456"};
+const firebaseConfig={
+ apiKey:"AIzaSyC8ZtXwPnUa9WnqLdKfYbXzYbXzYbXzYbXzYbXzYbX",
+ authDomain:"casas-na-praia.firebaseapp.com",
+ projectId:"casas-na-praia",
+ storageBucket:"casas-na-praia.appspot.com",
+ messagingSenderId:"123456789012",
+ appId:"1:123456789012:web:abc123def456"
+};
+
 const ADM_USUARIO='admin',ADM_SENHA='praia2026';
-firebase.initializeApp(firebaseConfig);const db=firebase.firestore();
+firebase.initializeApp(firebaseConfig);
+const db=firebase.firestore();
 const $=id=>document.getElementById(id);
 
 const casas={
-amarela:{nome:'Casa Amarela',capacidade:10,desc:'Casa com excelente estrutura para sua temporada.',caracteristicas:['🛏️ 3 quartos','🚿 2 banheiros e meio','🍖 Espaço gourmet com churrasqueira','🎱 Mesa de sinuca','🚗 Garagem coberta para 3 carros','🏖️ A poucos passos da praia'],fotos:[],taxaLimpeza:0},
-bege:{nome:'Casa Bege',capacidade:8,desc:'Conforto e praticidade para sua temporada.',caracteristicas:['🛏️ 2 quartos','🚿 2 banheiros','🍖 Espaço gourmet com churrasqueira','🎱 Mesa de sinuca','🏡 Pátio fechado','🏖️ A poucos passos da praia'],fotos:[],taxaLimpeza:0},
-marrom:{nome:'Casa Marrom',capacidade:10,desc:'Casa aconchegante e completa para sua temporada.',caracteristicas:['🛏️ 3 quartos','🚿 2 banheiros','🍖 Espaço gourmet com churrasqueira','🎱 Mesa de sinuca','🏡 Pátio fechado','🏖️ A poucos passos da praia'],fotos:[],taxaLimpeza:0},
-branca:{nome:'Casa Branca',capacidade:10,desc:'Casa ampla e completa, ideal para famílias.',caracteristicas:['🛏️ 3 quartos','🚿 2 banheiros e meio','🍖 Espaço gourmet com churrasqueira','🎱 Mesa de sinuca','🚗 Garagem coberta para 3 carros','🏖️ A poucos passos da praia'],fotos:[],taxaLimpeza:0}
+ amarela:{
+  nome:'Casa Amarela',
+  capacidade:10,
+  desc:'Casa com excelente estrutura para sua temporada.',
+  caracteristicas:['🛏️ 3 quartos','🚿 2 banheiros e meio','🍖 Espaço gourmet com churrasqueira','🎱 Mesa de sinuca','🚗 Garagem coberta para 3 carros','🏖️ A poucos passos da praia'],
+  fotos:[],
+  taxaLimpeza:0
+ },
+ bege:{
+  nome:'Casa Bege',
+  capacidade:8,
+  desc:'Conforto e praticidade para sua temporada.',
+  caracteristicas:['🛏️ 2 quartos','🚿 2 banheiros','🍖 Espaço gourmet com churrasqueira','🎱 Mesa de sinuca','🏡 Pátio fechado','🏖️ A poucos passos da praia'],
+  fotos:[],
+  taxaLimpeza:0
+ },
+ marrom:{
+  nome:'Casa Marrom',
+  capacidade:10,
+  desc:'Casa aconchegante e completa para sua temporada.',
+  caracteristicas:['🛏️ 3 quartos','🚿 2 banheiros','🍖 Espaço gourmet com churrasqueira','🎱 Mesa de sinuca','🏡 Pátio fechado','🏖️ A poucos passos da praia'],
+  fotos:[],
+  taxaLimpeza:0
+ },
+ branca:{
+  nome:'Casa Branca',
+  capacidade:10,
+  desc:'Casa ampla e completa, ideal para famílias.',
+  caracteristicas:['🛏️ 3 quartos','🚿 2 banheiros e meio','🍖 Espaço gourmet com churrasqueira','🎱 Mesa de sinuca','🚗 Garagem coberta para 3 carros','🏖️ A poucos passos da praia'],
+  fotos:[],
+  taxaLimpeza:0
+ }
 };
 
-let casaGaleriaAtual=null,indiceFotoAtual=0,dataAtual=new Date(),valoresDiarias={},reservasConfirmadas=[],hospedesCadastrados=[],filtroReservas='todas',filtroRelatorio='todos',selecionando=false,datasSelecionadas=new Set(),casaSelecionadaParaReserva=null;
-let pararMonitoramentoReservas=null,monitoramentoInicializado=false;
+let casaGaleriaAtual=null;
+let indiceFotoAtual=0;
+let dataAtual=new Date();
+let valoresDiarias={};
+let reservasConfirmadas=[];
+let hospedesCadastrados=[];
+let filtroReservas='todas';
+let filtroRelatorio='todos';
+let selecionando=false;
+let datasSelecionadas=new Set();
+let casaSelecionadaParaReserva=null;
+let pararMonitoramentoReservas=null;
+let monitoramentoInicializado=false;
+
 const CHAVE_NOTIFICACOES='casasPraiaNotificacoesAtivas';
 
 const moeda=v=>'R$ '+Number(v||0).toFixed(2).replace('.',',');
-const dataLocal=s=>{if(!s)return null;const p=s.split('-').map(Number);return p.length===3?new Date(p[0],p[1]-1,p[2]):null};
+const dataLocal=s=>{
+ if(!s)return null;
+ const p=s.split('-').map(Number);
+ return p.length===3?new Date(p[0],p[1]-1,p[2]):null;
+};
 const dataStr=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-const dataBr=s=>{if(!s)return '';const[a,m,d]=s.split('-');return `${d}/${m}/${a}`};
+const dataBr=s=>{
+ if(!s)return '';
+ const[a,m,d]=s.split('-');
+ return `${d}/${m}/${a}`;
+};
 const dias=(a,b)=>a&&b?Math.round(Math.abs((b-a)/86400000)):0;
 const normalizar=s=>(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
 
 document.addEventListener('DOMContentLoaded',async()=>{
- for(const fn of [carregarValoresDiarias,carregarReservasConfirmadas,carregarDadosCasas])try{await fn()}catch(e){console.error(e)}
+ for(const fn of [carregarValoresDiarias,carregarReservasConfirmadas,carregarDadosCasas]){
+  try{await fn()}catch(e){console.error(e)}
+ }
  renderizarPaginaPublica();
 });
 
 function abrirLogin(){$('overlayLogin').classList.add('aberto')}
-function fecharLogin(){$('overlayLogin').classList.remove('aberto');$('usuario').value='';$('senha').value=''}
+function fecharLogin(){
+ $('overlayLogin').classList.remove('aberto');
+ $('usuario').value='';
+ $('senha').value='';
+}
+
 function fazerLogin(){
  if($('usuario').value.trim()===ADM_USUARIO&&$('senha').value.trim()===ADM_SENHA){
-  fecharLogin();$('areaPublica').classList.add('oculto');$('painelAdmin').classList.remove('oculto');inicializarPainel();setTimeout(verificarNotificacoesJaAtivas,300);
+  fecharLogin();
+  $('areaPublica').classList.add('oculto');
+  $('painelAdmin').classList.remove('oculto');
+  inicializarPainel();
+  setTimeout(verificarNotificacoesJaAtivas,300);
  }else alert('❌ Usuário ou senha incorretos!');
 }
-function fazerLogout(){pararMonitoramentoDeReservas();$('painelAdmin').classList.add('oculto');$('areaPublica').classList.remove('oculto');renderizarPaginaPublica()}
+
+function fazerLogout(){
+ pararMonitoramentoDeReservas();
+ $('painelAdmin').classList.add('oculto');
+ $('areaPublica').classList.remove('oculto');
+ renderizarPaginaPublica();
+}
 
 function mostrarStatusBotaoNotificacao(){
- const b=$('btnNotificacoes');if(!b)return;
- if('Notification'in window&&Notification.permission==='granted'&&localStorage.getItem(CHAVE_NOTIFICACOES)==='sim'){b.textContent='🔔 Notificações ATIVADAS';b.classList.add('ativado');b.disabled=true}
- else{b.textContent='🔔 Ativar notificações';b.classList.remove('ativado');b.disabled=false}
+ const b=$('btnNotificacoes');
+ if(!b)return;
+
+ if('Notification'in window&&Notification.permission==='granted'&&localStorage.getItem(CHAVE_NOTIFICACOES)==='sim'){
+  b.textContent='🔔 Notificações ATIVADAS';
+  b.classList.add('ativado');
+  b.disabled=true;
+ }else{
+  b.textContent='🔔 Ativar notificações';
+  b.classList.remove('ativado');
+  b.disabled=false;
+ }
 }
 
 function mostrarNotificacaoNovaReserva(r,id){
  if(!('Notification'in window)||Notification.permission!=='granted')return;
- const n=new Notification('🏖️ Nova solicitação de reserva',{body:`${r.nome||'Novo hóspede'} solicitou ${casas[r.casa]?.nome||r.casa||'Casa'}\n${r.entrada||''} → ${r.saida||''}${r.totalPessoas?' — '+r.totalPessoas+' pessoa(s)':''}`,tag:'nova-reserva-'+id,requireInteraction:true});
- n.onclick=()=>{window.focus();n.close();document.querySelector('[data-pagina="reservas"]')?.click()}
+
+ const n=new Notification('🏖️ Nova solicitação de reserva',{
+  body:`${r.nome||'Novo hóspede'} solicitou ${casas[r.casa]?.nome||r.casa||'Casa'}\n${r.entrada||''} → ${r.saida||''}${r.totalPessoas?' — '+r.totalPessoas+' pessoa(s)':''}`,
+  tag:'nova-reserva-'+id,
+  requireInteraction:true
+ });
+
+ n.onclick=()=>{
+  window.focus();
+  n.close();
+  document.querySelector('[data-pagina="reservas"]')?.click();
+ };
 }
 
 function iniciarMonitoramentoReservas(){
  if(!('Notification'in window)||Notification.permission!=='granted'||pararMonitoramentoReservas)return;
+
  let primeiro=true;
- pararMonitoramentoReservas=db.collection('reservas').orderBy('criadoEm','desc').limit(100).onSnapshot(s=>{
-  if(primeiro){primeiro=false;monitoramentoInicializado=true;return}
+
+ pararMonitoramentoReservas=db.collection('reservas')
+ .orderBy('criadoEm','desc')
+ .limit(100)
+ .onSnapshot(s=>{
+  if(primeiro){
+   primeiro=false;
+   monitoramentoInicializado=true;
+   return;
+  }
+
   s.docChanges().forEach(c=>{
    if(c.type!=='added')return;
-   const id=c.doc.id,r=c.doc.data();
+
+   const id=c.doc.id;
+   const r=c.doc.data();
+
    if(reservasConfirmadas.some(x=>x.id===id))return;
-   mostrarNotificacaoNovaReserva(r,id);reservasConfirmadas.unshift({id,...r});atualizarListaReservas();renderizarCalendario();gerarRelatorio();
-  })
- },e=>{console.error('❌ Erro no monitoramento:',e);monitoramentoInicializado=false})
+
+   mostrarNotificacaoNovaReserva(r,id);
+
+   reservasConfirmadas.unshift({id,...r});
+   atualizarListaReservas();
+   renderizarCalendario();
+   gerarRelatorio();
+  });
+ },e=>{
+  console.error('❌ Erro no monitoramento:',e);
+  monitoramentoInicializado=false;
+ });
 }
-function pararMonitoramentoDeReservas(){if(pararMonitoramentoReservas){pararMonitoramentoReservas();pararMonitoramentoReservas=null}monitoramentoInicializado=false}
+
+function pararMonitoramentoDeReservas(){
+ if(pararMonitoramentoReservas){
+  pararMonitoramentoReservas();
+  pararMonitoramentoReservas=null;
+ }
+ monitoramentoInicializado=false;
+}
+
 async function ativarNotificacoes(){
  try{
-  if(!('Notification'in window))return alert('❌ Este navegador não suporta notificações.');
-  let p=Notification.permission;if(p==='default')p=await Notification.requestPermission();
-  if(p!=='granted')return alert(p==='denied'?'⚠️ As notificações estão bloqueadas neste navegador.':'⚠️ As notificações não foram autorizadas.');
-  localStorage.setItem(CHAVE_NOTIFICACOES,'sim');iniciarMonitoramentoReservas();mostrarStatusBotaoNotificacao();
-  new Notification('🏖️ Casas na Praia',{body:'Notificações ativadas com sucesso!\nEste dispositivo será avisado quando chegar uma nova reserva.',tag:'casas-praia-ativacao'});
- }catch(e){console.error(e);alert('❌ Não foi possível ativar as notificações.\n\n'+e.message)}
+  if(!('Notification'in window)){
+   return alert('❌ Este navegador não suporta notificações.');
+  }
+
+  let p=Notification.permission;
+
+  if(p==='default')p=await Notification.requestPermission();
+
+  if(p!=='granted'){
+   return alert(p==='denied'
+    ?'⚠️ As notificações estão bloqueadas neste navegador.'
+    :'⚠️ As notificações não foram autorizadas.');
+  }
+
+  localStorage.setItem(CHAVE_NOTIFICACOES,'sim');
+  iniciarMonitoramentoReservas();
+  mostrarStatusBotaoNotificacao();
+
+  new Notification('🏖️ Casas na Praia',{
+   body:'Notificações ativadas com sucesso!\nEste dispositivo será avisado quando chegar uma nova reserva.',
+   tag:'casas-praia-ativacao'
+  });
+
+ }catch(e){
+  console.error(e);
+  alert('❌ Não foi possível ativar as notificações.\n\n'+e.message);
+ }
 }
+
 function verificarNotificacoesJaAtivas(){
  if(!('Notification'in window))return;
+
  mostrarStatusBotaoNotificacao();
- if(Notification.permission==='granted'&&localStorage.getItem(CHAVE_NOTIFICACOES)==='sim')iniciarMonitoramentoReservas();
+
+ if(Notification.permission==='granted'&&localStorage.getItem(CHAVE_NOTIFICACOES)==='sim'){
+  iniciarMonitoramentoReservas();
+ }
 }
 
 async function inicializarPainel(){
- try{await Promise.all([carregarValoresDiarias(),carregarReservasConfirmadas(),carregarHospedes(),carregarDadosCasas()]);renderizarCalendario();configurarNavegacao();renderizarCasasAdmin();gerarRelatorio()}
- catch(e){console.error(e);alert('⚠️ O painel abriu, mas ocorreu um erro ao carregar alguns dados.')}
+ try{
+  await Promise.all([
+   carregarValoresDiarias(),
+   carregarReservasConfirmadas(),
+   carregarHospedes(),
+   carregarDadosCasas()
+  ]);
+
+  renderizarCalendario();
+  configurarNavegacao();
+  renderizarCasasAdmin();
+  gerarRelatorio();
+
+ }catch(e){
+  console.error(e);
+  alert('⚠️ O painel abriu, mas ocorreu um erro ao carregar alguns dados.');
+ }
 }
 
 function abrirGaleria(id,i=0){
- if(!casas[id]?.fotos?.length)return alert('Esta casa ainda não possui fotos cadastradas.');
- casaGaleriaAtual=id;indiceFotoAtual=i;atualizarFotoGaleria();$('overlayGaleria').classList.add('aberto');
+ if(!casas[id]?.fotos?.length){
+  return alert('Esta casa ainda não possui fotos cadastradas.');
+ }
+
+ casaGaleriaAtual=id;
+ indiceFotoAtual=i;
+ atualizarFotoGaleria();
+ $('overlayGaleria').classList.add('aberto');
 }
-function fecharGaleria(){$('overlayGaleria').classList.remove('aberto');casaGaleriaAtual=null}
+
+function fecharGaleria(){
+ $('overlayGaleria').classList.remove('aberto');
+ casaGaleriaAtual=null;
+}
+
 function atualizarFotoGaleria(){
  if(!casaGaleriaAtual)return;
- const f=casas[casaGaleriaAtual].fotos||[];if(!f.length)return fecharGaleria();
- indiceFotoAtual=(indiceFotoAtual+f.length)%f.length;$('fotoPrincipalGaleria').src=f[indiceFotoAtual];$('contadorGaleria').textContent=`${indiceFotoAtual+1} de ${f.length}`;
- $('miniaturasGaleria').innerHTML=f.map((x,i)=>`<img src="${x}" class="miniatura ${i===indiceFotoAtual?'ativa':''}" onclick="indiceFotoAtual=${i};atualizarFotoGaleria()">`).join('');
+
+ const f=casas[casaGaleriaAtual].fotos||[];
+
+ if(!f.length)return fecharGaleria();
+
+ indiceFotoAtual=(indiceFotoAtual+f.length)%f.length;
+ $('fotoPrincipalGaleria').src=f[indiceFotoAtual];
+ $('contadorGaleria').textContent=`${indiceFotoAtual+1} de ${f.length}`;
+
+ $('miniaturasGaleria').innerHTML=f.map((x,i)=>
+  `<img src="${x}" class="miniatura ${i===indiceFotoAtual?'ativa':''}" onclick="indiceFotoAtual=${i};atualizarFotoGaleria()">`
+ ).join('');
 }
-function fotoAnterior(){indiceFotoAtual--;atualizarFotoGaleria()}function proximaFoto(){indiceFotoAtual++;atualizarFotoGaleria()}
+
+function fotoAnterior(){
+ indiceFotoAtual--;
+ atualizarFotoGaleria();
+}
+
+function proximaFoto(){
+ indiceFotoAtual++;
+ atualizarFotoGaleria();
+}
 
 function renderizarPaginaPublica(){
- const c=$('listaCasasPublica');if(!c)return;
+ const c=$('listaCasasPublica');
+ if(!c)return;
+
  c.innerHTML=Object.entries(casas).map(([id,x])=>{
-  const f=x.fotos?.[0];return `<div class="card-casa"><div class="card-imagem" onclick="${f?`abrirGaleria('${id}')`:''}">${f?`<img src="${f}" alt="${x.nome}">`:'🏖️'}</div><div class="card-corpo"><h3>${x.nome}</h3><p class="descricao-casa">${x.desc}</p><div class="caracteristicas-casa">${(x.caracteristicas||[]).map(v=>`<div class="caracteristica-item">${v}</div>`).join('')}</div><div class="capacidade">👥 Capacidade: até ${x.capacidade} pessoas</div>${x.fotos?.length>1?`<button class="botao-galeria" onclick="abrirGaleria('${id}')">📷 Ver ${x.fotos.length} fotos</button>`:''}<button class="amarelo" style="width:100%;margin-top:8px" onclick="abrirModalReserva('${id}')">📅 Solicitar Reserva</button></div></div>`
+  const f=x.fotos?.[0];
+
+  return `
+  <div class="card-casa">
+   <div class="card-imagem" onclick="${f?`abrirGaleria('${id}')`:''}">
+    ${f?`<img src="${f}" alt="${x.nome}">`:'🏖️'}
+   </div>
+   <div class="card-corpo">
+    <h3>${x.nome}</h3>
+    <p class="descricao-casa">${x.desc}</p>
+    <div class="caracteristicas-casa">
+     ${(x.caracteristicas||[]).map(v=>`<div class="caracteristica-item">${v}</div>`).join('')}
+    </div>
+    <div class="capacidade">👥 Capacidade: até ${x.capacidade} pessoas</div>
+    ${x.fotos?.length>1?`<button class="botao-galeria" onclick="abrirGaleria('${id}')">📷 Ver ${x.fotos.length} fotos</button>`:''}
+    <button class="amarelo" style="width:100%;margin-top:8px" onclick="abrirModalReserva('${id}')">📅 Solicitar Reserva</button>
+   </div>
+  </div>`;
  }).join('');
 }
 
 function configurarNavegacao(){
  document.querySelectorAll('.item-menu').forEach(b=>b.onclick=()=>{
-  document.querySelectorAll('.item-menu').forEach(x=>x.classList.remove('ativo'));b.classList.add('ativo');
-  document.querySelectorAll('.pagina').forEach(x=>x.classList.remove('ativa'));$('pagina-'+b.dataset.pagina).classList.add('ativa');
+  document.querySelectorAll('.item-menu').forEach(x=>x.classList.remove('ativo'));
+  b.classList.add('ativo');
+
+  document.querySelectorAll('.pagina').forEach(x=>x.classList.remove('ativa'));
+  $('pagina-'+b.dataset.pagina).classList.add('ativa');
+
   if(b.dataset.pagina==='reservas')atualizarListaReservas();
   if(b.dataset.pagina==='calendario')renderizarCalendario();
   if(b.dataset.pagina==='hospedes')filtrarHospedes();
   if(b.dataset.pagina==='casas')renderizarCasasAdmin();
  });
- document.querySelectorAll('[data-filtro]').forEach(b=>b.onclick=()=>{filtroReservas=b.dataset.filtro;document.querySelectorAll('[data-filtro]').forEach(x=>x.classList.remove('ativo'));b.classList.add('ativo');atualizarListaReservas()});
- document.querySelectorAll('[data-periodo]').forEach(b=>b.onclick=()=>{filtroRelatorio=b.dataset.periodo;document.querySelectorAll('[data-periodo]').forEach(x=>x.classList.remove('ativo'));b.classList.add('ativo');gerarRelatorio()});
+
+ document.querySelectorAll('[data-filtro]').forEach(b=>b.onclick=()=>{
+  filtroReservas=b.dataset.filtro;
+  document.querySelectorAll('[data-filtro]').forEach(x=>x.classList.remove('ativo'));
+  b.classList.add('ativo');
+  atualizarListaReservas();
+ });
+
+ document.querySelectorAll('[data-periodo]').forEach(b=>b.onclick=()=>{
+  filtroRelatorio=b.dataset.periodo;
+  document.querySelectorAll('[data-periodo]').forEach(x=>x.classList.remove('ativo'));
+  b.classList.add('ativo');
+  gerarRelatorio();
+ });
 }
 
-function mudarMes(d){dataAtual.setMonth(dataAtual.getMonth()+d);renderizarCalendario()}
-function trocarCasaCalendario(){limparSelecao();renderizarCalendario()}
-function verificarDiaBloqueado(casa,s){return reservasConfirmadas.some(r=>(r.status==='confirmada'||r.status==='pago')&&r.casa===casa&&s>=r.entrada&&s<r.saida)}
+function mudarMes(d){
+ dataAtual.setMonth(dataAtual.getMonth()+d);
+ renderizarCalendario();
+}
+
+function trocarCasaCalendario(){
+ limparSelecao();
+ renderizarCalendario();
+}
+
+/* CORREÇÃO PRINCIPAL:
+   o banco usa statusPagamento, não status */
+function verificarDiaBloqueado(casa,s){
+ return reservasConfirmadas.some(r=>
+  ['confirmada','pago'].includes(r.statusPagamento)&&
+  r.casa===casa&&
+  s>=r.entrada&&
+  s<r.saida
+ );
+}
+
+/* Verificação direta no Firestore.
+   Isso impede reservas duplicadas mesmo se o navegador
+   ainda não tiver atualizado reservasConfirmadas. */
+async function verificarPeriodoBloqueado(casa,a,b,ignorarId=null){
+ if(!casa||!a||!b||b<=a)return false;
+
+ try{
+  const snap=await db.collection('reservas')
+   .where('casa','==',casa)
+   .get();
+
+  return snap.docs.some(doc=>{
+   if(ignorarId&&doc.id===ignorarId)return false;
+
+   const r=doc.data();
+
+   if(!['confirmada','pago'].includes(r.statusPagamento))return false;
+   if(!r.entrada||!r.saida)return false;
+
+   /* Há conflito quando:
+      início da nova reserva < fim da antiga
+      E
+      fim da nova reserva > início da antiga */
+   return a<r.saida&&b>r.entrada;
+  });
+
+ }catch(e){
+  console.error('Erro ao verificar período reservado:',e);
+
+  /* Em caso de erro no Firestore, bloqueia por segurança. */
+  return true;
+ }
+}
 
 function renderizarCalendario(){
- const g=$('gradeCalendario');if(!g)return;
- const casa=$('casaCalendario').value,y=dataAtual.getFullYear(),m=dataAtual.getMonth(),primeiro=new Date(y,m,1),ultimo=new Date(y,m+1,0),nomes=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
- $('nomeMes').textContent=new Intl.DateTimeFormat('pt-BR',{month:'long',year:'numeric'}).format(dataAtual);
+ const g=$('gradeCalendario');
+ if(!g)return;
+
+ const casa=$('casaCalendario').value;
+ const y=dataAtual.getFullYear();
+ const m=dataAtual.getMonth();
+ const primeiro=new Date(y,m,1);
+ const ultimo=new Date(y,m+1,0);
+ const nomes=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+
+ $('nomeMes').textContent=new Intl.DateTimeFormat('pt-BR',{
+  month:'long',
+  year:'numeric'
+ }).format(dataAtual);
+
  let h=nomes.map(x=>`<div class="rotulo-dia-semana">${x}</div>`).join('');
+
  for(let i=0;i<primeiro.getDay();i++)h+='<div></div>';
+
  for(let d=1;d<=ultimo.getDate();d++){
-  const dt=new Date(y,m,d),s=dataStr(dt),bloq=verificarDiaBloqueado(casa,s),pass=dt<new Date(new Date().setHours(0,0,0,0)),sel=datasSelecionadas.has(s),v=valoresDiarias[`${casa}_${s}`];
-  h+=`<div class="dia ${bloq?'bloqueado':''} ${pass?'passado':''} ${sel?'selecionado':''} ${v!=null?'com-valor':''}" data-data="${s}" onmousedown="iniciarSelecao('${s}')" onmouseenter="estenderSelecao('${s}')">${d}${v!=null?`<small><br>${moeda(v)}</small>`:''}${bloq?'<small><br>🔒</small>':''}</div>`;
+  const dt=new Date(y,m,d);
+  const s=dataStr(dt);
+  const bloq=verificarDiaBloqueado(casa,s);
+  const pass=dt<new Date(new Date().setHours(0,0,0,0));
+  const sel=datasSelecionadas.has(s);
+  const v=valoresDiarias[`${casa}_${s}`];
+
+  h+=`
+  <div class="dia ${bloq?'bloqueado':''} ${pass?'passado':''} ${sel?'selecionado':''} ${v!=null?'com-valor':''}"
+       data-data="${s}"
+       onmousedown="iniciarSelecao('${s}')"
+       onmouseenter="estenderSelecao('${s}')">
+   ${d}
+   ${v!=null?`<small><br>${moeda(v)}</small>`:''}
+   ${bloq?'<small><br>🔒</small>':''}
+  </div>`;
  }
+
  g.innerHTML=h;
 }
-function iniciarSelecao(s){if(verificarDiaBloqueado($('casaCalendario').value,s))return;selecionando=true;datasSelecionadas.clear();datasSelecionadas.add(s);atualizarInfoSelecao()}
-function estenderSelecao(s){if(!selecionando||verificarDiaBloqueado($('casaCalendario').value,s))return;const a=[...datasSelecionadas][0];if(!a)return;datasSelecionadas.clear();let d=dataLocal(a),fim=dataLocal(s),passo=d<=fim?1:-1;for(;;){datasSelecionadas.add(dataStr(d));if(dataStr(d)===dataStr(fim))break;d.setDate(d.getDate()+passo)}atualizarInfoSelecao();renderizarCalendario()}
-document.addEventListener('mouseup',()=>{if(selecionando){selecionando=false;atualizarInfoSelecao()}});
-function atualizarInfoSelecao(){$('infoSelecao').textContent=datasSelecionadas.size?`${datasSelecionadas.size} dia(s) selecionado(s): ${[...datasSelecionadas].sort().map(dataBr).join(', ')}`:'Nenhum dia selecionado'}
+
+function iniciarSelecao(s){
+ if(verificarDiaBloqueado($('casaCalendario').value,s))return;
+
+ selecionando=true;
+ datasSelecionadas.clear();
+ datasSelecionadas.add(s);
+ atualizarInfoSelecao();
+}
+
+function estenderSelecao(s){
+ if(!selecionando)return;
+ if(verificarDiaBloqueado($('casaCalendario').value,s))return;
+
+ const a=[...datasSelecionadas][0];
+ if(!a)return;
+
+ datasSelecionadas.clear();
+
+ let d=dataLocal(a);
+ const fim=dataLocal(s);
+ const passo=d<=fim?1:-1;
+
+ for(;;){
+  datasSelecionadas.add(dataStr(d));
+  if(dataStr(d)===dataStr(fim))break;
+  d.setDate(d.getDate()+passo);
+ }
+
+ atualizarInfoSelecao();
+ renderizarCalendario();
+}
+
+document.addEventListener('mouseup',()=>{
+ if(selecionando){
+  selecionando=false;
+  atualizarInfoSelecao();
+ }
+});
+
+function atualizarInfoSelecao(){
+ $('infoSelecao').textContent=datasSelecionadas.size
+ ?`${datasSelecionadas.size} dia(s) selecionado(s): ${[...datasSelecionadas].sort().map(dataBr).join(', ')}`
+ :'Nenhum dia selecionado';
+}
+
 async function salvarValorPeriodo(){
- const v=Number($('valorDiaria').value),c=$('casaCalendario').value;if(!datasSelecionadas.size||isNaN(v))return alert('Selecione os dias e informe o valor.');
- try{for(const s of datasSelecionadas)await db.collection('valores').doc(`${c}_${s}`).set({casa:c,data:s,valor:v,atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()});await carregarValoresDiarias();renderizarCalendario();alert('✅ Valor salvo com sucesso!')}catch(e){console.error(e);alert('❌ Erro ao salvar valor.')}
+ const v=Number($('valorDiaria').value);
+ const c=$('casaCalendario').value;
+
+ if(!datasSelecionadas.size||isNaN(v)){
+  return alert('Selecione os dias e informe o valor.');
+ }
+
+ try{
+  for(const s of datasSelecionadas){
+   await db.collection('valores').doc(`${c}_${s}`).set({
+    casa:c,
+    data:s,
+    valor:v,
+    atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()
+   });
+  }
+
+  await carregarValoresDiarias();
+  renderizarCalendario();
+  alert('✅ Valor salvo com sucesso!');
+
+ }catch(e){
+  console.error(e);
+  alert('❌ Erro ao salvar valor.');
+ }
 }
+
 async function removerValor(){
- const c=$('casaCalendario').value;if(!datasSelecionadas.size)return alert('Selecione os dias.');
- try{for(const s of datasSelecionadas)await db.collection('valores').doc(`${c}_${s}`).delete();await carregarValoresDiarias();renderizarCalendario();alert('🗑️ Valores removidos.')}catch(e){console.error(e);alert('❌ Erro ao remover.')}
+ const c=$('casaCalendario').value;
+
+ if(!datasSelecionadas.size){
+  return alert('Selecione os dias.');
+ }
+
+ try{
+  for(const s of datasSelecionadas){
+   await db.collection('valores').doc(`${c}_${s}`).delete();
+  }
+
+  await carregarValoresDiarias();
+  renderizarCalendario();
+  alert('🗑️ Valores removidos.');
+
+ }catch(e){
+  console.error(e);
+  alert('❌ Erro ao remover.');
+ }
 }
-function limparSelecao(){datasSelecionadas.clear();selecionando=false;const i=$('infoSelecao');if(i)i.textContent='Nenhum dia selecionado'}
+
+function limparSelecao(){
+ datasSelecionadas.clear();
+ selecionando=false;
+
+ const i=$('infoSelecao');
+ if(i)i.textContent='Nenhum dia selecionado';
+}
+
 async function carregarValoresDiarias(){
- valoresDiarias={};const s=await db.collection('valores').get();s.forEach(d=>{const x=d.data();valoresDiarias[`${x.casa}_${x.data}`]=Number(x.valor||0)});
+ valoresDiarias={};
+
+ const s=await db.collection('valores').get();
+
+ s.forEach(d=>{
+  const x=d.data();
+  valoresDiarias[`${x.casa}_${x.data}`]=Number(x.valor||0);
+ });
 }
 
 function atualizarTotalPessoas(){
- const a=Number($('qtdAdultos').value||0),c=Number($('qtdCriancas').value||0),t=a+c,max=casas[casaSelecionadaParaReserva]?.capacidade||0,box=$('avisoCapacidadeReserva');
- if(!t)box.textContent='Informe a quantidade de adultos e crianças.';
- else if(t>max)box.innerHTML=`⚠️ Total de ${t} pessoas ultrapassa a capacidade de ${max}. Explique a situação nas observações.`;else box.textContent=`✅ ${t} pessoa(s) — dentro da capacidade.`;
- box.className=t>max?'aviso-excesso':'aviso-capacidade';verificarDisponibilidade();
+ const a=Number($('qtdAdultos').value||0);
+ const c=Number($('qtdCriancas').value||0);
+ const t=a+c;
+ const max=casas[casaSelecionadaParaReserva]?.capacidade||0;
+ const box=$('avisoCapacidadeReserva');
+
+ if(!t){
+  box.textContent='Informe a quantidade de adultos e crianças.';
+ }else if(t>max){
+  box.innerHTML=`⚠️ Total de ${t} pessoas ultrapassa a capacidade de ${max}. Explique a situação nas observações.`;
+ }else{
+  box.textContent=`✅ ${t} pessoa(s) — dentro da capacidade.`;
+ }
+
+ box.className=t>max?'aviso-excesso':'aviso-capacidade';
+ verificarDisponibilidade();
 }
 
 function abrirModalReserva(id){
- casaSelecionadaParaReserva=id;const x=casas[id];$('nomeCasaReserva').textContent=x.nome;$('infoCapacidadeReserva').textContent=`👥 Capacidade máxima: ${x.capacidade} pessoas`;
- $('valorTaxaLimpeza').textContent=moeda(x.taxaLimpeza);$('hospedeNome').value='';$('hospedeTelefone').value='';$('obsReserva').value='';$('dataEntrada').value='';$('dataSaida').value='';$('qtdAdultos').value=1;$('qtdCriancas').value=0;$('valorDiarias').value='';$('valorEstimado').value='';$('avisoBloqueio').style.display='none';$('btnEnviarReserva').disabled=false;atualizarTotalPessoas();$('modalReserva').classList.add('aberto');
+ casaSelecionadaParaReserva=id;
+
+ const x=casas[id];
+
+ $('nomeCasaReserva').textContent=x.nome;
+ $('infoCapacidadeReserva').textContent=`👥 Capacidade máxima: ${x.capacidade} pessoas`;
+ $('valorTaxaLimpeza').textContent=moeda(x.taxaLimpeza);
+
+ $('hospedeNome').value='';
+ $('hospedeTelefone').value='';
+ $('obsReserva').value='';
+ $('dataEntrada').value='';
+ $('dataSaida').value='';
+ $('qtdAdultos').value=1;
+ $('qtdCriancas').value=0;
+ $('valorDiarias').value='';
+ $('valorEstimado').value='';
+
+ $('avisoBloqueio').style.display='none';
+ $('btnEnviarReserva').disabled=false;
+
+ atualizarTotalPessoas();
+ $('modalReserva').classList.add('aberto');
 }
-function fecharModal(){$('modalReserva').classList.remove('aberto');casaSelecionadaParaReserva=null}
-function verificarPeriodoBloqueado(casa,a,b){return reservasConfirmadas.some(r=>(r.status==='confirmada'||r.status==='pago')&&r.casa===casa&&a<r.saida&&b>r.entrada)}
+
+function fecharModal(){
+ $('modalReserva').classList.remove('aberto');
+ casaSelecionadaParaReserva=null;
+}
+
 async function calcularValorDiarias(casa,a,b){
- const da=dataLocal(a),ds=dataLocal(b);if(!da||!ds||ds<=da)return {dias:0,valor:0};
- let total=0,n=0;for(let d=new Date(da);d<ds;d.setDate(d.getDate()+1)){const s=dataStr(d),v=valoresDiarias[`${casa}_${s}`];total+=v!=null?Number(v):150;n++}return {dias:n,valor:total};
+ const da=dataLocal(a);
+ const ds=dataLocal(b);
+
+ if(!da||!ds||ds<=da)return{dias:0,valor:0};
+
+ let total=0,n=0;
+
+ for(let d=new Date(da);d<ds;d.setDate(d.getDate()+1)){
+  const s=dataStr(d);
+  const v=valoresDiarias[`${casa}_${s}`];
+
+  total+=v!=null?Number(v):150;
+  n++;
+ }
+
+ return{dias:n,valor:total};
 }
+
 async function verificarDisponibilidade(){
- const a=$('dataEntrada').value,b=$('dataSaida').value,c=casaSelecionadaParaReserva;if(!c||!a||!b)return;
- const bloqueado=verificarPeriodoBloqueado(c,a,b),x=await calcularValorDiarias(c,a,b),taxa=Number(casas[c]?.taxaLimpeza||0),total=x.valor+taxa;
- $('avisoBloqueio').style.display=bloqueado?'block':'none';$('valorDiarias').value=x.dias?`${moeda(x.valor)} (${x.dias} diária(s))`:'';$('valorEstimado').value=x.dias?moeda(total):'';$('btnEnviarReserva').disabled=bloqueado||!x.dias;
+ const a=$('dataEntrada').value;
+ const b=$('dataSaida').value;
+ const c=casaSelecionadaParaReserva;
+
+ if(!c||!a||!b)return;
+
+ if(b<=a){
+  $('avisoBloqueio').style.display='block';
+  $('avisoBloqueio').textContent='⚠️ A data de saída deve ser posterior à entrada.';
+  $('btnEnviarReserva').disabled=true;
+  return;
+ }
+
+ const bloqueado=await verificarPeriodoBloqueado(c,a,b);
+ const x=await calcularValorDiarias(c,a,b);
+ const taxa=Number(casas[c]?.taxaLimpeza||0);
+ const total=x.valor+taxa;
+
+ $('avisoBloqueio').style.display=bloqueado?'block':'none';
+
+ if(bloqueado){
+  $('avisoBloqueio').textContent='⚠️ Este período já possui uma reserva confirmada ou paga para esta casa. Escolha outras datas.';
+ }
+
+ $('valorDiarias').value=x.dias
+ ?`${moeda(x.valor)} (${x.dias} diária(s))`
+ :'';
+
+ $('valorEstimado').value=x.dias?moeda(total):'';
+
+ $('btnEnviarReserva').disabled=bloqueado||!x.dias;
 }
+
 async function enviarReserva(){
- const nome=$('hospedeNome').value.trim(),tel=$('hospedeTelefone').value.trim(),a=$('dataEntrada').value,b=$('dataSaida').value,c=casaSelecionadaParaReserva,adultos=Number($('qtdAdultos').value||0),criancas=Number($('qtdCriancas').value||0),obs=$('obsReserva').value.trim();
- if(!nome||!tel||!a||!b)return alert('⚠️ Preencha nome, telefone e datas.');
- if(b<=a)return alert('⚠️ A data de saída deve ser posterior à entrada.');
- if(verificarPeriodoBloqueado(c,a,b))return alert('⚠️ Este período já está reservado.');
- const totalPessoas=adultos+criancas,max=casas[c].capacidade;
- if(totalPessoas>max&&!obs)return alert(`⚠️ A casa comporta até ${max} pessoas. Explique a situação nas observações.`);
- const calc=await calcularValorDiarias(c,a,b),taxa=Number(casas[c].taxaLimpeza||0),valorTotal=calc.valor+taxa;
+ const nome=$('hospedeNome').value.trim();
+ const tel=$('hospedeTelefone').value.trim();
+ const a=$('dataEntrada').value;
+ const b=$('dataSaida').value;
+ const c=casaSelecionadaParaReserva;
+ const adultos=Number($('qtdAdultos').value||0);
+ const criancas=Number($('qtdCriancas').value||0);
+ const obs=$('obsReserva').value.trim();
+
+ if(!nome||!tel||!a||!b){
+  return alert('⚠️ Preencha nome, telefone e datas.');
+ }
+
+ if(b<=a){
+  return alert('⚠️ A data de saída deve ser posterior à entrada.');
+ }
+
+ /* NOVA VERIFICAÇÃO DIRETA NO FIRESTORE */
+ const bloqueado=await verificarPeriodoBloqueado(c,a,b);
+
+ if(bloqueado){
+  $('avisoBloqueio').style.display='block';
+  $('avisoBloqueio').textContent='⚠️ Este período já possui uma reserva confirmada ou paga para esta casa. Escolha outras datas.';
+  return;
+ }
+
+ const totalPessoas=adultos+criancas;
+ const max=casas[c].capacidade;
+
+ if(totalPessoas>max&&!obs){
+  return alert(`⚠️ A casa comporta até ${max} pessoas. Explique a situação nas observações.`);
+ }
+
+ const calc=await calcularValorDiarias(c,a,b);
+ const taxa=Number(casas[c].taxaLimpeza||0);
+ const valorTotal=calc.valor+taxa;
+
  try{
-  await db.collection('reservas').add({casa:c,nome,telefone:tel,entrada:a,saida:b,observacao:obs,adultos,criancas,totalPessoas,dias:calc.dias,valorDiarias:calc.valor,taxaLimpeza:taxa,desconto:0,valorTotal,valorPago:0,statusPagamento:'pendente',criadoEm:firebase.firestore.FieldValue.serverTimestamp(),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()});
-  await cadastrarOuAtualizarHospede(nome,tel);fecharModal();alert('✅ Solicitação enviada com sucesso!\n\nAguarde a confirmação da reserva.');
- }catch(e){console.error(e);alert('❌ Não foi possível enviar a solicitação.')}
+  await db.collection('reservas').add({
+   casa:c,
+   nome,
+   telefone:tel,
+   entrada:a,
+   saida:b,
+   observacao:obs,
+   adultos,
+   criancas,
+   totalPessoas,
+   dias:calc.dias,
+   valorDiarias:calc.valor,
+   taxaLimpeza:taxa,
+   desconto:0,
+   acrescimoValor:0,
+   valorTotal,
+   valorPago:0,
+   statusPagamento:'pendente',
+   criadoEm:firebase.firestore.FieldValue.serverTimestamp(),
+   atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()
+  });
+
+  await cadastrarOuAtualizarHospede(nome,tel);
+
+  fecharModal();
+
+  alert('✅ Solicitação enviada com sucesso!\n\nAguarde a confirmação da reserva.');
+
+ }catch(e){
+  console.error(e);
+  alert('❌ Não foi possível enviar a solicitação.');
+ }
 }
 
 async function carregarReservasConfirmadas(){
- reservasConfirmadas=[];const s=await db.collection('reservas').orderBy('entrada').get();s.forEach(d=>reservasConfirmadas.push({id:d.id,...d.data()}));
+ reservasConfirmadas=[];
+
+ const s=await db.collection('reservas').orderBy('entrada').get();
+
+ s.forEach(d=>{
+  reservasConfirmadas.push({
+   id:d.id,
+   ...d.data()
+  });
+ });
 }
+
 async function carregarDadosCasas(){
- try{const d=await db.collection('configuracoes').doc('casas').get();if(d.exists){const x=d.data().casas||{};Object.keys(casas).forEach(id=>{if(x[id])casas[id]={...casas[id],...x[id],caracteristicas:casas[id].caracteristicas||x[id].caracteristicas||[]}})}renderizarPaginaPublica()}catch(e){console.error('Erro ao carregar casas:',e)}
+ try{
+  const d=await db.collection('configuracoes').doc('casas').get();
+
+  if(d.exists){
+   const x=d.data().casas||{};
+
+   Object.keys(casas).forEach(id=>{
+    if(x[id]){
+     casas[id]={
+      ...casas[id],
+      ...x[id],
+      caracteristicas:casas[id].caracteristicas||x[id].caracteristicas||[]
+     };
+    }
+   });
+  }
+
+  renderizarPaginaPublica();
+
+ }catch(e){
+  console.error('Erro ao carregar casas:',e);
+ }
 }
-async function salvarTodasCasas(){await db.collection('configuracoes').doc('casas').set({casas});}
+
+async function salvarTodasCasas(){
+ await db.collection('configuracoes').doc('casas').set({casas});
+}
 
 function renderizarCasasAdmin(){
- const g=$('gradeCasas');if(!g)return;
- g.innerHTML=Object.entries(casas).map(([id,x])=>`<div class="card-casa"><div class="card-corpo"><h3>${x.nome}</h3><div class="grupo-input"><label>Taxa de Limpeza (R$)</label><input type="number" id="taxa-${id}" value="${x.taxaLimpeza||0}" min="0" step="10"></div><div class="grupo-input"><label>Descrição</label><textarea id="desc-${id}" rows="2">${x.desc||''}</textarea></div><div class="grupo-input"><label>Capacidade</label><input type="number" id="cap-${id}" value="${x.capacidade||0}" min="1"></div><div class="lista-fotos-galeria"><strong>📷 Fotos</strong><div id="fotos-${id}">${(x.fotos||[]).map((f,i)=>`<div class="item-foto-galeria"><img src="${f}"><span style="font-size:12px;overflow:hidden">${f}</span><button class="remover-foto" onclick="removerFotoGaleria('${id}',${i})">×</button></div>`).join('')}</div></div><button class="azul" style="margin-top:8px" onclick="adicionarFotoGaleria('${id}')">+ Adicionar Foto</button><button class="sucesso" style="margin-top:8px;width:100%" onclick="salvarConfiguracoesCasa('${id}')">💾 Salvar Casa</button></div></div>`).join('');
+ const g=$('gradeCasas');
+ if(!g)return;
+
+ g.innerHTML=Object.entries(casas).map(([id,x])=>`
+ <div class="card-casa">
+  <div class="card-corpo">
+   <h3>${x.nome}</h3>
+
+   <div class="grupo-input">
+    <label>Taxa de Limpeza (R$)</label>
+    <input type="number" id="taxa-${id}" value="${x.taxaLimpeza||0}" min="0" step="10">
+   </div>
+
+   <div class="grupo-input">
+    <label>Descrição</label>
+    <textarea id="desc-${id}" rows="2">${x.desc||''}</textarea>
+   </div>
+
+   <div class="grupo-input">
+    <label>Capacidade</label>
+    <input type="number" id="cap-${id}" value="${x.capacidade||0}" min="1">
+   </div>
+
+   <div class="lista-fotos-galeria">
+    <strong>📷 Fotos</strong>
+    <div id="fotos-${id}">
+     ${(x.fotos||[]).map((f,i)=>`
+      <div class="item-foto-galeria">
+       <img src="${f}">
+       <span style="font-size:12px;overflow:hidden">${f}</span>
+       <button class="remover-foto" onclick="removerFotoGaleria('${id}',${i})">×</button>
+      </div>
+     `).join('')}
+    </div>
+   </div>
+
+   <button class="azul" style="margin-top:8px" onclick="adicionarFotoGaleria('${id}')">+ Adicionar Foto</button>
+   <button class="sucesso" style="margin-top:8px;width:100%" onclick="salvarConfiguracoesCasa('${id}')">💾 Salvar Casa</button>
+  </div>
+ </div>
+ `).join('');
 }
+
 function adicionarFotoGaleria(id){
- const url=prompt('Cole o link direto da imagem (Imgur):');if(!url)return;
- if(!url.includes('imgur.com'))return alert('⚠️ Informe um link do Imgur.');
- casas[id].fotos=casas[id].fotos||[];casas[id].fotos.push(url);renderizarCasasAdmin();
+ const url=prompt('Cole o link direto da imagem (Imgur):');
+
+ if(!url)return;
+
+ if(!url.includes('imgur.com')){
+  return alert('⚠️ Informe um link do Imgur.');
+ }
+
+ casas[id].fotos=casas[id].fotos||[];
+ casas[id].fotos.push(url);
+ renderizarCasasAdmin();
 }
-function removerFotoGaleria(id,i){if(confirm('Remover esta foto?')){casas[id].fotos.splice(i,1);renderizarCasasAdmin()}}
+
+function removerFotoGaleria(id,i){
+ if(confirm('Remover esta foto?')){
+  casas[id].fotos.splice(i,1);
+  renderizarCasasAdmin();
+ }
+}
+
 async function salvarConfiguracoesCasa(id){
- casas[id].taxaLimpeza=Number($(`taxa-${id}`).value||0);casas[id].desc=$(`desc-${id}`).value;casas[id].capacidade=Number($(`cap-${id}`).value||0);
- try{await salvarTodasCasas();renderizarPaginaPublica();alert('✅ Configurações salvas!')}catch(e){console.error(e);alert('❌ Erro ao salvar.')}
+ casas[id].taxaLimpeza=Number($(`taxa-${id}`).value||0);
+ casas[id].desc=$(`desc-${id}`).value;
+ casas[id].capacidade=Number($(`cap-${id}`).value||0);
+
+ try{
+  await salvarTodasCasas();
+  renderizarPaginaPublica();
+  alert('✅ Configurações salvas!');
+ }catch(e){
+  console.error(e);
+  alert('❌ Erro ao salvar.');
+ }
 }
 
 function atualizarListaReservas(){
- const c=$('listaReservas');if(!c)return;
- let arr=filtroReservas==='todas'?reservasConfirmadas:reservasConfirmadas.filter(r=>r.statusPagamento===filtroReservas);
- arr=[...arr].sort((a,b)=>(b.criadoEm?.seconds||0)-(a.criadoEm?.seconds||0));
- if(!arr.length)return c.innerHTML='<p style="color:var(--cinza)">Nenhuma reserva encontrada.</p>';
+ const c=$('listaReservas');
+ if(!c)return;
+
+ let arr=filtroReservas==='todas'
+ ?reservasConfirmadas
+ :reservasConfirmadas.filter(r=>r.statusPagamento===filtroReservas);
+
+ arr=[...arr].sort((a,b)=>
+  (b.criadoEm?.seconds||0)-(a.criadoEm?.seconds||0)
+ );
+
+ if(!arr.length){
+  return c.innerHTML='<p style="color:var(--cinza)">Nenhuma reserva encontrada.</p>';
+ }
+
  c.innerHTML=arr.map(r=>{
-  const status=r.statusPagamento||'pendente',pago=Number(r.valorPago||0),total=Number(r.valorTotal||0);
-  return `<div class="reserva-item"><h3>${casas[r.casa]?.nome||r.casa}</h3><span class="status-badge status-${status}">${status.toUpperCase()}</span><p><strong>👤 ${r.nome}</strong> — ${r.telefone}</p><p>📅 ${dataBr(r.entrada)} até ${dataBr(r.saida)} — ${r.dias||dias(dataLocal(r.entrada),dataLocal(r.saida))} diária(s)</p><p>👥 ${r.totalPessoas||0} pessoa(s) — ${r.adultos||0} adulto(s), ${r.criancas||0} criança(s)</p><div class="total-geral"><div class="linha-valor"><span>Diárias</span><strong>${moeda(r.valorDiarias)}</strong></div><div class="linha-valor"><span>Limpeza</span><strong>${moeda(r.taxaLimpeza)}</strong></div><div class="linha-valor"><span>Desconto</span><strong>- ${moeda(r.desconto)}</strong></div><div class="linha-valor"><span>Total</span><strong>${moeda(total)}</strong></div><div class="linha-valor"><span>Pago</span><strong>${moeda(pago)}</strong></div><div class="linha-valor"><span>A receber</span><strong>${moeda(Math.max(0,total-pago))}</strong></div></div>${r.observacao?`<p><strong>📝 Observação:</strong> ${r.observacao}</p>`:''}<button class="azul" onclick="abrirEditarReserva('${r.id}')">✏️ Gerenciar</button></div>`
+  const status=r.statusPagamento||'pendente';
+  const pago=Number(r.valorPago||0);
+  const total=Number(r.valorTotal||0);
+
+  return `
+  <div class="reserva-item">
+   <h3>${casas[r.casa]?.nome||r.casa}</h3>
+
+   <span class="status-badge status-${status}">
+    ${status.toUpperCase()}
+   </span>
+
+   <p><strong>👤 ${r.nome}</strong> — ${r.telefone}</p>
+
+   <p>
+    📅 ${dataBr(r.entrada)} até ${dataBr(r.saida)}
+    — ${r.dias||dias(dataLocal(r.entrada),dataLocal(r.saida))} diária(s)
+   </p>
+
+   <p>
+    👥 ${r.totalPessoas||0} pessoa(s)
+    — ${r.adultos||0} adulto(s),
+    ${r.criancas||0} criança(s)
+   </p>
+
+   <div class="total-geral">
+    <div class="linha-valor">
+     <span>Diárias</span>
+     <strong>${moeda(r.valorDiarias)}</strong>
+    </div>
+
+    <div class="linha-valor">
+     <span>Limpeza</span>
+     <strong>${moeda(r.taxaLimpeza)}</strong>
+    </div>
+
+    ${Number(r.acrescimoValor||0)>0?`
+    <div class="linha-valor">
+     <span>Acréscimo</span>
+     <strong>+ ${moeda(r.acrescimoValor)}</strong>
+    </div>`:''}
+
+    <div class="linha-valor">
+     <span>Desconto</span>
+     <strong>- ${moeda(r.desconto)}</strong>
+    </div>
+
+    <div class="linha-valor">
+     <span>Total</span>
+     <strong>${moeda(total)}</strong>
+    </div>
+
+    <div class="linha-valor">
+     <span>Pago</span>
+     <strong>${moeda(pago)}</strong>
+    </div>
+
+    <div class="linha-valor">
+     <span>A receber</span>
+     <strong>${moeda(Math.max(0,total-pago))}</strong>
+    </div>
+   </div>
+
+   ${r.observacao?`<p><strong>📝 Observação:</strong> ${r.observacao}</p>`:''}
+
+   <button class="azul" onclick="abrirEditarReserva('${r.id}')">✏️ Gerenciar</button>
+  </div>`;
  }).join('');
 }
 
+/* NOVA GESTÃO DE RESERVA */
 function abrirEditarReserva(id){
- const r=reservasConfirmadas.find(x=>x.id===id);if(!r)return;
- const c=casas[r.casa]||{};
- $('conteudoEditar').innerHTML=`<input type="hidden" id="editId" value="${id}"><div class="grupo-input"><label>Hóspede</label><input id="editNome" value="${r.nome||''}"></div><div class="grupo-input"><label>Telefone</label><input id="editTelefone" value="${r.telefone||''}"></div><div class="linha-form"><div class="grupo-input" style="flex:1"><label>Entrada</label><input type="date" id="editEntrada" value="${r.entrada||''}" onchange="atualizarValoresEdicaoReserva()"></div><div class="grupo-input" style="flex:1"><label>Saída</label><input type="date" id="editSaida" value="${r.saida||''}" onchange="atualizarValoresEdicaoReserva()"></div></div><div class="linha-form"><div class="grupo-input" style="flex:1"><label>Adultos</label><input type="number" id="editAdultos" value="${r.adultos||0}"></div><div class="grupo-input" style="flex:1"><label>Crianças</label><input type="number" id="editCriancas" value="${r.criancas||0}"></div></div><div class="grupo-input"><label>Status</label><select id="editStatus"><option value="pendente">Pendente</option><option value="confirmada">Confirmada</option><option value="parcial">Pagamento Parcial</option><option value="pago">Pago</option></select></div><div class="grupo-input"><label>Valor Pago (R$)</label><input type="number" id="editPago" value="${r.valorPago||0}" step="0.01"></div><div class="grupo-input"><label>Desconto (R$)</label><input type="number" id="editDesconto" value="${r.desconto||0}" step="0.01" onchange="atualizarValoresEdicaoReserva()"></div><div class="grupo-input"><label>Observação</label><textarea id="editObs" rows="3">${r.observacao||''}</textarea></div><div class="caixa-valores-reserva" id="valoresEdicao"></div><button class="sucesso" onclick="salvarEdicao('${id}')">💾 Salvar Alterações</button> <button class="vermelho" onclick="excluirReserva('${id}')">🗑️ Excluir</button>`;
- $('editStatus').value=r.statusPagamento||'pendente';atualizarValoresEdicaoReserva();$('modalEditarReserva').classList.add('aberto');
+ const r=reservasConfirmadas.find(x=>x.id===id);
+ if(!r)return;
+
+ $('conteudoEditar').innerHTML=`
+ <input type="hidden" id="editId" value="${id}">
+
+ <div class="grupo-input">
+  <label>Hóspede</label>
+  <input id="editNome" value="${r.nome||''}">
+ </div>
+
+ <div class="grupo-input">
+  <label>Telefone</label>
+  <input id="editTelefone" value="${r.telefone||''}">
+ </div>
+
+ <div class="linha-form">
+  <div class="grupo-input" style="flex:1">
+   <label>Entrada</label>
+   <input type="date" id="editEntrada" value="${r.entrada||''}" onchange="recalcularTotalEdicao()">
+  </div>
+
+  <div class="grupo-input" style="flex:1">
+   <label>Saída</label>
+   <input type="date" id="editSaida" value="${r.saida||''}" onchange="recalcularTotalEdicao()">
+  </div>
+ </div>
+
+ <div class="linha-form">
+  <div class="grupo-input" style="flex:1">
+   <label>Adultos</label>
+   <input type="number" id="editAdultos" value="${r.adultos||0}">
+  </div>
+
+  <div class="grupo-input" style="flex:1">
+   <label>Crianças</label>
+   <input type="number" id="editCriancas" value="${r.criancas||0}">
+  </div>
+ </div>
+
+ <div class="grupo-input">
+  <label>Status</label>
+  <select id="editStatus">
+   <option value="pendente">Pendente</option>
+   <option value="confirmada">Confirmada</option>
+   <option value="parcial">Pagamento Parcial</option>
+   <option value="pago">Pago</option>
+  </select>
+ </div>
+
+ <div class="grupo-input">
+  <label>Valor Pago (R$)</label>
+  <input type="number" id="editPago" value="${r.valorPago||0}" step="0.01" oninput="atualizarResumoEdicao()">
+ </div>
+
+ <div class="grupo-input">
+  <label>Desconto (R$)</label>
+  <input type="number" id="editDesconto" value="${r.desconto||0}" min="0" step="0.01" onchange="recalcularTotalEdicao()">
+ </div>
+
+ <div class="acrescimo-box">
+  <strong>➕ Acrescentar valor à reserva</strong>
+
+  <div class="grupo-input" style="margin-top:10px">
+   <label>Acréscimo (R$)</label>
+   <input type="number" id="editAcrescimo" value="${r.acrescimoValor||0}" min="0" step="0.01" onchange="recalcularTotalEdicao()">
+  </div>
+
+  <div class="acrescimo-botoes">
+   <button type="button" onclick="adicionarAcrescimo(50)">+ R$ 50</button>
+   <button type="button" onclick="adicionarAcrescimo(100)">+ R$ 100</button>
+   <button type="button" onclick="adicionarAcrescimo(200)">+ R$ 200</button>
+   <button type="button" onclick="adicionarAcrescimo(500)">+ R$ 500</button>
+  </div>
+ </div>
+
+ <div class="grupo-input">
+  <label>Valor Total Final — editável</label>
+  <input
+   type="number"
+   id="editTotal"
+   value="${Number(r.valorTotal||0).toFixed(2)}"
+   step="0.01"
+   min="0"
+   class="valor-total-editavel"
+   oninput="atualizarResumoEdicao()">
+ </div>
+
+ <button type="button" class="cinza" onclick="recalcularTotalEdicao()" style="width:100%;margin-bottom:12px">
+  🔄 Recalcular Total pelas diárias
+ </button>
+
+ <div class="grupo-input">
+  <label>Observação</label>
+  <textarea id="editObs" rows="3">${r.observacao||''}</textarea>
+ </div>
+
+ <div class="caixa-valores-reserva" id="valoresEdicao"></div>
+
+ <button class="sucesso" onclick="salvarEdicao('${id}')">💾 Salvar Alterações</button>
+ <button class="vermelho" onclick="excluirReserva('${id}')">🗑️ Excluir</button>
+ `;
+
+ $('editStatus').value=r.statusPagamento||'pendente';
+
+ atualizarResumoEdicao();
+
+ $('modalEditarReserva').classList.add('aberto');
 }
-async function atualizarValoresEdicaoReserva(){
- const id=$('editId')?.value,r=reservasConfirmadas.find(x=>x.id===id);if(!r)return;
- const x=await calcularValorDiarias(r.casa,$('editEntrada').value,$('editSaida').value),desc=Number($('editDesconto').value||0),taxa=Number(casas[r.casa]?.taxaLimpeza||r.taxaLimpeza||0),total=Math.max(0,x.valor+taxa-desc);
- $('valoresEdicao').innerHTML=`<div class="linha-valor"><span>Diárias</span><strong>${moeda(x.valor)}</strong></div><div class="linha-valor"><span>Limpeza</span><strong>${moeda(taxa)}</strong></div><div class="linha-valor"><span>Desconto</span><strong>- ${moeda(desc)}</strong></div><div class="linha-valor total-reserva-destaque"><span>Total</span><strong>${moeda(total)}</strong></div><div class="linha-valor a-receber-destaque"><span>A receber</span><strong>${moeda(Math.max(0,total-Number($('editPago').value||0)))}</strong></div>`;
+
+function adicionarAcrescimo(valor){
+ const campo=$('editAcrescimo');
+ if(!campo)return;
+
+ campo.value=(Number(campo.value||0)+Number(valor)).toFixed(2);
+ recalcularTotalEdicao();
 }
-function fecharModalEditar(){$('modalEditarReserva').classList.remove('aberto')}
+
+async function recalcularTotalEdicao(){
+ const id=$('editId')?.value;
+ const r=reservasConfirmadas.find(x=>x.id===id);
+
+ if(!r)return;
+
+ const entrada=$('editEntrada').value;
+ const saida=$('editSaida').value;
+
+ if(!entrada||!saida||saida<=entrada){
+  atualizarResumoEdicao();
+  return;
+ }
+
+ const x=await calcularValorDiarias(r.casa,entrada,saida);
+ const desconto=Number($('editDesconto').value||0);
+ const acrescimo=Number($('editAcrescimo').value||0);
+ const taxa=Number(casas[r.casa]?.taxaLimpeza||r.taxaLimpeza||0);
+
+ const total=Math.max(0,x.valor+taxa+acrescimo-desconto);
+
+ $('editTotal').value=total.toFixed(2);
+
+ atualizarResumoEdicao();
+}
+
+function atualizarResumoEdicao(){
+ const id=$('editId')?.value;
+ const r=reservasConfirmadas.find(x=>x.id===id);
+
+ if(!r)return;
+
+ const total=Number($('editTotal')?.value||0);
+ const pago=Number($('editPago')?.value||0);
+ const acrescimo=Number($('editAcrescimo')?.value||0);
+ const desconto=Number($('editDesconto')?.value||0);
+ const taxa=Number(casas[r.casa]?.taxaLimpeza||r.taxaLimpeza||0);
+
+ const entrada=$('editEntrada')?.value;
+ const saida=$('editSaida')?.value;
+
+ let valorDiarias=Number(r.valorDiarias||0);
+ let qtdDias=r.dias||0;
+
+ if(entrada&&saida&&saida>entrada){
+  const da=dataLocal(entrada);
+  const ds=dataLocal(saida);
+
+  valorDiarias=0;
+  qtdDias=0;
+
+  for(let d=new Date(da);d<ds;d.setDate(d.getDate()+1)){
+   const s=dataStr(d);
+   const v=valoresDiarias[`${r.casa}_${s}`];
+   valorDiarias+=v!=null?Number(v):150;
+   qtdDias++;
+  }
+ }
+
+ $('valoresEdicao').innerHTML=`
+ <div class="linha-valor">
+  <span>Diárias (${qtdDias})</span>
+  <strong>${moeda(valorDiarias)}</strong>
+ </div>
+
+ <div class="linha-valor">
+  <span>Limpeza</span>
+  <strong>${moeda(taxa)}</strong>
+ </div>
+
+ <div class="linha-valor">
+  <span>Acréscimo</span>
+  <strong>+ ${moeda(acrescimo)}</strong>
+ </div>
+
+ <div class="linha-valor">
+  <span>Desconto</span>
+  <strong>- ${moeda(desconto)}</strong>
+ </div>
+
+ <div class="linha-valor total-reserva-destaque">
+  <span>TOTAL FINAL</span>
+  <strong>${moeda(total)}</strong>
+ </div>
+
+ <div class="linha-valor a-receber-destaque">
+  <span>A RECEBER</span>
+  <strong>${moeda(Math.max(0,total-pago))}</strong>
+ </div>`;
+}
+
+function fecharModalEditar(){
+ $('modalEditarReserva').classList.remove('aberto');
+}
+
 async function salvarEdicao(id){
- const r=reservasConfirmadas.find(x=>x.id===id);if(!r)return;
- const entrada=$('editEntrada').value,saida=$('editSaida').value;if(!entrada||!saida||saida<=entrada)return alert('⚠️ Datas inválidas.');
- if(verificarPeriodoBloqueado(r.casa,entrada,saida)&&!(entrada===r.entrada&&saida===r.saida))return alert('⚠️ O período informado está bloqueado.');
- const x=await calcularValorDiarias(r.casa,entrada,saida),desc=Number($('editDesconto').value||0),taxa=Number(casas[r.casa]?.taxaLimpeza||0),total=Math.max(0,x.valor+taxa-desc),pago=Number($('editPago').value||0);
- try{await db.collection('reservas').doc(id).update({nome:$('editNome').value.trim(),telefone:$('editTelefone').value.trim(),entrada,saida,adultos:Number($('editAdultos').value||0),criancas:Number($('editCriancas').value||0),totalPessoas:Number($('editAdultos').value||0)+Number($('editCriancas').value||0),dias:x.dias,valorDiarias:x.valor,taxaLimpeza:taxa,desconto:desc,valorTotal:total,valorPago:pago,statusPagamento:$('editStatus').value,observacao:$('editObs').value.trim(),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()});await carregarReservasConfirmadas();fecharModalEditar();atualizarListaReservas();renderizarCalendario();gerarRelatorio();alert('✅ Reserva atualizada!')}catch(e){console.error(e);alert('❌ Erro ao salvar reserva.')}
+ const r=reservasConfirmadas.find(x=>x.id===id);
+ if(!r)return;
+
+ const entrada=$('editEntrada').value;
+ const saida=$('editSaida').value;
+
+ if(!entrada||!saida||saida<=entrada){
+  return alert('⚠️ Datas inválidas.');
+ }
+
+ /* Verifica conflito ignorando a própria reserva */
+ const bloqueado=await verificarPeriodoBloqueado(
+  r.casa,
+  entrada,
+  saida,
+  id
+ );
+
+ if(bloqueado&&['confirmada','pago'].includes($('editStatus').value)){
+  return alert('⚠️ O período informado está bloqueado por outra reserva confirmada ou paga.');
+ }
+
+ const x=await calcularValorDiarias(r.casa,entrada,saida);
+ const desconto=Number($('editDesconto').value||0);
+ const acrescimo=Number($('editAcrescimo').value||0);
+ const taxa=Number(casas[r.casa]?.taxaLimpeza||0);
+ const pago=Number($('editPago').value||0);
+
+ /* Agora o total pode ser editado manualmente */
+ const total=Number($('editTotal').value||0);
+
+ if(total<0){
+  return alert('⚠️ O valor total não pode ser negativo.');
+ }
+
+ try{
+  await db.collection('reservas').doc(id).update({
+   nome:$('editNome').value.trim(),
+   telefone:$('editTelefone').value.trim(),
+   entrada,
+   saida,
+   adultos:Number($('editAdultos').value||0),
+   criancas:Number($('editCriancas').value||0),
+   totalPessoas:Number($('editAdultos').value||0)+Number($('editCriancas').value||0),
+   dias:x.dias,
+   valorDiarias:x.valor,
+   taxaLimpeza:taxa,
+   desconto:desconto,
+   acrescimoValor:acrescimo,
+   valorTotal:total,
+   valorPago:pago,
+   statusPagamento:$('editStatus').value,
+   observacao:$('editObs').value.trim(),
+   atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()
+  });
+
+  await carregarReservasConfirmadas();
+
+  fecharModalEditar();
+  atualizarListaReservas();
+  renderizarCalendario();
+  gerarRelatorio();
+
+  alert('✅ Reserva atualizada!');
+
+ }catch(e){
+  console.error(e);
+  alert('❌ Erro ao salvar reserva.');
+ }
 }
+
 async function excluirReserva(id){
  if(!confirm('Tem certeza que deseja excluir esta reserva?'))return;
- try{await db.collection('reservas').doc(id).delete();await carregarReservasConfirmadas();fecharModalEditar();atualizarListaReservas();renderizarCalendario();gerarRelatorio();alert('🗑️ Reserva excluída.')}catch(e){console.error(e);alert('❌ Erro ao excluir.')}
+
+ try{
+  await db.collection('reservas').doc(id).delete();
+
+  await carregarReservasConfirmadas();
+
+  fecharModalEditar();
+  atualizarListaReservas();
+  renderizarCalendario();
+  gerarRelatorio();
+
+  alert('🗑️ Reserva excluída.');
+
+ }catch(e){
+  console.error(e);
+  alert('❌ Erro ao excluir.');
+ }
 }
 
 function gerarRelatorio(){
- const el=$('relatorioConteudo');if(!el)return;let arr=[...reservasConfirmadas],agora=new Date();
- if(filtroRelatorio==='mes')arr=arr.filter(r=>{const d=dataLocal(r.entrada);return d&&d.getMonth()===agora.getMonth()&&d.getFullYear()===agora.getFullYear()});
- if(filtroRelatorio==='ano')arr=arr.filter(r=>{const d=dataLocal(r.entrada);return d&&d.getFullYear()===agora.getFullYear()});
- const total=arr.reduce((s,r)=>s+Number(r.valorTotal||0),0),pago=arr.reduce((s,r)=>s+Number(r.valorPago||0),0),pend=arr.filter(r=>r.statusPagamento==='pendente').length,conf=arr.filter(r=>r.statusPagamento==='confirmada'||r.statusPagamento==='pago').length;
- el.innerHTML=`<div class="total-geral"><div class="linha-valor"><span>Reservas</span><strong>${arr.length}</strong></div><div class="linha-valor"><span>Pendentes</span><strong>${pend}</strong></div><div class="linha-valor"><span>Confirmadas/Pagas</span><strong>${conf}</strong></div><div class="linha-valor"><span>Valor total</span><strong>${moeda(total)}</strong></div><div class="linha-valor"><span>Total recebido</span><strong>${moeda(pago)}</strong></div><div class="linha-valor"><span>A receber</span><strong>${moeda(Math.max(0,total-pago))}</strong></div></div>`;
+ const el=$('relatorioConteudo');
+ if(!el)return;
+
+ let arr=[...reservasConfirmadas];
+ const agora=new Date();
+
+ if(filtroRelatorio==='mes'){
+  arr=arr.filter(r=>{
+   const d=dataLocal(r.entrada);
+   return d&&d.getMonth()===agora.getMonth()&&d.getFullYear()===agora.getFullYear();
+  });
+ }
+
+ if(filtroRelatorio==='ano'){
+  arr=arr.filter(r=>{
+   const d=dataLocal(r.entrada);
+   return d&&d.getFullYear()===agora.getFullYear();
+  });
+ }
+
+ const total=arr.reduce((s,r)=>s+Number(r.valorTotal||0),0);
+ const pago=arr.reduce((s,r)=>s+Number(r.valorPago||0),0);
+ const pend=arr.filter(r=>r.statusPagamento==='pendente').length;
+ const conf=arr.filter(r=>r.statusPagamento==='confirmada'||r.statusPagamento==='pago').length;
+
+ el.innerHTML=`
+ <div class="total-geral">
+  <div class="linha-valor"><span>Reservas</span><strong>${arr.length}</strong></div>
+  <div class="linha-valor"><span>Pendentes</span><strong>${pend}</strong></div>
+  <div class="linha-valor"><span>Confirmadas/Pagas</span><strong>${conf}</strong></div>
+  <div class="linha-valor"><span>Valor total</span><strong>${moeda(total)}</strong></div>
+  <div class="linha-valor"><span>Total recebido</span><strong>${moeda(pago)}</strong></div>
+  <div class="linha-valor"><span>A receber</span><strong>${moeda(Math.max(0,total-pago))}</strong></div>
+ </div>`;
 }
 
 async function cadastrarOuAtualizarHospede(nome,telefone){
- const n=normalizar(nome);if(!n)return;
- const q=await db.collection('hospedes').where('nomeNormalizado','==',n).limit(1).get();
- if(q.empty)await db.collection('hospedes').add({nome,telefone,nomeNormalizado:n,cadastradoEm:firebase.firestore.FieldValue.serverTimestamp(),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()});
- else await q.docs[0].ref.update({nome,telefone,atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()});
+ const n=normalizar(nome);
+ if(!n)return;
+
+ const q=await db.collection('hospedes')
+ .where('nomeNormalizado','==',n)
+ .limit(1)
+ .get();
+
+ if(q.empty){
+  await db.collection('hospedes').add({
+   nome,
+   telefone,
+   nomeNormalizado:n,
+   cadastradoEm:firebase.firestore.FieldValue.serverTimestamp(),
+   atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()
+  });
+ }else{
+  await q.docs[0].ref.update({
+   nome,
+   telefone,
+   atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()
+  });
+ }
 }
+
 async function carregarHospedes(){
- hospedesCadastrados=[];const s=await db.collection('hospedes').orderBy('nome').get();s.forEach(d=>hospedesCadastrados.push({id:d.id,...d.data()}));filtrarHospedes();
+ hospedesCadastrados=[];
+
+ const s=await db.collection('hospedes').orderBy('nome').get();
+
+ s.forEach(d=>{
+  hospedesCadastrados.push({
+   id:d.id,
+   ...d.data()
+  });
+ });
+
+ filtrarHospedes();
 }
+
 function filtrarHospedes(){
- const el=$('listaHospedes');if(!el)return;const q=normalizar($('buscarHospede')?.value||'');const arr=hospedesCadastrados.filter(h=>!q||normalizar(h.nome).includes(q)||String(h.telefone||'').includes(q));
- el.innerHTML=arr.length?arr.map(h=>`<div class="reserva-item"><strong>👤 ${h.nome}</strong><p>📱 ${h.telefone||'—'}</p><button class="azul" onclick="editarHospede('${h.id}')">✏️ Editar</button></div>`).join(''):'<p style="color:var(--cinza)">Nenhum hóspede encontrado.</p>';
+ const el=$('listaHospedes');
+ if(!el)return;
+
+ const q=normalizar($('buscarHospede')?.value||'');
+
+ const arr=hospedesCadastrados.filter(h=>
+  !q||
+  normalizar(h.nome).includes(q)||
+  String(h.telefone||'').includes(q)
+ );
+
+ el.innerHTML=arr.length
+ ?arr.map(h=>`
+  <div class="reserva-item">
+   <strong>👤 ${h.nome}</strong>
+   <p>📱 ${h.telefone||'—'}</p>
+   <button class="azul" onclick="editarHospede('${h.id}')">✏️ Editar</button>
+  </div>
+ `).join('')
+ :'<p style="color:var(--cinza)">Nenhum hóspede encontrado.</p>';
 }
+
 function abrirCadastroHospede(){
- const nome=prompt('Nome completo:');if(!nome)return;const telefone=prompt('Telefone:');if(!telefone)return;
- cadastrarOuAtualizarHospede(nome,telefone).then(carregarHospedes).catch(e=>{console.error(e);alert('❌ Erro ao cadastrar hóspede.')});
+ const nome=prompt('Nome completo:');
+ if(!nome)return;
+
+ const telefone=prompt('Telefone:');
+ if(!telefone)return;
+
+ cadastrarOuAtualizarHospede(nome,telefone)
+ .then(carregarHospedes)
+ .catch(e=>{
+  console.error(e);
+  alert('❌ Erro ao cadastrar hóspede.');
+ });
 }
+
 async function editarHospede(id){
- const h=hospedesCadastrados.find(x=>x.id===id);if(!h)return;const nome=prompt('Nome:',h.nome);if(!nome)return;const telefone=prompt('Telefone:',h.telefone||'');await db.collection('hospedes').doc(id).update({nome,telefone,nomeNormalizado:normalizar(nome),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()});await carregarHospedes();
+ const h=hospedesCadastrados.find(x=>x.id===id);
+ if(!h)return;
+
+ const nome=prompt('Nome:',h.nome);
+ if(!nome)return;
+
+ const telefone=prompt('Telefone:',h.telefone||'');
+
+ await db.collection('hospedes').doc(id).update({
+  nome,
+  telefone,
+  nomeNormalizado:normalizar(nome),
+  atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()
+ });
+
+ await carregarHospedes();
 }
+
 async function sincronizarHospedesReservas(){
- for(const r of reservasConfirmadas)if(r.nome)try{await cadastrarOuAtualizarHospede(r.nome,r.telefone||'')}catch(e){console.error(e)}
- await carregarHospedes();alert('✅ Sincronização concluída!');
+ for(const r of reservasConfirmadas){
+  if(r.nome){
+   try{
+    await cadastrarOuAtualizarHospede(r.nome,r.telefone||'');
+   }catch(e){
+    console.error(e);
+   }
+  }
+ }
+
+ await carregarHospedes();
+ alert('✅ Sincronização concluída!');
 }
 
 document.addEventListener('keydown',e=>{
- if(e.key==='Escape'){fecharGaleria();fecharLogin();fecharModal();fecharModalEditar()}
+ if(e.key==='Escape'){
+  fecharGaleria();
+  fecharLogin();
+  fecharModal();
+  fecharModalEditar();
+ }
 });
 </script>
+
 </body>
 </html>
