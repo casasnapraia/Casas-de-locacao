@@ -2727,9 +2727,44 @@ function verificarNotificacoesJaAtivas(){
    PAINEL
 ===================================================== */
 
+async function sincronizarDisponibilidadePublica(){
+ if(!auth.currentUser || auth.currentUser.uid!==ADMIN_UID)return;
+ try{
+  const atual=await db.collection('disponibilidade').get();
+  let batch=db.batch(), ops=0;
+  for(const doc of atual.docs){
+   batch.delete(doc.ref); ops++;
+   if(ops===450){await batch.commit(); batch=db.batch(); ops=0;}
+  }
+  if(ops)await batch.commit();
+  const snap=await db.collection('reservas').get();
+  batch=db.batch(); ops=0;
+  for(const doc of snap.docs){
+   const r=doc.data();
+   if(!['confirmada','pago'].includes(r.statusPagamento)||!r.entrada||!r.saida||!r.casa)continue;
+   batch.set(db.collection('disponibilidade').doc(doc.id),{reservaId:doc.id,casa:r.casa,entrada:r.entrada,saida:r.saida,atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()});
+   ops++;
+   if(ops===450){await batch.commit();batch=db.batch();ops=0;}
+  }
+  if(ops)await batch.commit();
+ }catch(e){console.error('Erro ao sincronizar disponibilidade pública:',e);}
+}
+
+async function processarSolicitacoesHospedes(){
+ if(!auth.currentUser || auth.currentUser.uid!==ADMIN_UID)return;
+ try{
+  const snap=await db.collection('solicitacoesHospedes').orderBy('criadoEm').get();
+  for(const doc of snap.docs){const x=doc.data();await cadastrarOuAtualizarHospede(x.nome||'',x.telefone||'');await doc.ref.delete();}
+ }catch(e){console.error('Erro ao processar solicitações de hóspedes:',e);}
+}
+
+
 async function inicializarPainel(){
 
  try{
+
+  await processarSolicitacoesHospedes();
+  await sincronizarDisponibilidadePublica();
 
   await Promise.all([
    carregarValoresDiarias(),
@@ -3549,60 +3584,16 @@ async function calcularValorDiarias(
 }
 
 
-async function verificarPeriodoBloqueado(
- casa,
- a,
- b,
- ignorarId=null
-){
-
- if(
-  !casa ||
-  !a ||
-  !b ||
-  b<=a
- )return false;
-
-
+async function verificarPeriodoBloqueado(casa,a,b,ignorarId=null){
+ if(!casa||!a||!b||b<=a)return false;
  try{
-
-  const snap=
-   await db.collection('reservas')
-    .where('casa','==',casa)
-    .get();
-
-
+  const snap=await db.collection('disponibilidade').where('casa','==',casa).get();
   return snap.docs.some(doc=>{
-
-   if(
-    ignorarId &&
-    doc.id===ignorarId
-   ){
-    return false;
-   }
-
    const r=doc.data();
-
-
-   return(
-    ['confirmada','pago']
-     .includes(r.statusPagamento) &&
-    r.entrada &&
-    r.saida &&
-    a<r.saida &&
-    b>r.entrada
-   );
-
+   if(ignorarId && r.reservaId===ignorarId)return false;
+   return r.entrada&&r.saida&&a<r.saida&&b>r.entrada;
   });
-
- }catch(e){
-
-  console.error(e);
-
-  return true;
-
- }
-
+ }catch(e){ console.error('Erro ao consultar disponibilidade:',e); return true; }
 }
 
 
@@ -3611,46 +3602,12 @@ async function verificarPeriodoBloqueado(
 ===================================================== */
 
 async function carregarReservasBloqueantesSugestoes(){
-
- if(!casaSelecionadaParaReserva)
-  return [];
-
+ if(!casaSelecionadaParaReserva)return [];
  try{
-
-  const snap=
-   await db.collection('reservas')
-    .where(
-     'casa',
-     '==',
-     casaSelecionadaParaReserva
-    )
-    .get();
-
-
-  reservasBloqueantesSugestao=
-   snap.docs
-    .map(d=>({
-     id:d.id,
-     ...d.data()
-    }))
-    .filter(r=>
-     ['confirmada','pago']
-      .includes(r.statusPagamento) &&
-     r.entrada &&
-     r.saida
-    );
-
-
+  const snap=await db.collection('disponibilidade').where('casa','==',casaSelecionadaParaReserva).get();
+  reservasBloqueantesSugestao=snap.docs.map(d=>({id:d.id,...d.data()}));
   return reservasBloqueantesSugestao;
-
- }catch(e){
-
-  console.error(e);
-
-  return [];
-
- }
-
+ }catch(e){ console.error(e); return []; }
 }
 
 
@@ -4682,10 +4639,11 @@ async function enviarReserva(){
   });
 
 
-  await cadastrarOuAtualizarHospede(
+  await db.collection('solicitacoesHospedes').add({
    nome,
-   tel
-  );
+   telefone:tel,
+   criadoEm:firebase.firestore.FieldValue.serverTimestamp()
+  });
 
 
   fecharModal();
@@ -6784,6 +6742,7 @@ async function salvarEdicao(id){
 
 
   await carregarReservasConfirmadas();
+  await sincronizarDisponibilidadePublica();
 
   fecharModalEditar();
 
@@ -6826,6 +6785,7 @@ async function excluirReserva(id){
    .delete();
 
   await carregarReservasConfirmadas();
+  await sincronizarDisponibilidadePublica();
 
   fecharModalEditar();
 
