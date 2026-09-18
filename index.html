@@ -1500,8 +1500,8 @@ textarea{
   <h2>🔐 Acesso Administrativo</h2>
 
   <div class="grupo-input">
-   <label>Usuário</label>
-   <input id="usuario" placeholder="admin">
+   <label>E-mail</label>
+   <input id="usuario" type="email" placeholder="seu e-mail" autocomplete="username">
   </div>
 
   <div class="grupo-input">
@@ -2455,6 +2455,13 @@ document.addEventListener('DOMContentLoaded',async()=>{
 });
 
 
+// Permite pressionar Enter no campo de senha para entrar.
+document.addEventListener('keydown',e=>{
+ if(e.key==='Enter' && document.activeElement?.id==='senha')
+  fazerLogin();
+});
+
+
 /* =====================================================
    LOGIN — FIREBASE AUTHENTICATION
 ===================================================== */
@@ -2511,6 +2518,10 @@ async function fazerLogin(){
    msg='❌ Esta conta foi desativada no Firebase Authentication.';
   else if(e && e.code==='auth/invalid-email')
    msg='❌ O e-mail informado é inválido.';
+  else if(e && (e.code==='auth/invalid-credential' || e.code==='auth/wrong-password' || e.code==='auth/user-not-found'))
+   msg='❌ O Firebase não aceitou o e-mail/senha informados. Confirme se o e-mail é o da conta criada em Authentication > Users e se a senha foi redefinida nessa mesma conta.';
+  else if(e && e.code)
+   msg='❌ Erro no login Firebase: '+e.code;
 
   alert(msg);
  }
