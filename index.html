@@ -1,28 +1,18 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-
 <title>Casas na Praia - Disponibilidade e Reservas</title>
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <style>
-
 :root{
- --marinho:#0a4b6e;
- --marinho2:#063b57;
- --turquesa:#17a2b8;
- --ouro:#ffc107;
- --areia:#f8f5e6;
- --texto:#2c3e50;
- --cinza:#7f8c8d;
- --sucesso:#28a745;
- --perigo:#dc3545;
- --branco:#fff;
+ --marinho:#0a4b6e;--marinho2:#063b57;--turquesa:#17a2b8;
+ --ouro:#ffc107;--areia:#f8f5e6;--texto:#2c3e50;--cinza:#7f8c8d;
+ --sucesso:#28a745;--perigo:#dc3545;--branco:#fff;
  --sombra:0 8px 25px rgba(0,0,0,.10);
  --forte:0 15px 40px rgba(0,0,0,.18)
 }
@@ -58,56 +48,17 @@ button:disabled{
  transition:.2s
 }
 
-.azul{
- background:var(--marinho);
- color:#fff
-}
+.azul{background:var(--marinho);color:#fff}
+.azul:hover{background:var(--marinho2)}
+.sucesso{background:var(--sucesso);color:#fff}
+.vermelho{background:var(--perigo);color:#fff}
+.amarelo{background:var(--ouro);color:#222}
+.cinza{background:#6c757d!important;color:#fff!important}
 
-.azul:hover{
- background:var(--marinho2)
-}
-
-.sucesso{
- background:var(--sucesso);
- color:#fff
-}
-
-.vermelho{
- background:var(--perigo);
- color:#fff
-}
-
-.amarelo{
- background:var(--ouro);
- color:#222
-}
-
-.cinza{
- background:#6c757d!important;
- color:#fff!important
-}
-
-.oculto{
- display:none!important
-}
-
-.pagina{
- display:none
-}
-
-.pagina.ativa{
- display:block
-}
-
-.ativo{
- background:var(--ouro)!important;
- color:#222!important
-}
-
-
-/* =========================
-   PÁGINA PÚBLICA
-========================= */
+.oculto{display:none!important}
+.pagina{display:none}
+.pagina.ativa{display:block}
+.ativo{background:var(--ouro)!important;color:#222!important}
 
 .cabecalho-publico{
  position:absolute;
@@ -120,11 +71,7 @@ button:disabled{
  justify-content:space-between;
  align-items:center;
  color:#fff;
- background:linear-gradient(
-  180deg,
-  rgba(0,35,55,.82),
-  rgba(0,35,55,.2)
- );
+ background:linear-gradient(180deg,rgba(0,35,55,.82),rgba(0,35,55,.2));
  backdrop-filter:blur(4px)
 }
 
@@ -165,31 +112,20 @@ button:disabled{
 }
 
 @keyframes hero{
- from{
-  opacity:0;
-  transform:translateY(20px)
- }
- to{
-  opacity:1;
-  transform:none
- }
+ from{opacity:0;transform:translateY(20px)}
+ to{opacity:1;transform:none}
 }
 
-.hero-icone{
- font-size:60px
-}
-
+.hero-icone{font-size:60px}
 .hero-conteudo h1{
  font-size:clamp(44px,7vw,78px);
  line-height:1
 }
-
 .hero-conteudo h2{
  font-size:clamp(23px,4vw,38px);
  font-weight:400;
  margin:15px 0
 }
-
 .hero-conteudo p{
  font-size:18px;
  line-height:1.6;
@@ -270,9 +206,7 @@ button:disabled{
  object-fit:cover
 }
 
-.card-corpo{
- padding:22px
-}
+.card-corpo{padding:22px}
 
 .card-corpo h3{
  color:var(--marinho);
@@ -340,11 +274,6 @@ button:disabled{
  font-weight:600
 }
 
-
-/* =========================
-   FAIXAS
-========================= */
-
 .faixa-praia{
  min-height:330px;
  display:flex;
@@ -401,9 +330,7 @@ button:disabled{
  box-shadow:0 5px 18px #0000000f
 }
 
-.info-bloco .icone{
- font-size:38px
-}
+.info-bloco .icone{font-size:38px}
 
 .info-bloco h3{
  color:var(--marinho);
@@ -428,11 +355,6 @@ button:disabled{
  margin-top:5px;
  color:#ffffffd1
 }
-
-
-/* =========================
-   MODAIS
-========================= */
 
 .overlay-galeria,
 .overlay-login,
@@ -533,9 +455,7 @@ button:disabled{
  overflow-y:auto
 }
 
-.caixa-login{
- max-width:340px
-}
+.caixa-login{max-width:340px}
 
 .caixa-login h2{
  text-align:center;
@@ -554,9 +474,7 @@ button:disabled{
  font-size:14px
 }
 
-input,
-select,
-textarea{
+input,select,textarea{
  width:100%;
  padding:10px 12px;
  border:1px solid #ddd;
@@ -609,11 +527,6 @@ textarea{
  font-size:24px;
  color:var(--cinza)
 }
-
-
-/* =========================
-   ADMIN
-========================= */
 
 .barra-lateral{
  position:fixed;
@@ -681,11 +594,6 @@ textarea{
  background:#28a745!important
 }
 
-
-/* =========================
-   CALENDÁRIO
-========================= */
-
 .calendario{
  background:#fff;
  padding:20px;
@@ -724,9 +632,7 @@ textarea{
  user-select:none
 }
 
-.dia:hover{
- background:var(--areia)
-}
+.dia:hover{background:var(--areia)}
 
 .dia.selecionado{
  background:var(--ouro);
@@ -756,11 +662,6 @@ textarea{
  color:var(--cinza);
  padding:8px
 }
-
-
-/* =========================
-   RESERVAS
-========================= */
 
 .reserva-item{
  border:1px solid #eee;
@@ -866,23 +767,12 @@ textarea{
  font-weight:bold
 }
 
-.botao-recibo{
- background:#198754;
- color:#fff;
- border:0;
- padding:10px 15px;
- border-radius:6px;
- margin-left:6px
+.acoes-reserva{
+ display:flex;
+ gap:8px;
+ flex-wrap:wrap;
+ margin-top:12px
 }
-
-.botao-recibo:hover{
- background:#146c43
-}
-
-
-/* =========================
-   FOTOS
-========================= */
 
 .lista-fotos-galeria{
  margin-top:10px
@@ -913,11 +803,6 @@ textarea{
  padding:4px 8px;
  border-radius:4px
 }
-
-
-/* =========================
-   SUGESTÕES DE DATAS
-========================= */
 
 .sugestoes-disponibilidade{
  display:none;
@@ -1006,9 +891,7 @@ textarea{
  font-size:12px
 }
 
-.sugestao-dia.vazio{
- border:0
-}
+.sugestao-dia.vazio{border:0}
 
 .sugestao-dia.bloqueado{
  background:#f8d7da;
@@ -1057,11 +940,6 @@ textarea{
  color:var(--cinza);
  margin-top:3px
 }
-
-
-/* =========================
-   RELATÓRIOS
-========================= */
 
 .filtros-relatorio{
  background:#f7fafb;
@@ -1125,13 +1003,7 @@ textarea{
  margin:10px 0
 }
 
-
-/* =========================
-   RESPONSIVO
-========================= */
-
 @media(max-width:900px){
-
  .info-blocos,
  .relatorio-resumo{
   grid-template-columns:1fr
@@ -1143,7 +1015,6 @@ textarea{
 }
 
 @media(max-width:800px){
-
  .cabecalho-publico{
   flex-direction:column;
   gap:10px;
@@ -1207,7 +1078,6 @@ textarea{
 }
 
 @media(max-width:500px){
-
  .menu-lateral,
  .filtros-relatorio{
   grid-template-columns:1fr
@@ -1230,16 +1100,8 @@ textarea{
  }
 }
 
-
-/* =========================
-   IMPRESSÃO DO RELATÓRIO
-========================= */
-
 @media print{
-
- body{
-  background:#fff
- }
+ body{background:#fff}
 
  .barra-lateral,
  .filtros-relatorio,
@@ -1265,71 +1127,43 @@ textarea{
   font-size:10px
  }
 }
-
 </style>
 </head>
 
-
 <body>
-
-
-<!-- =====================================================
-     PÁGINA PÚBLICA
-===================================================== -->
 
 <div id="areaPublica">
 
 <header class="cabecalho-publico">
  <h1>🏖️ Casas na Praia — Balneário Arroio do Silva/SC</h1>
-
- <button class="botao-login" onclick="abrirLogin()">
-  🔐 Acesso Administrativo
- </button>
+ <button class="botao-login" onclick="abrirLogin()">🔐 Acesso Administrativo</button>
 </header>
 
-
 <section class="hero-praia">
-
  <div class="hero-conteudo">
-
   <div class="hero-icone">🌴</div>
-
   <h1>Casas na Praia</h1>
-
   <h2>Seu descanso começa aqui</h2>
-
   <p>
    Conforto, tranquilidade e a praia pertinho de você.
-   Encontre a casa ideal para aproveitar momentos especiais
-   com sua família e amigos.
+   Encontre a casa ideal para aproveitar momentos especiais com sua família e amigos.
   </p>
-
   <button class="hero-botao"
    onclick="$('nossasCasas').scrollIntoView({behavior:'smooth'})">
    🏖️ Conheça nossas casas
   </button>
-
  </div>
-
 </section>
-
 
 <main class="area-publica">
 
  <div class="introducao-publica" id="nossasCasas">
-
-  <div class="selo-praia">
-   🌊 TEMPORADA NA PRAIA
-  </div>
-
+  <div class="selo-praia">🌊 TEMPORADA NA PRAIA</div>
   <h2>Escolha sua casa</h2>
-
   <p>
-   Casas aconchegantes, completas e localizadas a poucos
-   passos da praia. Confira as opções disponíveis e
-   solicite sua reserva.
+   Casas aconchegantes, completas e localizadas a poucos passos da praia.
+   Confira as opções disponíveis e solicite sua reserva.
   </p>
-
  </div>
 
  <div id="avisoBloqueioPublico" class="aviso-bloqueio"></div>
@@ -1338,22 +1172,15 @@ textarea{
 
 </main>
 
-
 <section class="faixa-praia">
-
  <div class="faixa-praia-conteudo">
-
   <h2>☀️ Dias de praia começam com uma boa escolha</h2>
-
   <p>
-   Reúna a família, convide os amigos e aproveite o melhor
-   da temporada em Balneário Arroio do Silva/SC.
+   Reúna a família, convide os amigos e aproveite o melhor da temporada
+   em Balneário Arroio do Silva/SC.
   </p>
-
  </div>
-
 </section>
-
 
 <section class="info-praia">
 
@@ -1376,38 +1203,23 @@ textarea{
   <div class="info-bloco">
    <div class="icone">📅</div>
    <h3>Reserve sua estadia</h3>
-   <p>
-    Escolha a casa, informe as datas e envie sua solicitação.
-   </p>
+   <p>Escolha a casa, informe as datas e envie sua solicitação.</p>
   </div>
 
  </div>
 
 </section>
 
-
 <footer class="rodape-publico">
-
- <h3>
-  🏖️ Casas na Praia — Balneário Arroio do Silva/SC
- </h3>
-
- <p>
-  Conforto, tranquilidade e momentos especiais perto do mar.
- </p>
-
- <p>
-  © 2026 — Todos os direitos reservados.
- </p>
-
+ <h3>🏖️ Casas na Praia — Balneário Arroio do Silva/SC</h3>
+ <p>Conforto, tranquilidade e momentos especiais perto do mar.</p>
+ <p>© 2026 — Todos os direitos reservados.</p>
 </footer>
 
 </div>
 
 
-<!-- =====================================================
-     GALERIA
-===================================================== -->
+<!-- GALERIA -->
 
 <div id="overlayGaleria"
  class="overlay-galeria"
@@ -1415,35 +1227,24 @@ textarea{
 
  <div class="galeria-conteudo">
 
-  <button class="fechar-galeria"
-   onclick="fecharGaleria()">×</button>
+  <button class="fechar-galeria" onclick="fecharGaleria()">×</button>
 
-  <img id="fotoPrincipalGaleria"
-   class="galeria-foto-principal">
+  <img id="fotoPrincipalGaleria" class="galeria-foto-principal">
 
   <div class="galeria-navegacao">
-
-   <button class="galeria-botao-nav"
-    onclick="fotoAnterior()">❮</button>
-
+   <button class="galeria-botao-nav" onclick="fotoAnterior()">❮</button>
    <span id="contadorGaleria">1 de 1</span>
-
-   <button class="galeria-botao-nav"
-    onclick="proximaFoto()">❯</button>
-
+   <button class="galeria-botao-nav" onclick="proximaFoto()">❯</button>
   </div>
 
-  <div id="miniaturasGaleria"
-   class="galeria-miniaturas"></div>
+  <div id="miniaturasGaleria" class="galeria-miniaturas"></div>
 
  </div>
 
 </div>
 
 
-<!-- =====================================================
-     LOGIN
-===================================================== -->
+<!-- LOGIN -->
 
 <div id="overlayLogin" class="overlay-login">
 
@@ -1474,9 +1275,7 @@ textarea{
 </div>
 
 
-<!-- =====================================================
-     PAINEL ADMINISTRATIVO
-===================================================== -->
+<!-- PAINEL ADMIN -->
 
 <div id="painelAdmin" class="oculto">
 
@@ -1486,28 +1285,23 @@ textarea{
 
  <div class="menu-lateral">
 
-  <button class="item-menu ativo"
-   data-pagina="calendario">
+  <button class="item-menu ativo" data-pagina="calendario">
    📅 Calendário & Valores
   </button>
 
-  <button class="item-menu"
-   data-pagina="casas">
+  <button class="item-menu" data-pagina="casas">
    🏠 Casas / Fotos / Taxas
   </button>
 
-  <button class="item-menu"
-   data-pagina="hospedes">
+  <button class="item-menu" data-pagina="hospedes">
    👤 Hóspedes
   </button>
 
-  <button class="item-menu"
-   data-pagina="reservas">
+  <button class="item-menu" data-pagina="reservas">
    📋 Reservas
   </button>
 
-  <button class="item-menu"
-   data-pagina="relatorios">
+  <button class="item-menu" data-pagina="relatorios">
    📊 Relatórios
   </button>
 
@@ -1519,8 +1313,7 @@ textarea{
   🔔 Ativar notificações
  </button>
 
- <button class="voltar-publico"
-  onclick="fazerLogout()">
+ <button class="voltar-publico" onclick="fazerLogout()">
   🔙 Ver Página Pública
  </button>
 
@@ -1530,46 +1323,28 @@ textarea{
 <div class="conteudo-admin">
 
 
-<!-- =====================================================
-     CALENDÁRIO
-===================================================== -->
+<!-- CALENDÁRIO -->
 
 <div id="pagina-calendario" class="pagina ativa">
 
  <h2>📅 Calendário — Valores & Disponibilidade</h2>
 
  <p style="color:var(--cinza);margin:10px 0">
-  💡 Vermelho = reserva confirmada/paga.
-  Arraste para selecionar dias.
+  💡 Vermelho = reserva confirmada/paga. Arraste para selecionar dias.
  </p>
 
  <div class="linha-form">
 
   <label>Casa:</label>
 
-  <select id="casaCalendario"
-   onchange="trocarCasaCalendario()">
-
-   <option value="amarela">
-    🏡 Casa Amarela
-   </option>
-
-   <option value="bege">
-    🌾 Casa Bege
-   </option>
-
-   <option value="marrom">
-    🪵 Casa Marrom
-   </option>
-
-   <option value="branca">
-    ☁️ Casa Branca
-   </option>
-
+  <select id="casaCalendario" onchange="trocarCasaCalendario()">
+   <option value="amarela">🏡 Casa Amarela</option>
+   <option value="bege">🌾 Casa Bege</option>
+   <option value="marrom">🪵 Casa Marrom</option>
+   <option value="branca">☁️ Casa Branca</option>
   </select>
 
  </div>
-
 
  <div class="calendario">
 
@@ -1587,44 +1362,38 @@ textarea{
 
   </div>
 
-  <div class="calendario-grade"
-   id="gradeCalendario"></div>
+  <div class="calendario-grade" id="gradeCalendario"></div>
 
  </div>
-
 
  <div class="linha-form">
 
   <label>Valor Diária:</label>
 
-  <input type="number"
+  <input
+   type="number"
    id="valorDiaria"
    min="0"
    step="5">
 
-  <button class="sucesso"
-   onclick="salvarValorPeriodo()">
+  <button class="sucesso" onclick="salvarValorPeriodo()">
    💾 Salvar
   </button>
 
-  <button class="vermelho"
-   onclick="removerValor()">
+  <button class="vermelho" onclick="removerValor()">
    🗑️ Remover
   </button>
 
  </div>
 
- <p id="infoSelecao"
-  style="color:var(--cinza)">
+ <p id="infoSelecao" style="color:var(--cinza)">
   Nenhum dia selecionado
  </p>
 
 </div>
 
 
-<!-- =====================================================
-     CASAS
-===================================================== -->
+<!-- CASAS -->
 
 <div id="pagina-casas" class="pagina">
 
@@ -1632,22 +1401,14 @@ textarea{
 
  <div class="grade-casas" id="gradeCasas"></div>
 
- <div style="
-  margin-top:25px;
-  padding:15px;
-  background:#f0f9fc;
-  border-radius:8px">
-
+ <div style="margin-top:25px;padding:15px;background:#f0f9fc;border-radius:8px">
   📷 Para fotos: use um link direto do Imgur.
-
  </div>
 
 </div>
 
 
-<!-- =====================================================
-     HÓSPEDES
-===================================================== -->
+<!-- HÓSPEDES -->
 
 <div id="pagina-hospedes" class="pagina">
 
@@ -1659,17 +1420,16 @@ textarea{
 
  <div class="linha-form">
 
-  <input id="buscarHospede"
+  <input
+   id="buscarHospede"
    placeholder="Buscar nome ou telefone..."
    oninput="filtrarHospedes()">
 
-  <button class="azul"
-   onclick="abrirCadastroHospede()">
+  <button class="azul" onclick="abrirCadastroHospede()">
    + Novo Cadastro
   </button>
 
-  <button class="azul"
-   onclick="sincronizarHospedesReservas()">
+  <button class="azul" onclick="sincronizarHospedesReservas()">
    🔄 Sincronizar
   </button>
 
@@ -1680,42 +1440,31 @@ textarea{
 </div>
 
 
-<!-- =====================================================
-     RESERVAS
-===================================================== -->
+<!-- RESERVAS -->
 
 <div id="pagina-reservas" class="pagina">
 
  <h2>📋 Solicitações e Reservas</h2>
 
- <div style="
-  display:flex;
-  gap:10px;
-  margin:15px 0;
-  flex-wrap:wrap">
+ <div style="display:flex;gap:10px;margin:15px 0;flex-wrap:wrap">
 
-  <button data-filtro="todas"
-   class="azul ativo">
+  <button data-filtro="todas" class="azul ativo">
    Todas
   </button>
 
-  <button data-filtro="pendente"
-   class="azul">
+  <button data-filtro="pendente" class="azul">
    Pendentes
   </button>
 
-  <button data-filtro="confirmada"
-   class="azul">
+  <button data-filtro="confirmada" class="azul">
    ✅ Confirmadas
   </button>
 
-  <button data-filtro="parcial"
-   class="azul">
+  <button data-filtro="parcial" class="azul">
    Parciais
   </button>
 
-  <button data-filtro="pago"
-   class="azul">
+  <button data-filtro="pago" class="azul">
    💰 Pagas
   </button>
 
@@ -1726,9 +1475,7 @@ textarea{
 </div>
 
 
-<!-- =====================================================
-     RELATÓRIOS
-===================================================== -->
+<!-- RELATÓRIOS -->
 
 <div id="pagina-relatorios" class="pagina">
 
@@ -1738,27 +1485,18 @@ textarea{
 
   <div>
    <label>Casa</label>
-
-   <select id="filtroCasaRelatorio"
-    onchange="gerarRelatorio()">
-
+   <select id="filtroCasaRelatorio" onchange="gerarRelatorio()">
     <option value="todas">Todas as casas</option>
     <option value="amarela">Casa Amarela</option>
     <option value="bege">Casa Bege</option>
     <option value="marrom">Casa Marrom</option>
     <option value="branca">Casa Branca</option>
-
    </select>
-
   </div>
-
 
   <div>
    <label>Período</label>
-
-   <select id="filtroPeriodoRelatorio"
-    onchange="gerarRelatorio()">
-
+   <select id="filtroPeriodoRelatorio" onchange="gerarRelatorio()">
     <option value="todos">Todo o período</option>
     <option value="hoje">Hoje</option>
     <option value="mes">Este mês</option>
@@ -1766,68 +1504,51 @@ textarea{
     <option value="30dias">Últimos 30 dias</option>
     <option value="ano">Este ano</option>
     <option value="personalizado">Personalizado</option>
-
    </select>
-
   </div>
-
 
   <div>
    <label>Status</label>
-
-   <select id="filtroStatusRelatorio"
-    onchange="gerarRelatorio()">
-
+   <select id="filtroStatusRelatorio" onchange="gerarRelatorio()">
     <option value="todos">Todos</option>
     <option value="pendente">Pendente</option>
     <option value="confirmada">Confirmada</option>
     <option value="parcial">Parcial</option>
     <option value="pago">Pago</option>
-
    </select>
-
   </div>
-
 
   <div>
    <label>Hóspede</label>
-
-   <input id="filtroHospedeRelatorio"
+   <input
+    id="filtroHospedeRelatorio"
     placeholder="Nome ou telefone"
     oninput="gerarRelatorio()">
-
   </div>
-
 
   <div>
    <label>Data inicial</label>
-
-   <input type="date"
+   <input
+    type="date"
     id="relatorioDataInicial"
     onchange="gerarRelatorio()">
-
   </div>
-
 
   <div>
    <label>Data final</label>
-
-   <input type="date"
+   <input
+    type="date"
     id="relatorioDataFinal"
     onchange="gerarRelatorio()">
-
   </div>
 
  </div>
 
-
- <button class="cinza botao-imprimir"
-  onclick="window.print()">
+ <button class="cinza botao-imprimir" onclick="window.print()">
   🖨️ Imprimir / Salvar PDF
  </button>
 
- <button class="vermelho botao-imprimir"
-  onclick="limparFiltrosRelatorio()">
+ <button class="vermelho botao-imprimir" onclick="limparFiltrosRelatorio()">
   ✖ Limpar filtros
  </button>
 
@@ -1835,14 +1556,11 @@ textarea{
 
 </div>
 
-
 </div>
 </div>
 
 
-<!-- =====================================================
-     MODAL RESERVA
-===================================================== -->
+<!-- MODAL RESERVA -->
 
 <div id="modalReserva" class="modal">
 
@@ -1855,163 +1573,114 @@ textarea{
    <span id="nomeCasaReserva"></span>
   </h3>
 
-  <button class="fechar"
-   onclick="fecharModal()">
-   ×
-  </button>
+  <button class="fechar" onclick="fecharModal()">×</button>
 
  </div>
 
-
- <div id="avisoBloqueio"
-  class="aviso-bloqueio">
- </div>
-
+ <div id="avisoBloqueio" class="aviso-bloqueio"></div>
 
  <div class="grupo-input">
   <label>Nome Completo</label>
   <input id="hospedeNome">
  </div>
 
-
  <div class="grupo-input">
   <label>Telefone com WhatsApp</label>
   <input id="hospedeTelefone" type="tel">
  </div>
 
-
- <div id="infoCapacidadeReserva"
-  class="capacidade">
- </div>
-
+ <div id="infoCapacidadeReserva" class="capacidade"></div>
 
  <div class="linha-form">
 
   <div class="grupo-input">
-
    <label>Data Entrada</label>
-
-   <input type="date"
+   <input
+    type="date"
     id="dataEntrada"
     onchange="verificarDisponibilidade()">
-
   </div>
-
 
   <div class="grupo-input">
-
    <label>Data Saída</label>
-
-   <input type="date"
+   <input
+    type="date"
     id="dataSaida"
     onchange="verificarDisponibilidade()">
-
   </div>
 
  </div>
 
-
  <div id="sugestoesDisponibilidade"
-  class="sugestoes-disponibilidade">
- </div>
-
+  class="sugestoes-disponibilidade"></div>
 
  <div class="linha-form">
 
   <div class="grupo-input">
-
    <label>👨 Adultos</label>
-
-   <input type="number"
+   <input
+    type="number"
     id="qtdAdultos"
     min="0"
     value="1"
     onchange="atualizarTotalPessoas()">
-
   </div>
 
-
   <div class="grupo-input">
-
    <label>👧 Crianças</label>
-
-   <input type="number"
+   <input
+    type="number"
     id="qtdCriancas"
     min="0"
     value="0"
     onchange="atualizarTotalPessoas()">
-
   </div>
 
  </div>
 
-
- <div id="avisoCapacidadeReserva"
-  class="aviso-capacidade">
+ <div id="avisoCapacidadeReserva" class="aviso-capacidade">
   Informe a quantidade de pessoas.
  </div>
 
-
  <div class="grupo-input">
-
   <label>Valor das Diárias</label>
-
   <input id="valorDiarias" readonly>
-
  </div>
 
-
  <div class="grupo-input">
-
   🧹 Taxa de Limpeza:
-
-  <strong id="valorTaxaLimpeza">
-   R$ 0,00
-  </strong>
-
+  <strong id="valorTaxaLimpeza">R$ 0,00</strong>
  </div>
 
-
  <div class="grupo-input">
-
   <label>Valor Total</label>
-
-  <input id="valorEstimado"
+  <input
+   id="valorEstimado"
    readonly
    style="background:#fef9e7;font-weight:bold">
-
  </div>
-
 
  <div class="grupo-input">
-
   <label>Observações</label>
-
-  <textarea id="obsReserva"
+  <textarea
+   id="obsReserva"
    rows="3"
-   placeholder="Observações sobre a reserva...">
-  </textarea>
-
+   placeholder="Observações sobre a reserva..."></textarea>
  </div>
 
-
- <button class="amarelo"
+ <button
+  class="amarelo"
   id="btnEnviarReserva"
   onclick="enviarReserva()"
   style="width:100%">
-
   📤 Enviar Solicitação
-
  </button>
 
 </div>
-
 </div>
 
 
-<!-- =====================================================
-     MODAL EDITAR RESERVA
-===================================================== -->
+<!-- MODAL EDITAR RESERVA -->
 
 <div id="modalEditarReserva" class="modal">
 
@@ -2021,25 +1690,21 @@ textarea{
 
   <h3>Gestão de Reserva</h3>
 
-  <button class="fechar"
-   onclick="fecharModalEditar()">
-   ×
-  </button>
+  <button class="fechar" onclick="fecharModalEditar()">×</button>
 
  </div>
 
  <div id="conteudoEditar"></div>
 
 </div>
-
 </div>
 
 
 <script>
 
-/* =====================================================
+/* =========================================================
    FIREBASE
-===================================================== */
+========================================================= */
 
 const firebaseConfig={
  apiKey:"AIzaSyC8ZtXwPnUa9WnqLdKfYbXzYbXzYbXzYbXzYbXzYbX",
@@ -2060,9 +1725,9 @@ const db=firebase.firestore();
 const $=id=>document.getElementById(id);
 
 
-/* =====================================================
+/* =========================================================
    DADOS DAS CASAS
-===================================================== */
+========================================================= */
 
 const casas={
 
@@ -2133,10 +1798,6 @@ const casas={
 };
 
 
-/* =====================================================
-   ESTADO
-===================================================== */
-
 let casaGaleriaAtual=null;
 let indiceFotoAtual=0;
 let dataAtual=new Date();
@@ -2153,17 +1814,16 @@ let casaSelecionadaParaReserva=null;
 
 let pararMonitoramentoReservas=null;
 
-const CHAVE_NOTIFICACOES=
- 'casasPraiaNotificacoesAtivas';
+const CHAVE_NOTIFICACOES='casasPraiaNotificacoesAtivas';
 
 let mesSugestao=new Date();
 let reservasBloqueantesSugestao=[];
 let noitesSugestao=2;
 
 
-/* =====================================================
+/* =========================================================
    HELPERS
-===================================================== */
+========================================================= */
 
 const moeda=v=>
  'R$ '+Number(v||0).toFixed(2).replace('.',',');
@@ -2179,16 +1839,12 @@ const dataLocal=s=>{
 };
 
 const dataStr=d=>
- `${d.getFullYear()}-${
-  String(d.getMonth()+1).padStart(2,'0')
- }-${
-  String(d.getDate()).padStart(2,'0')
- }`;
+ `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 
 const dataBr=s=>{
  if(!s)return '';
 
- const[a,m,d]=s.split('-');
+ const [a,m,d]=s.split('-');
 
  return `${d}/${m}/${a}`;
 };
@@ -2198,10 +1854,10 @@ const dias=(a,b)=>
 
 const normalizar=s=>
  (s||'')
-  .toLowerCase()
-  .normalize('NFD')
-  .replace(/[\u0300-\u036f]/g,'')
-  .trim();
+ .toLowerCase()
+ .normalize('NFD')
+ .replace(/[\u0300-\u036f]/g,'')
+ .trim();
 
 function hoje(){
  const d=new Date();
@@ -2210,9 +1866,163 @@ function hoje(){
 }
 
 
-/* =====================================================
-   INICIALIZAÇÃO
-===================================================== */
+/* =========================================================
+   SEGURANÇA PARA RECIBO
+========================================================= */
+
+function escaparHtml(valor){
+ return String(valor??'')
+  .replace(/&/g,'&amp;')
+  .replace(/</g,'&lt;')
+  .replace(/>/g,'&gt;')
+  .replace(/"/g,'&quot;')
+  .replace(/'/g,'&#039;');
+}
+
+
+/* =========================================================
+   NÚMEROS POR EXTENSO
+========================================================= */
+
+function numeroPorExtenso(n){
+
+ n=Math.floor(Math.abs(Number(n)||0));
+
+ const unidades=[
+  'zero','um','dois','três','quatro',
+  'cinco','seis','sete','oito','nove'
+ ];
+
+ const especiais=[
+  'dez','onze','doze','treze','quatorze',
+  'quinze','dezesseis','dezessete','dezoito','dezenove'
+ ];
+
+ const dezenas=[
+  '','','vinte','trinta','quarenta',
+  'cinquenta','sessenta','setenta','oitenta','noventa'
+ ];
+
+ const centenas=[
+  '','cento','duzentos','trezentos',
+  'quatrocentos','quinhentos','seiscentos',
+  'setecentos','oitocentos','novecentos'
+ ];
+
+ if(n<10)return unidades[n];
+
+ if(n<20)return especiais[n-10];
+
+ if(n<100){
+
+  const d=Math.floor(n/10);
+  const u=n%10;
+
+  return dezenas[d]+(u?' e '+unidades[u]:'');
+ }
+
+ if(n===100)return 'cem';
+
+ if(n<1000){
+
+  const c=Math.floor(n/100);
+  const r=n%100;
+
+  return centenas[c]+(r?' e '+numeroPorExtenso(r):'');
+ }
+
+ if(n<1000000){
+
+  const mil=Math.floor(n/1000);
+  const r=n%1000;
+
+  let texto=mil===1
+   ?'mil'
+   :numeroPorExtenso(mil)+' mil';
+
+  if(r){
+
+   if(r<100 || r%100===0)
+    texto+=' e ';
+   else
+    texto+=' ';
+
+   texto+=numeroPorExtenso(r);
+  }
+
+  return texto;
+ }
+
+ if(n<1000000000){
+
+  const milhoes=Math.floor(n/1000000);
+  const r=n%1000000;
+
+  let texto=milhoes===1
+   ?'um milhão'
+   :numeroPorExtenso(milhoes)+' milhões';
+
+  if(r){
+
+   if(r<100 || r%100===0)
+    texto+=' e ';
+   else
+    texto+=' ';
+
+   texto+=numeroPorExtenso(r);
+  }
+
+  return texto;
+ }
+
+ const bilhoes=Math.floor(n/1000000000);
+ const r=n%1000000000;
+
+ let texto=bilhoes===1
+  ?'um bilhão'
+  :numeroPorExtenso(bilhoes)+' bilhões';
+
+ if(r){
+
+  if(r<100 || r%100===0)
+   texto+=' e ';
+  else
+   texto+=' ';
+
+  texto+=numeroPorExtenso(r);
+ }
+
+ return texto;
+}
+
+
+function valorPorExtenso(valor){
+
+ const centavosTotais=Math.round(
+  Number(valor||0)*100
+ );
+
+ const reais=Math.floor(centavosTotais/100);
+ const centavos=centavosTotais%100;
+
+ let texto=
+  numeroPorExtenso(reais)+
+  (reais===1?' real':' reais');
+
+ if(centavos){
+
+  texto+=' e '+
+   numeroPorExtenso(centavos)+
+   (centavos===1?' centavo':' centavos');
+ }
+
+ return texto;
+}
+
+
+/* =========================================================
+   INIT
+========================================================= */
 
 document.addEventListener('DOMContentLoaded',async()=>{
 
@@ -2235,13 +2045,12 @@ document.addEventListener('DOMContentLoaded',async()=>{
  }
 
  renderizarPaginaPublica();
-
 });
 
 
-/* =====================================================
+/* =========================================================
    LOGIN
-===================================================== */
+========================================================= */
 
 function abrirLogin(){
  $('overlayLogin').classList.add('aberto');
@@ -2253,7 +2062,6 @@ function fecharLogin(){
 
  $('usuario').value='';
  $('senha').value='';
-
 }
 
 function fazerLogin(){
@@ -2270,17 +2078,13 @@ function fazerLogin(){
 
   inicializarPainel();
 
-  setTimeout(
-   verificarNotificacoesJaAtivas,
-   300
-  );
+  setTimeout(verificarNotificacoesJaAtivas,300);
 
  }else{
 
   alert('❌ Usuário ou senha incorretos!');
 
  }
-
 }
 
 function fazerLogout(){
@@ -2291,13 +2095,12 @@ function fazerLogout(){
  $('areaPublica').classList.remove('oculto');
 
  renderizarPaginaPublica();
-
 }
 
 
-/* =====================================================
-   NOTIFICAÇÕES NATIVAS
-===================================================== */
+/* =========================================================
+   NOTIFICAÇÕES
+========================================================= */
 
 function mostrarStatusBotaoNotificacao(){
 
@@ -2306,7 +2109,7 @@ function mostrarStatusBotaoNotificacao(){
  if(!b)return;
 
  const ativo=
-  'Notification'in window &&
+  'Notification' in window &&
   Notification.permission==='granted' &&
   localStorage.getItem(CHAVE_NOTIFICACOES)==='sim';
 
@@ -2314,20 +2117,15 @@ function mostrarStatusBotaoNotificacao(){
   ?'🔔 Notificações ATIVADAS'
   :'🔔 Ativar notificações';
 
- b.classList.toggle(
-  'ativado',
-  ativo
- );
-
+ b.classList.toggle('ativado',ativo);
  b.disabled=ativo;
-
 }
 
 
 function mostrarNotificacaoNovaReserva(r,id){
 
  if(
-  !('Notification'in window) ||
+  !('Notification' in window) ||
   Notification.permission!=='granted'
  )return;
 
@@ -2344,6 +2142,7 @@ function mostrarNotificacaoNovaReserva(r,id){
  );
 
  n.onclick=()=>{
+
   window.focus();
   n.close();
 
@@ -2351,14 +2150,13 @@ function mostrarNotificacaoNovaReserva(r,id){
    .querySelector('[data-pagina="reservas"]')
    ?.click();
  };
-
 }
 
 
 function iniciarMonitoramentoReservas(){
 
  if(
-  !('Notification'in window) ||
+  !('Notification' in window) ||
   Notification.permission!=='granted' ||
   pararMonitoramentoReservas
  )return;
@@ -2383,16 +2181,10 @@ function iniciarMonitoramentoReservas(){
      const id=c.doc.id;
      const r=c.doc.data();
 
-     if(
-      reservasConfirmadas.some(
-       x=>x.id===id
-      )
-     )return;
+     if(reservasConfirmadas.some(x=>x.id===id))
+      return;
 
-     mostrarNotificacaoNovaReserva(
-      r,
-      id
-     );
+     mostrarNotificacaoNovaReserva(r,id);
 
      reservasConfirmadas.unshift({
       id,
@@ -2406,12 +2198,8 @@ function iniciarMonitoramentoReservas(){
     });
 
    },e=>{
-    console.error(
-     'Erro no monitoramento:',
-     e
-    );
+    console.error('Erro no monitoramento:',e);
    });
-
 }
 
 
@@ -2420,56 +2208,53 @@ function pararMonitoramentoDeReservas(){
  if(pararMonitoramentoReservas){
 
   pararMonitoramentoReservas();
-
   pararMonitoramentoReservas=null;
 
  }
-
 }
 
 
 async function ativarNotificacoes(){
 
- if(!('Notification'in window))
-  return alert(
-   '❌ Este navegador não suporta notificações.'
-  );
+ if(!('Notification' in window)){
+
+  alert('❌ Este navegador não suporta notificações.');
+  return;
+ }
 
  let p=Notification.permission;
 
  if(p==='default')
   p=await Notification.requestPermission();
 
- if(p!=='granted')
-  return alert(
+ if(p!=='granted'){
+
+  alert(
    p==='denied'
     ?'⚠️ As notificações estão bloqueadas neste navegador.'
     :'⚠️ As notificações não foram autorizadas.'
   );
 
- localStorage.setItem(
-  CHAVE_NOTIFICACOES,
-  'sim'
- );
+  return;
+ }
+
+ localStorage.setItem(CHAVE_NOTIFICACOES,'sim');
 
  iniciarMonitoramentoReservas();
-
  mostrarStatusBotaoNotificacao();
 
  new Notification(
   '🏖️ Casas na Praia',
   {
-   body:
-    'Notificações ativadas com sucesso!'
+   body:'Notificações ativadas com sucesso!'
   }
  );
-
 }
 
 
 function verificarNotificacoesJaAtivas(){
 
- if(!('Notification'in window))return;
+ if(!('Notification' in window))return;
 
  mostrarStatusBotaoNotificacao();
 
@@ -2479,13 +2264,12 @@ function verificarNotificacoesJaAtivas(){
  ){
   iniciarMonitoramentoReservas();
  }
-
 }
 
 
-/* =====================================================
+/* =========================================================
    PAINEL
-===================================================== */
+========================================================= */
 
 async function inicializarPainel(){
 
@@ -2499,7 +2283,6 @@ async function inicializarPainel(){
   ]);
 
   configurarNavegacao();
-
   renderizarCalendario();
   renderizarCasasAdmin();
   atualizarListaReservas();
@@ -2512,41 +2295,35 @@ async function inicializarPainel(){
   alert(
    '⚠️ O painel abriu, mas houve erro ao carregar alguns dados.'
   );
-
  }
-
 }
 
 
-/* =====================================================
+/* =========================================================
    GALERIA
-===================================================== */
+========================================================= */
 
 function abrirGaleria(id,i=0){
 
- if(!casas[id]?.fotos?.length)
-  return alert(
-   'Esta casa ainda não possui fotos.'
-  );
+ if(!casas[id]?.fotos?.length){
+
+  alert('Esta casa ainda não possui fotos.');
+  return;
+ }
 
  casaGaleriaAtual=id;
  indiceFotoAtual=i;
 
  atualizarFotoGaleria();
 
- $('overlayGaleria')
-  .classList.add('aberto');
-
+ $('overlayGaleria').classList.add('aberto');
 }
 
 
 function fecharGaleria(){
 
- $('overlayGaleria')
-  .classList.remove('aberto');
-
+ $('overlayGaleria').classList.remove('aberto');
  casaGaleriaAtual=null;
-
 }
 
 
@@ -2554,11 +2331,13 @@ function atualizarFotoGaleria(){
 
  if(!casaGaleriaAtual)return;
 
- const f=
-  casas[casaGaleriaAtual].fotos||[];
+ const f=casas[casaGaleriaAtual].fotos||[];
 
- if(!f.length)
-  return fecharGaleria();
+ if(!f.length){
+
+  fecharGaleria();
+  return;
+ }
 
  indiceFotoAtual=
   (indiceFotoAtual+f.length)%f.length;
@@ -2570,33 +2349,31 @@ function atualizarFotoGaleria(){
   `${indiceFotoAtual+1} de ${f.length}`;
 
  $('miniaturasGaleria').innerHTML=
-  f.map((x,i)=>`
-   <img
-    src="${x}"
+  f.map((x,i)=>
+   `<img src="${x}"
     class="miniatura ${i===indiceFotoAtual?'ativa':''}"
-    onclick="
-     indiceFotoAtual=${i};
-     atualizarFotoGaleria()
-    ">
-  `).join('');
-
+    onclick="indiceFotoAtual=${i};atualizarFotoGaleria()">`
+  ).join('');
 }
 
 
 function fotoAnterior(){
+
  indiceFotoAtual--;
  atualizarFotoGaleria();
 }
 
+
 function proximaFoto(){
+
  indiceFotoAtual++;
  atualizarFotoGaleria();
 }
 
 
-/* =====================================================
+/* =========================================================
    PÁGINA PÚBLICA
-===================================================== */
+========================================================= */
 
 function renderizarPaginaPublica(){
 
@@ -2605,90 +2382,75 @@ function renderizarPaginaPublica(){
  if(!c)return;
 
  c.innerHTML=
-  Object.entries(casas)
-   .map(([id,x])=>{
+  Object.entries(casas).map(([id,x])=>{
 
-    const f=x.fotos?.[0];
+   const f=x.fotos?.[0];
 
-    return `
-     <div class="card-casa">
+   return `
+    <div class="card-casa">
 
-      <div
-       class="card-imagem"
-       onclick="${f?`abrirGaleria('${id}')`:''}"
-      >
+     <div class="card-imagem"
+      onclick="${f?`abrirGaleria('${id}')`:''}">
 
-       ${
-        f
-         ?`<img src="${f}" alt="${x.nome}">`
-         :'🏖️'
-       }
-
-      </div>
-
-
-      <div class="card-corpo">
-
-       <h3>${x.nome}</h3>
-
-       <p class="descricao-casa">
-        ${x.desc}
-       </p>
-
-
-       <div class="caracteristicas-casa">
-
-        ${(x.caracteristicas||[])
-         .map(v=>`
-          <div class="caracteristica-item">
-           ${v}
-          </div>
-         `).join('')}
-
-       </div>
-
-
-       <div class="capacidade">
-        👥 Até ${x.capacidade} pessoas
-       </div>
-
-
-       ${
-        x.fotos?.length>1
-         ?`
-          <button
-           class="botao-galeria"
-           onclick="abrirGaleria('${id}')">
-           📷 Ver ${x.fotos.length} fotos
-          </button>
-         `
-         :''
-       }
-
-
-       <button
-        class="amarelo"
-        style="width:100%;margin-top:8px"
-        onclick="abrirModalReserva('${id}')">
-
-        📅 Solicitar Reserva
-
-       </button>
-
-      </div>
+      ${
+       f
+        ?`<img src="${f}" alt="${x.nome}">`
+        :'🏖️'
+      }
 
      </div>
-    `;
 
-   })
-   .join('');
+     <div class="card-corpo">
 
+      <h3>${x.nome}</h3>
+
+      <p class="descricao-casa">
+       ${x.desc}
+      </p>
+
+      <div class="caracteristicas-casa">
+
+       ${(x.caracteristicas||[])
+        .map(v=>
+         `<div class="caracteristica-item">${v}</div>`
+        ).join('')}
+
+      </div>
+
+      <div class="capacidade">
+       👥 Até ${x.capacidade} pessoas
+      </div>
+
+      ${
+       x.fotos?.length>1
+        ?`<button
+            class="botao-galeria"
+            onclick="abrirGaleria('${id}')">
+            📷 Ver ${x.fotos.length} fotos
+           </button>`
+        :''
+      }
+
+      <button
+       class="amarelo"
+       style="width:100%;margin-top:8px"
+       onclick="abrirModalReserva('${id}')">
+
+       📅 Solicitar Reserva
+
+      </button>
+
+     </div>
+    </div>
+   `;
+
+  }).join('');
 }
 
 
-/* =====================================================
+/* =========================================================
    NAVEGAÇÃO
-===================================================== */
+========================================================= */
 
 function configurarNavegacao(){
 
@@ -2700,21 +2462,16 @@ function configurarNavegacao(){
 
     document
      .querySelectorAll('.item-menu')
-     .forEach(x=>
-      x.classList.remove('ativo')
-     );
+     .forEach(x=>x.classList.remove('ativo'));
 
     b.classList.add('ativo');
 
     document
      .querySelectorAll('.pagina')
-     .forEach(x=>
-      x.classList.remove('ativa')
-     );
+     .forEach(x=>x.classList.remove('ativa'));
 
     $('pagina-'+b.dataset.pagina)
      .classList.add('ativa');
-
 
     if(b.dataset.pagina==='reservas')
      atualizarListaReservas();
@@ -2746,14 +2503,11 @@ function configurarNavegacao(){
 
     document
      .querySelectorAll('[data-filtro]')
-     .forEach(x=>
-      x.classList.remove('ativo')
-     );
+     .forEach(x=>x.classList.remove('ativo'));
 
     b.classList.add('ativo');
 
     atualizarListaReservas();
-
    };
 
   });
@@ -2761,9 +2515,9 @@ function configurarNavegacao(){
 }
 
 
-/* =====================================================
+/* =========================================================
    CALENDÁRIO
-===================================================== */
+========================================================= */
 
 function mudarMes(d){
 
@@ -2772,30 +2526,24 @@ function mudarMes(d){
  );
 
  renderizarCalendario();
-
 }
 
 
 function trocarCasaCalendario(){
 
  limparSelecao();
-
  renderizarCalendario();
-
 }
 
 
 function verificarDiaBloqueado(casa,s){
 
  return reservasConfirmadas.some(r=>
-  ['confirmada','pago'].includes(
-   r.statusPagamento
-  ) &&
+  ['confirmada','pago'].includes(r.statusPagamento) &&
   r.casa===casa &&
   s>=r.entrada &&
   s<r.saida
  );
-
 }
 
 
@@ -2805,23 +2553,18 @@ function renderizarCalendario(){
 
  if(!g)return;
 
- const casa=
-  $('casaCalendario').value;
+ const casa=$('casaCalendario').value;
 
  const y=dataAtual.getFullYear();
  const m=dataAtual.getMonth();
 
- const primeiro=
-  new Date(y,m,1);
-
- const ultimo=
-  new Date(y,m+1,0);
+ const primeiro=new Date(y,m,1);
+ const ultimo=new Date(y,m+1,0);
 
  const nomes=[
-  'Dom','Seg','Ter',
-  'Qua','Qui','Sex','Sáb'
+  'Dom','Seg','Ter','Qua',
+  'Qui','Sex','Sáb'
  ];
-
 
  $('nomeMes').textContent=
   new Intl.DateTimeFormat(
@@ -2832,51 +2575,26 @@ function renderizarCalendario(){
    }
   ).format(dataAtual);
 
-
  let h=nomes
-  .map(x=>
-   `<div class="rotulo-dia-semana">
-    ${x}
-   </div>`
-  )
+  .map(x=>`<div class="rotulo-dia-semana">${x}</div>`)
   .join('');
 
-
- for(
-  let i=0;
-  i<primeiro.getDay();
-  i++
- ){
+ for(let i=0;i<primeiro.getDay();i++)
   h+='<div></div>';
- }
 
-
- for(
-  let d=1;
-  d<=ultimo.getDate();
-  d++
- ){
+ for(let d=1;d<=ultimo.getDate();d++){
 
   const dt=new Date(y,m,d);
   const s=dataStr(dt);
 
   const bloq=
-   verificarDiaBloqueado(
-    casa,
-    s
-   );
+   verificarDiaBloqueado(casa,s);
 
-  const pass=
-   dt<hoje();
-
-  const sel=
-   datasSelecionadas.has(s);
+  const pass=dt<hoje();
+  const sel=datasSelecionadas.has(s);
 
   const v=
-   valoresDiarias[
-    `${casa}_${s}`
-   ];
-
+   valoresDiarias[`${casa}_${s}`];
 
   h+=`
    <div
@@ -2889,8 +2607,7 @@ function renderizarCalendario(){
     "
     data-data="${s}"
     onmousedown="iniciarSelecao('${s}')"
-    onmouseenter="estenderSelecao('${s}')"
-   >
+    onmouseenter="estenderSelecao('${s}')">
 
     ${d}
 
@@ -2908,11 +2625,9 @@ function renderizarCalendario(){
 
    </div>
   `;
-
  }
 
  g.innerHTML=h;
-
 }
 
 
@@ -2931,106 +2646,90 @@ function iniciarSelecao(s){
  datasSelecionadas.add(s);
 
  atualizarInfoSelecao();
-
 }
 
 
 function estenderSelecao(s){
 
- if(!selecionando)return;
-
  if(
+  !selecionando ||
   verificarDiaBloqueado(
    $('casaCalendario').value,
    s
   )
  )return;
 
- const a=
-  [...datasSelecionadas][0];
+ const a=[...datasSelecionadas][0];
 
  if(!a)return;
 
+ const inicio=dataLocal(a);
+ const fim=dataLocal(s);
+
+ const passo=inicio<=fim?1:-1;
+
  datasSelecionadas.clear();
 
- let d=dataLocal(a);
- let fim=dataLocal(s);
-
- const passo=
-  d<=fim?1:-1;
-
-
  for(;;){
+
+  const atual=dataStr(inicio);
 
   if(
    !verificarDiaBloqueado(
     $('casaCalendario').value,
-    dataStr(d)
+    atual
    )
   ){
-   datasSelecionadas.add(
-    dataStr(d)
-   );
+   datasSelecionadas.add(atual);
   }
 
-  if(
-   dataStr(d)===dataStr(fim)
-  )break;
+  if(atual===dataStr(fim))
+   break;
 
-  d.setDate(
-   d.getDate()+passo
+  inicio.setDate(
+   inicio.getDate()+passo
   );
-
  }
 
  atualizarInfoSelecao();
  renderizarCalendario();
-
 }
 
 
-document.addEventListener(
- 'mouseup',
- ()=>selecionando=false
-);
+document.addEventListener('mouseup',()=>{
+ selecionando=false;
+});
 
 
 function atualizarInfoSelecao(){
 
  $('infoSelecao').textContent=
   datasSelecionadas.size
-   ?`${datasSelecionadas.size} dia(s) selecionado(s): ${
-     [...datasSelecionadas]
-      .sort()
-      .map(dataBr)
-      .join(', ')
-    }`
+   ?`${datasSelecionadas.size} dia(s) selecionado(s): `+
+    `${[...datasSelecionadas].sort().map(dataBr).join(', ')}`
    :'Nenhum dia selecionado';
-
 }
 
 
-/* =====================================================
-   VALORES DAS DIÁRIAS
-===================================================== */
-
 async function salvarValorPeriodo(){
 
- const v=
-  Number($('valorDiaria').value);
+ const v=Number(
+  $('valorDiaria').value
+ );
 
- const c=
-  $('casaCalendario').value;
+ const c=$('casaCalendario').value;
 
  if(
   !datasSelecionadas.size ||
   isNaN(v)
  ){
-  return alert(
+
+  alert(
    'Selecione os dias e informe o valor.'
   );
- }
 
+  return;
+ }
 
  try{
 
@@ -3043,14 +2742,12 @@ async function salvarValorPeriodo(){
       data:s,
       valor:v,
       atualizadoEm:
-       firebase.firestore.FieldValue
-        .serverTimestamp()
+       firebase.firestore.FieldValue.serverTimestamp()
      })
    )
   );
 
   await carregarValoresDiarias();
-
   renderizarCalendario();
 
   alert('✅ Valor salvo!');
@@ -3058,26 +2755,21 @@ async function salvarValorPeriodo(){
  }catch(e){
 
   console.error(e);
-
-  alert(
-   '❌ Erro ao salvar valor.'
-  );
+  alert('❌ Erro ao salvar valor.');
 
  }
-
 }
 
 
 async function removerValor(){
 
- const c=
-  $('casaCalendario').value;
+ const c=$('casaCalendario').value;
 
- if(!datasSelecionadas.size)
-  return alert(
-   'Selecione os dias.'
-  );
+ if(!datasSelecionadas.size){
 
+  alert('Selecione os dias.');
+  return;
+ }
 
  try{
 
@@ -3090,23 +2782,16 @@ async function removerValor(){
   );
 
   await carregarValoresDiarias();
-
   renderizarCalendario();
 
-  alert(
-   '🗑️ Valores removidos.'
-  );
+  alert('🗑️ Valores removidos.');
 
  }catch(e){
 
   console.error(e);
-
-  alert(
-   '❌ Erro ao remover.'
-  );
+  alert('❌ Erro ao remover.');
 
  }
-
 }
 
 
@@ -3118,7 +2803,6 @@ function limparSelecao(){
  if($('infoSelecao'))
   $('infoSelecao').textContent=
    'Nenhum dia selecionado';
-
 }
 
 
@@ -3138,21 +2822,22 @@ async function carregarValoresDiarias(){
   ]=Number(x.valor||0);
 
  });
-
 }
 
 
-/* =====================================================
-   RESERVAS PÚBLICAS
-===================================================== */
+/* =========================================================
+   RESERVA PÚBLICA
+========================================================= */
 
 function atualizarTotalPessoas(){
 
- const a=
-  Number($('qtdAdultos').value||0);
+ const a=Number(
+  $('qtdAdultos').value||0
+ );
 
- const c=
-  Number($('qtdCriancas').value||0);
+ const c=Number(
+  $('qtdCriancas').value||0
+ );
 
  const t=a+c;
 
@@ -3163,36 +2848,30 @@ function atualizarTotalPessoas(){
  const box=
   $('avisoCapacidadeReserva');
 
-
  if(!t){
 
   box.textContent=
    'Informe a quantidade de adultos e crianças.';
 
-  box.className=
-   'aviso-capacidade';
+  box.className='aviso-capacidade';
 
  }else if(t>max){
 
   box.textContent=
-   `⚠️ ${t} pessoas ultrapassam a capacidade de ${max}. `+
-   'Explique nas observações.';
+   `⚠️ ${t} pessoas ultrapassam a capacidade `+
+   `de ${max}. Explique nas observações.`;
 
-  box.className=
-   'aviso-excesso';
+  box.className='aviso-excesso';
 
  }else{
 
   box.textContent=
    `✅ ${t} pessoa(s) — dentro da capacidade.`;
 
-  box.className=
-   'aviso-capacidade';
-
+  box.className='aviso-capacidade';
  }
 
  verificarDisponibilidade();
-
 }
 
 
@@ -3202,15 +2881,13 @@ function abrirModalReserva(id){
 
  const x=casas[id];
 
- $('nomeCasaReserva').textContent=
-  x.nome;
+ $('nomeCasaReserva').textContent=x.nome;
 
  $('infoCapacidadeReserva').textContent=
   `👥 Capacidade máxima: ${x.capacidade} pessoas`;
 
  $('valorTaxaLimpeza').textContent=
   moeda(x.taxaLimpeza);
-
 
  [
   'hospedeNome',
@@ -3220,65 +2897,46 @@ function abrirModalReserva(id){
   'dataSaida',
   'valorDiarias',
   'valorEstimado'
- ].forEach(id=>{
-  $(id).value='';
- });
-
+ ].forEach(id=>$(id).value='');
 
  $('qtdAdultos').value=1;
  $('qtdCriancas').value=0;
 
- $('avisoBloqueio')
-  .style.display='none';
+ $('avisoBloqueio').style.display='none';
 
- $('btnEnviarReserva')
-  .disabled=false;
+ $('btnEnviarReserva').disabled=false;
 
  ocultarSugestoesDisponibilidade();
 
  atualizarTotalPessoas();
 
- $('modalReserva')
-  .classList.add('aberto');
-
+ $('modalReserva').classList.add('aberto');
 }
 
 
 function fecharModal(){
 
- $('modalReserva')
-  .classList.remove('aberto');
+ $('modalReserva').classList.remove('aberto');
 
  ocultarSugestoesDisponibilidade();
 
  casaSelecionadaParaReserva=null;
-
 }
 
 
-async function calcularValorDiarias(
- casa,
- a,
- b
-){
+async function calcularValorDiarias(casa,a,b){
 
  const da=dataLocal(a);
  const ds=dataLocal(b);
 
- if(
-  !da ||
-  !ds ||
-  ds<=da
- ){
+ if(!da||!ds||ds<=da)
   return{
    dias:0,
    valor:0
   };
- }
 
  let total=0;
  let n=0;
-
 
  for(
   let d=new Date(da);
@@ -3297,15 +2955,12 @@ async function calcularValorDiarias(
     :150;
 
   n++;
-
  }
-
 
  return{
   dias:n,
   valor:total
  };
-
 }
 
 
@@ -3323,26 +2978,22 @@ async function verificarPeriodoBloqueado(
   b<=a
  )return false;
 
-
  try{
 
   const snap=
-   await db.collection('reservas')
+   await db
+    .collection('reservas')
     .where('casa','==',casa)
     .get();
-
 
   return snap.docs.some(doc=>{
 
    if(
     ignorarId &&
     doc.id===ignorarId
-   ){
-    return false;
-   }
+   )return false;
 
    const r=doc.data();
-
 
    return(
     ['confirmada','pago']
@@ -3358,34 +3009,31 @@ async function verificarPeriodoBloqueado(
  }catch(e){
 
   console.error(e);
-
   return true;
-
  }
-
 }
 
 
-/* =====================================================
-   SUGESTÕES DE DATAS
-===================================================== */
+/* =========================================================
+   SUGESTÕES DE DISPONIBILIDADE
+========================================================= */
 
 async function carregarReservasBloqueantesSugestoes(){
 
  if(!casaSelecionadaParaReserva)
-  return [];
+  return[];
 
  try{
 
   const snap=
-   await db.collection('reservas')
+   await db
+    .collection('reservas')
     .where(
      'casa',
      '==',
      casaSelecionadaParaReserva
     )
     .get();
-
 
   reservasBloqueantesSugestao=
    snap.docs
@@ -3400,17 +3048,13 @@ async function carregarReservasBloqueantesSugestoes(){
      r.saida
     );
 
-
   return reservasBloqueantesSugestao;
 
  }catch(e){
 
   console.error(e);
-
-  return [];
-
+  return[];
  }
-
 }
 
 
@@ -3423,7 +3067,6 @@ function dataDentroDeReserva(
   s>=r.entrada &&
   s<r.saida
  );
-
 }
 
 
@@ -3437,7 +3080,6 @@ function periodoColideReservas(
   a<r.saida &&
   b>r.entrada
  );
-
 }
 
 
@@ -3457,7 +3099,6 @@ function encontrarPeriodosDisponiveis(
   base0<hoje()
    ?hoje()
    :base0;
-
 
  for(
   let i=0;
@@ -3480,10 +3121,8 @@ function encontrarPeriodosDisponiveis(
    saida.getDate()+noites
   );
 
-
   const a=dataStr(entrada);
   const b=dataStr(saida);
-
 
   if(
    !periodoColideReservas(
@@ -3500,11 +3139,9 @@ function encontrarPeriodosDisponiveis(
    });
 
   }
-
  }
 
  return encontrados;
-
 }
 
 
@@ -3523,14 +3160,10 @@ function formatarPeriodoSugestao(p){
   `${f(dataLocal(p.entrada))} → `+
   `${f(dataLocal(p.saida))}`
  );
-
 }
 
 
-function selecionarPeriodoSugerido(
- a,
- b
-){
+function selecionarPeriodoSugerido(a,b){
 
  $('dataEntrada').value=a;
  $('dataSaida').value=b;
@@ -3541,7 +3174,6 @@ function selecionarPeriodoSugerido(
  ocultarSugestoesDisponibilidade();
 
  verificarDisponibilidade();
-
 }
 
 
@@ -3561,24 +3193,26 @@ function selecionarDataSugestao(s){
  const a=dataStr(entrada);
  const b=dataStr(saida);
 
-
  if(
   periodoColideReservas(a,b)
  ){
-  return alert(
+
+  alert(
    '⚠️ Esse período não está totalmente disponível.'
   );
+
+  return;
  }
 
  selecionarPeriodoSugerido(a,b);
-
 }
 
 
 function ocultarSugestoesDisponibilidade(){
 
- const el=
-  $('sugestoesDisponibilidade');
+ const el=$(
+  'sugestoesDisponibilidade'
+ );
 
  if(el){
 
@@ -3586,7 +3220,6 @@ function ocultarSugestoesDisponibilidade(){
   el.innerHTML='';
 
  }
-
 }
 
 
@@ -3594,49 +3227,39 @@ async function mostrarSugestoesDisponibilidade(
  mensagem=''
 ){
 
- const el=
-  $('sugestoesDisponibilidade');
+ const el=$(
+  'sugestoesDisponibilidade'
+ );
 
  if(
   !el ||
   !casaSelecionadaParaReserva
  )return;
 
-
  await carregarReservasBloqueantesSugestoes();
 
-
- const a=
-  $('dataEntrada').value;
-
- const b=
-  $('dataSaida').value;
-
+ const a=$('dataEntrada').value;
+ const b=$('dataSaida').value;
 
  noitesSugestao=
-  a &&
-  b &&
-  b>a
+  a&&b&&b>a
    ?Math.max(
-    1,
-    dias(
-     dataLocal(a),
-     dataLocal(b)
+     1,
+     dias(
+      dataLocal(a),
+      dataLocal(b)
+     )
     )
-   )
    :2;
-
 
  mesSugestao=
   a
    ?dataLocal(a)
    :new Date();
 
-
  renderizarSugestoesDisponibilidade(
   mensagem
  );
-
 }
 
 
@@ -3644,17 +3267,14 @@ function renderizarSugestoesDisponibilidade(
  mensagem=''
 ){
 
- const el=
-  $('sugestoesDisponibilidade');
+ const el=$(
+  'sugestoesDisponibilidade'
+ );
 
  if(!el)return;
 
-
- const y=
-  mesSugestao.getFullYear();
-
- const m=
-  mesSugestao.getMonth();
+ const y=mesSugestao.getFullYear();
+ const m=mesSugestao.getMonth();
 
  const primeiro=
   new Date(y,m,1);
@@ -3667,24 +3287,19 @@ function renderizarSugestoesDisponibilidade(
   'Qua','Qui','Sex','Sáb'
  ];
 
-
  const entradaAtual=
   $('dataEntrada').value;
 
-
  const sugestoes=
   encontrarPeriodosDisponiveis(
-   entradaAtual ||
-   dataStr(hoje()),
+   entradaAtual||dataStr(hoje()),
    noitesSugestao,
    reservasBloqueantesSugestao,
    5
   );
 
-
  let h=`
   <div class="sugestao-titulo">
-
    <strong>
     📅 Encontre outra data disponível
    </strong>
@@ -3694,10 +3309,8 @@ function renderizarSugestoesDisponibilidade(
     onclick="ocultarSugestoesDisponibilidade()">
     ×
    </button>
-
   </div>
  `;
-
 
  if(mensagem){
 
@@ -3709,20 +3322,11 @@ function renderizarSugestoesDisponibilidade(
 
  }
 
-
  h+=`
-  <div style="
-   font-size:13px;
-   color:var(--cinza);
-   margin-bottom:8px">
-
+  <div style="font-size:13px;color:var(--cinza);margin-bottom:8px">
    Período procurado:
-   <strong>
-    ${noitesSugestao} noite(s)
-   </strong>
-
+   <strong>${noitesSugestao} noite(s)</strong>
   </div>
-
 
   <div class="sugestao-mes">
 
@@ -3748,31 +3352,23 @@ function renderizarSugestoesDisponibilidade(
 
   </div>
 
-
   <div class="sugestao-grade">
 
    ${nomes.map(x=>
-    `<div class="sugestao-dia-semana">
-     ${x}
-    </div>`
+    `<div class="sugestao-dia-semana">${x}</div>`
    ).join('')}
  `;
-
 
  for(
   let i=0;
   i<primeiro.getDay();
   i++
  ){
-  h+=`
-   <div class="sugestao-dia vazio"></div>
-  `;
+  h+=
+   '<div class="sugestao-dia vazio"></div>';
  }
 
-
- const hojeStr=
-  dataStr(hoje());
-
+ const hojeStr=dataStr(hoje());
 
  for(
   let d=1;
@@ -3780,11 +3376,8 @@ function renderizarSugestoesDisponibilidade(
   d++
  ){
 
-  const dt=
-   new Date(y,m,d);
-
-  const s=
-   dataStr(dt);
+  const dt=new Date(y,m,d);
+  const s=dataStr(dt);
 
   const passado=
    dt<hoje();
@@ -3806,23 +3399,17 @@ function renderizarSugestoesDisponibilidade(
     dataStr(fim)
    );
 
-
   let cls='sugestao-dia';
-
 
   if(ocupado)
    cls+=' bloqueado';
-
   else if(livre)
    cls+=' sugestao';
-
   else if(!passado)
    cls+=' livre';
 
-
   if(s===hojeStr)
    cls+=' hoje';
-
 
   h+=`
    <div
@@ -3831,23 +3418,18 @@ function renderizarSugestoesDisponibilidade(
      livre
       ?`onclick="selecionarDataSugestao('${s}')"`
       :''
-    }
-   >
+    }>
+
     ${d}
+
    </div>
   `;
-
  }
-
 
  h+=`
   </div>
 
-
-  <div style="
-   margin-top:15px;
-   border-top:1px solid #eee;
-   padding-top:12px">
+  <div style="margin-top:15px;border-top:1px solid #eee;padding-top:12px">
 
    <strong style="color:var(--marinho)">
     ✨ Próximos períodos disponíveis
@@ -3858,50 +3440,44 @@ function renderizarSugestoesDisponibilidade(
     style="margin-top:8px">
  `;
 
-
  h+=
   sugestoes.length
-   ?sugestoes.map(p=>`
-    <button
-     class="periodo-sugerido"
-     onclick="
-      selecionarPeriodoSugerido(
-       '${p.entrada}',
-       '${p.saida}'
-      )
-     ">
+   ?sugestoes.map(p=>
+    `
+     <button
+      class="periodo-sugerido"
+      onclick="
+       selecionarPeriodoSugerido(
+        '${p.entrada}',
+        '${p.saida}'
+       )
+      ">
 
-     <strong>
-      📅 ${formatarPeriodoSugestao(p)}
-     </strong>
+      <strong>
+       📅 ${formatarPeriodoSugestao(p)}
+      </strong>
 
-     <small>
-      ${p.noites} noite(s) — selecionar
-     </small>
+      <small>
+       ${p.noites} noite(s) — selecionar
+      </small>
 
-    </button>
-   `).join('')
-   :`
-    <div style="
-     color:var(--cinza);
-     font-size:13px">
-
+     </button>
+    `
+   ).join('')
+   :
+   `
+    <div style="color:var(--cinza);font-size:13px">
      Nenhum período equivalente encontrado.
-
     </div>
    `;
-
 
  h+=`
    </div>
   </div>
  `;
 
-
  el.innerHTML=h;
-
  el.classList.add('aberto');
-
 }
 
 
@@ -3912,13 +3488,12 @@ async function mudarMesSugestao(d){
  );
 
  renderizarSugestoesDisponibilidade();
-
 }
 
 
-/* =====================================================
+/* =========================================================
    DISPONIBILIDADE
-===================================================== */
+========================================================= */
 
 async function verificarDisponibilidade(){
 
@@ -3928,38 +3503,28 @@ async function verificarDisponibilidade(){
 
  if(!c)return;
 
-
  if(!a&&!b){
 
-  $('avisoBloqueio')
-   .style.display='none';
-
-  $('btnEnviarReserva')
-   .disabled=false;
+  $('avisoBloqueio').style.display='none';
+  $('btnEnviarReserva').disabled=false;
 
   ocultarSugestoesDisponibilidade();
 
   return;
-
  }
-
 
  if(a&&!b){
 
   await carregarReservasBloqueantesSugestoes();
 
-
   if(dataDentroDeReserva(a)){
 
-   $('avisoBloqueio')
-    .style.display='block';
+   $('avisoBloqueio').style.display='block';
 
    $('avisoBloqueio').textContent=
-    '⚠️ A data de entrada está ocupada. '+
-    'Veja abaixo as alternativas.';
+    '⚠️ A data de entrada está ocupada. Veja abaixo as alternativas.';
 
-   $('btnEnviarReserva')
-    .disabled=true;
+   $('btnEnviarReserva').disabled=true;
 
    mostrarSugestoesDisponibilidade(
     'Escolha uma das datas disponíveis.'
@@ -3967,38 +3532,28 @@ async function verificarDisponibilidade(){
 
   }else{
 
-   $('avisoBloqueio')
-    .style.display='none';
-
-   $('btnEnviarReserva')
-    .disabled=true;
+   $('avisoBloqueio').style.display='none';
+   $('btnEnviarReserva').disabled=true;
 
    ocultarSugestoesDisponibilidade();
-
   }
 
   return;
-
  }
-
 
  if(b<=a){
 
-  $('avisoBloqueio')
-   .style.display='block';
+  $('avisoBloqueio').style.display='block';
 
   $('avisoBloqueio').textContent=
    '⚠️ A saída deve ser posterior à entrada.';
 
-  $('btnEnviarReserva')
-   .disabled=true;
+  $('btnEnviarReserva').disabled=true;
 
   ocultarSugestoesDisponibilidade();
 
   return;
-
  }
-
 
  const bloqueado=
   await verificarPeriodoBloqueado(
@@ -4007,7 +3562,6 @@ async function verificarDisponibilidade(){
    b
   );
 
-
  const x=
   await calcularValorDiarias(
    c,
@@ -4015,53 +3569,45 @@ async function verificarDisponibilidade(){
    b
   );
 
-
  const taxa=
   Number(casas[c].taxaLimpeza||0);
 
-
- $('avisoBloqueio')
-  .style.display=
-   bloqueado?'block':'none';
-
+ $('avisoBloqueio').style.display=
+  bloqueado?'block':'none';
 
  if(bloqueado){
 
   $('avisoBloqueio').textContent=
-   '⚠️ Este período já possui uma reserva '+
-   'confirmada ou paga.';
+   '⚠️ Este período já possui uma reserva confirmada ou paga.';
 
-  $('btnEnviarReserva')
-   .disabled=true;
+  $('btnEnviarReserva').disabled=true;
 
   mostrarSugestoesDisponibilidade(
-   'O período escolhido está ocupado. '+
-   'Selecione outra opção.'
+   'O período escolhido está ocupado. Selecione outra opção.'
   );
 
  }else{
 
-  $('btnEnviarReserva')
-   .disabled=!x.dias;
+  $('btnEnviarReserva').disabled=!x.dias;
 
   ocultarSugestoesDisponibilidade();
-
  }
-
 
  $('valorDiarias').value=
   x.dias
    ?`${moeda(x.valor)} (${x.dias} diária(s))`
    :'';
 
-
  $('valorEstimado').value=
   x.dias
    ?moeda(x.valor+taxa)
    :'';
-
 }
 
+
+/* =========================================================
+   ENVIAR RESERVA
+========================================================= */
 
 async function enviarReserva(){
 
@@ -4089,27 +3635,23 @@ async function enviarReserva(){
  const obs=
   $('obsReserva').value.trim();
 
+ if(!nome||!tel||!a||!b){
 
- if(
-  !nome ||
-  !tel ||
-  !a ||
-  !b
- ){
-  return alert(
+  alert(
    '⚠️ Preencha nome, telefone e datas.'
   );
- }
 
+  return;
+ }
 
  if(b<=a){
 
-  return alert(
+  alert(
    '⚠️ A saída deve ser posterior à entrada.'
   );
 
+  return;
  }
-
 
  const bloqueado=
   await verificarPeriodoBloqueado(
@@ -4118,24 +3660,19 @@ async function enviarReserva(){
    b
   );
 
-
  if(bloqueado){
 
-  $('avisoBloqueio')
-   .style.display='block';
+  $('avisoBloqueio').style.display='block';
 
   $('avisoBloqueio').textContent=
-   '⚠️ O período acabou de ser ocupado. '+
-   'Escolha outra data.';
+   '⚠️ O período acabou de ser ocupado. Escolha outra data.';
 
   await mostrarSugestoesDisponibilidade(
    'Escolha outra data disponível.'
   );
 
   return;
-
  }
-
 
  const totalPessoas=
   adultos+criancas;
@@ -4143,17 +3680,18 @@ async function enviarReserva(){
  const max=
   casas[c].capacidade;
 
-
  if(
   totalPessoas>max &&
   !obs
  ){
-  return alert(
+
+  alert(
    `⚠️ A capacidade é de ${max} pessoas. `+
    'Explique a situação nas observações.'
   );
- }
 
+  return;
+ }
 
  const calc=
   await calcularValorDiarias(
@@ -4165,65 +3703,56 @@ async function enviarReserva(){
  const taxa=
   Number(casas[c].taxaLimpeza||0);
 
-
  try{
 
-  await db.collection('reservas').add({
+  await db
+   .collection('reservas')
+   .add({
 
-   casa:c,
-   nome,
-   telefone:tel,
+    casa:c,
+    nome,
+    telefone:tel,
+    entrada:a,
+    saida:b,
+    observacao:obs,
 
-   entrada:a,
-   saida:b,
+    adultos,
+    criancas,
+    totalPessoas,
 
-   observacao:obs,
+    dias:calc.dias,
+    valorDiarias:calc.valor,
+    taxaLimpeza:taxa,
 
-   adultos,
-   criancas,
-   totalPessoas,
+    desconto:0,
+    acrescimoValor:0,
 
-   dias:calc.dias,
+    valorTotal:
+     calc.valor+taxa,
 
-   valorDiarias:calc.valor,
-   taxaLimpeza:taxa,
+    valorPago:0,
 
-   desconto:0,
-   acrescimoValor:0,
+    statusPagamento:'pendente',
 
-   valorTotal:
-    calc.valor+taxa,
+    criadoEm:
+     firebase.firestore.FieldValue.serverTimestamp(),
 
-   valorPago:0,
+    atualizadoEm:
+     firebase.firestore.FieldValue.serverTimestamp()
 
-   statusPagamento:
-    'pendente',
-
-   criadoEm:
-    firebase.firestore.FieldValue
-     .serverTimestamp(),
-
-   atualizadoEm:
-    firebase.firestore.FieldValue
-     .serverTimestamp()
-
-  });
-
+   });
 
   await cadastrarOuAtualizarHospede(
    nome,
    tel
   );
 
-
   fecharModal();
 
-
   alert(
-   '✅ Solicitação enviada com sucesso!\n\n'+
+   '✅ Solicitação enviada com sucesso!\n\n' +
    'Aguarde a confirmação.'
   );
-
 
  }catch(e){
 
@@ -4234,23 +3763,22 @@ async function enviarReserva(){
   );
 
  }
-
 }
 
 
-/* =====================================================
-   FIREBASE - RESERVAS / CASAS
-===================================================== */
+/* =========================================================
+   FIREBASE - RESERVAS E CASAS
+========================================================= */
 
 async function carregarReservasConfirmadas(){
 
  reservasConfirmadas=[];
 
  const s=
-  await db.collection('reservas')
+  await db
+   .collection('reservas')
    .orderBy('entrada')
    .get();
-
 
  s.forEach(d=>
   reservasConfirmadas.push({
@@ -4258,7 +3786,6 @@ async function carregarReservasConfirmadas(){
    ...d.data()
   })
  );
-
 }
 
 
@@ -4267,16 +3794,14 @@ async function carregarDadosCasas(){
  try{
 
   const d=
-   await db.collection('configuracoes')
+   await db
+    .collection('configuracoes')
     .doc('casas')
     .get();
 
-
   if(d.exists){
 
-   const x=
-    d.data().casas||{};
-
+   const x=d.data().casas||{};
 
    Object.keys(casas).forEach(id=>{
 
@@ -4285,7 +3810,6 @@ async function carregarDadosCasas(){
      casas[id]={
       ...casas[id],
       ...x[id],
-
       caracteristicas:
        casas[id].caracteristicas||
        x[id].caracteristicas||
@@ -4298,7 +3822,6 @@ async function carregarDadosCasas(){
 
   }
 
-
   renderizarPaginaPublica();
 
  }catch(e){
@@ -4309,16 +3832,15 @@ async function carregarDadosCasas(){
   );
 
  }
-
 }
 
 
 async function salvarTodasCasas(){
 
- await db.collection('configuracoes')
+ await db
+  .collection('configuracoes')
   .doc('casas')
   .set({casas});
-
 }
 
 
@@ -4328,119 +3850,107 @@ function renderizarCasasAdmin(){
 
  if(!g)return;
 
-
  g.innerHTML=
   Object.entries(casas)
-   .map(([id,x])=>`
+   .map(([id,x])=>
+    `
+     <div class="card-casa">
 
-    <div class="card-casa">
+      <div class="card-corpo">
 
-     <div class="card-corpo">
+       <h3>${x.nome}</h3>
 
-      <h3>${x.nome}</h3>
+       <div class="grupo-input">
 
+        <label>Taxa de Limpeza</label>
 
-      <div class="grupo-input">
+        <input
+         type="number"
+         id="taxa-${id}"
+         value="${x.taxaLimpeza||0}"
+         min="0"
+         step="10">
 
-       <label>Taxa de Limpeza</label>
+       </div>
 
-       <input
-        type="number"
-        id="taxa-${id}"
-        value="${x.taxaLimpeza||0}"
-        min="0"
-        step="10">
+       <div class="grupo-input">
+
+        <label>Descrição</label>
+
+        <textarea
+         id="desc-${id}"
+         rows="2">${x.desc||''}</textarea>
+
+       </div>
+
+       <div class="grupo-input">
+
+        <label>Capacidade</label>
+
+        <input
+         type="number"
+         id="cap-${id}"
+         value="${x.capacidade||0}"
+         min="1">
+
+       </div>
+
+       <strong>📷 Fotos</strong>
+
+       <div id="fotos-${id}">
+
+        ${(x.fotos||[])
+         .map((f,i)=>
+          `
+           <div class="item-foto-galeria">
+
+            <img src="${f}">
+
+            <span
+             style="font-size:12px;overflow:hidden">
+             ${f}
+            </span>
+
+            <button
+             class="remover-foto"
+             onclick="
+              removerFotoGaleria(
+               '${id}',
+               ${i}
+              )
+             ">
+             ×
+            </button>
+
+           </div>
+          `
+         ).join('')}
+
+       </div>
+
+       <button
+        class="azul"
+        style="margin-top:8px"
+        onclick="adicionarFotoGaleria('${id}')">
+
+        + Foto
+
+       </button>
+
+       <button
+        class="sucesso"
+        style="margin-top:8px;width:100%"
+        onclick="salvarConfiguracoesCasa('${id}')">
+
+        💾 Salvar
+
+       </button>
 
       </div>
-
-
-      <div class="grupo-input">
-
-       <label>Descrição</label>
-
-       <textarea
-        id="desc-${id}"
-        rows="2">${x.desc||''}</textarea>
-
-      </div>
-
-
-      <div class="grupo-input">
-
-       <label>Capacidade</label>
-
-       <input
-        type="number"
-        id="cap-${id}"
-        value="${x.capacidade||0}"
-        min="1">
-
-      </div>
-
-
-      <strong>📷 Fotos</strong>
-
-
-      <div id="fotos-${id}">
-
-       ${(x.fotos||[])
-        .map((f,i)=>`
-
-         <div class="item-foto-galeria">
-
-          <img src="${f}">
-
-          <span style="
-           font-size:12px;
-           overflow:hidden">
-
-           ${f}
-
-          </span>
-
-          <button
-           class="remover-foto"
-           onclick="
-            removerFotoGaleria(
-             '${id}',
-             ${i}
-            )
-           ">
-           ×
-          </button>
-
-         </div>
-
-        `).join('')}
-
-      </div>
-
-
-      <button
-       class="azul"
-       style="margin-top:8px"
-       onclick="adicionarFotoGaleria('${id}')">
-
-       + Foto
-
-      </button>
-
-
-      <button
-       class="sucesso"
-       style="margin-top:8px;width:100%"
-       onclick="salvarConfiguracoesCasa('${id}')">
-
-       💾 Salvar
-
-      </button>
 
      </div>
-
-    </div>
-
-   `).join('');
-
+    `
+   ).join('');
 }
 
 
@@ -4453,12 +3963,14 @@ function adicionarFotoGaleria(id){
 
  if(!url)return;
 
+ if(!url.includes('imgur.com')){
 
- if(!url.includes('imgur.com'))
-  return alert(
+  alert(
    '⚠️ Informe um link do Imgur.'
   );
 
+  return;
+ }
 
  casas[id].fotos=
   casas[id].fotos||[];
@@ -4466,24 +3978,19 @@ function adicionarFotoGaleria(id){
  casas[id].fotos.push(url);
 
  renderizarCasasAdmin();
-
 }
 
 
 function removerFotoGaleria(id,i){
 
  if(
-  confirm(
-   'Remover esta foto?'
-  )
+  confirm('Remover esta foto?')
  ){
 
   casas[id].fotos.splice(i,1);
 
   renderizarCasasAdmin();
-
  }
-
 }
 
 
@@ -4502,7 +4009,6 @@ async function salvarConfiguracoesCasa(id){
    $(`cap-${id}`).value||0
   );
 
-
  try{
 
   await salvarTodasCasas();
@@ -4520,15 +4026,13 @@ async function salvarConfiguracoesCasa(id){
   alert(
    '❌ Erro ao salvar.'
   );
-
  }
-
 }
 
 
-/* =====================================================
+/* =========================================================
    LISTA DE RESERVAS
-===================================================== */
+========================================================= */
 
 function atualizarListaReservas(){
 
@@ -4536,16 +4040,14 @@ function atualizarListaReservas(){
 
  if(!c)return;
 
-
  let arr=
   filtroReservas==='todas'
    ?reservasConfirmadas
    :reservasConfirmadas.filter(
-    r=>
-     r.statusPagamento===
-     filtroReservas
-   );
-
+     r=>
+      r.statusPagamento===
+      filtroReservas
+    );
 
  arr.sort(
   (a,b)=>
@@ -4553,25 +4055,19 @@ function atualizarListaReservas(){
    (a.criadoEm?.seconds||0)
  );
 
-
  if(!arr.length){
 
   c.innerHTML=
-   '<p style="color:var(--cinza)">'+
-   'Nenhuma reserva encontrada.'+
-   '</p>';
+   '<p style="color:var(--cinza)">Nenhuma reserva encontrada.</p>';
 
   return;
-
  }
-
 
  c.innerHTML=
   arr.map(r=>{
 
    const status=
-    r.statusPagamento||
-    'pendente';
+    r.statusPagamento||'pendente';
 
    const pago=
     Number(r.valorPago||0);
@@ -4579,36 +4075,25 @@ function atualizarListaReservas(){
    const total=
     Number(r.valorTotal||0);
 
-   const pendente=
-    Math.max(
-     0,
-     total-pago
-    );
-
+   const receber=
+    Math.max(0,total-pago);
 
    return `
-
     <div class="reserva-item">
 
      <h3>
       ${casas[r.casa]?.nome||r.casa}
      </h3>
 
-
-     <span class="
-      status-badge
-      status-${status}">
-
+     <span
+      class="status-badge status-${status}">
       ${status.toUpperCase()}
-
      </span>
-
 
      <p>
       <strong>👤 ${r.nome}</strong>
       — ${r.telefone}
      </p>
-
 
      <p>
       📅 ${dataBr(r.entrada)}
@@ -4616,14 +4101,11 @@ function atualizarListaReservas(){
       — ${r.dias||0} diária(s)
      </p>
 
-
      <p>
       👥 ${r.totalPessoas||0} pessoa(s)
-      —
-      ${r.adultos||0} adulto(s),
+      — ${r.adultos||0} adulto(s),
       ${r.criancas||0} criança(s)
      </p>
-
 
      <div class="total-geral">
 
@@ -4634,14 +4116,12 @@ function atualizarListaReservas(){
        </strong>
       </div>
 
-
       <div class="linha-valor">
        <span>Limpeza</span>
        <strong>
         ${moeda(r.taxaLimpeza)}
        </strong>
       </div>
-
 
       ${
        Number(r.acrescimoValor)>0
@@ -4656,7 +4136,6 @@ function atualizarListaReservas(){
         :''
       }
 
-
       ${
        Number(r.desconto)>0
         ?`
@@ -4670,7 +4149,6 @@ function atualizarListaReservas(){
         :''
       }
 
-
       <div class="linha-valor">
        <span>Total</span>
        <strong>
@@ -4678,24 +4156,21 @@ function atualizarListaReservas(){
        </strong>
       </div>
 
-
       <div class="linha-valor">
        <span>Pago</span>
-       <strong>
+       <strong style="color:var(--sucesso)">
         ${moeda(pago)}
        </strong>
       </div>
 
-
       <div class="linha-valor">
        <span>A receber</span>
        <strong>
-        ${moeda(pendente)}
+        ${moeda(receber)}
        </strong>
       </div>
 
      </div>
-
 
      ${
       r.observacao
@@ -4708,12 +4183,7 @@ function atualizarListaReservas(){
        :''
      }
 
-
-     <div style="
-      display:flex;
-      gap:6px;
-      flex-wrap:wrap;
-      margin-top:10px">
+     <div class="acoes-reserva">
 
       <button
        class="azul"
@@ -4723,12 +4193,11 @@ function atualizarListaReservas(){
 
       </button>
 
-
       ${
        pago>0
         ?`
          <button
-          class="botao-recibo"
+          class="sucesso"
           onclick="emitirRecibo('${r.id}')">
 
           🧾 Emitir recibo
@@ -4741,277 +4210,15 @@ function atualizarListaReservas(){
      </div>
 
     </div>
-
    `;
 
   }).join('');
-
 }
 
 
-/* =====================================================
+/* =========================================================
    RECIBO DE PAGAMENTO
-===================================================== */
-
-/*
-   Converte números para texto em português.
-   Usado no recibo para escrever o valor pago
-   por extenso.
-*/
-
-function numeroPorExtenso(n){
-
- n=Number(n||0);
-
- if(!isFinite(n))
-  return '';
-
- if(n===0)
-  return 'zero';
-
-
- const unidades=[
-  '',
-  'um',
-  'dois',
-  'três',
-  'quatro',
-  'cinco',
-  'seis',
-  'sete',
-  'oito',
-  'nove'
- ];
-
- const especiais=[
-  'dez',
-  'onze',
-  'doze',
-  'treze',
-  'quatorze',
-  'quinze',
-  'dezesseis',
-  'dezessete',
-  'dezoito',
-  'dezenove'
- ];
-
- const dezenas=[
-  '',
-  '',
-  'vinte',
-  'trinta',
-  'quarenta',
-  'cinquenta',
-  'sessenta',
-  'setenta',
-  'oitenta',
-  'noventa'
- ];
-
- const centenas=[
-  '',
-  'cento',
-  'duzentos',
-  'trezentos',
-  'quatrocentos',
-  'quinhentos',
-  'seiscentos',
-  'setecentos',
-  'oitocentos',
-  'novecentos'
- ];
-
-
- function grupo(v){
-
-  v=Number(v);
-
-  if(v===0)return '';
-
-  if(v===100)return 'cem';
-
-
-  let texto='';
-
-  const c=
-   Math.floor(v/100);
-
-  const resto=
-   v%100;
-
-
-  if(c)
-   texto+=centenas[c];
-
-
-  if(resto){
-
-   if(texto)
-    texto+=' e ';
-
-
-   if(resto<10){
-
-    texto+=unidades[resto];
-
-   }else if(resto<20){
-
-    texto+=especiais[resto-10];
-
-   }else{
-
-    texto+=dezenas[
-     Math.floor(resto/10)
-    ];
-
-    if(resto%10)
-     texto+=' e '+
-      unidades[resto%10];
-
-   }
-
-  }
-
-  return texto;
-
- }
-
-
- function parte(v){
-
-  if(v===0)return '';
-
-  if(v<1000)
-   return grupo(v);
-
-
-  const milhares=
-   Math.floor(v/1000);
-
-  const resto=
-   v%1000;
-
-  let texto='';
-
-
-  if(milhares===1)
-   texto='mil';
-  else
-   texto=
-    numeroPorExtenso(
-     milhares
-    )+' mil';
-
-
-  if(resto)
-   texto+=' e '+grupo(resto);
-
-  return texto;
-
- }
-
-
- const reais=
-  Math.floor(n);
-
- const centavos=
-  Math.round(
-   (n-reais)*100
-  );
-
-
- let texto='';
-
-
- if(reais>0)
-  texto=
-   parte(reais)+
-   (
-    reais===1
-     ?' real'
-     :' reais'
-   );
-
-
- if(centavos>0){
-
-  if(texto)
-   texto+=' e ';
-
-  texto+=
-   parte(centavos)+
-   (
-    centavos===1
-     ?' centavo'
-     :' centavos'
-   );
-
- }
-
- return texto;
-
-}
-
-
-function valorPorExtenso(v){
-
- const n=Number(v||0);
-
- if(n===0)
-  return 'zero reais';
-
-
- const reais=
-  Math.floor(n);
-
- const centavos=
-  Math.round(
-   (n-reais)*100
-  );
-
-
- let texto='';
-
-
- if(reais>0){
-
-  texto+=
-   numeroPorExtenso(reais)+
-   (
-    reais===1
-     ?' real'
-     :' reais'
-   );
-
- }
-
-
- if(centavos>0){
-
-  if(texto)
-   texto+=' e ';
-
-  texto+=
-   numeroPorExtenso(centavos)+
-   (
-    centavos===1
-     ?' centavo'
-     :' centavos'
-   );
-
- }
-
-
- return texto;
-
-}
-
-
-/*
-   Abre um recibo limpo em nova janela.
-   O usuário poderá imprimir ou salvar em PDF.
-*/
+========================================================= */
 
 function emitirRecibo(id){
 
@@ -5020,11 +4227,14 @@ function emitirRecibo(id){
    x=>x.id===id
   );
 
- if(!r)
-  return alert(
+ if(!r){
+
+  alert(
    '❌ Reserva não encontrada.'
   );
 
+  return;
+ }
 
  const total=
   Number(r.valorTotal||0);
@@ -5038,32 +4248,52 @@ function emitirRecibo(id){
    total-pago
   );
 
-
- if(pago<=0){
-
-  return alert(
-   '⚠️ Esta reserva ainda não possui valor pago.'
-  );
-
- }
-
-
  const casa=
   casas[r.casa]?.nome||
   r.casa||
-  'Casa';
+  '';
 
-
- const nome=
-  r.nome||
-  'Hóspede';
-
-
- const dataEmissao=
+ const hojeFormatado=
   new Intl.DateTimeFormat(
-   'pt-BR'
+   'pt-BR',
+   {
+    day:'2-digit',
+    month:'2-digit',
+    year:'numeric'
+   }
   ).format(new Date());
 
+ const valorExtenso=
+  valorPorExtenso(pago);
+
+ const w=
+  window.open(
+   '',
+   '_blank',
+   'width=800,height=900'
+  );
+
+ if(!w){
+
+  alert(
+   '⚠️ O navegador bloqueou a janela do recibo.\n\n' +
+   'Permita pop-ups para este site e tente novamente.'
+  );
+
+  return;
+ }
+
+ const nome=
+  escaparHtml(r.nome||'');
+
+ const telefone=
+  escaparHtml(r.telefone||'');
+
+ const casaHtml=
+  escaparHtml(casa);
+
+ const periodo=
+  `${dataBr(r.entrada)} até ${dataBr(r.saida)}`;
 
  const noites=
   Number(
@@ -5075,43 +4305,15 @@ function emitirRecibo(id){
    0
   );
 
-
- const pagoExtenso=
-  valorPorExtenso(pago);
-
-
- const pendenteExtenso=
-  valorPorExtenso(pendente);
-
-
- const janela=
-  window.open(
-   '',
-   '_blank',
-   'width=850,height=700'
-  );
-
-
- if(!janela){
-
-  return alert(
-   '⚠️ O navegador bloqueou a janela do recibo. '+
-   'Permita pop-ups para este site e tente novamente.'
-  );
-
- }
-
-
- janela.document.write(`
+ w.document.write(`
 <!DOCTYPE html>
-
 <html lang="pt-BR">
 
 <head>
 
 <meta charset="UTF-8">
 
-<title>Recibo - ${nome}</title>
+<title>Recibo de Pagamento - ${nome}</title>
 
 <style>
 
@@ -5128,130 +4330,111 @@ body{
 }
 
 .recibo{
+ width:100%;
  max-width:760px;
- margin:auto;
+ margin:0 auto;
  background:#fff;
  padding:45px;
- border:1px solid #ddd;
- box-shadow:0 3px 15px rgba(0,0,0,.08);
+ border:1px solid #ccc;
+ box-shadow:0 3px 15px rgba(0,0,0,.12);
 }
 
 .cabecalho{
  text-align:center;
  border-bottom:2px solid #0a4b6e;
  padding-bottom:20px;
- margin-bottom:30px;
+ margin-bottom:25px;
 }
 
 .cabecalho h1{
  margin:0;
  color:#0a4b6e;
- font-size:27px;
+ font-size:28px;
 }
 
 .cabecalho h2{
  margin:8px 0 0;
- font-size:19px;
- letter-spacing:1px;
-}
-
-.empresa{
- margin-top:8px;
- color:#666;
- font-size:13px;
-}
-
-.texto{
  font-size:17px;
- line-height:1.7;
- margin:20px 0;
+ font-weight:normal;
+ color:#555;
 }
 
-.dados{
- border:1px solid #ddd;
- border-radius:8px;
- overflow:hidden;
- margin:25px 0;
+.info{
+ margin:20px 0;
 }
 
 .linha{
  display:flex;
  justify-content:space-between;
  gap:20px;
- padding:12px 15px;
  border-bottom:1px solid #eee;
-}
-
-.linha:last-child{
- border-bottom:0;
+ padding:10px 0;
 }
 
 .linha strong{
  color:#0a4b6e;
 }
 
-.pagamento{
- background:#f7fbfc;
- border:1px solid #cfe1e6;
- border-radius:8px;
+.valor{
+ margin:30px 0;
  padding:20px;
- margin:25px 0;
+ border:2px solid #0a4b6e;
+ border-radius:8px;
+ text-align:center;
 }
 
-.pagamento .valor{
- font-size:25px;
+.valor .rotulo{
+ font-size:14px;
+ color:#666;
+}
+
+.valor .principal{
+ font-size:30px;
  font-weight:bold;
- color:#198754;
+ color:#0a4b6e;
+ margin:8px 0;
 }
 
 .extenso{
- margin-top:8px;
- font-size:14px;
- color:#555;
+ font-size:15px;
  font-style:italic;
+ line-height:1.5;
 }
 
-.saldo{
- margin-top:15px;
- padding-top:15px;
- border-top:1px solid #ddd;
+.resumo{
+ margin-top:25px;
 }
 
-.assinatura{
- margin-top:75px;
- text-align:center;
+.resumo .linha{
+ font-size:16px;
 }
 
-.linha-assinatura{
- width:330px;
- max-width:90%;
- border-top:1px solid #222;
- margin:0 auto 8px;
+.recebido{
+ color:#198754;
+ font-weight:bold;
+}
+
+.pendente{
+ color:#dc3545;
+ font-weight:bold;
 }
 
 .rodape{
- margin-top:40px;
- padding-top:15px;
- border-top:1px solid #ddd;
+ margin-top:60px;
  text-align:center;
- font-size:12px;
- color:#777;
 }
 
-.botoes{
- text-align:center;
- margin:20px auto;
+.assinatura{
+ width:280px;
+ margin:70px auto 0;
+ border-top:1px solid #222;
+ padding-top:8px;
 }
 
-.botoes button{
- border:0;
- background:#0a4b6e;
- color:#fff;
- padding:12px 25px;
- border-radius:6px;
- font-size:15px;
- cursor:pointer;
- margin:4px;
+.data{
+ margin-top:30px;
+ text-align:right;
+ color:#555;
 }
 
 @media print{
@@ -5268,208 +4451,142 @@ body{
   padding:25px;
  }
 
- .botoes{
-  display:none;
- }
-
 }
 
 </style>
 
 </head>
 
-
 <body>
 
-
 <div class="recibo">
-
 
  <div class="cabecalho">
 
   <h1>
-   🏖️ CASAS NA PRAIA
+   RECIBO DE PAGAMENTO
   </h1>
 
   <h2>
-   RECIBO DE PAGAMENTO
+   🏖️ Casas na Praia — Balneário Arroio do Silva/SC
   </h2>
 
-  <div class="empresa">
-   Balneário Arroio do Silva/SC
-  </div>
-
  </div>
 
-
- <div class="texto">
-
-  Recebi de
-  <strong>${nome}</strong>,
-  a importância referente ao pagamento
-  de hospedagem da
-  <strong>${casa}</strong>.
-
- </div>
-
-
- <div class="dados">
+ <div class="info">
 
   <div class="linha">
-
    <span>Hóspede</span>
-
-   <strong>
-    ${nome}
-   </strong>
-
+   <strong>${nome}</strong>
   </div>
 
+  <div class="linha">
+   <span>Telefone</span>
+   <strong>${telefone}</strong>
+  </div>
 
   <div class="linha">
-
    <span>Casa</span>
-
-   <strong>
-    ${casa}
-   </strong>
-
+   <strong>${casaHtml}</strong>
   </div>
 
-
   <div class="linha">
-
    <span>Período</span>
-
-   <strong>
-    ${dataBr(r.entrada)}
-    até
-    ${dataBr(r.saida)}
-   </strong>
-
+   <strong>${periodo}</strong>
   </div>
 
-
   <div class="linha">
-
-   <span>Diárias</span>
-
-   <strong>
-    ${noites}
-   </strong>
-
-  </div>
-
-
-  <div class="linha">
-
-   <span>Valor total da reserva</span>
-
-   <strong>
-    ${moeda(total)}
-   </strong>
-
+   <span>Quantidade de noites</span>
+   <strong>${noites}</strong>
   </div>
 
  </div>
 
+ <div class="valor">
 
- <div class="pagamento">
-
-  <div>
-   <strong>
-    VALOR RECEBIDO / ADIANTAMENTO
-   </strong>
+  <div class="rotulo">
+   VALOR RECEBIDO
   </div>
 
-  <div class="valor">
+  <div class="principal">
    ${moeda(pago)}
   </div>
 
   <div class="extenso">
-   ${pagoExtenso}
+   (${escaparHtml(valorExtenso)})
   </div>
 
+ </div>
 
-  <div class="saldo">
+ <div class="resumo">
 
-   <strong>
-    Saldo pendente:
+  <div class="linha">
+   <span>Valor total da reserva</span>
+   <strong>${moeda(total)}</strong>
+  </div>
+
+  <div class="linha">
+   <span>Pagamento recebido</span>
+   <strong class="recebido">
+    ${moeda(pago)}
    </strong>
+  </div>
 
-   ${moeda(pendente)}
-
-   <div class="extenso">
-    ${pendenteExtenso}
-   </div>
-
+  <div class="linha">
+   <span>Saldo restante</span>
+   <strong class="pendente">
+    ${moeda(pendente)}
+   </strong>
   </div>
 
  </div>
 
-
- <div class="texto">
-
-  Declaro, para os devidos fins, que recebi
-  o valor acima informado referente à reserva
-  descrita neste recibo.
-
+ <div class="data">
+  Recibo emitido em ${hojeFormatado}
  </div>
-
 
  <div class="assinatura">
-
-  <div class="linha-assinatura"></div>
-
-  <strong>
-   Responsável pelo recebimento
-  </strong>
-
+  Assinatura / Responsável
  </div>
-
 
  <div class="rodape">
-
-  Recibo emitido em
-  ${dataEmissao}.
-
-  <br><br>
-
-  Casas na Praia — Balneário Arroio do Silva/SC
-
+  <small>
+   Este recibo registra o valor efetivamente recebido
+   referente à reserva acima.
+  </small>
  </div>
 
-
 </div>
 
+<script>
 
-<div class="botoes">
+window.onload=function(){
 
- <button onclick="window.print()">
-  🖨️ Imprimir / Salvar PDF
- </button>
+ setTimeout(function(){
+  window.print();
+ },300);
 
- <button onclick="window.close()">
-  ✖ Fechar
- </button>
+};
 
-</div>
+window.onafterprint=function(){
+ // A janela permanece aberta para permitir
+ // salvar novamente ou fechar manualmente.
+};
 
+<\/script>
 
 </body>
-
 </html>
  `);
 
-
- janela.document.close();
-
+ w.document.close();
+ w.focus();
 }
 
 
-/* =====================================================
+/* =========================================================
    EDIÇÃO DE RESERVA
-===================================================== */
+========================================================= */
 
 function abrirEditarReserva(id){
 
@@ -5480,7 +4597,6 @@ function abrirEditarReserva(id){
 
  if(!r)return;
 
-
  $('conteudoEditar').innerHTML=`
 
   <input
@@ -5488,86 +4604,61 @@ function abrirEditarReserva(id){
    id="editId"
    value="${id}">
 
-
   <div class="grupo-input">
-
    <label>Hóspede</label>
-
    <input
     id="editNome"
     value="${r.nome||''}">
-
   </div>
 
-
   <div class="grupo-input">
-
    <label>Telefone</label>
-
    <input
     id="editTelefone"
     value="${r.telefone||''}">
-
   </div>
-
 
   <div class="linha-form">
 
    <div class="grupo-input">
-
     <label>Entrada</label>
-
     <input
      type="date"
      id="editEntrada"
      value="${r.entrada||''}"
      onchange="recalcularTotalEdicao()">
-
    </div>
 
-
    <div class="grupo-input">
-
     <label>Saída</label>
-
     <input
      type="date"
      id="editSaida"
      value="${r.saida||''}"
      onchange="recalcularTotalEdicao()">
-
    </div>
 
   </div>
-
 
   <div class="linha-form">
 
    <div class="grupo-input">
-
     <label>Adultos</label>
-
     <input
      type="number"
      id="editAdultos"
      value="${r.adultos||0}">
-
    </div>
 
-
    <div class="grupo-input">
-
     <label>Crianças</label>
-
     <input
      type="number"
      id="editCriancas"
      value="${r.criancas||0}">
-
    </div>
 
   </div>
-
 
   <div class="grupo-input">
 
@@ -5595,7 +4686,6 @@ function abrirEditarReserva(id){
 
   </div>
 
-
   <div class="grupo-input">
 
    <label>Valor Pago</label>
@@ -5608,7 +4698,6 @@ function abrirEditarReserva(id){
     oninput="atualizarResumoEdicao()">
 
   </div>
-
 
   <div class="grupo-input">
 
@@ -5624,12 +4713,9 @@ function abrirEditarReserva(id){
 
   </div>
 
-
   <div class="acrescimo-box">
 
-   <strong>
-    ➕ Acrescentar valor
-   </strong>
+   <strong>➕ Acrescentar valor</strong>
 
    <div
     class="grupo-input"
@@ -5644,7 +4730,6 @@ function abrirEditarReserva(id){
      onchange="recalcularTotalEdicao()">
 
    </div>
-
 
    <div class="acrescimo-botoes">
 
@@ -5668,7 +4753,6 @@ function abrirEditarReserva(id){
 
   </div>
 
-
   <div class="grupo-input">
 
    <label>
@@ -5686,7 +4770,6 @@ function abrirEditarReserva(id){
 
   </div>
 
-
   <button
    type="button"
    class="cinza"
@@ -5696,7 +4779,6 @@ function abrirEditarReserva(id){
    🔄 Recalcular pelas diárias
 
   </button>
-
 
   <div class="grupo-input">
 
@@ -5708,12 +4790,10 @@ function abrirEditarReserva(id){
 
   </div>
 
-
   <div
    class="caixa-valores-reserva"
    id="valoresEdicao">
   </div>
-
 
   <button
    class="sucesso"
@@ -5723,45 +4803,22 @@ function abrirEditarReserva(id){
 
   </button>
 
-
-  ${
-   Number(r.valorPago||0)>0
-    ?`
-     <button
-      class="botao-recibo"
-      style="margin-top:8px;width:100%"
-      onclick="emitirRecibo('${id}')">
-
-      🧾 Emitir Recibo
-
-     </button>
-    `
-    :''
-  }
-
-
   <button
    class="vermelho"
-   onclick="excluirReserva('${id}')"
-   style="margin-top:8px">
+   onclick="excluirReserva('${id}')">
 
    🗑️ Excluir
 
   </button>
-
  `;
 
-
  $('editStatus').value=
-  r.statusPagamento||
-  'pendente';
-
+  r.statusPagamento||'pendente';
 
  atualizarResumoEdicao();
 
  $('modalEditarReserva')
   .classList.add('aberto');
-
 }
 
 
@@ -5777,7 +4834,6 @@ function adicionarAcrescimo(v){
   ).toFixed(2);
 
  recalcularTotalEdicao();
-
 }
 
 
@@ -5793,22 +4849,21 @@ async function recalcularTotalEdicao(){
 
  if(!r)return;
 
-
  const entrada=
   $('editEntrada').value;
 
  const saida=
   $('editSaida').value;
 
-
  if(
   !entrada ||
   !saida ||
   saida<=entrada
  ){
-  return atualizarResumoEdicao();
- }
 
+  atualizarResumoEdicao();
+  return;
+ }
 
  const x=
   await calcularValorDiarias(
@@ -5816,7 +4871,6 @@ async function recalcularTotalEdicao(){
    entrada,
    saida
   );
-
 
  const desconto=
   Number(
@@ -5835,7 +4889,6 @@ async function recalcularTotalEdicao(){
    0
   );
 
-
  $('editTotal').value=
   Math.max(
    0,
@@ -5845,9 +4898,7 @@ async function recalcularTotalEdicao(){
    desconto
   ).toFixed(2);
 
-
  atualizarResumoEdicao();
-
 }
 
 
@@ -5862,7 +4913,6 @@ function atualizarResumoEdicao(){
   );
 
  if(!r)return;
-
 
  const total=
   Number(
@@ -5891,20 +4941,17 @@ function atualizarResumoEdicao(){
    0
   );
 
-
  let vd=
   Number(r.valorDiarias||0);
 
  let qd=
   r.dias||0;
 
-
  const entrada=
   $('editEntrada')?.value;
 
  const saida=
   $('editSaida')?.value;
-
 
  if(
   entrada &&
@@ -5921,9 +4968,7 @@ function atualizarResumoEdicao(){
 
   vd=x.valor;
   qd=x.dias;
-
  }
-
 
  $('valoresEdicao').innerHTML=`
 
@@ -5947,34 +4992,18 @@ function atualizarResumoEdicao(){
    <strong>- ${moeda(desconto)}</strong>
   </div>
 
-  <div class="
-   linha-valor
-   total-reserva-destaque">
-
+  <div class="linha-valor total-reserva-destaque">
    <span>TOTAL</span>
-
-   <strong>
-    ${moeda(total)}
-   </strong>
-
+   <strong>${moeda(total)}</strong>
   </div>
 
-  <div class="
-   linha-valor
-   a-receber-destaque">
-
+  <div class="linha-valor a-receber-destaque">
    <span>A RECEBER</span>
-
    <strong>
-    ${moeda(
-     Math.max(0,total-pago)
-    )}
+    ${moeda(Math.max(0,total-pago))}
    </strong>
-
   </div>
-
  `;
-
 }
 
 
@@ -5990,10 +5019,9 @@ function calcularValorDiariasLocal(
  let valor=0;
  let n=0;
 
-
  if(
-  !da ||
-  !ds ||
+  !da||
+  !ds||
   ds<=da
  ){
   return{
@@ -6001,7 +5029,6 @@ function calcularValorDiariasLocal(
    valor:0
   };
  }
-
 
  for(
   let d=new Date(da);
@@ -6020,15 +5047,12 @@ function calcularValorDiariasLocal(
     :150;
 
   n++;
-
  }
-
 
  return{
   dias:n,
   valor
  };
-
 }
 
 
@@ -6036,7 +5060,6 @@ function fecharModalEditar(){
 
  $('modalEditarReserva')
   .classList.remove('aberto');
-
 }
 
 
@@ -6049,7 +5072,6 @@ async function salvarEdicao(id){
 
  if(!r)return;
 
-
  const entrada=
   $('editEntrada').value;
 
@@ -6059,17 +5081,15 @@ async function salvarEdicao(id){
  const status=
   $('editStatus').value;
 
-
  if(
-  !entrada ||
-  !saida ||
+  !entrada||
+  !saida||
   saida<=entrada
  ){
-  return alert(
-   '⚠️ Datas inválidas.'
-  );
- }
 
+  alert('⚠️ Datas inválidas.');
+  return;
+ }
 
  if(
   await verificarPeriodoBloqueado(
@@ -6078,16 +5098,15 @@ async function salvarEdicao(id){
    saida,
    id
   ) &&
-  ['confirmada','pago']
-   .includes(status)
+  ['confirmada','pago'].includes(status)
  ){
 
-  return alert(
+  alert(
    '⚠️ O período está bloqueado por outra reserva confirmada ou paga.'
   );
 
+  return;
  }
-
 
  const x=
   await calcularValorDiarias(
@@ -6095,7 +5114,6 @@ async function salvarEdicao(id){
    entrada,
    saida
   );
-
 
  const desconto=
   Number(
@@ -6122,26 +5140,27 @@ async function salvarEdicao(id){
    $('editTotal').value||0
   );
 
+ if(total<0){
 
- if(total<0)
-  return alert(
+  alert(
    '⚠️ O valor total não pode ser negativo.'
   );
 
+  return;
+ }
 
  try{
 
-  await db.collection('reservas')
+  await db
+   .collection('reservas')
    .doc(id)
    .update({
 
     nome:
-     $('editNome')
-      .value.trim(),
+     $('editNome').value.trim(),
 
     telefone:
-     $('editTelefone')
-      .value.trim(),
+     $('editTelefone').value.trim(),
 
     entrada,
     saida,
@@ -6165,34 +5184,24 @@ async function salvarEdicao(id){
      ),
 
     dias:x.dias,
-
     valorDiarias:x.valor,
-
     taxaLimpeza:taxa,
 
     desconto,
+    acrescimoValor:acrescimo,
 
-    acrescimoValor:
-     acrescimo,
+    valorTotal:total,
+    valorPago:pago,
 
-    valorTotal:
-     total,
-
-    valorPago:
-     pago,
-
-    statusPagamento:
-     status,
+    statusPagamento:status,
 
     observacao:
      $('editObs').value.trim(),
 
     atualizadoEm:
-     firebase.firestore.FieldValue
-      .serverTimestamp()
+     firebase.firestore.FieldValue.serverTimestamp()
 
    });
-
 
   await carregarReservasConfirmadas();
 
@@ -6202,11 +5211,9 @@ async function salvarEdicao(id){
   renderizarCalendario();
   gerarRelatorio();
 
-
   alert(
    '✅ Reserva atualizada!'
   );
-
 
  }catch(e){
 
@@ -6215,9 +5222,7 @@ async function salvarEdicao(id){
   alert(
    '❌ Erro ao salvar reserva.'
   );
-
  }
-
 }
 
 
@@ -6229,10 +5234,10 @@ async function excluirReserva(id){
   )
  )return;
 
-
  try{
 
-  await db.collection('reservas')
+  await db
+   .collection('reservas')
    .doc(id)
    .delete();
 
@@ -6243,7 +5248,6 @@ async function excluirReserva(id){
   atualizarListaReservas();
   renderizarCalendario();
   gerarRelatorio();
-
 
   alert(
    '🗑️ Reserva excluída.'
@@ -6256,38 +5260,29 @@ async function excluirReserva(id){
   alert(
    '❌ Erro ao excluir.'
   );
-
  }
-
 }
 
 
-/* =====================================================
+/* =========================================================
    RELATÓRIO
-===================================================== */
+========================================================= */
 
 function limparFiltrosRelatorio(){
 
- $('filtroCasaRelatorio')
-  .value='todas';
+ $('filtroCasaRelatorio').value='todas';
 
- $('filtroPeriodoRelatorio')
-  .value='todos';
+ $('filtroPeriodoRelatorio').value='todos';
 
- $('filtroStatusRelatorio')
-  .value='todos';
+ $('filtroStatusRelatorio').value='todos';
 
- $('filtroHospedeRelatorio')
-  .value='';
+ $('filtroHospedeRelatorio').value='';
 
- $('relatorioDataInicial')
-  .value='';
+ $('relatorioDataInicial').value='';
 
- $('relatorioDataFinal')
-  .value='';
+ $('relatorioDataFinal').value='';
 
  gerarRelatorio();
-
 }
 
 
@@ -6297,85 +5292,81 @@ function obterReservasRelatorio(){
   ...reservasConfirmadas
  ];
 
-
  const casa=
-  $('filtroCasaRelatorio')
-   ?.value||'todas';
+  $('filtroCasaRelatorio')?.value||
+  'todas';
 
  const periodo=
-  $('filtroPeriodoRelatorio')
-   ?.value||'todos';
+  $('filtroPeriodoRelatorio')?.value||
+  'todos';
 
  const status=
-  $('filtroStatusRelatorio')
-   ?.value||'todos';
+  $('filtroStatusRelatorio')?.value||
+  'todos';
 
  const busca=
   normalizar(
-   $('filtroHospedeRelatorio')
-    ?.value||''
+   $('filtroHospedeRelatorio')?.value||''
   );
 
+ if(casa!=='todas'){
 
- if(casa!=='todas')
-  arr=arr.filter(
-   r=>r.casa===casa
-  );
+  arr=
+   arr.filter(
+    r=>r.casa===casa
+   );
+ }
 
+ if(status!=='todos'){
 
- if(status!=='todos')
-  arr=arr.filter(
-   r=>
-    r.statusPagamento===
-    status
-  );
-
+  arr=
+   arr.filter(
+    r=>r.statusPagamento===status
+   );
+ }
 
  if(busca){
 
-  arr=arr.filter(r=>
-   normalizar(r.nome)
-    .includes(busca) ||
-   String(r.telefone||'')
-    .includes(busca)
-  );
-
+  arr=
+   arr.filter(
+    r=>
+     normalizar(r.nome)
+      .includes(busca) ||
+     String(r.telefone||'')
+      .includes(busca)
+   );
  }
 
-
  const agora=hoje();
-
 
  if(periodo==='hoje'){
 
   const s=dataStr(agora);
 
-  arr=arr.filter(
-   r=>r.entrada===s
-  );
-
+  arr=
+   arr.filter(
+    r=>r.entrada===s
+   );
  }
-
 
  if(periodo==='mes'){
 
-  arr=arr.filter(r=>{
+  arr=
+   arr.filter(r=>{
 
-   const d=
-    dataLocal(r.entrada);
+    const d=
+     dataLocal(r.entrada);
 
-   return(
-    d &&
-    d.getMonth()===
-     agora.getMonth() &&
-    d.getFullYear()===
-     agora.getFullYear()
-   );
+    return(
+     d &&
+     d.getMonth()===
+      agora.getMonth() &&
+     d.getFullYear()===
+      agora.getFullYear()
+    );
 
-  });
-
+   });
  }
-
 
  if(periodo==='proximoMes'){
 
@@ -6386,21 +5377,20 @@ function obterReservasRelatorio(){
     1
    );
 
-  arr=arr.filter(r=>{
+  arr=
+   arr.filter(r=>{
 
-   const x=
-    dataLocal(r.entrada);
+    const x=
+     dataLocal(r.entrada);
 
-   return(
-    x &&
-    x.getMonth()===d.getMonth() &&
-    x.getFullYear()===d.getFullYear()
-   );
+    return(
+     x &&
+     x.getMonth()===d.getMonth() &&
+     x.getFullYear()===d.getFullYear()
+    );
 
-  });
-
+   });
  }
-
 
  if(periodo==='30dias'){
 
@@ -6411,39 +5401,36 @@ function obterReservasRelatorio(){
    inicio.getDate()-30
   );
 
+  arr=
+   arr.filter(r=>{
 
-  arr=arr.filter(r=>{
+    const d=
+     dataLocal(r.entrada);
 
-   const d=
-    dataLocal(r.entrada);
+    return(
+     d>=inicio &&
+     d<=agora
+    );
 
-   return(
-    d>=inicio &&
-    d<=agora
-   );
-
-  });
-
+   });
  }
-
 
  if(periodo==='ano'){
 
-  arr=arr.filter(r=>{
+  arr=
+   arr.filter(r=>{
 
-   const d=
-    dataLocal(r.entrada);
+    const d=
+     dataLocal(r.entrada);
 
-   return(
-    d &&
-    d.getFullYear()===
-     agora.getFullYear()
-   );
+    return(
+     d &&
+     d.getFullYear()===
+      agora.getFullYear()
+    );
 
-  });
-
+   });
  }
-
 
  if(periodo==='personalizado'){
 
@@ -6453,20 +5440,18 @@ function obterReservasRelatorio(){
   const b=
    $('relatorioDataFinal').value;
 
-
   if(a)
-   arr=arr.filter(
-    r=>r.entrada>=a
-   );
-
+   arr=
+    arr.filter(
+     r=>r.entrada>=a
+    );
 
   if(b)
-   arr=arr.filter(
-    r=>r.entrada<=b
-   );
-
+   arr=
+    arr.filter(
+     r=>r.entrada<=b
+    );
  }
-
 
  return arr.sort(
   (a,b)=>
@@ -6475,7 +5460,6 @@ function obterReservasRelatorio(){
      b.entrada||''
     )
  );
-
 }
 
 
@@ -6486,10 +5470,8 @@ function gerarRelatorio(){
 
  if(!el)return;
 
-
  const arr=
   obterReservasRelatorio();
-
 
  const total=
   arr.reduce(
@@ -6498,7 +5480,6 @@ function gerarRelatorio(){
    0
   );
 
-
  const recebido=
   arr.reduce(
    (s,r)=>
@@ -6506,13 +5487,11 @@ function gerarRelatorio(){
    0
   );
 
-
  const receber=
   Math.max(
    0,
    total-recebido
   );
-
 
  const noites=
   arr.reduce(
@@ -6529,35 +5508,29 @@ function gerarRelatorio(){
    0
   );
 
-
  const pendentes=
   arr.filter(
    r=>r.statusPagamento==='pendente'
   ).length;
-
 
  const confirmadas=
   arr.filter(
    r=>r.statusPagamento==='confirmada'
   ).length;
 
-
  const parciais=
   arr.filter(
    r=>r.statusPagamento==='parcial'
   ).length;
-
 
  const pagas=
   arr.filter(
    r=>r.statusPagamento==='pago'
   ).length;
 
-
  let tabela=
   arr.length
    ?`
-
     <div style="overflow-x:auto">
 
      <table class="tabela-relatorio">
@@ -6579,24 +5552,17 @@ function gerarRelatorio(){
 
       </thead>
 
-
       <tbody>
 
        ${arr.map(r=>{
 
         const t=
-         Number(
-          r.valorTotal||0
-         );
+         Number(r.valorTotal||0);
 
         const p=
-         Number(
-          r.valorPago||0
-         );
+         Number(r.valorPago||0);
 
-
-        return `
-
+        return`
          <tr>
 
           <td>
@@ -6642,9 +5608,7 @@ function gerarRelatorio(){
           </td>
 
           <td>
-           ${moeda(
-            Math.max(0,t-p)
-           )}
+           ${moeda(Math.max(0,t-p))}
           </td>
 
           <td>
@@ -6652,7 +5616,6 @@ function gerarRelatorio(){
           </td>
 
          </tr>
-
         `;
 
        }).join('')}
@@ -6662,14 +5625,13 @@ function gerarRelatorio(){
      </table>
 
     </div>
-
    `
-   :`
+   :
+   `
     <p style="color:var(--cinza)">
      Nenhuma reserva encontrada com os filtros atuais.
     </p>
    `;
-
 
  el.innerHTML=`
 
@@ -6720,29 +5682,26 @@ function gerarRelatorio(){
   </div>
 
   ${tabela}
-
  `;
-
 }
 
 
-/* =====================================================
+/* =========================================================
    HÓSPEDES
-===================================================== */
+========================================================= */
 
 async function cadastrarOuAtualizarHospede(
  nome,
  telefone
 ){
 
- const n=
-  normalizar(nome);
+ const n=normalizar(nome);
 
  if(!n)return;
 
-
  const q=
-  await db.collection('hospedes')
+  await db
+   .collection('hospedes')
    .where(
     'nomeNormalizado',
     '==',
@@ -6751,10 +5710,10 @@ async function cadastrarOuAtualizarHospede(
    .limit(1)
    .get();
 
-
  if(q.empty){
 
-  await db.collection('hospedes')
+  await db
+   .collection('hospedes')
    .add({
 
     nome,
@@ -6762,12 +5721,10 @@ async function cadastrarOuAtualizarHospede(
     nomeNormalizado:n,
 
     cadastradoEm:
-     firebase.firestore.FieldValue
-      .serverTimestamp(),
+     firebase.firestore.FieldValue.serverTimestamp(),
 
     atualizadoEm:
-     firebase.firestore.FieldValue
-      .serverTimestamp()
+     firebase.firestore.FieldValue.serverTimestamp()
 
    });
 
@@ -6779,13 +5736,11 @@ async function cadastrarOuAtualizarHospede(
    telefone,
 
    atualizadoEm:
-    firebase.firestore.FieldValue
-     .serverTimestamp()
+    firebase.firestore.FieldValue.serverTimestamp()
 
   });
 
  }
-
 }
 
 
@@ -6794,10 +5749,10 @@ async function carregarHospedes(){
  hospedesCadastrados=[];
 
  const s=
-  await db.collection('hospedes')
+  await db
+   .collection('hospedes')
    .orderBy('nome')
    .get();
-
 
  s.forEach(d=>
   hospedesCadastrados.push({
@@ -6806,9 +5761,7 @@ async function carregarHospedes(){
   })
  );
 
-
  filtrarHospedes();
-
 }
 
 
@@ -6818,75 +5771,66 @@ function filtrarHospedes(){
 
  if(!el)return;
 
-
  const q=
   normalizar(
-   $('buscarHospede')
-    ?.value||''
+   $('buscarHospede')?.value||''
   );
-
 
  const arr=
-  hospedesCadastrados.filter(h=>
-   !q ||
-   normalizar(h.nome)
-    .includes(q) ||
-   String(h.telefone||'')
-    .includes(q)
+  hospedesCadastrados.filter(
+   h=>
+    !q ||
+    normalizar(h.nome)
+     .includes(q) ||
+    String(h.telefone||'')
+     .includes(q)
   );
-
 
  el.innerHTML=
   arr.length
-   ?arr.map(h=>`
+   ?arr.map(h=>
+    `
+     <div class="reserva-item">
 
-    <div class="reserva-item">
+      <strong>
+       👤 ${h.nome}
+      </strong>
 
-     <strong>
-      👤 ${h.nome}
-     </strong>
+      <p>
+       📱 ${h.telefone||'—'}
+      </p>
 
-     <p>
-      📱 ${h.telefone||'—'}
-     </p>
+      <button
+       class="azul"
+       onclick="editarHospede('${h.id}')">
 
-     <button
-      class="azul"
-      onclick="editarHospede('${h.id}')">
+       ✏️ Editar
 
-      ✏️ Editar
+      </button>
 
-     </button>
-
-    </div>
-
-   `).join('')
-   :`
+     </div>
+    `
+   ).join('')
+   :
+   `
     <p style="color:var(--cinza)">
      Nenhum hóspede encontrado.
     </p>
    `;
-
 }
 
 
 function abrirCadastroHospede(){
 
  const nome=
-  prompt(
-   'Nome completo:'
-  );
+  prompt('Nome completo:');
 
  if(!nome)return;
 
-
  const telefone=
-  prompt(
-   'Telefone:'
-  );
+  prompt('Telefone:');
 
  if(!telefone)return;
-
 
  cadastrarOuAtualizarHospede(
   nome,
@@ -6902,7 +5846,6 @@ function abrirCadastroHospede(){
   );
 
  });
-
 }
 
 
@@ -6915,7 +5858,6 @@ async function editarHospede(id){
 
  if(!h)return;
 
-
  const nome=
   prompt(
    'Nome:',
@@ -6924,15 +5866,14 @@ async function editarHospede(id){
 
  if(!nome)return;
 
-
  const telefone=
   prompt(
    'Telefone:',
    h.telefone||''
   );
 
-
- await db.collection('hospedes')
+ await db
+  .collection('hospedes')
   .doc(id)
   .update({
 
@@ -6943,14 +5884,11 @@ async function editarHospede(id){
     normalizar(nome),
 
    atualizadoEm:
-    firebase.firestore.FieldValue
-     .serverTimestamp()
+    firebase.firestore.FieldValue.serverTimestamp()
 
   });
 
-
  await carregarHospedes();
-
 }
 
 
@@ -6974,25 +5912,20 @@ async function sincronizarHospedesReservas(){
     console.error(e);
 
    }
-
   }
-
  }
 
-
  await carregarHospedes();
-
 
  alert(
   '✅ Sincronização concluída!'
  );
-
 }
 
 
-/* =====================================================
-   TECLADO / ESC
-===================================================== */
+/* =========================================================
+   TECLADO
+========================================================= */
 
 document.addEventListener(
  'keydown',
