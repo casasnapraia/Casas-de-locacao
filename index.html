@@ -1531,7 +1531,7 @@ function calcularValorDiariasLocal(casa,a,b){
  if(!da||!ds||ds<=da)return{dias:0,valor:0};
 
  for(let d=new Date(da);d<ds;d.setDate(d.getDate()+1)){
-  const v=valoresDiarias[`${casa}_${dataStr(d)`];
+  const v=valoresDiarias[`${casa}_${dataStr(d)}`];
   valor+=v!=null?Number(v):150;n++;
  }
  return{dias:n,valor};
