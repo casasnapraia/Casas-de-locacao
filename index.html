@@ -4233,14 +4233,23 @@ async function enviarNotificacaoEmailReserva(dados){
    casa:dados.casa||'',
    casa_nome:dados.casa||'',
 
+   // Datas: enviamos vários aliases para atender ao nome das
+   // variáveis configuradas no template do EmailJS.
    entrada:dados.entrada||'',
    saida:dados.saida||'',
+   dataEntrada:dados.entrada||'',
+   dataSaida:dados.saida||'',
+   entradaBr:dados.entrada?dataBr(dados.entrada):'',
+   saidaBr:dados.saida?dataBr(dados.saida):'',
 
    adultos:dados.adultos||0,
    criancas:dados.criancas||0,
    totalPessoas:dados.totalPessoas||0,
+   pessoas:dados.totalPessoas||0,
+   quantidadePessoas:dados.totalPessoas||0,
 
    dias:dados.dias||0,
+   noites:dados.dias||0,
 
    valorDiarias:dados.valorDiarias||0,
    valor_diarias:dados.valorDiarias||0,
