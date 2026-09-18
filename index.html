@@ -9,6 +9,7 @@
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
 <style>
 
@@ -2097,6 +2098,20 @@ const ADM_SENHA='praia2026';
 firebase.initializeApp(firebaseConfig);
 
 const db=firebase.firestore();
+
+/* =====================================================
+   EMAILJS - NOTIFICAÇÃO DE NOVA RESERVA
+===================================================== */
+
+const EMAILJS_SERVICE_ID='service_m2u5zmw';
+const EMAILJS_TEMPLATE_ID='template_45tnk3k';
+const EMAILJS_PUBLIC_KEY='x1av_4xY0bu0TQalh';
+
+if(typeof emailjs!=='undefined'){
+ emailjs.init({
+  publicKey:EMAILJS_PUBLIC_KEY
+ });
+}
 
 const $=id=>document.getElementById(id);
 
@@ -4199,6 +4214,82 @@ function enviarReservaWhatsApp(numero){
 }
 
 
+async function enviarNotificacaoEmailReserva(dados){
+
+ try{
+
+  if(typeof emailjs==='undefined'){
+   throw new Error('EmailJS não foi carregado.');
+  }
+
+  const params={
+
+   nome:dados.nome||'',
+   name:dados.nome||'',
+
+   telefone:dados.telefone||'',
+   phone:dados.telefone||'',
+
+   casa:dados.casa||'',
+   casa_nome:dados.casa||'',
+
+   entrada:dados.entrada||'',
+   saida:dados.saida||'',
+
+   adultos:dados.adultos||0,
+   criancas:dados.criancas||0,
+   totalPessoas:dados.totalPessoas||0,
+
+   dias:dados.dias||0,
+
+   valorDiarias:dados.valorDiarias||0,
+   valor_diarias:dados.valorDiarias||0,
+
+   taxaLimpeza:dados.taxaLimpeza||0,
+   taxa_limpeza:dados.taxaLimpeza||0,
+
+   desconto:dados.desconto||0,
+   acrescimoValor:dados.acrescimoValor||0,
+
+   valorTotal:dados.valorTotal||0,
+   valor_total:dados.valorTotal||0,
+
+   valorPago:dados.valorPago||0,
+
+   status:dados.status||'pendente',
+   statusPagamento:dados.status||'pendente',
+
+   observacao:dados.observacao||'',
+   observacoes:dados.observacao||'',
+   reservaId:dados.reservaId||'',
+   idReserva:dados.reservaId||'',
+
+   reply_to:dados.telefone||''
+  };
+
+  await emailjs.send(
+   EMAILJS_SERVICE_ID,
+   EMAILJS_TEMPLATE_ID,
+   params
+  );
+
+  console.log('✅ Notificação de reserva enviada por e-mail.');
+  return true;
+
+ }catch(e){
+
+  console.error(
+   '❌ Erro ao enviar notificação por e-mail:',
+   e
+  );
+
+  return false;
+
+ }
+
+}
+
+
 async function enviarReserva(){
 
  const nome=
@@ -4304,7 +4395,7 @@ async function enviarReserva(){
 
  try{
 
-  await db.collection('reservas').add({
+  const reservaRef=await db.collection('reservas').add({
 
    casa:c,
    nome,
@@ -4346,6 +4437,28 @@ async function enviarReserva(){
   });
 
 
+  const emailEnviado=await enviarNotificacaoEmailReserva({
+   nome,
+   telefone:tel,
+   casa:casas[c]?.nome||c,
+   entrada:a,
+   saida:b,
+   adultos,
+   criancas,
+   totalPessoas,
+   dias:calc.dias,
+   valorDiarias:calc.valor,
+   taxaLimpeza:taxa,
+   desconto:0,
+   acrescimoValor:0,
+   valorTotal:calc.valor+taxa,
+   valorPago:0,
+   status:'pendente',
+   observacao:obs,
+   reservaId:reservaRef.id
+  });
+
+
   await cadastrarOuAtualizarHospede(
    nome,
    tel
@@ -4357,7 +4470,10 @@ async function enviarReserva(){
 
   alert(
    '✅ Solicitação enviada com sucesso!\n\n'+
-   'Aguarde a confirmação.'
+   'Aguarde a confirmação.'+
+   (emailEnviado
+    ?'\n\n📧 A notificação por e-mail foi enviada.'
+    :'\n\n⚠️ A reserva foi salva, mas a notificação por e-mail não pôde ser enviada.')
   );
 
 
