@@ -188,7 +188,6 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--turquesa
         <div id="msg-config" class="aviso oculto"></div>
       </div>
     </div>
-
   </div>
 </div>
 
@@ -220,7 +219,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--turquesa
 </div>
 
 <script>
-// ========== CONFIGURAÇÕES ==========
+// ========== CONFIGURAÇÕES COMPLETAS ==========
 const firebaseConfig = {
   apiKey: "AIzaSyC9WzH6sF8C9pIeQqXzP7zP8qYbX7mN9pQ",
   authDomain: "casasnapraia.firebaseapp.com",
@@ -230,11 +229,13 @@ const firebaseConfig = {
   appId: "1:123456789012:web:abc123def456ghi789jkl01"
 };
 
-const ADMIN_USER = "admin";
-const ADMIN_PASS = "praia2026"; // Altere para sua senha
-const EMAILJS_SERVICE_ID = "service_m2u5zmw"; // Vou te explicar como pegar
+// DADOS DO EMAILJS — JÁ PREENCHIDOS! ✅
+const EMAILJS_SERVICE_ID = "service_m2u5zmw";
 const EMAILJS_TEMPLATE_ID = "template_45tnk3k";
 const EMAILJS_PUBLIC_KEY = "x1av_4xY0bu0TQalh";
+
+const ADMIN_USER = "admin";
+const ADMIN_PASS = "praia2026";
 
 // Inicializar
 firebase.initializeApp(firebaseConfig);
@@ -245,7 +246,7 @@ emailjs.init(EMAILJS_PUBLIC_KEY);
 const CASAS = {
   amarela: {
     nome: "Casa Amarela",
-    descricao: "3 quartos, 2 banheiros e meio, espaço gourmet com churrasqueira e mesa de sinuca, garagem para 3 carros coberta.",
+    descricao: "3 quartos, 2 banheiros e meio, espaço gourmet com churrasqueira e mesa de sinuca, garagem para 3 carros coberta — a poucos passos da praia.",
     maxPessoas: 10,
     foto: "",
     galeria: [],
@@ -253,7 +254,7 @@ const CASAS = {
   },
   beje: {
     nome: "Casa Bege",
-    descricao: "2 quartos, 2 banheiros, espaço gourmet com churrasqueira e mesa de sinuca, pátio fechado.",
+    descricao: "2 quartos, 2 banheiros, espaço gourmet com churrasqueira e mesa de sinuca, pátio fechado — a poucos passos da praia.",
     maxPessoas: 8,
     foto: "",
     galeria: [],
@@ -261,7 +262,7 @@ const CASAS = {
   },
   marrom: {
     nome: "Casa Marrom",
-    descricao: "3 quartos, 2 banheiros, espaço gourmet com churrasqueira e mesa de sinuca, pátio fechado.",
+    descricao: "3 quartos, 2 banheiros, espaço gourmet com churrasqueira e mesa de sinuca, pátio fechado — a poucos passos da praia.",
     maxPessoas: 10,
     foto: "",
     galeria: [],
@@ -269,7 +270,7 @@ const CASAS = {
   },
   branca: {
     nome: "Casa Branca",
-    descricao: "3 quartos, 2 banheiros e meio, espaço gourmet com churrasqueira e mesa de sinuca, garagem coberta para 3 carros.",
+    descricao: "3 quartos, 2 banheiros e meio, espaço gourmet com churrasqueira e mesa de sinuca, garagem coberta para 3 carros — a poucos passos da praia.",
     maxPessoas: 10,
     foto: "",
     galeria: [],
@@ -286,6 +287,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   await renderizarCasasPublicas();
   await verificarSolicitacoes();
   configurarAbas();
+  
+  // Pedir permissão para notificações
+  if (Notification.permission === "default") {
+    Notification.requestPermission();
+  }
 });
 
 // ========== AUTENTICAÇÃO ==========
@@ -344,7 +350,6 @@ async function enviarNotificacaoEmail(solicitacao) {
   
   try {
     await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-      destinatario: configSistema.emailNotificacao,
       casa: solicitacao.casaNome,
       nome: solicitacao.nome,
       telefone: solicitacao.telefone,
@@ -354,9 +359,9 @@ async function enviarNotificacaoEmail(solicitacao) {
       pessoas: `${solicitacao.adultos} adultos, ${solicitacao.criancas} crianças`,
       taxaLimpeza: solicitacao.taxaLimpeza.toFixed(2).replace(".", ",")
     });
-    console.log("Notificação enviada!");
+    console.log("✅ Notificação enviada por e-mail!");
   } catch (e) {
-    console.log("Erro ao enviar e-mail:", e);
+    console.log("⚠️ Erro ao enviar e-mail:", e);
   }
 }
 
@@ -368,10 +373,10 @@ async function salvarSolicitacao(dados) {
     criado: firebase.firestore.FieldValue.serverTimestamp()
   });
   
-  // Enviar notificação
+  // Enviar notificação por e-mail
   await enviarNotificacaoEmail(dados);
   
-  // Disparar notificação no navegador
+  // Notificação no navegador
   if (Notification.permission === "granted") {
     new Notification("🏖️ Nova Solicitação de Reserva", {
       body: `${dados.casaNome} — ${dados.nome} solicita reserva de ${formatarData(dados.dataEntrada)} a ${formatarData(dados.dataSaida)}`
@@ -409,38 +414,275 @@ async function salvarConfig() {
 async function carregarConfig() {
   const res = await db.collection("config").doc("geral").get();
   if (res.exists) {
-    configSistema = res.data();
+    configSistema = { ...configSistema, ...res.data() };
     document.getElementById("email-notificacao").value = configSistema.emailNotificacao || "";
     document.getElementById("taxa-limpeza-padrao").value = configSistema.taxaLimpezaPadrao || 50;
   }
+}
+
+// ========== ABAS ==========
+function configurarAbas() {
+  document.querySelectorAll(".tab").forEach(tab => {
+    tab.addEventListener("click", () => {
+      document.querySelectorAll(".tab").forEach(t => t.classList.remove("ativa"));
+      tab.classList.add("ativa");
+      const abaId = tab.getAttribute("data-aba");
+      document.querySelectorAll(".aba").forEach(a => {
+        a.classList.remove("visivel");
+        a.classList.add("oculto");
+      });
+      document.getElementById(`aba-${abaId}`).classList.remove("oculto");
+      document.getElementById(`aba-${abaId}`).classList.add("visivel");
+    });
+  });
+}
+
+// ========== PÁGINA PÚBLICA ==========
+async function renderizarCasasPublicas() {
+  const container = document.getElementById("lista-casas-publica");
+  container.innerHTML = "";
   
-  // Pedir permissão para notificações
-  if (Notification.permission === "default") {
-    Notification.requestPermission();
+  for (const [id, casa] of Object.entries(CASAS)) {
+    const doc = await db.collection("casas").doc(id).get();
+    const dados = doc.exists ? doc.data() : { foto: casa.foto };
+    
+    container.innerHTML += `
+      <div class="casa-card">
+        <img src="${dados.foto || 'https://via.placeholder.com/400x200/e6f2f5/17a2b8?text=' + encodeURIComponent(casa.nome)}" alt="${casa.nome}">
+        <div class="casa-corpo">
+          <h3>${casa.nome}</h3>
+          <p style="color:var(--claro);margin:.5rem 0 1rem 0;line-height:1.5;">${casa.descricao}</p>
+          <p style="font-size:.9rem;color:var(--claro);">👥 Máximo: ${casa.maxPessoas} pessoas</p>
+          <button class="btn btn-primario" style="width:100%;margin-top:.8rem;" onclick="abrirReserva('${id}')">Ver Disponibilidade e Reservar</button>
+        </div>
+      </div>
+    `;
   }
 }
 
-// ========== O RESTANTE DAS FUNÇÕES (mantive tudo que já funcionava) ==========
-async function renderizarCasasPublica() { /* ... */ }
-async function verificarSolicitacoes() { /* ... */ }
-function configurarAbas() { /* ... */ }
-async function carregarDadosAdmin() { /* ... */ }
-async function gerarRelatorio() { /* ... */ }
-function imprimirRelatorio() { window.print(); }
-async function abrirCadastroHospede() { /* ... */ }
-</script>
+async function abrirReserva(casaId) {
+  const casa = CASAS[casaId];
+  document.getElementById("res-titulo").textContent = `📅 ${casa.nome} — Solicitar Reserva`;
+  document.getElementById("res-conteudo").innerHTML = `
+    <div class="grupo">
+      <label>Data de entrada</label>
+      <input type="date" id="res-entrada">
+    </div>
+    <div class="grupo">
+      <label>Data de saída</label>
+      <input type="date" id="res-saida">
+    </div>
+    <div class="linha">
+      <div class="grupo">
+        <label>Adultos</label>
+        <input type="number" id="res-adultos" min="1" max="${casa.maxPessoas}" value="2">
+      </div>
+      <div class="grupo">
+        <label>Crianças</label>
+        <input type="number" id="res-criancas" min="0" max="${casa.maxPessoas - 1}" value="0">
+      </div>
+    </div>
+    <p style="font-size:.85rem;color:var(--claro);margin:.5rem 0;">Capacidade máxima: ${casa.maxPessoas} pessoas. Se precisar de mais, informe nas observações.</p>
+    <div class="grupo">
+      <label>Nome completo</label>
+      <input type="text" id="res-nome" placeholder="Seu nome">
+    </div>
+    <div class="grupo">
+      <label>Telefone com WhatsApp</label>
+      <input type="tel" id="res-telefone" placeholder="(48) 99999-9999">
+    </div>
+    <div class="grupo">
+      <label>Observações</label>
+      <textarea id="res-obs" rows="3" placeholder="Alguma observação especial?"></textarea>
+    </div>
+    <div id="res-valor" style="margin:1rem 0;padding:1rem;background:var(--areia);border-radius:var(--raio);display:none;">
+      <strong>Valor Total:</strong> R$ <span id="res-valor-total">0,00</span>
+      <br>
+      <small style="color:var(--claro);">Inclui taxa de limpeza de R$ ${casa.taxaLimpeza.toFixed(2).replace(".", ",")}</small>
+    </div>
+    <button class="btn btn-primario" style="width:100%;margin-top:1rem;" onclick="confirmarReserva('${casaId}')">Enviar Solicitação</button>
+  `;
+  
+  document.getElementById("modal-reserva").classList.remove("oculto");
+  
+  // Calcular valor automaticamente
+  setTimeout(() => {
+    const entrada = document.getElementById("res-entrada");
+    const saida = document.getElementById("res-saida");
+    const valorDiv = document.getElementById("res-valor");
+    
+    const calcular = async () => {
+      if (!entrada.value || !saida.value) { valorDiv.style.display = "none"; return; }
+      
+      const inicio = new Date(entrada.value);
+      const fim = new Date(saida.value);
+      if (fim <= inicio) return;
+      
+      const dias = Math.ceil((fim - inicio) / (1000 * 60 * 60 * 24));
+      const resValores = await db.collection("casas").doc(casaId).collection("valores").get();
+      
+      let totalDiarias = 0;
+      for (let d = new Date(inicio); d < fim; d.setDate(d.getDate() + 1)) {
+        const dataStr = d.toISOString().split("T")[0];
+        const dia = resValores.docs.find(doc => doc.id === dataStr);
+        totalDiarias += dia ? dia.data().valor : 150; // valor padrão R$150
+      }
+      
+      const total = totalDiarias + casa.taxaLimpeza;
+      document.getElementById("res-valor-total").textContent = total.toFixed(2).replace(".", ",");
+      valorDiv.style.display = "block";
+    };
+    
+    entrada.addEventListener("change", calcular);
+    saida.addEventListener("change", calcular);
+  }, 100);
+}
 
-<script>
-// SOLICITAÇÃO DE NOTIFICAÇÃO NO CELULAR
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", async () => {
-    try {
-      const registration = await navigator.serviceWorker.register("/sw.js");
-      console.log("Service Worker registrado");
-    } catch (err) {
-      console.log("Service Worker não necessário nesta versão");
-    }
+async function confirmarReserva(casaId) {
+  const casa = CASAS[casaId];
+  const entrada = document.getElementById("res-entrada").value;
+  const saida = document.getElementById("res-saida").value;
+  const adultos = parseInt(document.getElementById("res-adultos").value) || 0;
+  const criancas = parseInt(document.getElementById("res-criancas").value) || 0;
+  const nome = document.getElementById("res-nome").value.trim();
+  const telefone = document.getElementById("res-telefone").value.trim();
+  const obs = document.getElementById("res-obs").value.trim();
+  
+  if (!entrada || !saida || !nome || !telefone) {
+    alert("⚠️ Preencha todos os campos!");
+    return;
+  }
+  
+  if (adultos + criancas > casa.maxPessoas) {
+    alert(`⚠️ Esta casa comporta no máximo ${casa.maxPessoas} pessoas. Confirme mesmo e iremos avaliar.`);
+  }
+  
+  // Calcular valor
+  const inicio = new Date(entrada);
+  const fim = new Date(saida);
+  const resValores = await db.collection("casas").doc(casaId).collection("valores").get();
+  let totalDiarias = 0;
+  for (let d = new Date(inicio); d < fim; d.setDate(d.getDate() + 1)) {
+    const dataStr = d.toISOString().split("T")[0];
+    const dia = resValores.docs.find(doc => doc.id === dataStr);
+    totalDiarias += dia ? dia.data().valor : 150;
+  }
+  const valorTotal = totalDiarias + casa.taxaLimpeza;
+  
+  await salvarSolicitacao({
+    casaId,
+    casaNome: casa.nome,
+    dataEntrada: entrada,
+    dataSaida: saida,
+    adultos,
+    criancas,
+    nome,
+    telefone,
+    observacao: obs,
+    valorTotal,
+    taxaLimpeza: casa.taxaLimpeza
   });
+  
+  alert("✅ Solicitação enviada com sucesso! Entrarei em contato em breve.");
+  fecharModal("modal-reserva");
+}
+
+// ========== ÁREA ADMINISTRATIVA ==========
+async function verificarSolicitacoes() {
+  if (!logado) return;
+  const snap = await db.collection("solicitacoes").where("status", "==", "pendente").get();
+  document.getElementById("cont-solicitacoes").textContent = snap.size;
+}
+
+async function carregarDadosAdmin() {
+  await verificarSolicitacoes();
+  
+  // Carregar solicitações
+  const snapSol = await db.collection("solicitacoes").orderBy("criado", "desc").limit(30).get();
+  const container = document.getElementById("lista-solicitacoes");
+  container.innerHTML = "";
+  
+  if (snapSol.empty) {
+    container.innerHTML = "<p style='color:var(--claro);'>Nenhuma solicitação nova.</p>";
+  } else {
+    snapSol.forEach(doc => {
+      const s = doc.data();
+      const etiqueta = s.status === "pendente" ? "et-pendente" : s.status === "confirmada" ? "et-confirmada" : "et-cancelada";
+      container.innerHTML += `
+        <div class="reserva-item">
+          <h4>${s.casaNome} <span class="etiqueta ${etiqueta}">${s.status.charAt(0).toUpperCase() + s.status.slice(1)}</span></h4>
+          <p><strong>${s.nome}</strong> — ${s.telefone}</p>
+          <p>📅 ${formatarData(s.dataEntrada)} até ${formatarData(s.dataSaida)}</p>
+          <p>👥 ${s.adultos} adultos, ${s.criancas} crianças</p>
+          <p>💰 Total: R$ ${s.valorTotal.toFixed(2).replace(".", ",")}</p>
+          <p>📝 ${s.observacao || "Sem observações"}</p>
+          ${s.status === "pendente" ? `
+            <div class="linha" style="margin-top:.8rem;">
+              <button class="btn btn-primario" onclick="confirmarReservaAdmin('${doc.id}')">✅ Confirmar</button>
+              <button class="btn btn-cinza" onclick="cancelarReservaAdmin('${doc.id}')">❌ Cancelar</button>
+            </div>
+          ` : ""}
+        </div>
+      `;
+    });
+  }
+}
+
+async function confirmarReservaAdmin(id) {
+  if (!confirm("Confirmar esta reserva? As datas ficarão bloqueadas.")) return;
+  await db.collection("solicitacoes").doc(id).update({ status: "confirmada" });
+  alert("✅ Reserva confirmada!");
+  carregarDadosAdmin();
+}
+
+async function cancelarReservaAdmin(id) {
+  if (!confirm("Cancelar esta solicitação?")) return;
+  await db.collection("solicitacoes").doc(id).update({ status: "cancelada" });
+  carregarDadosAdmin();
+}
+
+async function gerarRelatorio() {
+  const inicio = document.getElementById("rel-data-inicio").value;
+  const fim = document.getElementById("rel-data-fim").value;
+  
+  if (!inicio || !fim) {
+    alert("Informe o período!");
+    return;
+  }
+  
+  const snap = await db.collection("solicitacoes")
+    .where("status", "==", "confirmada")
+    .get();
+  
+  const container = document.getElementById("relatorio-conteudo");
+  container.innerHTML = "<h3 style='margin:1rem 0;'>Relatório de Recebimentos</h3>";
+  
+  let totalGeral = 0;
+  snap.forEach(doc => {
+    const r = doc.data();
+    container.innerHTML += `
+      <div style="padding:.8rem 0;border-bottom:1px solid var(--borda);">
+        <strong>${r.casaNome}</strong> — ${r.nome}<br>
+        ${formatarData(r.dataEntrada)} a ${formatarData(r.dataSaida)} — 
+        <strong>R$ ${r.valorTotal.toFixed(2).replace(".", ",")}</strong>
+      </div>
+    `;
+    totalGeral += r.valorTotal;
+  });
+  
+  container.innerHTML += `
+    <div style="margin-top:1rem;padding:1rem;background:var(--areia);border-radius:var(--raio);font-weight:bold;">
+      💰 TOTAL GERAL: R$ ${totalGeral.toFixed(2).replace(".", ",")}
+    </div>
+  `;
+}
+
+function imprimirRelatorio() {
+  window.print();
+}
+
+async function abrirCadastroHospede() {
+  alert("Funcionalidade de cadastro de hóspedes em desenvolvimento!");
 }
 </script>
 
