@@ -105,123 +105,6 @@ button:disabled{
  background:var(--ouro)!important;
  color:#222!important
 }
-```css
-/* =====================================================
-   FILTROS DA ÁREA DE RESERVAS
-===================================================== */
-
-.filtros-reservas{
- display:grid;
- grid-template-columns:
-  minmax(220px,2fr)
-  minmax(180px,1fr)
-  minmax(160px,1fr)
-  minmax(160px,1fr);
- gap:12px;
- margin:15px 0 10px;
- padding:15px;
- background:#f7f9fa;
- border:1px solid #ddd;
- border-radius:10px;
-}
-
-.filtro-reserva-item{
- display:flex;
- flex-direction:column;
- gap:5px;
-}
-
-.filtro-reserva-item label{
- font-size:13px;
- font-weight:bold;
- color:var(--marinho);
-}
-
-.filtro-reserva-item input,
-.filtro-reserva-item select{
- width:100%;
- padding:10px 12px;
- border:1px solid #ccc;
- border-radius:7px;
- background:#fff;
- font-size:14px;
- box-sizing:border-box;
-}
-
-.filtros-status-reservas{
- display:flex;
- gap:7px;
- flex-wrap:wrap;
- align-items:center;
- margin:10px 0 5px;
-}
-
-.filtros-status-reservas button{
- margin:0;
-}
-
-.resumo-filtros-reservas{
- margin:10px 0 15px;
- padding:10px 14px;
- background:#eef6f8;
- border-left:4px solid var(--turquesa);
- border-radius:6px;
- color:var(--marinho);
- font-weight:bold;
- font-size:14px;
-}
-
-/* Lista mais compacta */
-
-#listaReservas{
- display:grid;
- grid-template-columns:
-  repeat(auto-fit,minmax(330px,1fr));
- gap:12px;
- align-items:start;
-}
-
-#listaReservas .reserva-item{
- margin:0;
- height:100%;
- box-sizing:border-box;
-}
-
-#listaReservas .reserva-item h3{
- margin-top:0;
- padding-right:80px;
-}
-
-@media(max-width:900px){
-
- .filtros-reservas{
-  grid-template-columns:
-   repeat(2,minmax(0,1fr));
- }
-
-}
-
-@media(max-width:600px){
-
- .filtros-reservas{
-  grid-template-columns:1fr;
- }
-
- #listaReservas{
-  grid-template-columns:1fr;
- }
-
- .filtros-status-reservas{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
- }
-
- .filtros-status-reservas button{
-  width:100%;
- }
-
-}
-```
 
 
 /* =========================
@@ -1849,138 +1732,46 @@ textarea{
      RESERVAS
 ===================================================== -->
 
-```html
 <div id="pagina-reservas" class="pagina">
 
  <h2>📋 Solicitações e Reservas</h2>
 
- <!-- FILTROS DAS RESERVAS -->
- <div class="filtros-reservas">
+ <div style="
+  display:flex;
+  gap:10px;
+  margin:15px 0;
+  flex-wrap:wrap">
 
-  <div class="filtro-reserva-item busca">
-   <label>🔎 Hóspede</label>
-   <input
-    type="text"
-    id="filtroHospedeReservas"
-    placeholder="Nome, telefone, e-mail ou CPF"
-    oninput="aplicarFiltrosReservas()">
-  </div>
-
-
-  <div class="filtro-reserva-item">
-   <label>🏠 Casa</label>
-   <select
-    id="filtroCasaReservas"
-    onchange="aplicarFiltrosReservas()">
-
-    <option value="todas">
-     Todas as casas
-    </option>
-
-   </select>
-  </div>
-
-
-  <div class="filtro-reserva-item">
-   <label>📅 Data inicial</label>
-   <input
-    type="date"
-    id="filtroDataInicialReservas"
-    onchange="aplicarFiltrosReservas()">
-  </div>
-
-
-  <div class="filtro-reserva-item">
-   <label>📅 Data final</label>
-   <input
-    type="date"
-    id="filtroDataFinalReservas"
-    onchange="aplicarFiltrosReservas()">
-  </div>
-
- </div>
-
-
- <!-- STATUS -->
- <div class="filtros-status-reservas">
-
-  <button
-   type="button"
-   data-filtro="todas"
+  <button data-filtro="todas"
    class="azul ativo">
-
    Todas
-
   </button>
 
-
-  <button
-   type="button"
-   data-filtro="pendente"
+  <button data-filtro="pendente"
    class="azul">
-
-   🟠 Pendentes
-
+   Pendentes
   </button>
 
-
-  <button
-   type="button"
-   data-filtro="confirmada"
+  <button data-filtro="confirmada"
    class="azul">
-
    ✅ Confirmadas
-
   </button>
 
-
-  <button
-   type="button"
-   data-filtro="parcial"
+  <button data-filtro="parcial"
    class="azul">
-
-   🟡 Parciais
-
+   Parciais
   </button>
 
-
-  <button
-   type="button"
-   data-filtro="pago"
+  <button data-filtro="pago"
    class="azul">
-
    💰 Pagas
-
-  </button>
-
-
-  <button
-   type="button"
-   class="cinza"
-   onclick="limparFiltrosReservas()">
-
-   🧹 Limpar filtros
-
   </button>
 
  </div>
 
-
- <!-- RESUMO -->
- <div
-  id="resumoFiltrosReservas"
-  class="resumo-filtros-reservas">
-
-  📋 Carregando reservas...
-
- </div>
-
-
- <!-- LISTA -->
  <div id="listaReservas"></div>
 
 </div>
-```
 
 
 <!-- =====================================================
@@ -5171,7 +4962,7 @@ async function salvarConfiguracoesCasa(id){
 /* =====================================================
    LISTA DE RESERVAS
 ===================================================== */
-```javascript
+
 function atualizarListaReservas(){
 
  const c=$('listaReservas');
@@ -5179,190 +4970,15 @@ function atualizarListaReservas(){
  if(!c)return;
 
 
- /* =====================================================
-    CARREGA AS CASAS NO FILTRO
- ===================================================== */
-
- const selectCasa=
-  $('filtroCasaReservas');
-
- if(selectCasa){
-
-  const valorAtual=
-   selectCasa.value||'todas';
-
-  selectCasa.innerHTML=`
-
-   <option value="todas">
-    Todas as casas
-   </option>
-
-   ${Object.keys(casas).map(id=>`
-
-    <option value="${id}">
-     ${casas[id]?.nome||id}
-    </option>
-
-   `).join('')}
-
-  `;
-
-  if(
-   [...selectCasa.options]
-    .some(o=>o.value===valorAtual)
-  ){
-
-   selectCasa.value=valorAtual;
-
-  }
-
- }
-
-
- /* =====================================================
-    FILTROS
- ===================================================== */
-
- const busca=
-  normalizar(
-   $('filtroHospedeReservas')
-    ?.value||''
-  );
-
-
- const casaFiltro=
-  $('filtroCasaReservas')
-   ?.value||'todas';
-
-
- const dataInicial=
-  $('filtroDataInicialReservas')
-   ?.value||'';
-
-
- const dataFinal=
-  $('filtroDataFinalReservas')
-   ?.value||'';
-
-
  let arr=
-  [...reservasConfirmadas];
-
-
- /* =====================================================
-    STATUS
- ===================================================== */
-
- if(filtroReservas!=='todas'){
-
-  arr=
-   arr.filter(
+  filtroReservas==='todas'
+   ?reservasConfirmadas
+   :reservasConfirmadas.filter(
     r=>
-     (r.statusPagamento||'pendente')===
+     r.statusPagamento===
      filtroReservas
    );
 
- }
-
-
- /* =====================================================
-    CASA
- ===================================================== */
-
- if(casaFiltro!=='todas'){
-
-  arr=
-   arr.filter(
-    r=>r.casa===casaFiltro
-   );
-
- }
-
-
- /* =====================================================
-    HÓSPEDE
- ===================================================== */
-
- if(busca){
-
-  arr=
-   arr.filter(r=>{
-
-    const nome=
-     normalizar(r.nome||'');
-
-    const telefone=
-     normalizar(
-      String(r.telefone||'')
-     );
-
-    const email=
-     normalizar(r.email||'');
-
-    const cpf=
-     normalizar(r.cpf||'');
-
-
-    return(
-     nome.includes(busca)||
-     telefone.includes(busca)||
-     email.includes(busca)||
-     cpf.includes(busca)
-    );
-
-   });
-
- }
-
-
- /* =====================================================
-    PERÍODO
- ===================================================== */
-
- if(dataInicial){
-
-  arr=
-   arr.filter(r=>{
-
-    const entrada=
-     r.entrada||'';
-
-    const saida=
-     r.saida||'';
-
-
-    /*
-       A reserva aparece quando seu período
-       possui alguma sobreposição com o filtro.
-    */
-
-    return saida>dataInicial;
-
-   });
-
- }
-
-
- if(dataFinal){
-
-  arr=
-   arr.filter(r=>{
-
-    const entrada=
-     r.entrada||'';
-
-
-    return entrada<dataFinal;
-
-   });
-
- }
-
-
- /* =====================================================
-    ORDENAÇÃO
-    Mais recentes primeiro
- ===================================================== */
 
  arr.sort(
   (a,b)=>
@@ -5371,138 +4987,30 @@ function atualizarListaReservas(){
  );
 
 
- /* =====================================================
-    RESUMO
- ===================================================== */
-
- const resumo=
-  $('resumoFiltrosReservas');
-
- if(resumo){
-
-  const totalReservas=
-   arr.length;
-
-  const valorTotal=
-   arr.reduce(
-    (s,r)=>
-     s+
-     Number(r.valorTotal||0),
-    0
-   );
-
-  const valorPago=
-   arr.reduce(
-    (s,r)=>
-     s+
-     Number(r.valorPago||0),
-    0
-   );
-
-  const aReceber=
-   Math.max(
-    0,
-    valorTotal-valorPago
-   );
-
-
-  resumo.innerHTML=`
-
-   📋 <strong>
-    ${totalReservas}
-   </strong>
-   ${
-    totalReservas===1
-     ?'reserva encontrada'
-     :'reservas encontradas'
-   }
-
-   &nbsp; • &nbsp;
-
-   💰 Total:
-   <strong>
-    ${moeda(valorTotal)}
-   </strong>
-
-   &nbsp; • &nbsp;
-
-   Recebido:
-   <strong>
-    ${moeda(valorPago)}
-   </strong>
-
-   &nbsp; • &nbsp;
-
-   A receber:
-   <strong>
-    ${moeda(aReceber)}
-   </strong>
-
-  `;
-
- }
-
-
- /* =====================================================
-    NENHUM RESULTADO
- ===================================================== */
-
  if(!arr.length){
 
-  c.innerHTML=`
-
-   <div
-    class="reserva-item"
-    style="
-     grid-column:1/-1;
-     text-align:center;
-     padding:30px">
-
-    <div style="font-size:35px">
-     🔎
-    </div>
-
-    <h3>
-     Nenhuma reserva encontrada
-    </h3>
-
-    <p style="color:var(--cinza)">
-     Tente alterar os filtros de busca.
-    </p>
-
-   </div>
-
-  `;
+  c.innerHTML=
+   '<p style="color:var(--cinza)">'+
+   'Nenhuma reserva encontrada.'+
+   '</p>';
 
   return;
 
  }
 
 
- /* =====================================================
-    LISTA DE RESERVAS
- ===================================================== */
-
  c.innerHTML=
-
   arr.map(r=>{
 
    const status=
     r.statusPagamento||
     'pendente';
 
-
    const pago=
-    Number(
-     r.valorPago||0
-    );
-
+    Number(r.valorPago||0);
 
    const total=
-    Number(
-     r.valorTotal||0
-    );
-
+    Number(r.valorTotal||0);
 
    const pendente=
     Math.max(
@@ -5511,137 +5019,112 @@ function atualizarListaReservas(){
     );
 
 
-   const casaNome=
-    casas[r.casa]?.nome||
-    r.casa||
-    'Casa';
-
-
-   const pessoas=
-    Number(
-     r.totalPessoas||
-     (
-      Number(r.adultos||0)+
-      Number(r.criancas||0)
-     )
-    );
-
-
    return `
 
     <div class="reserva-item">
 
-     <div style="
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap:8px">
+     <h3>
+      ${casas[r.casa]?.nome||r.casa}
+     </h3>
 
-      <h3 style="margin:0">
 
-       ${casaNome}
+     <span class="
+      status-badge
+      status-${status}">
 
-      </h3>
+      ${status.toUpperCase()}
 
-      <span
-       class="status-badge status-${status}">
-
-       ${status.toUpperCase()}
-
-      </span>
-
-     </div>
+     </span>
 
 
      <p>
-      <strong>
-       👤 ${r.nome||'Hóspede não informado'}
-      </strong>
+      <strong>👤 ${r.nome}</strong>
+      — ${r.telefone}
      </p>
 
 
-     ${
-      r.telefone
-       ?`
-        <p>
-         📱 ${r.telefone}
-        </p>
-       `
-       :''
-     }
+     <p>
+      📅 ${dataBr(r.entrada)}
+      até ${dataBr(r.saida)}
+      — ${r.dias||0} diária(s)
+     </p>
 
 
      <p>
-      📅
-      <strong>
-       ${dataBr(r.entrada)}
-      </strong>
-
-      até
-
-      <strong>
-       ${dataBr(r.saida)}
-      </strong>
-
+      👥 ${r.totalPessoas||0} pessoa(s)
       —
-      ${r.dias||0} diária(s)
-     </p>
-
-
-     <p>
-      👥 ${pessoas} pessoa(s)
-
-      ${
-       r.adultos||r.criancas
-        ?`
-         —
-         ${r.adultos||0} adulto(s),
-         ${r.criancas||0} criança(s)
-        `
-        :''
-      }
-
+      ${r.adultos||0} adulto(s),
+      ${r.criancas||0} criança(s)
      </p>
 
 
      <div class="total-geral">
 
       <div class="linha-valor">
+       <span>Diárias</span>
+       <strong>
+        ${moeda(r.valorDiarias)}
+       </strong>
+      </div>
 
-       <span>
-        Total
-       </span>
 
+      <div class="linha-valor">
+       <span>Limpeza</span>
+       <strong>
+        ${moeda(r.taxaLimpeza)}
+       </strong>
+      </div>
+
+
+      ${
+       Number(r.acrescimoValor)>0
+        ?`
+         <div class="linha-valor">
+          <span>Acréscimo</span>
+          <strong>
+           + ${moeda(r.acrescimoValor)}
+          </strong>
+         </div>
+        `
+        :''
+      }
+
+
+      ${
+       Number(r.desconto)>0
+        ?`
+         <div class="linha-valor">
+          <span>Desconto</span>
+          <strong>
+           - ${moeda(r.desconto)}
+          </strong>
+         </div>
+        `
+        :''
+      }
+
+
+      <div class="linha-valor">
+       <span>Total</span>
        <strong>
         ${moeda(total)}
        </strong>
-
       </div>
 
 
       <div class="linha-valor">
-
-       <span>
-        Pago
-       </span>
-
+       <span>Pago</span>
        <strong>
         ${moeda(pago)}
        </strong>
-
       </div>
 
 
       <div class="linha-valor">
-
-       <span>
-        A receber
-       </span>
-
+       <span>A receber</span>
        <strong>
         ${moeda(pendente)}
        </strong>
-
       </div>
 
      </div>
@@ -5697,63 +5180,6 @@ function atualizarListaReservas(){
   }).join('');
 
 }
-
-
-/* =====================================================
-   APLICA OS FILTROS
-===================================================== */
-
-function aplicarFiltrosReservas(){
-
- atualizarListaReservas();
-
-}
-
-
-/* =====================================================
-   LIMPA OS FILTROS
-===================================================== */
-
-function limparFiltrosReservas(){
-
- if($('filtroHospedeReservas'))
-  $('filtroHospedeReservas').value='';
-
-
- if($('filtroCasaReservas'))
-  $('filtroCasaReservas').value='todas';
-
-
- if($('filtroDataInicialReservas'))
-  $('filtroDataInicialReservas').value='';
-
-
- if($('filtroDataFinalReservas'))
-  $('filtroDataFinalReservas').value='';
-
-
- filtroReservas='todas';
-
-
- document
-  .querySelectorAll(
-   '#pagina-reservas [data-filtro]'
-  )
-  .forEach(btn=>{
-
-   btn.classList.toggle(
-    'ativo',
-    btn.dataset.filtro==='todas'
-   );
-
-  });
-
-
- atualizarListaReservas();
-
-}
-```
-
 
 
 /* =====================================================
