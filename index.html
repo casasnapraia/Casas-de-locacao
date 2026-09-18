@@ -161,6 +161,221 @@ button:disabled{opacity:.55;cursor:not-allowed}
 .acrescimo-botoes button{padding:7px 12px;border:0;border-radius:6px;background:#198754;color:#fff}
 .valor-total-editavel{background:#fff8df!important;border:2px solid #e0b000!important;font-weight:700;font-size:17px}
 
+/* =========================================================
+   BALÃO DE SUGESTÕES DE DISPONIBILIDADE
+   ========================================================= */
+.area-sugestoes-datas{position:relative;width:100%;z-index:50}
+
+.sugestoes-disponibilidade{
+ display:none;
+ position:relative;
+ margin:-5px 0 18px;
+ background:#fff;
+ border:1px solid #d7e2e7;
+ border-radius:14px;
+ box-shadow:0 12px 35px rgba(0,0,0,.16);
+ padding:15px;
+ animation:abrirSugestao .2s ease;
+}
+
+.sugestoes-disponibilidade.aberto{display:block}
+
+@keyframes abrirSugestao{
+ from{opacity:0;transform:translateY(-5px)}
+ to{opacity:1;transform:translateY(0)}
+}
+
+.sugestao-titulo{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:10px;
+ margin-bottom:10px;
+ color:var(--marinho);
+}
+
+.sugestao-titulo strong{font-size:16px}
+.sugestao-fechar{
+ background:none;
+ border:0;
+ color:var(--cinza);
+ font-size:22px;
+ padding:2px 6px;
+}
+
+.sugestao-mensagem{
+ background:#fff3cd;
+ color:#856404;
+ border:1px solid #ffe69c;
+ border-radius:8px;
+ padding:9px 10px;
+ font-size:13px;
+ margin-bottom:12px;
+ line-height:1.4;
+}
+
+.sugestao-mes{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:8px;
+ margin-bottom:8px;
+}
+
+.sugestao-mes button{
+ border:0;
+ background:#e9f7fa;
+ color:var(--marinho);
+ width:32px;
+ height:32px;
+ border-radius:7px;
+ font-weight:bold;
+}
+
+.sugestao-mes strong{
+ color:var(--marinho);
+ text-transform:capitalize;
+}
+
+.sugestao-legenda{
+ display:flex;
+ gap:12px;
+ flex-wrap:wrap;
+ font-size:11px;
+ color:var(--cinza);
+ margin-bottom:8px;
+}
+
+.sugestao-legenda span{display:flex;align-items:center;gap:4px}
+.legenda-livre{width:12px;height:12px;border-radius:3px;background:#e8f5e9;border:1px solid #9ad3a5}
+.legenda-bloqueado{width:12px;height:12px;border-radius:3px;background:#f8d7da;border:1px solid #f5c6cb}
+.legenda-sugestao{width:12px;height:12px;border-radius:3px;background:#fff0b3;border:1px solid #e0b000}
+
+.sugestao-grade{
+ display:grid;
+ grid-template-columns:repeat(7,1fr);
+ gap:4px;
+}
+
+.sugestao-dia-semana{
+ text-align:center;
+ color:var(--cinza);
+ font-size:11px;
+ font-weight:700;
+ padding:4px 0;
+}
+
+.sugestao-dia{
+ min-height:35px;
+ border:1px solid #e8ecee;
+ border-radius:6px;
+ background:#fff;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:12px;
+ position:relative;
+}
+
+.sugestao-dia.vazio{
+ border:0;
+ background:transparent;
+}
+
+.sugestao-dia.bloqueado{
+ background:#f8d7da;
+ color:#842029;
+ border-color:#f5c6cb;
+}
+
+.sugestao-dia.livre{
+ background:#e8f5e9;
+ color:#176b2c;
+ border-color:#b8dfc1;
+ cursor:pointer;
+}
+
+.sugestao-dia.livre:hover{
+ background:#cfead5;
+ transform:scale(1.04);
+}
+
+.sugestao-dia.sugestao{
+ background:#fff0b3;
+ border:2px solid #e0b000;
+ color:#664d03;
+ font-weight:700;
+ cursor:pointer;
+}
+
+.sugestao-dia.sugestao:hover{
+ background:#ffe58a;
+}
+
+.sugestao-dia.hoje{
+ box-shadow:inset 0 0 0 2px var(--turquesa);
+}
+
+.sugestao-periodos{
+ margin-top:15px;
+ border-top:1px solid #e8ecee;
+ padding-top:12px;
+}
+
+.sugestao-periodos h4{
+ color:var(--marinho);
+ font-size:14px;
+ margin-bottom:8px;
+}
+
+.lista-periodos-sugeridos{
+ display:grid;
+ gap:7px;
+ max-height:180px;
+ overflow-y:auto;
+}
+
+.periodo-sugerido{
+ width:100%;
+ border:1px solid #cfe1e6;
+ background:#f7fbfc;
+ border-radius:8px;
+ padding:9px 10px;
+ text-align:left;
+ color:var(--texto);
+ transition:.2s;
+}
+
+.periodo-sugerido:hover{
+ background:#e7f7fa;
+ border-color:var(--turquesa);
+ transform:translateX(2px);
+}
+
+.periodo-sugerido strong{
+ color:var(--marinho);
+}
+
+.periodo-sugerido small{
+ display:block;
+ color:var(--cinza);
+ margin-top:2px;
+}
+
+.sem-periodos{
+ color:var(--cinza);
+ font-size:13px;
+ line-height:1.4;
+ padding:5px 0;
+}
+
+.sugestao-rodape{
+ margin-top:10px;
+ color:var(--cinza);
+ font-size:11px;
+ text-align:center;
+}
+
 @media(max-width:900px){
 .info-blocos{grid-template-columns:1fr}.hero-praia{min-height:600px;height:72vh}.hero-conteudo h1{font-size:52px}.area-publica{padding:50px 20px}
 }
@@ -172,10 +387,14 @@ button:disabled{opacity:.55;cursor:not-allowed}
 .barra-lateral{position:relative;width:100%;height:auto}.conteudo-admin{margin-left:0;padding:15px}
 .menu-lateral{display:grid;grid-template-columns:1fr 1fr}.area-publica{padding:40px 15px}
 .calendario{padding:10px;overflow-x:auto}.calendario-grade{min-width:650px}
+.sugestao-grade{gap:3px}
+.sugestao-dia{min-height:32px}
 }
 @media(max-width:500px){
 .menu-lateral{grid-template-columns:1fr}.hero-conteudo h1{font-size:38px}.hero-conteudo h2{font-size:22px}
 .hero-botao{padding:13px 22px}.introducao-publica h2{font-size:29px}.card-imagem{height:220px}.info-praia{padding:40px 15px}
+.sugestoes-disponibilidade{padding:11px}
+.sugestao-dia{min-height:30px;font-size:11px}
 }
 </style>
 </head>
@@ -365,6 +584,8 @@ button:disabled{opacity:.55;cursor:not-allowed}
 <div class="grupo-input"><label>Telefone com WhatsApp</label><input id="hospedeTelefone" type="tel"></div>
 <div class="grupo-input"><label>Capacidade da casa</label><div id="infoCapacidadeReserva" class="capacidade"></div></div>
 
+<div class="area-sugestoes-datas">
+
 <div class="linha-form">
 <div class="grupo-input" style="flex:1">
 <label>Data Entrada</label>
@@ -374,6 +595,10 @@ button:disabled{opacity:.55;cursor:not-allowed}
 <label>Data Saída</label>
 <input type="date" id="dataSaida" onchange="verificarDisponibilidade()">
 </div>
+</div>
+
+<div id="sugestoesDisponibilidade" class="sugestoes-disponibilidade"></div>
+
 </div>
 
 <div class="linha-form">
@@ -489,19 +714,29 @@ let monitoramentoInicializado=false;
 
 const CHAVE_NOTIFICACOES='casasPraiaNotificacoesAtivas';
 
+/* Estado do calendário de sugestões */
+let mesSugestao=new Date();
+let reservasBloqueantesSugestao=[];
+let noitesSugestao=2;
+
 const moeda=v=>'R$ '+Number(v||0).toFixed(2).replace('.',',');
+
 const dataLocal=s=>{
  if(!s)return null;
  const p=s.split('-').map(Number);
  return p.length===3?new Date(p[0],p[1]-1,p[2]):null;
 };
+
 const dataStr=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+
 const dataBr=s=>{
  if(!s)return '';
  const[a,m,d]=s.split('-');
  return `${d}/${m}/${a}`;
 };
+
 const dias=(a,b)=>a&&b?Math.round(Math.abs((b-a)/86400000)):0;
+
 const normalizar=s=>(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
 
 document.addEventListener('DOMContentLoaded',async()=>{
@@ -512,6 +747,7 @@ document.addEventListener('DOMContentLoaded',async()=>{
 });
 
 function abrirLogin(){$('overlayLogin').classList.add('aberto')}
+
 function fecharLogin(){
  $('overlayLogin').classList.remove('aberto');
  $('usuario').value='';
@@ -778,8 +1014,6 @@ function trocarCasaCalendario(){
  renderizarCalendario();
 }
 
-/* CORREÇÃO PRINCIPAL:
-   o banco usa statusPagamento, não status */
 function verificarDiaBloqueado(casa,s){
  return reservasConfirmadas.some(r=>
   ['confirmada','pago'].includes(r.statusPagamento)&&
@@ -789,9 +1023,6 @@ function verificarDiaBloqueado(casa,s){
  );
 }
 
-/* Verificação direta no Firestore.
-   Isso impede reservas duplicadas mesmo se o navegador
-   ainda não tiver atualizado reservasConfirmadas. */
 async function verificarPeriodoBloqueado(casa,a,b,ignorarId=null){
  if(!casa||!a||!b||b<=a)return false;
 
@@ -808,17 +1039,11 @@ async function verificarPeriodoBloqueado(casa,a,b,ignorarId=null){
    if(!['confirmada','pago'].includes(r.statusPagamento))return false;
    if(!r.entrada||!r.saida)return false;
 
-   /* Há conflito quando:
-      início da nova reserva < fim da antiga
-      E
-      fim da nova reserva > início da antiga */
    return a<r.saida&&b>r.entrada;
   });
 
  }catch(e){
   console.error('Erro ao verificar período reservado:',e);
-
-  /* Em caso de erro no Firestore, bloqueia por segurança. */
   return true;
  }
 }
@@ -1020,12 +1245,15 @@ function abrirModalReserva(id){
  $('avisoBloqueio').style.display='none';
  $('btnEnviarReserva').disabled=false;
 
+ ocultarSugestoesDisponibilidade();
+
  atualizarTotalPessoas();
  $('modalReserva').classList.add('aberto');
 }
 
 function fecharModal(){
  $('modalReserva').classList.remove('aberto');
+ ocultarSugestoesDisponibilidade();
  casaSelecionadaParaReserva=null;
 }
 
@@ -1048,17 +1276,336 @@ async function calcularValorDiarias(casa,a,b){
  return{dias:n,valor:total};
 }
 
+/* =========================================================
+   NOVO SISTEMA DE SUGESTÃO DE DATAS
+   ========================================================= */
+
+async function carregarReservasBloqueantesSugestoes(){
+ if(!casaSelecionadaParaReserva)return [];
+
+ try{
+  const snap=await db.collection('reservas')
+   .where('casa','==',casaSelecionadaParaReserva)
+   .get();
+
+  reservasBloqueantesSugestao=snap.docs
+   .map(d=>({id:d.id,...d.data()}))
+   .filter(r=>
+    ['confirmada','pago'].includes(r.statusPagamento)&&
+    r.entrada&&
+    r.saida
+   );
+
+  return reservasBloqueantesSugestao;
+
+ }catch(e){
+  console.error('Erro ao carregar reservas para sugestões:',e);
+  reservasBloqueantesSugestao=[];
+  return [];
+ }
+}
+
+function dataDentroDeReserva(s,reservas=reservasBloqueantesSugestao){
+ return reservas.some(r=>
+  s>=r.entrada&&
+  s<r.saida
+ );
+}
+
+function periodoColideReservas(a,b,reservas=reservasBloqueantesSugestao){
+ return reservas.some(r=>
+  a<r.saida&&
+  b>r.entrada
+ );
+}
+
+function encontrarPeriodosDisponiveis(inicio,noites,reservas,quantidade=5){
+ const encontrados=[];
+ const hoje=new Date();
+ hoje.setHours(0,0,0,0);
+
+ let base=dataLocal(inicio);
+
+ if(!base||base<hoje)base=new Date(hoje);
+
+ for(let i=0;i<370&&encontrados.length<quantidade;i++){
+  const entrada=new Date(base);
+  entrada.setDate(entrada.getDate()+i);
+
+  const saida=new Date(entrada);
+  saida.setDate(saida.getDate()+noites);
+
+  const a=dataStr(entrada);
+  const b=dataStr(saida);
+
+  if(!periodoColideReservas(a,b,reservas)){
+   encontrados.push({
+    entrada:a,
+    saida:b,
+    noites
+   });
+  }
+ }
+
+ return encontrados;
+}
+
+function formatarPeriodoSugestao(p){
+ const a=dataLocal(p.entrada);
+ const b=dataLocal(p.saida);
+
+ const fmt=d=>new Intl.DateTimeFormat('pt-BR',{
+  day:'2-digit',
+  month:'2-digit'
+ }).format(d);
+
+ return `${fmt(a)} → ${fmt(b)}`;
+}
+
+function selecionarPeriodoSugerido(a,b){
+ $('dataEntrada').value=a;
+ $('dataSaida').value=b;
+ mesSugestao=dataLocal(a)||new Date();
+ ocultarSugestoesDisponibilidade();
+ verificarDisponibilidade();
+}
+
+function selecionarDataSugestao(s){
+ const noites=Math.max(1,Number(noitesSugestao||2));
+ const entrada=dataLocal(s);
+
+ if(!entrada)return;
+
+ const saida=new Date(entrada);
+ saida.setDate(saida.getDate()+noites);
+
+ const a=dataStr(entrada);
+ const b=dataStr(saida);
+
+ if(periodoColideReservas(a,b,reservasBloqueantesSugestao)){
+  alert('⚠️ Esta data não permite o período completo solicitado. Escolha uma das datas destacadas em amarelo.');
+  return;
+ }
+
+ selecionarPeriodoSugerido(a,b);
+}
+
+function ocultarSugestoesDisponibilidade(){
+ const el=$('sugestoesDisponibilidade');
+ if(el){
+  el.classList.remove('aberto');
+  el.innerHTML='';
+ }
+}
+
+async function mostrarSugestoesDisponibilidade(mensagem=''){
+ const el=$('sugestoesDisponibilidade');
+ if(!el||!casaSelecionadaParaReserva)return;
+
+ await carregarReservasBloqueantesSugestoes();
+
+ const a=$('dataEntrada').value;
+ const b=$('dataSaida').value;
+
+ let noites=2;
+
+ if(a&&b&&b>a){
+  noites=Math.max(1,dias(dataLocal(a),dataLocal(b)));
+ }else if(a){
+  const atual=dataLocal(a);
+  const saidaAtual=b?dataLocal(b):null;
+
+  if(saidaAtual&&saidaAtual>atual){
+   noites=Math.max(1,dias(atual,saidaAtual));
+  }
+ }
+
+ noitesSugestao=noites;
+
+ const hoje=new Date();
+ hoje.setHours(0,0,0,0);
+
+ if(a){
+  mesSugestao=dataLocal(a)||new Date();
+ }else if(mesSugestao<hoje){
+  mesSugestao=new Date(hoje);
+ }
+
+ await renderizarSugestoesDisponibilidade(mensagem);
+}
+
+async function renderizarSugestoesDisponibilidade(mensagem=''){
+ const el=$('sugestoesDisponibilidade');
+ if(!el||!casaSelecionadaParaReserva)return;
+
+ const y=mesSugestao.getFullYear();
+ const m=mesSugestao.getMonth();
+ const primeiro=new Date(y,m,1);
+ const ultimo=new Date(y,m+1,0);
+ const nomes=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+
+ const entradaAtual=$('dataEntrada').value;
+ const saidaAtual=$('dataSaida').value;
+
+ const sugestoes=encontrarPeriodosDisponiveis(
+  entradaAtual||dataStr(new Date()),
+  noitesSugestao,
+  reservasBloqueantesSugestao,
+  5
+ );
+
+ let h=`
+ <div class="sugestao-titulo">
+  <strong>📅 Encontre outra data disponível</strong>
+  <button class="sugestao-fechar" onclick="ocultarSugestoesDisponibilidade()">×</button>
+ </div>`;
+
+ if(mensagem){
+  h+=`<div class="sugestao-mensagem">⚠️ ${mensagem}</div>`;
+ }
+
+ h+=`
+ <div style="font-size:13px;color:var(--cinza);margin-bottom:10px">
+  Para esta busca, o sistema está procurando períodos de
+  <strong>${noitesSugestao} noite(s)</strong>.
+ </div>
+
+ <div class="sugestao-mes">
+  <button onclick="mudarMesSugestao(-1)">‹</button>
+  <strong>${new Intl.DateTimeFormat('pt-BR',{month:'long',year:'numeric'}).format(mesSugestao)}</strong>
+  <button onclick="mudarMesSugestao(1)">›</button>
+ </div>
+
+ <div class="sugestao-legenda">
+  <span><i class="legenda-livre"></i> Livre</span>
+  <span><i class="legenda-bloqueado"></i> Reservado</span>
+  <span><i class="legenda-sugestao"></i> Período possível</span>
+ </div>
+
+ <div class="sugestao-grade">
+  ${nomes.map(x=>`<div class="sugestao-dia-semana">${x}</div>`).join('')}`;
+
+ for(let i=0;i<primeiro.getDay();i++){
+  h+='<div class="sugestao-dia vazio"></div>';
+ }
+
+ const hojeStr=dataStr(new Date());
+
+ for(let d=1;d<=ultimo.getDate();d++){
+  const dt=new Date(y,m,d);
+  const s=dataStr(dt);
+
+  const passado=dt<new Date(new Date().setHours(0,0,0,0));
+  const ocupado=dataDentroDeReserva(s);
+  const saida=new Date(dt);
+  saida.setDate(saida.getDate()+noitesSugestao);
+  const fim=dataStr(saida);
+
+  const periodoLivre=!passado&&!periodoColideReservas(s,fim,reservasBloqueantesSugestao);
+
+  const ehSelecionado=
+   entradaAtual===s||
+   (entradaAtual&&saidaAtual&&s>=entradaAtual&&s<saidaAtual);
+
+  let classe='sugestao-dia';
+
+  if(ocupado)classe+=' bloqueado';
+  else if(periodoLivre)classe+=' sugestao';
+  else if(!passado)classe+=' livre';
+
+  if(s===hojeStr)classe+=' hoje';
+
+  let onclick='';
+
+  if(periodoLivre){
+   onclick=`onclick="selecionarDataSugestao('${s}')"`;
+  }
+
+  h+=`
+   <div class="${classe}" ${onclick} title="${
+    ocupado?'Data reservada':
+    periodoLivre?'Clique para selecionar este período':
+    passado?'Data passada':
+    'Não há noites suficientes disponíveis a partir desta data'
+   }">
+    ${d}
+   </div>`;
+ }
+
+ h+=`</div>`;
+
+ h+=`
+ <div class="sugestao-periodos">
+  <h4>✨ Próximos períodos completos disponíveis</h4>
+  <div class="lista-periodos-sugeridos">`;
+
+ if(sugestoes.length){
+  h+=sugestoes.map(p=>`
+   <button class="periodo-sugerido" onclick="selecionarPeriodoSugerido('${p.entrada}','${p.saida}')">
+    <strong>📅 ${formatarPeriodoSugestao(p)}</strong>
+    <small>${p.noites} noite(s) — clique para selecionar</small>
+   </button>
+  `).join('');
+ }else{
+  h+=`<div class="sem-periodos">Não foi encontrado um período equivalente disponível nos próximos 12 meses.</div>`;
+ }
+
+ h+=`
+  </div>
+ </div>
+
+ <div class="sugestao-rodape">
+  🔒 Datas em vermelho estão ocupadas por reservas confirmadas ou pagas.
+ </div>`;
+
+ el.innerHTML=h;
+ el.classList.add('aberto');
+}
+
+async function mudarMesSugestao(d){
+ mesSugestao.setMonth(mesSugestao.getMonth()+d);
+ await renderizarSugestoesDisponibilidade();
+}
+
 async function verificarDisponibilidade(){
  const a=$('dataEntrada').value;
  const b=$('dataSaida').value;
  const c=casaSelecionadaParaReserva;
 
- if(!c||!a||!b)return;
+ if(!c){
+  ocultarSugestoesDisponibilidade();
+  return;
+ }
+
+ if(!a&&!b){
+  $('avisoBloqueio').style.display='none';
+  $('btnEnviarReserva').disabled=false;
+  ocultarSugestoesDisponibilidade();
+  return;
+ }
+
+ if(a&&!b){
+  const reservas=await carregarReservasBloqueantesSugestoes();
+
+  if(dataDentroDeReserva(a,reservas)){
+   $('avisoBloqueio').style.display='block';
+   $('avisoBloqueio').textContent='⚠️ Esta data de entrada já está ocupada. Veja abaixo as próximas datas disponíveis.';
+   $('btnEnviarReserva').disabled=true;
+   await mostrarSugestoesDisponibilidade('A data escolhida está ocupada. Selecione uma data disponível no calendário abaixo.');
+  }else{
+   $('avisoBloqueio').style.display='none';
+   $('btnEnviarReserva').disabled=true;
+   ocultarSugestoesDisponibilidade();
+  }
+
+  return;
+ }
 
  if(b<=a){
   $('avisoBloqueio').style.display='block';
   $('avisoBloqueio').textContent='⚠️ A data de saída deve ser posterior à entrada.';
   $('btnEnviarReserva').disabled=true;
+  ocultarSugestoesDisponibilidade();
   return;
  }
 
@@ -1070,7 +1617,12 @@ async function verificarDisponibilidade(){
  $('avisoBloqueio').style.display=bloqueado?'block':'none';
 
  if(bloqueado){
-  $('avisoBloqueio').textContent='⚠️ Este período já possui uma reserva confirmada ou paga para esta casa. Escolha outras datas.';
+  $('avisoBloqueio').textContent='⚠️ Este período já possui uma reserva confirmada ou paga para esta casa. Veja abaixo outras datas disponíveis.';
+  $('btnEnviarReserva').disabled=true;
+  await mostrarSugestoesDisponibilidade('O período escolhido está ocupado. Você pode selecionar uma das alternativas abaixo.');
+ }else{
+  $('btnEnviarReserva').disabled=!x.dias;
+  ocultarSugestoesDisponibilidade();
  }
 
  $('valorDiarias').value=x.dias
@@ -1078,8 +1630,6 @@ async function verificarDisponibilidade(){
  :'';
 
  $('valorEstimado').value=x.dias?moeda(total):'';
-
- $('btnEnviarReserva').disabled=bloqueado||!x.dias;
 }
 
 async function enviarReserva(){
@@ -1100,12 +1650,12 @@ async function enviarReserva(){
   return alert('⚠️ A data de saída deve ser posterior à entrada.');
  }
 
- /* NOVA VERIFICAÇÃO DIRETA NO FIRESTORE */
  const bloqueado=await verificarPeriodoBloqueado(c,a,b);
 
  if(bloqueado){
   $('avisoBloqueio').style.display='block';
   $('avisoBloqueio').textContent='⚠️ Este período já possui uma reserva confirmada ou paga para esta casa. Escolha outras datas.';
+  await mostrarSugestoesDisponibilidade('O período acabou de ser ocupado. Escolha outra data disponível.');
   return;
  }
 
@@ -1364,7 +1914,6 @@ function atualizarListaReservas(){
  }).join('');
 }
 
-/* NOVA GESTÃO DE RESERVA */
 function abrirEditarReserva(id){
  const r=reservasConfirmadas.find(x=>x.id===id);
  if(!r)return;
@@ -1590,7 +2139,6 @@ async function salvarEdicao(id){
   return alert('⚠️ Datas inválidas.');
  }
 
- /* Verifica conflito ignorando a própria reserva */
  const bloqueado=await verificarPeriodoBloqueado(
   r.casa,
   entrada,
@@ -1608,7 +2156,6 @@ async function salvarEdicao(id){
  const taxa=Number(casas[r.casa]?.taxaLimpeza||0);
  const pago=Number($('editPago').value||0);
 
- /* Agora o total pode ser editado manualmente */
  const total=Number($('editTotal').value||0);
 
  if(total<0){
