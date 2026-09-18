@@ -2227,10 +2227,11 @@ const firebaseConfig={
 
 // UID autorizado para o painel administrativo. A senha NÃO fica armazenada no HTML.
 const ADMIN_UID='KycYQuRxLWPxB7rDIe7x6sKvve';
-const auth=firebase.auth();
 
+// Primeiro inicializamos o Firebase; somente depois acessamos Authentication e Firestore.
 firebase.initializeApp(firebaseConfig);
 
+const auth=firebase.auth();
 const db=firebase.firestore();
 
 /* =====================================================
