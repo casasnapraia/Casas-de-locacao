@@ -1,6 +1,29 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-...
+<head>
+ <meta charset="UTF-8">
+ <title>Gestão - Casas na Praia</title>
+</head>
+<body>
+
+<script>
+/* =====================================================
+   IMPRESSÃO E ENVIO DE RECIBO
+===================================================== */
+
+function gerarReciboHTML(r, nome, pago, pagoExtenso, casa, noites, total, pendente, pendenteExtenso, dataEmissao) {
+ const janela = window.open('', '_blank');
+ 
+ const textoWhatsApp = encodeURIComponent(
+  `*RECIBO DE PAGAMENTO - CASAS NA PRAIA*\n\n` +
+  `Hóspede: ${nome}\n` +
+  `Acomodação: ${casa}\n` +
+  `Período: ${dataBr(r.entrada)} a ${dataBr(r.saida)} (${noites} diárias)\n` +
+  `Valor Pago: ${moeda(pago)}\n` +
+  `Saldo Pendente: ${moeda(pendente)}\n\n` +
+  `Obrigado pela preferência! 🏖️`
+ );
+
  janela.document.write(`
   <!DOCTYPE html>
   <html lang="pt-BR">
@@ -8,98 +31,23 @@
    <meta charset="UTF-8">
    <title>Recibo de Pagamento - ${nome}</title>
    <style>
-    body {
-     font-family: 'Segoe UI', Arial, sans-serif;
-     background-color: #f4f6f8;
-     margin: 0;
-     padding: 20px;
-     color: #2c3e50;
-    }
-    .recibo-container {
-     max-width: 700px;
-     margin: 0 auto;
-     background: #fff;
-     padding: 35px;
-     border-radius: 12px;
-     box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-     border: 1px solid #e1e8ed;
-    }
-    .recibo-cabecalho {
-     text-align: center;
-     border-bottom: 2px solid #0a4b6e;
-     padding-bottom: 15px;
-     margin-bottom: 25px;
-    }
-    .recibo-cabecalho h1 {
-     margin: 0;
-     color: #0a4b6e;
-     font-size: 26px;
-    }
-    .recibo-cabecalho p {
-     margin: 5px 0 0;
-     color: #7f8c8d;
-     font-size: 14px;
-    }
-    .recibo-numero {
-     float: right;
-     font-size: 14px;
-     font-weight: bold;
-     color: #17a2b8;
-    }
-    .recibo-corpo {
-     font-size: 15px;
-     line-height: 1.8;
-     margin-bottom: 25px;
-    }
-    .recibo-valor-box {
-     background: #e8f5e9;
-     border-left: 5px solid #28a745;
-     padding: 15px;
-     margin: 20px 0;
-     border-radius: 4px;
-    }
-    .recibo-valor-box strong {
-     font-size: 20px;
-     color: #155724;
-    }
-    .detalhes-tabela {
-     width: 100%;
-     border-collapse: collapse;
-     margin: 20px 0;
-    }
-    .detalhes-tabela th, .detalhes-tabela td {
-     padding: 10px;
-     border-bottom: 1px solid #eee;
-     text-align: left;
-    }
-    .detalhes-tabela th {
-     background-color: #f8fafb;
-     color: #0a4b6e;
-    }
-    .recibo-rodape {
-     margin-top: 40px;
-     padding-top: 20px;
-     border-top: 1px solid #eee;
-     text-align: center;
-    }
-    .assinatura-linha {
-     width: 250px;
-     border-top: 1px solid #2c3e50;
-     margin: 50px auto 10px auto;
-    }
-    .botoes-impressao {
-     text-align: center;
-     margin-top: 25px;
-    }
-    .btn-imprimir {
-     background: #0a4b6e;
-     color: #fff;
-     border: 0;
-     padding: 12px 25px;
-     border-radius: 6px;
-     font-size: 15px;
-     cursor: pointer;
-    }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f4f6f8; margin: 0; padding: 20px; color: #2c3e50; }
+    .recibo-container { max-width: 700px; margin: 0 auto; background: #fff; padding: 35px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border: 1px solid #e1e8ed; }
+    .recibo-cabecalho { text-align: center; border-bottom: 2px solid #0a4b6e; padding-bottom: 15px; margin-bottom: 25px; }
+    .recibo-cabecalho h1 { margin: 0; color: #0a4b6e; font-size: 26px; }
+    .recibo-cabecalho p { margin: 5px 0 0; color: #7f8c8d; font-size: 14px; }
+    .recibo-numero { float: right; font-size: 14px; font-weight: bold; color: #17a2b8; }
+    .recibo-corpo { font-size: 15px; line-height: 1.8; margin-bottom: 25px; }
+    .recibo-valor-box { background: #e8f5e9; border-left: 5px solid #28a745; padding: 15px; margin: 20px 0; border-radius: 4px; }
+    .recibo-valor-box strong { font-size: 20px; color: #155724; }
+    .detalhes-tabela { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    .detalhes-tabela th, .detalhes-tabela td { padding: 10px; border-bottom: 1px solid #eee; text-align: left; }
+    .detalhes-tabela th { background-color: #f8fafb; color: #0a4b6e; }
+    .recibo-rodape { margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; text-align: center; }
+    .assinatura-linha { width: 250px; border-top: 1px solid #2c3e50; margin: 50px auto 10px auto; }
+    .botoes-impressao { text-align: center; margin-top: 25px; display: flex; gap: 10px; justify-content: center; }
+    .btn-imprimir { background: #0a4b6e; color: #fff; border: 0; padding: 12px 20px; border-radius: 6px; font-size: 15px; cursor: pointer; }
+    .btn-whats { background: #25d366; color: #fff; text-decoration: none; padding: 12px 20px; border-radius: 6px; font-size: 15px; font-weight: bold; display: inline-block; }
     @media print {
      body { background: #fff; padding: 0; }
      .recibo-container { box-shadow: none; border: none; width: 100%; }
@@ -153,6 +101,7 @@
 
     <div class="botoes-impressao">
      <button class="btn-imprimir" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button>
+     <a href="https://wa.me/55${(r.telefone||'').replace(/\D/g,'')}?text=${textoWhatsApp}" target="_blank" class="btn-whats">📲 Enviar no WhatsApp</a>
     </div>
    </div>
   </body>
@@ -168,14 +117,11 @@
 ===================================================== */
 
 function abrirEditarReserva(id){
-
  const r=reservasConfirmadas.find(x=>x.id===id);
-
  if(!r) return alert('❌ Reserva não encontrada.');
 
  const total=Number(r.valorTotal||0);
  const pago=Number(r.valorPago||0);
- const pendente=Math.max(0, total-pago);
 
  const h=`
   <div class="grupo-input">
@@ -231,8 +177,8 @@ function abrirEditarReserva(id){
   </div>
 
   <div class="linha-form" style="margin-top:20px">
-   <button class="sucesso" onclick="salvarEdicaoReserva('${r.id}')">💾 Salvar Alterações</button>
-   <button class="vermelho" onclick="excluirReserva('${r.id}')">🗑️ Excluir Reserva</button>
+   <button id="btnSalvarReserva" class="sucesso" onclick="salvarEdicaoReserva('${r.id}')">💾 Salvar Alterações</button>
+   <button id="btnExcluirReserva" class="vermelho" onclick="excluirReserva('${r.id}')">🗑️ Excluir Reserva</button>
   </div>
  `;
 
@@ -247,6 +193,8 @@ function fecharModalEditar(){
 
 
 async function salvarEdicaoReserva(id){
+ const btn = $('btnSalvarReserva');
+ if (btn) { btn.disabled = true; btn.innerText = '⏳ Salvando...'; }
 
  const status=$('editStatus').value;
  const pago=Number($('editValorPago').value||0);
@@ -265,7 +213,6 @@ async function salvarEdicaoReserva(id){
  }
 
  try{
-
   await db.collection('reservas').doc(id).update({
    statusPagamento: novoStatus,
    valorPago: pago,
@@ -280,18 +227,18 @@ async function salvarEdicaoReserva(id){
 
   fecharModalEditar();
   alert('✅ Reserva atualizada!');
-
  }catch(e){
   console.error(e);
   alert('❌ Erro ao atualizar reserva.');
+ } finally {
+  if (btn) { btn.disabled = false; btn.innerText = '💾 Salvar Alterações'; }
  }
 }
 
 
 async function aplicarAjusteReserva(id, tipo){
-
  const val=Number($('valAjuste').value||0);
- if(!val || val<=0) return alert('Informe um valor válido para o ajuste.');
+ if(!val || val<=0) return alert('Informe um valor positivo válido para o ajuste.');
 
  const r=reservasConfirmadas.find(x=>x.id===id);
  if(!r) return;
@@ -319,7 +266,6 @@ async function aplicarAjusteReserva(id, tipo){
   await carregarReservasConfirmadas();
   abrirEditarReserva(id);
   atualizarListaReservas();
-
  }catch(e){
   console.error(e);
   alert('❌ Erro ao aplicar ajuste.');
@@ -328,8 +274,10 @@ async function aplicarAjusteReserva(id, tipo){
 
 
 async function excluirReserva(id){
-
  if(!confirm('⚠️ Tem certeza que deseja excluir esta reserva permanentemente?')) return;
+
+ const btn = $('btnExcluirReserva');
+ if (btn) { btn.disabled = true; btn.innerText = '⏳ Excluindo...'; }
 
  try{
   await db.collection('reservas').doc(id).delete();
@@ -341,10 +289,11 @@ async function excluirReserva(id){
 
   fecharModalEditar();
   alert('🗑️ Reserva excluída!');
-
  }catch(e){
   console.error(e);
   alert('❌ Erro ao excluir reserva.');
+ } finally {
+  if (btn) { btn.disabled = false; btn.innerText = '🗑️ Excluir Reserva'; }
  }
 }
 
@@ -373,7 +322,6 @@ function calcularValorDiariasLocal(casa, a, b){
 
 
 function calcularValorFinalReserva(dias, valorDiarias, taxaLimpeza){
-
  let percDesconto=0;
 
  if(dias>=10) percDesconto=10;
@@ -391,7 +339,7 @@ function calcularValorFinalReserva(dias, valorDiarias, taxaLimpeza){
 
 
 /* =====================================================
-   GERENCIAMENTO DE HÓSPEDES
+   GERENCIAMENTO DE HÓSPEDES (OTIMIZADO)
 ===================================================== */
 
 async function carregarHospedes(){
@@ -405,28 +353,41 @@ async function carregarHospedes(){
 }
 
 
-async function cadastrarOuAtualizarHospede(nome, telefone){
- if(!nome || !telefone) return;
+async function sincronizarHospedesReservas(){
+ if(!reservasConfirmadas.length) return alert('Nenhuma reserva para sincronizar.');
+ 
+ const batch = db.batch();
+ let novosCount = 0;
 
- const normTel=telefone.replace(/\D/g,'');
- const existente=hospedesCadastrados.find(x=>(x.telefone||'').replace(/\D/g,'')===normTel);
+ for(const r of reservasConfirmadas){
+  if(r.nome && r.telefone){
+   const normTel = r.telefone.replace(/\D/g,'');
+   const existente = hospedesCadastrados.find(x=>(x.telefone||'').replace(/\D/g,'')===normTel);
 
- try{
-  if(existente){
-   await db.collection('hospedes').doc(existente.id).update({
-    nome: nome,
-    ultimoAcesso: firebase.firestore.FieldValue.serverTimestamp()
-   });
-  } else {
-   await db.collection('hospedes').add({
-    nome: nome,
-    telefone: telefone,
-    criadoEm: firebase.firestore.FieldValue.serverTimestamp()
-   });
+   if(!existente){
+    const docRef = db.collection('hospedes').doc();
+    batch.set(docRef, {
+     nome: r.nome,
+     telefone: r.telefone,
+     criadoEm: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    novosCount++;
+   }
   }
-  await carregarHospedes();
- }catch(e){
-  console.error('Erro ao salvar hóspede:', e);
+ }
+
+ try {
+  if(novosCount > 0){
+   await batch.commit();
+   await carregarHospedes();
+   filtrarHospedes();
+   alert(`🔄 Sincronização concluída! ${novosCount} novo(s) hóspede(s) adicionado(s).`);
+  } else {
+   alert('ℹ️ Todos os hóspedes das reservas já estão cadastrados.');
+  }
+ } catch(e) {
+  console.error('Erro ao sincronizar em lote:', e);
+  alert('❌ Ocorreu um erro ao sincronizar os hóspedes.');
  }
 }
 
@@ -473,44 +434,13 @@ function filtrarHospedes(){
 }
 
 
-function abrirCadastroHospede(){
- const nome=prompt('Nome do Hóspede:');
- if(!nome) return;
- const tel=prompt('Telefone / WhatsApp:');
- if(!tel) return;
-
- cadastrarOuAtualizarHospede(nome, tel).then(()=>{
-  filtrarHospedes();
-  alert('✅ Hóspede cadastrado!');
- });
-}
-
-
-async function sincronizarHospedesReservas(){
- for(const r of reservasConfirmadas){
-  if(r.nome && r.telefone){
-   await cadastrarOuAtualizarHospede(r.nome, r.telefone);
-  }
- }
- filtrarHospedes();
- alert('🔄 Hóspedes sincronizados com as reservas!');
-}
-
-
 /* =====================================================
-   RELATÓRIOS
+   RELATÓRIOS E EXPORTAÇÃO CSV
 ===================================================== */
 
-function limparFiltrosRelatorio(){
- $('filtroCasaRelatorio').value='todas';$('filtroPeriodoRelatorio').value='todos';
- $('filtroStatusRelatorio').value='todos';$('filtroHospedeRelatorio').value='';
- $('relatorioDataInicial').value='';$('relatorioDataFinal').value='';
- gerarRelatorio();
-}
-
+let ultimasReservasFiltradas = [];
 
 function gerarRelatorio(){
-
  const container=$('relatorioConteudo');
  if(!container) return;
 
@@ -523,14 +453,8 @@ function gerarRelatorio(){
 
  let filtradas=[...reservasConfirmadas];
 
- if(fCasa!=='todas'){
-  filtradas=filtradas.filter(r=>r.casa===fCasa);
- }
-
- if(fStatus!=='todos'){
-  filtradas=filtradas.filter(r=>r.statusPagamento===fStatus);
- }
-
+ if(fCasa!=='todas') filtradas=filtradas.filter(r=>r.casa===fCasa);
+ if(fStatus!=='todos') filtradas=filtradas.filter(r=>r.statusPagamento===fStatus);
  if(fHospede){
   filtradas=filtradas.filter(r=>
    normalizar(r.nome).includes(fHospede) || normalizar(r.telefone).includes(fHospede)
@@ -552,9 +476,9 @@ function gerarRelatorio(){
   filtradas=filtradas.filter(r=>r.entrada>=dIni && r.saida<=dFim);
  }
 
- let totalFaturado=0;
- let totalPago=0;
- let totalPendente=0;
+ ultimasReservasFiltradas = filtradas;
+
+ let totalFaturado=0, totalPago=0, totalPendente=0;
 
  filtradas.forEach(r=>{
   const t=Number(r.valorTotal||0);
@@ -565,6 +489,12 @@ function gerarRelatorio(){
  });
 
  container.innerHTML=`
+  <div style="text-align:right; margin-bottom:15px;">
+   <button onclick="exportarRelatorioCSV()" style="background:#28a745; color:#fff; border:none; padding:8px 15px; border-radius:4px; cursor:pointer; font-weight:bold;">
+    📊 Exportar Excel / CSV
+   </button>
+  </div>
+
   <div class="relatorio-resumo">
    <div class="resumo-card">
     <small>Total de Reservas</small>
@@ -615,6 +545,30 @@ function gerarRelatorio(){
    </tbody>
   </table>
  `;
+}
+
+
+function exportarRelatorioCSV(){
+ if(!ultimasReservasFiltradas.length) return alert('Nenhum dado para exportar.');
+
+ let csv = 'Casa;Hospede;Telefone;Entrada;Saida;Status;Total;Pago;Pendente\n';
+
+ ultimasReservasFiltradas.forEach(r=>{
+  const t=Number(r.valorTotal||0);
+  const p=Number(r.valorPago||0);
+  const pend=Math.max(0, t-p);
+
+  csv += `"${casas[r.casa]?.nome||r.casa}";"${r.nome}";"${r.telefone}";"${dataBr(r.entrada)}";"${dataBr(r.saida)}";"${r.statusPagamento}";"${t.toFixed(2)}";"${p.toFixed(2)}";"${pend.toFixed(2)}"\n`;
+ });
+
+ const blob = new Blob(["\ufeff" + csv], { type: 'text/csv;charset=utf-8;' });
+ const url = URL.createObjectURL(blob);
+ const link = document.createElement("a");
+ link.setAttribute("href", url);
+ link.setAttribute("download", `relatorio_reservas_${dataStr(hoje())}.csv`);
+ document.body.appendChild(link);
+ link.click();
+ document.body.removeChild(link);
 }
 
 </script>
