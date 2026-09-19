@@ -1204,6 +1204,97 @@ textarea{
 }
 
 
+
+/* =========================
+   DESPESAS / CAIXA
+========================= */
+.painel-despesas{
+ background:#f7fafb;
+ border:1px solid #e2eaee;
+ border-radius:12px;
+ padding:16px;
+ margin:15px 0;
+}
+.despesas-form-grid{
+ display:grid;
+ grid-template-columns:repeat(4,minmax(0,1fr));
+ gap:10px;
+}
+.despesas-form-grid .grupo-input{margin:0}
+.despesas-acoes,.despesas-relatorio-acoes{
+ display:flex;
+ flex-wrap:wrap;
+ gap:8px;
+ margin-top:12px;
+}
+.despesas-resumo{
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:10px;
+ margin:15px 0;
+}
+.despesa-badge{
+ display:inline-block;
+ padding:3px 7px;
+ border-radius:999px;
+ background:#eef6fa;
+ color:var(--marinho);
+ font-size:11px;
+ font-weight:600;
+}
+.paginacao-admin{
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ flex-wrap:wrap;
+ gap:8px;
+ margin:14px 0;
+}
+.paginacao-admin button{
+ border:1px solid #ccd8de;
+ background:#fff;
+ color:var(--marinho);
+ padding:7px 11px;
+ border-radius:6px;
+}
+.paginacao-admin button.ativo{background:var(--marinho)!important;color:#fff!important}
+.paginacao-admin span{color:var(--cinza);font-size:13px}
+.tabela-admin-compacta{
+ width:100%;
+ border-collapse:collapse;
+ margin-top:12px;
+ font-size:13px;
+ background:#fff;
+}
+.tabela-admin-compacta th,.tabela-admin-compacta td{
+ border-bottom:1px solid #e4eaed;
+ padding:8px 7px;
+ text-align:left;
+ vertical-align:top;
+}
+.tabela-admin-compacta th{background:#f0f6f8;color:var(--marinho)}
+.despesa-valor{font-weight:700;white-space:nowrap}
+.despesa-acoes button{margin:2px;padding:5px 8px;font-size:12px}
+.print-cabecalho{display:none}
+@media print{
+ .print-cabecalho{display:block!important;text-align:center;margin-bottom:18px;border-bottom:2px solid #0a4b6e;padding-bottom:12px}
+ .print-cabecalho h1{font-size:20px;margin:0;color:#0a4b6e}
+ .print-cabecalho p{font-size:11px;margin:4px 0;color:#555}
+ #relatorioConteudo .relatorio-resumo{grid-template-columns:repeat(5,1fr)!important;box-shadow:none!important}
+ #relatorioConteudo .resumo-card{box-shadow:none;border:1px solid #bbb;padding:8px}
+ #relatorioConteudo .resumo-card strong{font-size:14px}
+ #relatorioConteudo .tabela-relatorio{font-size:9px!important}
+ #relatorioConteudo .tabela-relatorio th{background:#e9eef0!important;color:#111!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+@media(max-width:1000px){
+ .despesas-form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .despesas-resumo{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:600px){
+ .despesas-form-grid{grid-template-columns:1fr}
+ .despesas-resumo{grid-template-columns:1fr}
+}
+
 /* =========================
    RELATÓRIOS
 ========================= */
@@ -1702,6 +1793,11 @@ textarea{
    📊 Relatórios
   </button>
 
+  <button class="item-menu"
+   data-pagina="despesas">
+   💸 Despesas / Caixa
+  </button>
+
  </div>
 
  <button id="btnNotificacoes"
@@ -1852,7 +1948,7 @@ textarea{
 
   <input id="buscarHospede"
    placeholder="Buscar nome, telefone, CPF ou e-mail..."
-   oninput="filtrarHospedes()">
+   oninput="paginaHospedesAtual=1;filtrarHospedes(1)">
 
   <button class="azul"
    onclick="abrirCadastroHospede()">
@@ -1867,6 +1963,7 @@ textarea{
  </div>
 
  <div id="listaHospedes"></div>
+ <div id="paginacaoHospedes" class="paginacao-admin"></div>
 
 </div>
 
@@ -1989,6 +2086,142 @@ textarea{
 
 
 <!-- =====================================================
+     DESPESAS / CAIXA
+===================================================== -->
+
+<div id="pagina-despesas" class="pagina">
+
+ <h2>💸 Controle de Despesas e Caixa</h2>
+ <p style="color:var(--cinza);margin:8px 0 14px">
+  Registre os gastos de cada propriedade e acompanhe os pagamentos por categoria, forma de pagamento e destino.
+ </p>
+
+ <div class="painel-despesas">
+  <h3>➕ Novo lançamento de despesa</h3>
+  <div class="despesas-form-grid" style="margin-top:12px">
+   <div class="grupo-input">
+    <label>Data *</label>
+    <input type="date" id="despesaData">
+   </div>
+   <div class="grupo-input">
+    <label>Casa / propriedade *</label>
+    <select id="despesaCasa">
+     <option value="amarela">Casa Amarela</option>
+     <option value="bege">Casa Bege</option>
+     <option value="marrom">Casa Marrom</option>
+     <option value="branca">Casa Branca</option>
+    </select>
+   </div>
+   <div class="grupo-input">
+    <label>Categoria *</label>
+    <select id="despesaCategoria">
+     <option value="agua">Água</option>
+     <option value="energia">Energia</option>
+     <option value="internet">Internet</option>
+     <option value="limpeza">Pagamento de limpeza</option>
+     <option value="manutencao">Manutenção</option>
+     <option value="gas">Gás</option>
+     <option value="impostos">Impostos / taxas</option>
+     <option value="materiais">Materiais / compras</option>
+     <option value="outros">Outros</option>
+    </select>
+   </div>
+   <div class="grupo-input">
+    <label>Valor *</label>
+    <input type="number" id="despesaValor" min="0" step="0.01" placeholder="0,00">
+   </div>
+   <div class="grupo-input">
+    <label>Forma de pagamento *</label>
+    <select id="despesaFormaPagamento">
+     <option value="Pix">Pix</option>
+     <option value="Dinheiro">Dinheiro</option>
+     <option value="Cartão">Cartão</option>
+     <option value="Boleto">Boleto</option>
+     <option value="Transferência bancária">Transferência bancária</option>
+    </select>
+   </div>
+   <div class="grupo-input">
+    <label>Caixa / conta de origem</label>
+    <select id="despesaContaOrigem">
+     <option value="Caixa Casa Amarela">Caixa Casa Amarela</option>
+     <option value="Caixa Casa Bege">Caixa Casa Bege</option>
+     <option value="Caixa Casa Marrom">Caixa Casa Marrom</option>
+     <option value="Caixa Casa Branca">Caixa Casa Branca</option>
+     <option value="Caixa Geral">Caixa Geral</option>
+     <option value="Conta bancária">Conta bancária</option>
+    </select>
+   </div>
+   <div class="grupo-input" style="grid-column:span 2">
+    <label>Descrição</label>
+    <input id="despesaDescricao" placeholder="Ex.: conta de energia de setembro">
+   </div>
+   <div class="grupo-input" style="grid-column:1/-1">
+    <label>Observação</label>
+    <textarea id="despesaObservacao" rows="2" placeholder="Informações adicionais..."></textarea>
+   </div>
+  </div>
+  <div class="despesas-acoes">
+   <button class="sucesso" onclick="salvarDespesa()">💾 Lançar despesa</button>
+   <button class="cinza" onclick="limparFormularioDespesa()">✖ Limpar</button>
+  </div>
+ </div>
+
+ <div class="painel-despesas">
+  <h3>🔎 Filtros e relatório de despesas</h3>
+  <div class="despesas-form-grid" style="margin-top:12px">
+   <div class="grupo-input">
+    <label>Casa</label>
+    <select id="filtroDespesaCasa" onchange="gerarRelatorioDespesas()">
+     <option value="todas">Todas</option>
+     <option value="amarela">Casa Amarela</option>
+     <option value="bege">Casa Bege</option>
+     <option value="marrom">Casa Marrom</option>
+     <option value="branca">Casa Branca</option>
+    </select>
+   </div>
+   <div class="grupo-input">
+    <label>Categoria</label>
+    <select id="filtroDespesaCategoria" onchange="gerarRelatorioDespesas()">
+     <option value="todas">Todas</option>
+     <option value="agua">Água</option><option value="energia">Energia</option><option value="internet">Internet</option>
+     <option value="limpeza">Limpeza</option><option value="manutencao">Manutenção</option><option value="gas">Gás</option>
+     <option value="impostos">Impostos / taxas</option><option value="materiais">Materiais / compras</option><option value="outros">Outros</option>
+    </select>
+   </div>
+   <div class="grupo-input">
+    <label>Forma de pagamento</label>
+    <select id="filtroDespesaPagamento" onchange="gerarRelatorioDespesas()">
+     <option value="todas">Todas</option><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Boleto</option><option>Transferência bancária</option>
+    </select>
+   </div>
+   <div class="grupo-input">
+    <label>Conta / caixa</label>
+    <select id="filtroDespesaConta" onchange="gerarRelatorioDespesas()">
+     <option value="todas">Todas</option><option>Caixa Casa Amarela</option><option>Caixa Casa Bege</option><option>Caixa Casa Marrom</option><option>Caixa Casa Branca</option><option>Caixa Geral</option><option>Conta bancária</option>
+    </select>
+   </div>
+   <div class="grupo-input">
+    <label>Data inicial</label><input type="date" id="filtroDespesaDataInicial" onchange="gerarRelatorioDespesas()">
+   </div>
+   <div class="grupo-input">
+    <label>Data final</label><input type="date" id="filtroDespesaDataFinal" onchange="gerarRelatorioDespesas()">
+   </div>
+  </div>
+  <div class="despesas-relatorio-acoes">
+   <button class="btn-verde" onclick="exportarDespesasCSV()">📊 Exportar CSV</button>
+   <button class="cinza" onclick="imprimirRelatorioDespesas()">🖨️ Imprimir / PDF</button>
+   <button class="vermelho" onclick="limparFiltrosDespesas()">✖ Limpar filtros</button>
+  </div>
+ </div>
+
+ <div id="despesasResumo" class="despesas-resumo"></div>
+ <div id="listaDespesas"></div>
+ <div id="paginacaoDespesas" class="paginacao-admin"></div>
+
+</div>
+
+
+<!-- =====================================================
      RELATÓRIOS
 ===================================================== -->
 
@@ -2060,6 +2293,20 @@ textarea{
 
   </div>
 
+
+  <div>
+   <label>Forma de recebimento</label>
+   <select id="filtroFormaPagamentoRelatorio" onchange="gerarRelatorio()">
+    <option value="todos">Todas</option><option>Pix</option><option>Dinheiro</option><option>Cartão</option>
+   </select>
+  </div>
+
+  <div>
+   <label>Conta / caixa destino</label>
+   <select id="filtroContaDestinoRelatorio" onchange="gerarRelatorio()">
+    <option value="todos">Todas</option><option>Caixa Casa Amarela</option><option>Caixa Casa Bege</option><option>Caixa Casa Marrom</option><option>Caixa Casa Branca</option><option>Caixa Geral</option><option>Conta bancária</option>
+   </select>
+  </div>
 
   <div>
    <label>Data inicial</label>
@@ -2550,6 +2797,12 @@ let dataAtual=new Date();
 let valoresDiarias={};
 let reservasConfirmadas=[];
 let hospedesCadastrados=[];
+let paginaHospedesAtual=1;
+const HOSPEDES_POR_PAGINA=20;
+let despesasCadastradas=[];
+let paginaDespesasAtual=1;
+const DESPESAS_POR_PAGINA=15;
+let ultimasDespesasFiltradas=[];
 
 // Últimas reservas exibidas no relatório, usadas pela exportação CSV.
 let ultimasReservasFiltradas=[];
@@ -2984,6 +3237,7 @@ async function inicializarPainel(){
    carregarValoresDiarias(),
    carregarReservasConfirmadas(),
    carregarHospedes(),
+   carregarDespesas(),
    carregarDadosCasas()
   ]);
 
@@ -2994,6 +3248,8 @@ async function inicializarPainel(){
   renderizarCasasAdmin();
   atualizarListaReservas();
   gerarRelatorio();
+  limparFormularioDespesa();
+  gerarRelatorioDespesas();
 
  }catch(e){
 
@@ -3220,6 +3476,9 @@ function configurarNavegacao(){
 
     if(b.dataset.pagina==='relatorios')
      gerarRelatorio();
+
+    if(b.dataset.pagina==='despesas')
+     gerarRelatorioDespesas();
 
    };
 
@@ -5419,6 +5678,8 @@ function atualizarListaReservas(){
         <td>
          <span class="status-badge badge-status-${status}">${escapeHtmlReserva(statusTexto[status]||status)}</span>
          <small style="display:block;color:var(--cinza)">Pago: ${moeda(pago)} · Saldo: ${moeda(pendente)}</small>
+         ${r.formaPagamento?`<small style="display:block;color:var(--cinza)">💳 ${escapeHtmlReserva(r.formaPagamento)}</small>`:''}
+         ${r.contaDestino?`<small style="display:block;color:var(--cinza)">🏦 ${escapeHtmlReserva(r.contaDestino)}</small>`:''}
         </td>
         <td><strong>${moeda(total)}</strong></td>
         <td><span class="badge-situacao ${situacaoClasse}">${situacaoTexto}</span></td>
@@ -5695,24 +5956,12 @@ function emitirRecibo(id){
  const pendenteExtenso=
   valorPorExtenso(pendente);
 
- const desconto=
-  Number(r.desconto||0);
-
- const valorDiarias=
-  Number(r.valorDiarias||0);
-
- const taxaLimpeza=
-  Number(r.taxaLimpeza||0);
-
  const textoWhatsApp=encodeURIComponent(
   `*RECIBO DE PAGAMENTO - CASAS NA PRAIA*\n\n`+
   `Hóspede: ${nome}\n`+
   `Acomodação: ${casa}\n`+
   `Origem da reserva: ${r.origemReserva||'Não informada'}\n`+
   `Período: ${dataBr(r.entrada)} a ${dataBr(r.saida)} (${noites} diárias)\n`+
-  `Valor das diárias: ${moeda(valorDiarias)}\n`+
-  `Desconto: ${moeda(desconto)}\n`+
-  `Taxa de limpeza: ${moeda(taxaLimpeza)}\n`+
   `Valor total da reserva: ${moeda(total)}\n`+
   `Valor Pago: ${moeda(pago)}\n`+
   `Saldo Pendente: ${moeda(pendente)}\n\n`+
@@ -5989,6 +6238,28 @@ body{
 
   <div class="linha">
 
+   <span>Forma de recebimento</span>
+
+   <strong>
+    ${r.formaPagamento||'Não informada'}
+   </strong>
+
+  </div>
+
+
+  <div class="linha">
+
+   <span>Caixa / conta de destino</span>
+
+   <strong>
+    ${r.contaDestino||'Não informado'}
+   </strong>
+
+  </div>
+
+
+  <div class="linha">
+
    <span>Período</span>
 
    <strong>
@@ -6010,36 +6281,6 @@ body{
 
   </div>
 
-
-  <div class="linha">
-
-   <span>Valor das diárias</span>
-
-   <strong>
-    ${moeda(valorDiarias)}
-   </strong>
-
-  </div>
-
-  <div class="linha">
-
-   <span>Desconto</span>
-
-   <strong>
-    - ${moeda(desconto)}
-   </strong>
-
-  </div>
-
-  <div class="linha">
-
-   <span>Taxa de limpeza</span>
-
-   <strong>
-    ${moeda(taxaLimpeza)}
-   </strong>
-
-  </div>
 
   <div class="linha">
 
@@ -6210,6 +6451,34 @@ function abrirEditarReserva(id){
     <option value="Telefone">Telefone</option>
     <option value="Outro">Outro</option>
    </select>
+
+  </div>
+
+
+  <div class="linha-form">
+
+   <div class="grupo-input">
+    <label>Forma de recebimento</label>
+    <select id="editFormaPagamento">
+     <option value="">Não informada</option>
+     <option value="Pix">Pix</option>
+     <option value="Dinheiro">Dinheiro</option>
+     <option value="Cartão">Cartão</option>
+    </select>
+   </div>
+
+   <div class="grupo-input">
+    <label>Caixa / conta de destino</label>
+    <select id="editContaDestino">
+     <option value="">Não informado</option>
+     <option value="Caixa Casa Amarela">Caixa Casa Amarela</option>
+     <option value="Caixa Casa Bege">Caixa Casa Bege</option>
+     <option value="Caixa Casa Marrom">Caixa Casa Marrom</option>
+     <option value="Caixa Casa Branca">Caixa Casa Branca</option>
+     <option value="Caixa Geral">Caixa Geral</option>
+     <option value="Conta bancária">Conta bancária</option>
+    </select>
+   </div>
 
   </div>
 
@@ -6462,6 +6731,11 @@ function abrirEditarReserva(id){
  if($('editOrigem'))
   $('editOrigem').value=r.origemReserva||'';
 
+ if($('editFormaPagamento'))
+  $('editFormaPagamento').value=r.formaPagamento||'';
+
+ if($('editContaDestino'))
+  $('editContaDestino').value=r.contaDestino||'';
 
  atualizarResumoEdicao();
 
@@ -6904,6 +7178,12 @@ async function salvarEdicao(id){
     origemReserva:
      $('editOrigem')?.value||'',
 
+    formaPagamento:
+     $('editFormaPagamento')?.value||'',
+
+    contaDestino:
+     $('editContaDestino')?.value||'',
+
     entrada,
     saida,
 
@@ -7043,6 +7323,12 @@ function limparFiltrosRelatorio(){
  $('filtroHospedeRelatorio')
   .value='';
 
+ $('filtroFormaPagamentoRelatorio')
+  .value='todos';
+
+ $('filtroContaDestinoRelatorio')
+  .value='todos';
+
  $('relatorioDataInicial')
   .value='';
 
@@ -7079,6 +7365,12 @@ function obterReservasRelatorio(){
     ?.value||''
   );
 
+ const formaPagamento=
+  $('filtroFormaPagamentoRelatorio')?.value||'todos';
+
+ const contaDestino=
+  $('filtroContaDestinoRelatorio')?.value||'todos';
+
 
  if(casa!=='todas')
   arr=arr.filter(
@@ -7087,11 +7379,22 @@ function obterReservasRelatorio(){
 
 
  if(status!=='todos')
-  arr=arr.filter(
-   r=>
-    r.statusPagamento===
-    status
-  );
+  arr=arr.filter(r=>{
+   const st=r.statusPagamento||'pendente';
+   const pago=Number(r.valorPago||0);
+   const total=Number(r.valorTotal||0);
+   if(status==='parcial')
+    return st==='parcial' || (pago>0 && pago<total);
+   if(status==='pago')
+    return st==='pago' || (total>0 && pago>=total);
+   return st===status;
+  });
+
+ if(formaPagamento!=='todos')
+  arr=arr.filter(r=>r.formaPagamento===formaPagamento);
+
+ if(contaDestino!=='todos')
+  arr=arr.filter(r=>r.contaDestino===contaDestino);
 
 
  if(busca){
@@ -7247,7 +7550,7 @@ function exportarRelatorioCSV(){
   return alert('Nenhum dado filtrado para exportar.');
  }
 
- let csv='Casa;Hospede;Telefone;Entrada;Saida;Noites;Status;Diarias;Desconto;Taxa Limpeza;Total;Pago;Pendente\n';
+ let csv='Casa;Hospede;Telefone;Entrada;Saida;Noites;Origem;Forma Recebimento;Conta Destino;Status;Diarias;Desconto;Taxa Limpeza;Total;Pago;Pendente\n';
 
  ultimasReservasFiltradas.forEach(r=>{
   const t=Number(r.valorTotal||0);
@@ -7264,6 +7567,9 @@ function exportarRelatorioCSV(){
        `"${dataBr(r.entrada)}";`+
        `"${dataBr(r.saida)}";`+
        `"${noites}";`+
+       `"${String(r.origemReserva||'').replace(/"/g,'""')}";`+
+       `"${String(r.formaPagamento||'').replace(/"/g,'""')}";`+
+       `"${String(r.contaDestino||'').replace(/"/g,'""')}";`+
        `"${r.statusPagamento||''}";`+
        `"${diarias.toFixed(2)}";`+
        `"${desconto.toFixed(2)}";`+
@@ -7352,8 +7658,9 @@ function gerarRelatorio(){
 
 
  const parciais=
-  arr.filter(
-   r=>r.statusPagamento==='parcial'
+  arr.filter(r=>
+   r.statusPagamento==='parcial' ||
+   (Number(r.valorPago||0)>0 && Number(r.valorPago||0)<Number(r.valorTotal||0))
   ).length;
 
 
@@ -7380,6 +7687,9 @@ function gerarRelatorio(){
         <th>Hóspede</th>
         <th>Pessoas</th>
         <th>Noites</th>
+        <th>Origem</th>
+        <th>Recebimento</th>
+        <th>Conta destino</th>
         <th>Total</th>
         <th>Pago</th>
         <th>A receber</th>
@@ -7442,6 +7752,12 @@ function gerarRelatorio(){
            }
           </td>
 
+          <td>${r.origemReserva||'—'}</td>
+
+          <td>${r.formaPagamento||'—'}</td>
+
+          <td>${r.contaDestino||'—'}</td>
+
           <td>
            ${moeda(t)}
           </td>
@@ -7481,6 +7797,12 @@ function gerarRelatorio(){
 
 
  el.innerHTML=`
+
+  <div class="print-cabecalho">
+   <h1>CASAS NA PRAIA — RELATÓRIO DE RECEBIMENTOS</h1>
+   <p>Balneário Arroio do Silva/SC · Emitido em ${new Intl.DateTimeFormat('pt-BR',{dateStyle:'short',timeStyle:'short'}).format(new Date())}</p>
+   <p>Casa: ${$('filtroCasaRelatorio')?.selectedOptions?.[0]?.textContent||'Todas'} · Período: ${$('filtroPeriodoRelatorio')?.selectedOptions?.[0]?.textContent||'Todo o período'}</p>
+  </div>
 
   <div class="relatorio-resumo">
 
@@ -7592,12 +7914,13 @@ async function cadastrarOuAtualizarHospede(nome,telefone,extras={}){
 
 async function carregarHospedes(){
  hospedesCadastrados=[];
+ paginaHospedesAtual=1;
  const s=await db.collection('hospedes').orderBy('nome').get();
  s.forEach(d=>hospedesCadastrados.push({id:d.id,...d.data()}));
  filtrarHospedes();
 }
 
-function filtrarHospedes(){
+function filtrarHospedes(pagina=paginaHospedesAtual){
  const el=$('listaHospedes');
  if(!el)return;
 
@@ -7610,17 +7933,33 @@ function filtrarHospedes(){
   String(h.cpf||'').includes(q)
  );
 
- el.innerHTML=arr.length
-  ?arr.map(h=>`
+ const totalPaginas=Math.max(1,Math.ceil(arr.length/HOSPEDES_POR_PAGINA));
+ paginaHospedesAtual=Math.min(Math.max(1,Number(pagina)||1),totalPaginas);
+ const inicio=(paginaHospedesAtual-1)*HOSPEDES_POR_PAGINA;
+ const visiveis=arr.slice(inicio,inicio+HOSPEDES_POR_PAGINA);
+
+ el.innerHTML=visiveis.length
+  ?visiveis.map(h=>`
    <div class="reserva-item">
-    <strong>👤 ${h.nome}</strong>
-    <p>📱 ${h.telefone||'—'} ${h.email?` · ✉️ ${h.email}`:''}</p>
-    ${h.cpf?`<p>🪪 CPF: ${h.cpf}</p>`:''}
-    ${h.cidade||h.estado?`<p>📍 ${[h.cidade,h.estado].filter(Boolean).join(' - ')}</p>`:''}
+    <strong>👤 ${escapeHtmlReserva(h.nome||'')}</strong>
+    <p>📱 ${escapeHtmlReserva(h.telefone||'—')} ${h.email?` · ✉️ ${escapeHtmlReserva(h.email)}`:''}</p>
+    ${h.cpf?`<p>🪪 CPF: ${escapeHtmlReserva(h.cpf)}</p>`:''}
+    ${h.cidade||h.estado?`<p>📍 ${escapeHtmlReserva([h.cidade,h.estado].filter(Boolean).join(' - '))}</p>`:''}
     <button class="azul" onclick="editarHospede('${h.id}')">✏️ Editar Cadastro</button>
    </div>
   `).join('')
   :`<p style="color:var(--cinza)">Nenhum hóspede encontrado.</p>`;
+
+ const pag=$('paginacaoHospedes');
+ if(!pag)return;
+ if(arr.length<=HOSPEDES_POR_PAGINA){pag.innerHTML='';return;}
+ const botoes=[];
+ botoes.push(`<button onclick="filtrarHospedes(${paginaHospedesAtual-1})" ${paginaHospedesAtual===1?'disabled':''}>‹ Anterior</button>`);
+ const inicioPag=Math.max(1,paginaHospedesAtual-2), fimPag=Math.min(totalPaginas,inicioPag+4);
+ for(let i=inicioPag;i<=fimPag;i++) botoes.push(`<button class="${i===paginaHospedesAtual?'ativo':''}" onclick="filtrarHospedes(${i})">${i}</button>`);
+ botoes.push(`<button onclick="filtrarHospedes(${paginaHospedesAtual+1})" ${paginaHospedesAtual===totalPaginas?'disabled':''}>Próxima ›</button>`);
+ botoes.push(`<span>${arr.length} hóspedes · página ${paginaHospedesAtual}/${totalPaginas}</span>`);
+ pag.innerHTML=botoes.join('');
 }
 
 function limparFormularioHospede(){
@@ -7736,6 +8075,145 @@ async function sincronizarHospedesReservas(){
  alert('✅ Sincronização concluída!');
 }
 
+
+/* =====================================================
+   DESPESAS / CONTROLE DE CAIXA
+===================================================== */
+
+const nomesCategoriasDespesa={
+ agua:'Água',energia:'Energia',internet:'Internet',limpeza:'Pagamento de limpeza',manutencao:'Manutenção',gas:'Gás',impostos:'Impostos / taxas',materiais:'Materiais / compras',outros:'Outros'
+};
+
+function nomeCategoriaDespesa(v){return nomesCategoriasDespesa[v]||v||'Outros';}
+
+function contaDestinoCasa(casa){
+ return {amarela:'Caixa Casa Amarela',bege:'Caixa Casa Bege',marrom:'Caixa Casa Marrom',branca:'Caixa Casa Branca'}[casa]||'';
+}
+
+async function carregarDespesas(){
+ despesasCadastradas=[];
+ try{
+  const snap=await db.collection('despesas').orderBy('data','desc').get();
+  snap.forEach(d=>despesasCadastradas.push({id:d.id,...d.data()}));
+ }catch(e){console.error('Erro ao carregar despesas:',e);}
+ paginaDespesasAtual=1;
+ gerarRelatorioDespesas();
+}
+
+function limparFormularioDespesa(){
+ $('despesaData').value=dataStr(hoje());
+ $('despesaCasa').value='amarela';
+ $('despesaCategoria').value='agua';
+ $('despesaValor').value='';
+ $('despesaFormaPagamento').value='Pix';
+ $('despesaContaOrigem').value='Caixa Casa Amarela';
+ $('despesaDescricao').value='';
+ $('despesaObservacao').value='';
+}
+
+async function salvarDespesa(){
+ const data=$('despesaData').value;
+ const casa=$('despesaCasa').value;
+ const categoria=$('despesaCategoria').value;
+ const valor=Number($('despesaValor').value||0);
+ const formaPagamento=$('despesaFormaPagamento').value;
+ const contaOrigem=$('despesaContaOrigem').value;
+ if(!data||!casa||!categoria||valor<=0||!formaPagamento||!contaOrigem)
+  return alert('⚠️ Informe data, casa, categoria, valor, forma de pagamento e caixa/conta.');
+ try{
+  await db.collection('despesas').add({
+   data,casa,categoria,valor,formaPagamento,contaOrigem,
+   descricao:$('despesaDescricao').value.trim(),
+   observacao:$('despesaObservacao').value.trim(),
+   criadoEm:firebase.firestore.FieldValue.serverTimestamp(),
+   atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()
+  });
+  await carregarDespesas();
+  limparFormularioDespesa();
+  alert('✅ Despesa lançada com sucesso.');
+ }catch(e){console.error(e);alert('❌ Erro ao salvar a despesa.');}
+}
+
+function obterDespesasFiltradas(){
+ let arr=[...despesasCadastradas];
+ const casa=$('filtroDespesaCasa')?.value||'todas';
+ const cat=$('filtroDespesaCategoria')?.value||'todas';
+ const pag=$('filtroDespesaPagamento')?.value||'todas';
+ const conta=$('filtroDespesaConta')?.value||'todas';
+ const a=$('filtroDespesaDataInicial')?.value||'';
+ const b=$('filtroDespesaDataFinal')?.value||'';
+ if(casa!=='todas')arr=arr.filter(x=>x.casa===casa);
+ if(cat!=='todas')arr=arr.filter(x=>x.categoria===cat);
+ if(pag!=='todas')arr=arr.filter(x=>x.formaPagamento===pag);
+ if(conta!=='todas')arr=arr.filter(x=>x.contaOrigem===conta);
+ if(a)arr=arr.filter(x=>x.data>=a);
+ if(b)arr=arr.filter(x=>x.data<=b);
+ return arr.sort((x,y)=>(y.data||'').localeCompare(x.data||''));
+}
+
+function gerarRelatorioDespesas(){
+ const arr=obterDespesasFiltradas();
+ ultimasDespesasFiltradas=[...arr];
+ const total=arr.reduce((s,x)=>s+Number(x.valor||0),0);
+ const pix=arr.filter(x=>x.formaPagamento==='Pix').reduce((s,x)=>s+Number(x.valor||0),0);
+ const dinheiro=arr.filter(x=>x.formaPagamento==='Dinheiro').reduce((s,x)=>s+Number(x.valor||0),0);
+ const cartao=arr.filter(x=>x.formaPagamento==='Cartão').reduce((s,x)=>s+Number(x.valor||0),0);
+ const el=$('listaDespesas');
+ const resumo=$('despesasResumo');
+ if(resumo)resumo.innerHTML=`
+  <div class="resumo-card"><small>Lançamentos</small><strong>${arr.length}</strong></div>
+  <div class="resumo-card"><small>Total de despesas</small><strong>${moeda(total)}</strong></div>
+  <div class="resumo-card"><small>Pix</small><strong>${moeda(pix)}</strong></div>
+  <div class="resumo-card"><small>Dinheiro / Cartão</small><strong>${moeda(dinheiro+cartao)}</strong></div>`;
+ const totalPag=Math.max(1,Math.ceil(arr.length/DESPESAS_POR_PAGINA));
+ paginaDespesasAtual=Math.min(Math.max(1,paginaDespesasAtual),totalPag);
+ const inicio=(paginaDespesasAtual-1)*DESPESAS_POR_PAGINA;
+ const vis=arr.slice(inicio,inicio+DESPESAS_POR_PAGINA);
+ if(el)el.innerHTML=vis.length?`<div style="overflow-x:auto"><table class="tabela-admin-compacta"><thead><tr><th>Data</th><th>Casa</th><th>Categoria</th><th>Descrição</th><th>Forma</th><th>Conta / caixa</th><th>Valor</th><th>Ações</th></tr></thead><tbody>${vis.map(x=>`<tr><td>${dataBr(x.data)}</td><td>${casas[x.casa]?.nome||x.casa}</td><td><span class="despesa-badge">${nomeCategoriaDespesa(x.categoria)}</span></td><td>${escapeHtmlReserva(x.descricao||'—')}</td><td>${escapeHtmlReserva(x.formaPagamento||'—')}</td><td>${escapeHtmlReserva(x.contaOrigem||'—')}</td><td class="despesa-valor">${moeda(x.valor)}</td><td class="despesa-acoes"><button class="vermelho" onclick="excluirDespesa('${x.id}')">Excluir</button></td></tr>`).join('')}</tbody></table></div>`:`<p style="color:var(--cinza);margin-top:12px">Nenhuma despesa encontrada com os filtros atuais.</p>`;
+ const pagEl=$('paginacaoDespesas');
+ if(pagEl){
+  if(arr.length<=DESPESAS_POR_PAGINA)pagEl.innerHTML='';
+  else{
+   const botoes=[`<button onclick="mudarPaginaDespesas(${paginaDespesasAtual-1})" ${paginaDespesasAtual===1?'disabled':''}>‹ Anterior</button>`];
+   const ini=Math.max(1,paginaDespesasAtual-2),fim=Math.min(totalPag,ini+4);
+   for(let i=ini;i<=fim;i++)botoes.push(`<button class="${i===paginaDespesasAtual?'ativo':''}" onclick="mudarPaginaDespesas(${i})">${i}</button>`);
+   botoes.push(`<button onclick="mudarPaginaDespesas(${paginaDespesasAtual+1})" ${paginaDespesasAtual===totalPag?'disabled':''}>Próxima ›</button>`);
+   botoes.push(`<span>${arr.length} lançamentos · página ${paginaDespesasAtual}/${totalPag}</span>`);
+   pagEl.innerHTML=botoes.join('');
+  }
+ }
+}
+
+function mudarPaginaDespesas(p){paginaDespesasAtual=p;gerarRelatorioDespesas();}
+
+async function excluirDespesa(id){
+ if(!confirm('Tem certeza que deseja excluir este lançamento de despesa?'))return;
+ try{await db.collection('despesas').doc(id).delete();await carregarDespesas();alert('🗑️ Despesa excluída.');}
+ catch(e){console.error(e);alert('❌ Não foi possível excluir a despesa.');}
+}
+
+function limparFiltrosDespesas(){
+ ['filtroDespesaCasa','filtroDespesaCategoria','filtroDespesaPagamento','filtroDespesaConta'].forEach(id=>{if($(id))$(id).value='todas';});
+ ['filtroDespesaDataInicial','filtroDespesaDataFinal'].forEach(id=>{if($(id))$(id).value='';});
+ paginaDespesasAtual=1;gerarRelatorioDespesas();
+}
+
+function exportarDespesasCSV(){
+ const arr=ultimasDespesasFiltradas;
+ if(!arr.length)return alert('Nenhum lançamento para exportar.');
+ let csv='Data;Casa;Categoria;Descrição;Forma de pagamento;Conta/Caixa;Valor;Observação\n';
+ arr.forEach(x=>{csv+=`"${dataBr(x.data)}";"${String(casas[x.casa]?.nome||x.casa||'').replace(/"/g,'""')}";"${nomeCategoriaDespesa(x.categoria)}";"${String(x.descricao||'').replace(/"/g,'""')}";"${String(x.formaPagamento||'').replace(/"/g,'""')}";"${String(x.contaOrigem||'').replace(/"/g,'""')}";"${Number(x.valor||0).toFixed(2)}";"${String(x.observacao||'').replace(/"/g,'""')}"\n`;});
+ const blob=new Blob(["\ufeff"+csv],{type:'text/csv;charset=utf-8;'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='relatorio_despesas.csv';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+}
+
+function imprimirRelatorioDespesas(){
+ const arr=ultimasDespesasFiltradas;
+ if(!arr.length)return alert('Nenhum lançamento para imprimir.');
+ const total=arr.reduce((s,x)=>s+Number(x.valor||0),0);
+ const w=window.open('','_blank','width=1000,height=750');
+ if(!w)return alert('⚠️ Permita pop-ups para imprimir o relatório.');
+ w.document.write(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Relatório de Despesas</title><style>body{font-family:Arial,sans-serif;color:#222;padding:28px}h1{color:#0a4b6e;text-align:center;font-size:22px}p{font-size:12px;color:#555;text-align:center}table{width:100%;border-collapse:collapse;margin-top:20px;font-size:11px}th,td{border:1px solid #ccc;padding:7px;text-align:left}th{background:#e9eef0}.total{margin-top:15px;text-align:right;font-size:16px;font-weight:bold}@media print{button{display:none}}</style></head><body><h1>CASAS NA PRAIA — RELATÓRIO DE DESPESAS</h1><p>Balneário Arroio do Silva/SC · Emitido em ${new Date().toLocaleString('pt-BR')}</p><table><thead><tr><th>Data</th><th>Casa</th><th>Categoria</th><th>Descrição</th><th>Forma</th><th>Conta/Caixa</th><th>Valor</th></tr></thead><tbody>${arr.map(x=>`<tr><td>${dataBr(x.data)}</td><td>${casas[x.casa]?.nome||x.casa}</td><td>${nomeCategoriaDespesa(x.categoria)}</td><td>${escapeHtmlReserva(x.descricao||'')}</td><td>${escapeHtmlReserva(x.formaPagamento||'')}</td><td>${escapeHtmlReserva(x.contaOrigem||'')}</td><td>${moeda(x.valor)}</td></tr>`).join('')}</tbody></table><div class="total">Total de despesas: ${moeda(total)}</div><br><button onclick="window.print()">Imprimir / Salvar PDF</button></body></html>`);w.document.close();setTimeout(()=>w.print(),300);
+}
 
 /* =====================================================
    TECLADO / ESC
