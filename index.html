@@ -883,6 +883,149 @@ textarea{
 
 
 /* =========================
+   RESERVAS - FILTROS E TABELA
+========================= */
+.painel-reservas-filtros{
+ background:#f7fafb;
+ border:1px solid #e3eaed;
+ border-radius:12px;
+ padding:16px;
+ margin:15px 0;
+}
+.reservas-filtros-grid{
+ display:grid;
+ grid-template-columns:repeat(4,minmax(0,1fr));
+ gap:12px;
+}
+.reservas-filtro label{
+ display:block;
+ font-size:13px;
+ font-weight:600;
+ margin-bottom:5px;
+ color:var(--texto);
+}
+.reservas-filtros-acoes{
+ display:flex;
+ gap:8px;
+ flex-wrap:wrap;
+ margin-top:14px;
+}
+.reservas-indicadores{
+ display:grid;
+ grid-template-columns:repeat(4,minmax(0,1fr));
+ gap:10px;
+ margin:15px 0;
+}
+.indicador-reserva{
+ background:#fff;
+ border:1px solid #e5e5e5;
+ border-radius:10px;
+ padding:13px;
+ box-shadow:0 3px 10px #00000008;
+}
+.indicador-reserva small{
+ display:block;
+ color:var(--cinza);
+ margin-bottom:4px;
+}
+.indicador-reserva strong{
+ font-size:23px;
+ color:var(--marinho);
+}
+.titulo-resultados-reservas{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:10px;
+ margin:18px 0 10px;
+ flex-wrap:wrap;
+}
+.titulo-resultados-reservas small{
+ color:var(--cinza);
+ font-weight:400;
+}
+.lista-reservas-tabela{
+ width:100%;
+ overflow-x:auto;
+ border:1px solid #e5e5e5;
+ border-radius:10px;
+ background:#fff;
+}
+.tabela-reservas{
+ width:100%;
+ border-collapse:collapse;
+ min-width:930px;
+ font-size:13px;
+}
+.tabela-reservas th,
+.tabela-reservas td{
+ padding:10px 9px;
+ border-bottom:1px solid #edf0f1;
+ text-align:left;
+ vertical-align:middle;
+}
+.tabela-reservas th{
+ background:var(--marinho);
+ color:#fff;
+ white-space:nowrap;
+}
+.tabela-reservas tr:hover td{background:#f8fbfc}
+.tabela-reservas .reserva-hospede strong{
+ display:block;
+ color:var(--marinho);
+ margin-bottom:2px;
+}
+.tabela-reservas .reserva-hospede small,
+.tabela-reservas .reserva-datas small{
+ color:var(--cinza);
+}
+.reserva-datas strong{display:block}
+.badge-situacao{
+ display:inline-block;
+ padding:4px 8px;
+ border-radius:12px;
+ font-size:11px;
+ font-weight:700;
+ white-space:nowrap;
+}
+.badge-proxima{background:#e8f5e9;color:#176b2c}
+.badge-andamento{background:#d1ecf1;color:#0c5460}
+.badge-concluida{background:#eeeeee;color:#666}
+.badge-status-pendente{background:#fff3cd;color:#856404}
+.badge-status-confirmada,
+.badge-status-pago{background:#d4edda;color:#155724}
+.badge-status-parcial{background:#d1ecf1;color:#0c5460}
+.reserva-acoes{
+ display:flex;
+ gap:5px;
+ flex-wrap:wrap;
+ white-space:nowrap;
+}
+.reserva-acoes button{
+ padding:7px 9px;
+ font-size:12px;
+}
+.reservas-vazio{
+ padding:25px;
+ text-align:center;
+ color:var(--cinza);
+}
+.reservas-ajuda{
+ margin-top:8px;
+ color:var(--cinza);
+ font-size:12px;
+}
+@media(max-width:1100px){
+ .reservas-filtros-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .reservas-indicadores{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:600px){
+ .reservas-filtros-grid{grid-template-columns:1fr}
+ .reservas-indicadores{grid-template-columns:1fr 1fr}
+}
+
+
+/* =========================
    FOTOS
 ========================= */
 
@@ -1736,37 +1879,108 @@ textarea{
 
  <h2>📋 Solicitações e Reservas</h2>
 
- <div style="
-  display:flex;
-  gap:10px;
-  margin:15px 0;
-  flex-wrap:wrap">
+ <div class="painel-reservas-filtros">
 
-  <button data-filtro="todas"
-   class="azul ativo">
-   Todas
-  </button>
+  <div class="reservas-filtros-grid">
 
-  <button data-filtro="pendente"
-   class="azul">
-   Pendentes
-  </button>
+   <div class="reservas-filtro">
+    <label>👤 Hóspede</label>
+    <input id="filtroHospedeReservas"
+     placeholder="Nome, telefone, CPF ou e-mail...">
+   </div>
 
-  <button data-filtro="confirmada"
-   class="azul">
-   ✅ Confirmadas
-  </button>
+   <div class="reservas-filtro">
+    <label>🏠 Casa</label>
+    <select id="filtroCasaReservas">
+     <option value="todas">Todas as casas</option>
+     <option value="amarela">🏡 Casa Amarela</option>
+     <option value="bege">🌾 Casa Bege</option>
+     <option value="marrom">🪵 Casa Marrom</option>
+     <option value="branca">☁️ Casa Branca</option>
+    </select>
+   </div>
 
-  <button data-filtro="parcial"
-   class="azul">
-   Parciais
-  </button>
+   <div class="reservas-filtro">
+    <label>📌 Situação</label>
+    <select id="filtroSituacaoReservas">
+     <option value="ativas" selected>Ativas — ocultar concluídas</option>
+     <option value="proximas">Próximas</option>
+     <option value="andamento">Em andamento</option>
+     <option value="concluidas">Concluídas</option>
+     <option value="todas">Todas</option>
+    </select>
+   </div>
 
-  <button data-filtro="pago"
-   class="azul">
-   💰 Pagas
-  </button>
+   <div class="reservas-filtro">
+    <label>💰 Pagamento</label>
+    <select id="filtroPagamentoReservas">
+     <option value="todos">Todos</option>
+     <option value="pendente">Pendente</option>
+     <option value="parcial">Pagamento parcial</option>
+     <option value="confirmada">Confirmada</option>
+     <option value="pago">Paga</option>
+    </select>
+   </div>
 
+   <div class="reservas-filtro">
+    <label>📅 Entrada a partir de</label>
+    <input type="date" id="filtroEntradaInicialReservas">
+   </div>
+
+   <div class="reservas-filtro">
+    <label>📅 Entrada até</label>
+    <input type="date" id="filtroEntradaFinalReservas">
+   </div>
+
+   <div class="reservas-filtro">
+    <label>🔎 Período inclui a data</label>
+    <input type="date" id="filtroPeriodoReservas">
+   </div>
+
+   <div class="reservas-filtro">
+    <label>↕️ Ordenar por</label>
+    <select id="filtroOrdenacaoReservas">
+     <option value="entradaAsc">Entrada mais próxima</option>
+     <option value="entradaDesc">Entrada mais distante</option>
+     <option value="criacaoDesc">Mais recentes cadastradas</option>
+     <option value="criacaoAsc">Mais antigas cadastradas</option>
+    </select>
+   </div>
+
+  </div>
+
+  <div class="reservas-filtros-acoes">
+   <button class="azul" onclick="aplicarFiltrosReservas()">🔎 Buscar reservas</button>
+   <button class="cinza" onclick="limparFiltrosReservas()">✖ Limpar filtros</button>
+  </div>
+
+  <div class="reservas-ajuda">
+   💡 Por padrão, reservas cuja data de saída já passou ficam ocultas. Use “Concluídas” ou “Todas” para visualizá-las.
+  </div>
+
+ </div>
+
+ <div class="reservas-indicadores">
+  <div class="indicador-reserva">
+   <small>📋 Ativas</small>
+   <strong id="indicadorReservasAtivas">0</strong>
+  </div>
+  <div class="indicador-reserva">
+   <small>📅 Próximas</small>
+   <strong id="indicadorReservasProximas">0</strong>
+  </div>
+  <div class="indicador-reserva">
+   <small>🏖️ Em andamento</small>
+   <strong id="indicadorReservasAndamento">0</strong>
+  </div>
+  <div class="indicador-reserva">
+   <small>✅ Concluídas</small>
+   <strong id="indicadorReservasConcluidas">0</strong>
+  </div>
+ </div>
+
+ <div class="titulo-resultados-reservas">
+  <h3>Resultados <small id="contadorResultadosReservas">0 reservas</small></h3>
  </div>
 
  <div id="listaReservas"></div>
@@ -2774,6 +2988,7 @@ async function inicializarPainel(){
   ]);
 
   configurarNavegacao();
+  configurarFiltrosReservas();
 
   renderizarCalendario();
   renderizarCasasAdmin();
@@ -3033,6 +3248,31 @@ function configurarNavegacao(){
 
   });
 
+}
+
+
+function configurarFiltrosReservas(){
+ const ids=[
+  'filtroHospedeReservas',
+  'filtroCasaReservas',
+  'filtroSituacaoReservas',
+  'filtroPagamentoReservas',
+  'filtroEntradaInicialReservas',
+  'filtroEntradaFinalReservas',
+  'filtroPeriodoReservas',
+  'filtroOrdenacaoReservas'
+ ];
+ ids.forEach(id=>{
+  const el=$(id);
+  if(!el || el.dataset.filtroReservasConfigurado==='1')return;
+  el.dataset.filtroReservasConfigurado='1';
+  el.addEventListener('change',()=>atualizarListaReservas());
+  if(el.tagName==='INPUT' && el.type==='text'){
+   el.addEventListener('keydown',e=>{
+    if(e.key==='Enter')aplicarFiltrosReservas();
+   });
+  }
+ });
 }
 
 
@@ -4963,222 +5203,223 @@ async function salvarConfiguracoesCasa(id){
    LISTA DE RESERVAS
 ===================================================== */
 
+function reservaConcluida(r){
+ const saida=dataLocal(r.saida);
+ const h=hoje();
+ return !!saida && saida<=h;
+}
+
+function reservaEmAndamento(r){
+ const entrada=dataLocal(r.entrada);
+ const saida=dataLocal(r.saida);
+ const h=hoje();
+ return !!entrada && !!saida && entrada<=h && h<saida;
+}
+
+function reservaProxima(r){
+ const entrada=dataLocal(r.entrada);
+ const h=hoje();
+ return !!entrada && entrada>h;
+}
+
+function timestampCriacaoReserva(r){
+ if(r.criadoEm?.seconds)return Number(r.criadoEm.seconds);
+ if(r.criadoEm?.toMillis)return Number(r.criadoEm.toMillis());
+ return 0;
+}
+
+function hospedeCorrespondeReserva(r,termo){
+ const q=normalizar(termo||'');
+ if(!q)return true;
+
+ const nome=normalizar(r.nome||'');
+ const telefone=String(r.telefone||'').replace(/\D/g,'');
+ const termoNumerico=String(termo||'').replace(/\D/g,'');
+
+ if(nome.includes(q))return true;
+ if(termoNumerico && telefone.includes(termoNumerico))return true;
+
+ const hospede=hospedesCadastrados.find(h=>{
+  const hn=normalizar(h.nome||'');
+  const ht=String(h.telefone||'').replace(/\D/g,'');
+  return (hn && hn===nome) || (ht && ht===telefone);
+ });
+
+ if(!hospede)return false;
+
+ if(normalizar(hospede.email||'').includes(q))return true;
+ if(normalizar(hospede.nome||'').includes(q))return true;
+
+ const cpf=String(hospede.cpf||'').replace(/\D/g,'');
+ if(termoNumerico && cpf.includes(termoNumerico))return true;
+
+ return false;
+}
+
+function escapeHtmlReserva(valor){
+ return String(valor??'')
+  .replace(/&/g,'&amp;')
+  .replace(/</g,'&lt;')
+  .replace(/>/g,'&gt;')
+  .replace(/"/g,'&quot;')
+  .replace(/'/g,'&#039;');
+}
+
+function atualizarIndicadoresReservas(){
+ const ativas=reservasConfirmadas.filter(r=>!reservaConcluida(r));
+ const proximas=reservasConfirmadas.filter(reservaProxima);
+ const andamento=reservasConfirmadas.filter(reservaEmAndamento);
+ const concluidas=reservasConfirmadas.filter(reservaConcluida);
+
+ if($('indicadorReservasAtivas'))$('indicadorReservasAtivas').textContent=ativas.length;
+ if($('indicadorReservasProximas'))$('indicadorReservasProximas').textContent=proximas.length;
+ if($('indicadorReservasAndamento'))$('indicadorReservasAndamento').textContent=andamento.length;
+ if($('indicadorReservasConcluidas'))$('indicadorReservasConcluidas').textContent=concluidas.length;
+}
+
+function aplicarFiltrosReservas(){
+ atualizarListaReservas();
+}
+
+function limparFiltrosReservas(){
+ if($('filtroHospedeReservas'))$('filtroHospedeReservas').value='';
+ if($('filtroCasaReservas'))$('filtroCasaReservas').value='todas';
+ if($('filtroSituacaoReservas'))$('filtroSituacaoReservas').value='ativas';
+ if($('filtroPagamentoReservas'))$('filtroPagamentoReservas').value='todos';
+ if($('filtroEntradaInicialReservas'))$('filtroEntradaInicialReservas').value='';
+ if($('filtroEntradaFinalReservas'))$('filtroEntradaFinalReservas').value='';
+ if($('filtroPeriodoReservas'))$('filtroPeriodoReservas').value='';
+ if($('filtroOrdenacaoReservas'))$('filtroOrdenacaoReservas').value='entradaAsc';
+ atualizarListaReservas();
+}
+
 function atualizarListaReservas(){
-
  const c=$('listaReservas');
-
  if(!c)return;
 
+ atualizarIndicadoresReservas();
 
- let arr=
-  filtroReservas==='todas'
-   ?reservasConfirmadas
-   :reservasConfirmadas.filter(
-    r=>
-     r.statusPagamento===
-     filtroReservas
-   );
+ const busca=$('filtroHospedeReservas')?.value||'';
+ const casa=$('filtroCasaReservas')?.value||'todas';
+ const situacao=$('filtroSituacaoReservas')?.value||'ativas';
+ const pagamento=$('filtroPagamentoReservas')?.value||'todos';
+ const entradaInicial=$('filtroEntradaInicialReservas')?.value||'';
+ const entradaFinal=$('filtroEntradaFinalReservas')?.value||'';
+ const periodo=$('filtroPeriodoReservas')?.value||'';
+ const ordenacao=$('filtroOrdenacaoReservas')?.value||'entradaAsc';
 
+ let arr=[...reservasConfirmadas];
 
- arr.sort(
-  (a,b)=>
-   (b.criadoEm?.seconds||0)-
-   (a.criadoEm?.seconds||0)
- );
+ if(busca)arr=arr.filter(r=>hospedeCorrespondeReserva(r,busca));
+ if(casa!=='todas')arr=arr.filter(r=>r.casa===casa);
+ if(pagamento!=='todos')arr=arr.filter(r=>(r.statusPagamento||'pendente')===pagamento);
 
+ if(situacao==='ativas')arr=arr.filter(r=>!reservaConcluida(r));
+ if(situacao==='proximas')arr=arr.filter(reservaProxima);
+ if(situacao==='andamento')arr=arr.filter(reservaEmAndamento);
+ if(situacao==='concluidas')arr=arr.filter(reservaConcluida);
 
- if(!arr.length){
+ if(entradaInicial)arr=arr.filter(r=>!!r.entrada && r.entrada>=entradaInicial);
+ if(entradaFinal)arr=arr.filter(r=>!!r.entrada && r.entrada<=entradaFinal);
 
-  c.innerHTML=
-   '<p style="color:var(--cinza)">'+
-   'Nenhuma reserva encontrada.'+
-   '</p>';
-
-  return;
-
+ if(periodo){
+  arr=arr.filter(r=>{
+   const entrada=dataLocal(r.entrada);
+   const saida=dataLocal(r.saida);
+   const alvo=dataLocal(periodo);
+   return !!entrada && !!saida && !!alvo && entrada<=alvo && alvo<saida;
+  });
  }
 
+ arr.sort((a,b)=>{
+  if(ordenacao==='entradaDesc')return String(b.entrada||'').localeCompare(String(a.entrada||''));
+  if(ordenacao==='criacaoDesc')return timestampCriacaoReserva(b)-timestampCriacaoReserva(a);
+  if(ordenacao==='criacaoAsc')return timestampCriacaoReserva(a)-timestampCriacaoReserva(b);
+  return String(a.entrada||'').localeCompare(String(b.entrada||''));
+ });
 
- c.innerHTML=
-  arr.map(r=>{
+ if($('contadorResultadosReservas')){
+  $('contadorResultadosReservas').textContent=`${arr.length} ${arr.length===1?'reserva':'reservas'}`;
+ }
 
-   const status=
-    r.statusPagamento||
-    'pendente';
+ if(!arr.length){
+  c.innerHTML='<div class="reservas-vazio">🔎 Nenhuma reserva encontrada com os filtros selecionados.</div>';
+  return;
+ }
 
-   const pago=
-    Number(r.valorPago||0);
+ const statusTexto={
+  pendente:'Pendente',
+  parcial:'Pagamento parcial',
+  confirmada:'Confirmada',
+  pago:'Paga'
+ };
 
-   const total=
-    Number(r.valorTotal||0);
+ c.innerHTML=`
+  <div class="lista-reservas-tabela">
+   <table class="tabela-reservas">
+    <thead>
+     <tr>
+      <th>📅 Período</th>
+      <th>🏠 Casa</th>
+      <th>👤 Hóspede</th>
+      <th>👥 Pessoas</th>
+      <th>💰 Pagamento</th>
+      <th>💵 Total</th>
+      <th>📌 Situação</th>
+      <th>⚙️ Ações</th>
+     </tr>
+    </thead>
+    <tbody>
+     ${arr.map(r=>{
+      const status=r.statusPagamento||'pendente';
+      const pago=Number(r.valorPago||0);
+      const total=Number(r.valorTotal||0);
+      const pendente=Math.max(0,total-pago);
+      const concluida=reservaConcluida(r);
+      const andamento=reservaEmAndamento(r);
+      const situacaoTexto=concluida?'Concluída':andamento?'Em andamento':'Próxima';
+      const situacaoClasse=concluida?'badge-concluida':andamento?'badge-andamento':'badge-proxima';
+      const casaNome=escapeHtmlReserva(casas[r.casa]?.nome||r.casa||'Casa');
+      const nome=escapeHtmlReserva(r.nome||'Sem nome');
+      const telefone=escapeHtmlReserva(r.telefone||'');
+      const observacao=escapeHtmlReserva(r.observacao||'');
+      const totalPessoas=Number(r.totalPessoas||((Number(r.adultos||0)+Number(r.criancas||0))));
 
-   const pendente=
-    Math.max(
-     0,
-     total-pago
-    );
-
-
-   return `
-
-    <div class="reserva-item">
-
-     <h3>
-      ${casas[r.casa]?.nome||r.casa}
-     </h3>
-
-
-     <span class="
-      status-badge
-      status-${status}">
-
-      ${status.toUpperCase()}
-
-     </span>
-
-
-     <p>
-      <strong>👤 ${r.nome}</strong>
-      — ${r.telefone}
-     </p>
-
-
-     <p>
-      📅 ${dataBr(r.entrada)}
-      até ${dataBr(r.saida)}
-      — ${r.dias||0} diária(s)
-     </p>
-
-
-     <p>
-      👥 ${r.totalPessoas||0} pessoa(s)
-      —
-      ${r.adultos||0} adulto(s),
-      ${r.criancas||0} criança(s)
-     </p>
-
-
-     <div class="total-geral">
-
-      <div class="linha-valor">
-       <span>Diárias</span>
-       <strong>
-        ${moeda(r.valorDiarias)}
-       </strong>
-      </div>
-
-
-      <div class="linha-valor">
-       <span>Limpeza</span>
-       <strong>
-        ${moeda(r.taxaLimpeza)}
-       </strong>
-      </div>
-
-
-      ${
-       Number(r.acrescimoValor)>0
-        ?`
-         <div class="linha-valor">
-          <span>Acréscimo</span>
-          <strong>
-           + ${moeda(r.acrescimoValor)}
-          </strong>
+      return `
+       <tr>
+        <td class="reserva-datas">
+         <strong>${dataBr(r.entrada)} → ${dataBr(r.saida)}</strong>
+         <small>${Number(r.dias||0)} diária(s)</small>
+        </td>
+        <td>${casaNome}</td>
+        <td class="reserva-hospede">
+         <strong>${nome}</strong>
+         <small>${telefone}</small>
+         ${observacao?`<small title="${observacao}">📝 ${observacao.length>45?observacao.slice(0,45)+'…':observacao}</small>`:''}
+        </td>
+        <td>
+         ${totalPessoas} pessoa(s)<br>
+         <small>${Number(r.adultos||0)} adulto(s) · ${Number(r.criancas||0)} criança(s)</small>
+        </td>
+        <td>
+         <span class="status-badge badge-status-${status}">${escapeHtmlReserva(statusTexto[status]||status)}</span>
+         <small style="display:block;color:var(--cinza)">Pago: ${moeda(pago)} · Saldo: ${moeda(pendente)}</small>
+        </td>
+        <td><strong>${moeda(total)}</strong></td>
+        <td><span class="badge-situacao ${situacaoClasse}">${situacaoTexto}</span></td>
+        <td>
+         <div class="reserva-acoes">
+          <button class="azul" onclick="abrirEditarReserva('${r.id}')">✏️ Gerenciar</button>
+          ${pago>0?`<button class="botao-recibo" onclick="emitirRecibo('${r.id}')">🧾 Recibo</button>`:''}
          </div>
-        `
-        :''
-      }
-
-
-      ${
-       Number(r.desconto)>0
-        ?`
-         <div class="linha-valor">
-          <span>Desconto</span>
-          <strong>
-           - ${moeda(r.desconto)}
-          </strong>
-         </div>
-        `
-        :''
-      }
-
-
-      <div class="linha-valor">
-       <span>Total</span>
-       <strong>
-        ${moeda(total)}
-       </strong>
-      </div>
-
-
-      <div class="linha-valor">
-       <span>Pago</span>
-       <strong>
-        ${moeda(pago)}
-       </strong>
-      </div>
-
-
-      <div class="linha-valor">
-       <span>A receber</span>
-       <strong>
-        ${moeda(pendente)}
-       </strong>
-      </div>
-
-     </div>
-
-
-     ${
-      r.observacao
-       ?`
-        <p>
-         <strong>📝</strong>
-         ${r.observacao}
-        </p>
-       `
-       :''
-     }
-
-
-     <div style="
-      display:flex;
-      gap:6px;
-      flex-wrap:wrap;
-      margin-top:10px">
-
-      <button
-       class="azul"
-       onclick="abrirEditarReserva('${r.id}')">
-
-       ✏️ Gerenciar
-
-      </button>
-
-
-      ${
-       pago>0
-        ?`
-         <button
-          class="botao-recibo"
-          onclick="emitirRecibo('${r.id}')">
-
-          🧾 Emitir recibo
-
-         </button>
-        `
-        :''
-      }
-
-     </div>
-
-    </div>
-
-   `;
-
-  }).join('');
-
+        </td>
+       </tr>
+      `;
+     }).join('')}
+    </tbody>
+   </table>
+  </div>
+ `;
 }
 
 
