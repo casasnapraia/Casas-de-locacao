@@ -5312,7 +5312,20 @@ function atualizarListaReservas(){
 
  if(busca)arr=arr.filter(r=>hospedeCorrespondeReserva(r,busca));
  if(casa!=='todas')arr=arr.filter(r=>r.casa===casa);
- if(pagamento!=='todos')arr=arr.filter(r=>(r.statusPagamento||'pendente')===pagamento);
+ if(pagamento!=='todos'){
+  arr=arr.filter(r=>{
+   const status=r.statusPagamento||'pendente';
+   const pago=Number(r.valorPago||0);
+   const total=Number(r.valorTotal||0);
+   if(pagamento==='parcial'){
+    return status==='parcial' || (pago>0 && pago<total);
+   }
+   if(pagamento==='pago'){
+    return status==='pago' || (total>0 && pago>=total);
+   }
+   return status===pagamento;
+  });
+ }
 
  if(situacao==='ativas')arr=arr.filter(r=>!reservaConcluida(r));
  if(situacao==='proximas')arr=arr.filter(reservaProxima);
@@ -5361,6 +5374,7 @@ function atualizarListaReservas(){
      <tr>
       <th>📅 Período</th>
       <th>🏠 Casa</th>
+      <th>🌐 Origem</th>
       <th>👤 Hóspede</th>
       <th>👥 Pessoas</th>
       <th>💰 Pagamento</th>
@@ -5392,6 +5406,7 @@ function atualizarListaReservas(){
          <small>${Number(r.dias||0)} diária(s)</small>
         </td>
         <td>${casaNome}</td>
+        <td>${escapeHtmlReserva(r.origemReserva||'Não informada')}</td>
         <td class="reserva-hospede">
          <strong>${nome}</strong>
          <small>${telefone}</small>
@@ -5435,14 +5450,13 @@ function atualizarListaReservas(){
 
 function numeroPorExtenso(n){
 
- n=Number(n||0);
+ n=Math.round(Number(n||0));
 
  if(!isFinite(n))
   return '';
 
  if(n===0)
   return 'zero';
-
 
  const unidades=[
   '',
@@ -5496,137 +5510,61 @@ function numeroPorExtenso(n){
   'novecentos'
  ];
 
-
  function grupo(v){
 
   v=Number(v);
 
   if(v===0)return '';
-
   if(v===100)return 'cem';
 
-
   let texto='';
+  const c=Math.floor(v/100);
+  const resto=v%100;
 
-  const c=
-   Math.floor(v/100);
-
-  const resto=
-   v%100;
-
-
-  if(c)
-   texto+=centenas[c];
-
+  if(c)texto+=centenas[c];
 
   if(resto){
-
-   if(texto)
-    texto+=' e ';
-
+   if(texto)texto+=' e ';
 
    if(resto<10){
-
     texto+=unidades[resto];
-
    }else if(resto<20){
-
     texto+=especiais[resto-10];
-
    }else{
-
-    texto+=dezenas[
-     Math.floor(resto/10)
-    ];
-
+    texto+=dezenas[Math.floor(resto/10)];
     if(resto%10)
-     texto+=' e '+
-      unidades[resto%10];
-
+     texto+=' e '+unidades[resto%10];
    }
-
   }
 
   return texto;
-
  }
-
 
  function parte(v){
 
-  if(v===0)return '';
+  v=Number(v);
 
   if(v<1000)
    return grupo(v);
 
-
-  const milhares=
-   Math.floor(v/1000);
-
-  const resto=
-   v%1000;
+  const milhares=Math.floor(v/1000);
+  const resto=v%1000;
 
   let texto='';
-
 
   if(milhares===1)
    texto='mil';
   else
-   texto=
-    numeroPorExtenso(
-     milhares
-    )+' mil';
-
+   texto=parte(milhares)+' mil';
 
   if(resto)
    texto+=' e '+grupo(resto);
 
   return texto;
-
  }
 
-
- const reais=
-  Math.floor(n);
-
- const centavos=
-  Math.round(
-   (n-reais)*100
-  );
-
-
- let texto='';
-
-
- if(reais>0)
-  texto=
-   parte(reais)+
-   (
-    reais===1
-     ?' real'
-     :' reais'
-   );
-
-
- if(centavos>0){
-
-  if(texto)
-   texto+=' e ';
-
-  texto+=
-   parte(centavos)+
-   (
-    centavos===1
-     ?' centavo'
-     :' centavos'
-   );
-
- }
-
- return texto;
-
+ return parte(n);
 }
-
 
 function valorPorExtenso(v){
 
@@ -5770,6 +5708,7 @@ function emitirRecibo(id){
   `*RECIBO DE PAGAMENTO - CASAS NA PRAIA*\n\n`+
   `Hóspede: ${nome}\n`+
   `Acomodação: ${casa}\n`+
+  `Origem da reserva: ${r.origemReserva||'Não informada'}\n`+
   `Período: ${dataBr(r.entrada)} a ${dataBr(r.saida)} (${noites} diárias)\n`+
   `Valor das diárias: ${moeda(valorDiarias)}\n`+
   `Desconto: ${moeda(desconto)}\n`+
@@ -6039,6 +5978,17 @@ body{
 
   <div class="linha">
 
+   <span>Origem da reserva</span>
+
+   <strong>
+    ${r.origemReserva||'Não informada'}
+   </strong>
+
+  </div>
+
+
+  <div class="linha">
+
    <span>Período</span>
 
    <strong>
@@ -6243,6 +6193,23 @@ function abrirEditarReserva(id){
    <input
     id="editTelefone"
     value="${r.telefone||''}">
+
+  </div>
+
+
+  <div class="grupo-input">
+
+   <label>Origem da reserva</label>
+
+   <select id="editOrigem">
+    <option value="">Não informada</option>
+    <option value="Airbnb">Airbnb</option>
+    <option value="Booking.com">Booking.com</option>
+    <option value="Direto">Reserva direta</option>
+    <option value="WhatsApp">WhatsApp</option>
+    <option value="Telefone">Telefone</option>
+    <option value="Outro">Outro</option>
+   </select>
 
   </div>
 
@@ -6491,6 +6458,9 @@ function abrirEditarReserva(id){
  $('editStatus').value=
   r.statusPagamento||
   'pendente';
+
+ if($('editOrigem'))
+  $('editOrigem').value=r.origemReserva||'';
 
 
  atualizarResumoEdicao();
@@ -6930,6 +6900,9 @@ async function salvarEdicao(id){
     telefone:
      $('editTelefone')
       .value.trim(),
+
+    origemReserva:
+     $('editOrigem')?.value||'',
 
     entrada,
     saida,
