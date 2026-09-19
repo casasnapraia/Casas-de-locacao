@@ -706,10 +706,15 @@ textarea{
 }
 
 .dia.selecionado{
- background:var(--ouro);
- border-color:#d4a000;
- font-weight:bold
+ background:#7c3aed!important;
+ border-color:#4c1d95!important;
+ color:#fff;
+ font-weight:bold;
+ box-shadow:0 0 0 2px #c4b5fd inset,0 2px 7px #0003;
+ transform:scale(1.03)
 }
+.dia.bloqueado.selecionado{background:#dc2626!important;border-color:#991b1b!important}
+.paginacao-hospedes{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin:15px 0}.paginacao-hospedes button{padding:7px 12px}.banner-admin-box{background:#fff;border:1px solid #ddd;border-radius:10px;padding:16px;margin:15px 0;box-shadow:var(--sombra)}.banner-preview{width:100%;max-height:220px;object-fit:cover;border-radius:10px;margin-top:10px;display:block}.acoes-reserva-final{display:flex;gap:5px;flex-wrap:wrap}.botao-quitar{background:#15803d;color:#fff;border:0;padding:7px 9px;border-radius:6px;font-weight:bold}.botao-quitar:hover{background:#166534}
 
 .dia.passado{
  color:#bbb;
@@ -1750,6 +1755,15 @@ textarea{
 
  <h2>🏠 Gerenciar Casas, Fotos & Taxas</h2>
 
+ <div class="banner-admin-box">
+  <h3>🖼️ Banner principal da página</h3>
+  <p style="color:var(--cinza);margin:6px 0 12px">Envie uma imagem para o Imgur ou informe uma URL direta. O banner será exibido somente na página pública.</p>
+  <div class="linha-form"><div class="grupo-input"><label>Client ID do Imgur</label><input id="imgurClientId" type="text" placeholder="Client ID do Imgur"></div><div class="grupo-input"><label>Selecionar imagem</label><input id="bannerArquivo" type="file" accept="image/*" onchange="uploadBannerImgur()"></div></div>
+  <div class="grupo-input"><label>URL do banner</label><input id="bannerPrincipalUrl" placeholder="https://i.imgur.com/...jpg" oninput="atualizarPreviewBanner()"></div>
+  <img id="bannerPreviewAdmin" class="banner-preview" style="display:none">
+  <button class="sucesso" onclick="salvarBannerPrincipal()">💾 Salvar banner</button>
+ </div>
+
  <div class="grade-casas" id="gradeCasas"></div>
 
  <div style="
@@ -1795,6 +1809,7 @@ textarea{
  </div>
 
  <div id="listaHospedes"></div>
+ <div id="paginacaoHospedes" class="paginacao-hospedes"></div>
 
 </div>
 
@@ -2398,6 +2413,7 @@ if(typeof emailjs!=='undefined'){
 
 const $=id=>document.getElementById(id);
 
+let bannerPrincipalUrl="",imgurClientId="",paginaHospedesAtual=1;const HOSPEDES_POR_PAGINA=20;
 const casas={
 
  nossa:{nome:'Nossa Casa',capacidade:12,desc:'Propriedade interna — uso administrativo.',caracteristicas:['🏠 Uso interno','🔒 Não aparece no site público'],fotos:[],taxaLimpeza:0,interna:true},
@@ -2974,7 +2990,7 @@ function proximaFoto(){
 }
 
 function renderizarPaginaPublica(){
-
+ aplicarBannerPrincipal();
  const c=$('listaCasasPublica');
 
  if(!c)return;
@@ -3353,10 +3369,7 @@ function estenderSelecao(s){
 
 }
 
-document.addEventListener(
- 'mouseup',
- ()=>selecionando=false
-);
+document.addEventListener('mouseup',()=>selecionando=false);document.addEventListener('mouseleave',()=>selecionando=false);
 
 function atualizarInfoSelecao(){
 
@@ -4674,8 +4687,7 @@ async function carregarDadosCasas(){
 
   if(d.exists){
 
-   const x=
-    d.data().casas||{};
+   const dados=d.data()||{},x=dados.casas||{};bannerPrincipalUrl=dados.bannerPrincipalUrl||'';imgurClientId=dados.imgurClientId||'';
 
    Object.keys(casas).forEach(id=>{
 
@@ -4699,6 +4711,8 @@ async function carregarDadosCasas(){
   }
 
   renderizarPaginaPublica();
+  aplicarBannerPrincipal();
+  if($('bannerPrincipalUrl')){ $('bannerPrincipalUrl').value=bannerPrincipalUrl; $('imgurClientId').value=imgurClientId; atualizarPreviewBanner(); }
 
  }catch(e){
 
@@ -4713,11 +4727,14 @@ async function carregarDadosCasas(){
 
 async function salvarTodasCasas(){
 
- await db.collection('configuracoes')
-  .doc('casas')
-  .set({casas});
+ await db.collection('configuracoes').doc('casas').set({casas,bannerPrincipalUrl,imgurClientId});
 
 }
+
+function aplicarBannerPrincipal(){const h=document.querySelector('.hero-praia');if(h&&bannerPrincipalUrl)h.style.backgroundImage=`linear-gradient(180deg,#002d461f,#002337b8),url("${bannerPrincipalUrl}")`;}
+function atualizarPreviewBanner(){const i=$('bannerPreviewAdmin'),u=$('bannerPrincipalUrl')?.value.trim();if(!i)return;i.src=u||'';i.style.display=u?'block':'none';}
+async function uploadBannerImgur(){const f=$('bannerArquivo')?.files?.[0];if(!f)return;const id=$('imgurClientId')?.value.trim()||imgurClientId;if(!id)return alert('⚠️ Informe o Client ID do Imgur antes de enviar.');if(f.size>10*1024*1024)return alert('⚠️ A imagem deve ter no máximo 10 MB.');try{const fd=new FormData();fd.append('image',f);const r=await fetch('https://api.imgur.com/3/image',{method:'POST',headers:{Authorization:`Client-ID ${id}`},body:fd});const j=await r.json();if(!r.ok||!j.success||!j.data?.link)throw new Error(j.data?.error||'Falha no upload');$('bannerPrincipalUrl').value=j.data.link;imgurClientId=id;atualizarPreviewBanner();alert('✅ Banner enviado ao Imgur. Clique em Salvar banner.');}catch(e){console.error(e);alert('❌ Não foi possível enviar o banner ao Imgur. Confira o Client ID e tente novamente.');}}
+async function salvarBannerPrincipal(){bannerPrincipalUrl=$('bannerPrincipalUrl')?.value.trim()||'';imgurClientId=$('imgurClientId')?.value.trim()||imgurClientId;try{await salvarTodasCasas();aplicarBannerPrincipal();atualizarPreviewBanner();alert('✅ Banner salvo com sucesso!');}catch(e){console.error(e);alert('❌ Erro ao salvar o banner.');}}
 
 function renderizarCasasAdmin(){
 
@@ -5122,7 +5139,7 @@ function atualizarListaReservas(){
         <td>
          <div class="reserva-acoes">
           <button class="azul" onclick="abrirEditarReserva('${r.id}')">✏️ Gerenciar</button>
-          ${pago>0?`<button class="botao-recibo" onclick="emitirRecibo('${r.id}')">🧾 Recibo</button>`:''}
+          ${pago>0?`<button class="botao-recibo" onclick="emitirRecibo('${r.id}')">🧾 Recibo</button>`:''}${pendente>0&&dataLocal(r.entrada)<=hoje()?`<button class="botao-quitar" onclick="quitarRecebimentoFinal('${r.id}')">💰 Quitar Recebimento Final</button>`:''}
          </div>
         </td>
        </tr>
@@ -5133,6 +5150,8 @@ function atualizarListaReservas(){
   </div>
  `;
 }
+
+async function quitarRecebimentoFinal(id){const r=reservasConfirmadas.find(x=>x.id===id);if(!r)return;const total=Number(r.valorTotal||0),recebido=Number(r.valorPago||0),saldo=Math.max(0,total-recebido);if(saldo<=0)return alert('✅ Esta reserva já está quitada.');if(dataLocal(r.entrada)>hoje())return alert('⚠️ A quitação final fica disponível a partir da data de check-in.');const forma=prompt('Forma de recebimento do saldo final:\n1 - Pix\n2 - Dinheiro\n3 - Cartão\n4 - Transferência Bancária',r.formaPagamento||'Pix');const formas={'1':'Pix','2':'Dinheiro','3':'Cartão','4':'Transferência Bancária'};const fp=formas[forma?.trim()]||forma?.trim();if(!fp)return;if(!confirm(`Confirmar recebimento final de ${moeda(saldo)}?\n\nHóspede: ${r.nome||'—'}\nCasa: ${casas[r.casa]?.nome||r.casa}`))return;try{await db.collection('reservas').doc(id).update({valorPago:total,statusPagamento:'pago',formaPagamento:fp,atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()});await carregarReservasConfirmadas();await sincronizarDisponibilidadePublica();atualizarListaReservas();gerarRelatorio();alert(`✅ Recebimento final baixado: ${moeda(saldo)}`);}catch(e){console.error(e);alert('❌ Não foi possível quitar o recebimento final.');}}
 
 function numeroPorExtenso(n){
 
@@ -7168,38 +7187,8 @@ async function cadastrarOuAtualizarHospede(nome,telefone,extras={}){
  }
 }
 
-async function carregarHospedes(){
- hospedesCadastrados=[];
- const s=await db.collection('hospedes').orderBy('nome').get();
- s.forEach(d=>hospedesCadastrados.push({id:d.id,...d.data()}));
- filtrarHospedes();
-}
-
-function filtrarHospedes(){
- const el=$('listaHospedes');
- if(!el)return;
-
- const q=normalizar($('buscarHospede')?.value||'');
- const arr=hospedesCadastrados.filter(h=>
-  !q ||
-  normalizar(h.nome).includes(q) ||
-  String(h.telefone||'').includes(q) ||
-  normalizar(h.email).includes(q) ||
-  String(h.cpf||'').includes(q)
- );
-
- el.innerHTML=arr.length
-  ?arr.map(h=>`
-   <div class="reserva-item">
-    <strong>👤 ${h.nome}</strong>
-    <p>📱 ${h.telefone||'—'} ${h.email?` · ✉️ ${h.email}`:''}</p>
-    ${h.cpf?`<p>🪪 CPF: ${h.cpf}</p>`:''}
-    ${h.cidade||h.estado?`<p>📍 ${[h.cidade,h.estado].filter(Boolean).join(' - ')}</p>`:''}
-    <button class="azul" onclick="editarHospede('${h.id}')">✏️ Editar Cadastro</button>
-   </div>
-  `).join('')
-  :`<p style="color:var(--cinza)">Nenhum hóspede encontrado.</p>`;
-}
+async function carregarHospedes(){hospedesCadastrados=[];const s=await db.collection('hospedes').orderBy('nome').get();s.forEach(d=>hospedesCadastrados.push({id:d.id,...d.data()}));paginaHospedesAtual=1;filtrarHospedes();}
+function filtrarHospedes(pagina=1){const el=$('listaHospedes');if(!el)return;const q=normalizar($('buscarHospede')?.value||'');const arr=hospedesCadastrados.filter(h=>!q||normalizar(h.nome).includes(q)||String(h.telefone||'').includes(q)||normalizar(h.email).includes(q)||String(h.cpf||'').includes(q));const paginas=Math.max(1,Math.ceil(arr.length/HOSPEDES_POR_PAGINA));paginaHospedesAtual=Math.min(Math.max(1,pagina),paginas);const vis=arr.slice((paginaHospedesAtual-1)*HOSPEDES_POR_PAGINA,paginaHospedesAtual*HOSPEDES_POR_PAGINA);el.innerHTML=vis.length?vis.map(h=>`<div class="reserva-item"><strong>👤 ${escapeHtmlReserva(h.nome)}</strong><p>📱 ${escapeHtmlReserva(h.telefone||'—')} ${h.email?` · ✉️ ${escapeHtmlReserva(h.email)}`:''}</p>${h.cpf?`<p>🪪 CPF: ${escapeHtmlReserva(h.cpf)}</p>`:''}${h.cidade||h.estado?`<p>📍 ${escapeHtmlReserva([h.cidade,h.estado].filter(Boolean).join(' - '))}</p>`:''}<button class="azul" onclick="editarHospede('${h.id}')">✏️ Editar Cadastro</button></div>`).join(''):`<p style="color:var(--cinza)">Nenhum hóspede encontrado.</p>`;const pg=$('paginacaoHospedes');if(pg)pg.innerHTML=arr.length<=HOSPEDES_POR_PAGINA?'':`<button onclick="filtrarHospedes(${paginaHospedesAtual-1})" ${paginaHospedesAtual===1?'disabled':''}>‹ Anterior</button><span>Página ${paginaHospedesAtual} de ${paginas} · ${arr.length} hóspedes</span><button onclick="filtrarHospedes(${paginaHospedesAtual+1})" ${paginaHospedesAtual===paginas?'disabled':''}>Próxima ›</button>`;}
 
 function limparFormularioHospede(){
  ['hospedeEdicaoId','cadHospedeNome','cadHospedeTelefone','cadHospedeEmail','cadHospedeCpf','cadHospedeNascimento','cadHospedeCep','cadHospedeEndereco','cadHospedeNumero','cadHospedeComplemento','cadHospedeBairro','cadHospedeCidade','cadHospedeEstado','cadHospedeObservacoes']
