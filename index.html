@@ -106,11 +106,6 @@ button:disabled{
  color:#222!important
 }
 
-
-/* =========================
-   PÁGINA PÚBLICA
-========================= */
-
 .cabecalho-publico{
  position:absolute;
  top:0;
@@ -342,11 +337,6 @@ button:disabled{
  font-weight:600
 }
 
-
-/* =========================
-   FAIXAS
-========================= */
-
 .faixa-praia{
  min-height:330px;
  display:flex;
@@ -430,11 +420,6 @@ button:disabled{
  margin-top:5px;
  color:#ffffffd1
 }
-
-
-/* =========================
-   MODAIS
-========================= */
 
 .overlay-galeria,
 .overlay-login,
@@ -612,11 +597,6 @@ textarea{
  color:var(--cinza)
 }
 
-
-/* =========================
-   ADMIN
-========================= */
-
 .barra-lateral{
  position:fixed;
  left:0;
@@ -682,11 +662,6 @@ textarea{
 .btn-notificacoes.ativado{
  background:#28a745!important
 }
-
-
-/* =========================
-   CALENDÁRIO
-========================= */
 
 .calendario{
  background:#fff;
@@ -758,11 +733,6 @@ textarea{
  color:var(--cinza);
  padding:8px
 }
-
-
-/* =========================
-   RESERVAS
-========================= */
 
 .reserva-item{
  border:1px solid #eee;
@@ -881,10 +851,6 @@ textarea{
  background:#146c43
 }
 
-
-/* =========================
-   RESERVAS - FILTROS E TABELA
-========================= */
 .painel-reservas-filtros{
  background:#f7fafb;
  border:1px solid #e3eaed;
@@ -1024,11 +990,6 @@ textarea{
  .reservas-indicadores{grid-template-columns:1fr 1fr}
 }
 
-
-/* =========================
-   FOTOS
-========================= */
-
 .lista-fotos-galeria{
  margin-top:10px
 }
@@ -1058,11 +1019,6 @@ textarea{
  padding:4px 8px;
  border-radius:4px
 }
-
-
-/* =========================
-   SUGESTÕES DE DATAS
-========================= */
 
 .sugestoes-disponibilidade{
  display:none;
@@ -1203,102 +1159,6 @@ textarea{
  margin-top:3px
 }
 
-
-
-/* =========================
-   DESPESAS / CAIXA
-========================= */
-.painel-despesas{
- background:#f7fafb;
- border:1px solid #e2eaee;
- border-radius:12px;
- padding:16px;
- margin:15px 0;
-}
-.despesas-form-grid{
- display:grid;
- grid-template-columns:repeat(4,minmax(0,1fr));
- gap:10px;
-}
-.despesas-form-grid .grupo-input{margin:0}
-.despesas-acoes,.despesas-relatorio-acoes{
- display:flex;
- flex-wrap:wrap;
- gap:8px;
- margin-top:12px;
-}
-.despesas-resumo{
- display:grid;
- grid-template-columns:repeat(4,1fr);
- gap:10px;
- margin:15px 0;
-}
-.despesa-badge{
- display:inline-block;
- padding:3px 7px;
- border-radius:999px;
- background:#eef6fa;
- color:var(--marinho);
- font-size:11px;
- font-weight:600;
-}
-.paginacao-admin{
- display:flex;
- align-items:center;
- justify-content:center;
- flex-wrap:wrap;
- gap:8px;
- margin:14px 0;
-}
-.paginacao-admin button{
- border:1px solid #ccd8de;
- background:#fff;
- color:var(--marinho);
- padding:7px 11px;
- border-radius:6px;
-}
-.paginacao-admin button.ativo{background:var(--marinho)!important;color:#fff!important}
-.paginacao-admin span{color:var(--cinza);font-size:13px}
-.tabela-admin-compacta{
- width:100%;
- border-collapse:collapse;
- margin-top:12px;
- font-size:13px;
- background:#fff;
-}
-.tabela-admin-compacta th,.tabela-admin-compacta td{
- border-bottom:1px solid #e4eaed;
- padding:8px 7px;
- text-align:left;
- vertical-align:top;
-}
-.tabela-admin-compacta th{background:#f0f6f8;color:var(--marinho)}
-.despesa-valor{font-weight:700;white-space:nowrap}
-.despesa-acoes button{margin:2px;padding:5px 8px;font-size:12px}
-.print-cabecalho{display:none}
-@media print{
- .print-cabecalho{display:block!important;text-align:center;margin-bottom:18px;border-bottom:2px solid #0a4b6e;padding-bottom:12px}
- .print-cabecalho h1{font-size:20px;margin:0;color:#0a4b6e}
- .print-cabecalho p{font-size:11px;margin:4px 0;color:#555}
- #relatorioConteudo .relatorio-resumo{grid-template-columns:repeat(5,1fr)!important;box-shadow:none!important}
- #relatorioConteudo .resumo-card{box-shadow:none;border:1px solid #bbb;padding:8px}
- #relatorioConteudo .resumo-card strong{font-size:14px}
- #relatorioConteudo .tabela-relatorio{font-size:9px!important}
- #relatorioConteudo .tabela-relatorio th{background:#e9eef0!important;color:#111!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-}
-@media(max-width:1000px){
- .despesas-form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
- .despesas-resumo{grid-template-columns:repeat(2,1fr)}
-}
-@media(max-width:600px){
- .despesas-form-grid{grid-template-columns:1fr}
- .despesas-resumo{grid-template-columns:1fr}
-}
-
-/* =========================
-   RELATÓRIOS
-========================= */
-
 .filtros-relatorio{
  background:#f7fafb;
  padding:15px;
@@ -1361,10 +1221,6 @@ textarea{
  margin:10px 0
 }
 
-
-/* =========================
-   FORMULÁRIO DE HÓSPEDES
-========================= */
 .grade-formulario{
  display:grid;
  grid-template-columns:repeat(2,minmax(0,1fr));
@@ -1379,10 +1235,6 @@ textarea{
   grid-column:1/-1!important;
  }
 }
-
-/* =========================
-   RESPONSIVO
-========================= */
 
 @media(max-width:900px){
 
@@ -1460,7 +1312,6 @@ textarea{
  }
 }
 
-
 .whatsapp-reserva{
  margin-top:12px;
  padding:12px;
@@ -1500,11 +1351,6 @@ textarea{
  }
 }
 
-
-/* =========================
-   IMPRESSÃO DO RELATÓRIO
-========================= */
-
 @media print{
 
  body{
@@ -1536,12 +1382,12 @@ textarea{
  }
 }
 
+.painel-despesas{background:#fff;border:1px solid #ddd;border-radius:10px;padding:16px;margin:15px 0;box-shadow:var(--sombra)}
+.despesas-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.despesas-acoes{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.despesas-resumo{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:15px 0}.despesa-acoes button{margin:2px;padding:5px 8px;font-size:12px}@media(max-width:800px){.despesas-form-grid,.despesas-resumo{grid-template-columns:1fr}}
 </style>
 </head>
 
-
 <body>
-
 
 <!-- =====================================================
      PÁGINA PÚBLICA
@@ -1556,7 +1402,6 @@ textarea{
   🔐 Acesso Administrativo
  </button>
 </header>
-
 
 <section class="hero-praia">
 
@@ -1583,7 +1428,6 @@ textarea{
 
 </section>
 
-
 <main class="area-publica">
 
  <div class="introducao-publica" id="nossasCasas">
@@ -1608,7 +1452,6 @@ textarea{
 
 </main>
 
-
 <section class="faixa-praia">
 
  <div class="faixa-praia-conteudo">
@@ -1623,7 +1466,6 @@ textarea{
  </div>
 
 </section>
-
 
 <section class="info-praia">
 
@@ -1655,7 +1497,6 @@ textarea{
 
 </section>
 
-
 <footer class="rodape-publico">
 
  <h3>
@@ -1685,7 +1526,6 @@ textarea{
 </footer>
 
 </div>
-
 
 <!-- =====================================================
      GALERIA
@@ -1722,7 +1562,6 @@ textarea{
 
 </div>
 
-
 <!-- =====================================================
      LOGIN
 ===================================================== -->
@@ -1754,7 +1593,6 @@ textarea{
  </div>
 
 </div>
-
 
 <!-- =====================================================
      PAINEL ADMINISTRATIVO
@@ -1788,15 +1626,9 @@ textarea{
    📋 Reservas
   </button>
 
-  <button class="item-menu"
-   data-pagina="relatorios">
-   📊 Relatórios
-  </button>
+  <button class="item-menu" data-pagina="relatorios">📊 Relatórios</button>
 
-  <button class="item-menu"
-   data-pagina="despesas">
-   💸 Despesas / Caixa
-  </button>
+  <button class="item-menu" data-pagina="despesas">💸 Despesas / Caixa</button>
 
  </div>
 
@@ -1813,9 +1645,7 @@ textarea{
 
 </div>
 
-
 <div class="conteudo-admin">
-
 
 <!-- =====================================================
      CALENDÁRIO
@@ -1852,11 +1682,13 @@ textarea{
    <option value="branca">
     ☁️ Casa Branca
    </option>
+   <option value="nossa">
+    🏠 Nossa Casa — interno
+   </option>
 
   </select>
 
  </div>
-
 
  <div class="calendario">
 
@@ -1879,7 +1711,6 @@ textarea{
 
  </div>
 
-
  <div class="linha-form">
 
   <label>Valor Diária:</label>
@@ -1901,13 +1732,15 @@ textarea{
 
  </div>
 
- <p id="infoSelecao"
-  style="color:var(--cinza)">
-  Nenhum dia selecionado
- </p>
+ <p id="infoSelecao" style="color:var(--cinza)">Nenhum dia selecionado</p>
+ <div class="painel-despesas" style="margin-top:14px">
+  <h3>🔒 Bloquear período</h3>
+  <p style="color:var(--cinza);margin:6px 0 10px">Selecione os dias para impedir novas reservas públicas.</p>
+  <div class="linha-form"><div class="grupo-input"><label>Motivo</label><input id="motivoBloqueioCalendario" placeholder="Ex.: uso próprio, manutenção..."></div><div class="grupo-input" style="align-self:end"><button class="vermelho" onclick="bloquearPeriodoSelecionado()">🔒 Bloquear período</button></div></div>
+  <div id="listaBloqueiosCalendario" style="margin-top:10px"></div>
+ </div>
 
 </div>
-
 
 <!-- =====================================================
      CASAS
@@ -1931,7 +1764,6 @@ textarea{
 
 </div>
 
-
 <!-- =====================================================
      HÓSPEDES
 ===================================================== -->
@@ -1948,7 +1780,7 @@ textarea{
 
   <input id="buscarHospede"
    placeholder="Buscar nome, telefone, CPF ou e-mail..."
-   oninput="paginaHospedesAtual=1;filtrarHospedes(1)">
+   oninput="filtrarHospedes()">
 
   <button class="azul"
    onclick="abrirCadastroHospede()">
@@ -1963,10 +1795,8 @@ textarea{
  </div>
 
  <div id="listaHospedes"></div>
- <div id="paginacaoHospedes" class="paginacao-admin"></div>
 
 </div>
-
 
 <!-- =====================================================
      RESERVAS
@@ -1974,7 +1804,10 @@ textarea{
 
 <div id="pagina-reservas" class="pagina">
 
- <h2>📋 Solicitações e Reservas</h2>
+ <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+  <h2 style="margin:0">📋 Solicitações e Reservas</h2>
+  <button class="sucesso" onclick="abrirNovaReservaAdmin()">➕ Nova reserva administrativa</button>
+ </div>
 
  <div class="painel-reservas-filtros">
 
@@ -1994,6 +1827,7 @@ textarea{
      <option value="bege">🌾 Casa Bege</option>
      <option value="marrom">🪵 Casa Marrom</option>
      <option value="branca">☁️ Casa Branca</option>
+     <option value="nossa">🏠 Nossa Casa — interno</option>
     </select>
    </div>
 
@@ -2084,146 +1918,24 @@ textarea{
 
 </div>
 
-
-<!-- =====================================================
-     DESPESAS / CAIXA
-===================================================== -->
-
-<div id="pagina-despesas" class="pagina">
-
- <h2>💸 Controle de Despesas e Caixa</h2>
- <p style="color:var(--cinza);margin:8px 0 14px">
-  Registre os gastos de cada propriedade e acompanhe os pagamentos por categoria, forma de pagamento e destino.
- </p>
-
- <div class="painel-despesas">
-  <h3>➕ Novo lançamento de despesa</h3>
-  <div class="despesas-form-grid" style="margin-top:12px">
-   <div class="grupo-input">
-    <label>Data *</label>
-    <input type="date" id="despesaData">
-   </div>
-   <div class="grupo-input">
-    <label>Casa / propriedade *</label>
-    <select id="despesaCasa">
-     <option value="amarela">Casa Amarela</option>
-     <option value="bege">Casa Bege</option>
-     <option value="marrom">Casa Marrom</option>
-     <option value="branca">Casa Branca</option>
-    </select>
-   </div>
-   <div class="grupo-input">
-    <label>Categoria *</label>
-    <select id="despesaCategoria">
-     <option value="agua">Água</option>
-     <option value="energia">Energia</option>
-     <option value="internet">Internet</option>
-     <option value="limpeza">Pagamento de limpeza</option>
-     <option value="manutencao">Manutenção</option>
-     <option value="gas">Gás</option>
-     <option value="impostos">Impostos / taxas</option>
-     <option value="materiais">Materiais / compras</option>
-     <option value="outros">Outros</option>
-    </select>
-   </div>
-   <div class="grupo-input">
-    <label>Valor *</label>
-    <input type="number" id="despesaValor" min="0" step="0.01" placeholder="0,00">
-   </div>
-   <div class="grupo-input">
-    <label>Forma de pagamento *</label>
-    <select id="despesaFormaPagamento">
-     <option value="Pix">Pix</option>
-     <option value="Dinheiro">Dinheiro</option>
-     <option value="Cartão">Cartão</option>
-     <option value="Boleto">Boleto</option>
-     <option value="Transferência bancária">Transferência bancária</option>
-    </select>
-   </div>
-   <div class="grupo-input">
-    <label>Caixa / conta de origem</label>
-    <select id="despesaContaOrigem">
-     <option value="Caixa Casa Amarela">Caixa Casa Amarela</option>
-     <option value="Caixa Casa Bege">Caixa Casa Bege</option>
-     <option value="Caixa Casa Marrom">Caixa Casa Marrom</option>
-     <option value="Caixa Casa Branca">Caixa Casa Branca</option>
-     <option value="Caixa Geral">Caixa Geral</option>
-     <option value="Conta bancária">Conta bancária</option>
-    </select>
-   </div>
-   <div class="grupo-input" style="grid-column:span 2">
-    <label>Descrição</label>
-    <input id="despesaDescricao" placeholder="Ex.: conta de energia de setembro">
-   </div>
-   <div class="grupo-input" style="grid-column:1/-1">
-    <label>Observação</label>
-    <textarea id="despesaObservacao" rows="2" placeholder="Informações adicionais..."></textarea>
-   </div>
-  </div>
-  <div class="despesas-acoes">
-   <button class="sucesso" onclick="salvarDespesa()">💾 Lançar despesa</button>
-   <button class="cinza" onclick="limparFormularioDespesa()">✖ Limpar</button>
-  </div>
- </div>
-
- <div class="painel-despesas">
-  <h3>🔎 Filtros e relatório de despesas</h3>
-  <div class="despesas-form-grid" style="margin-top:12px">
-   <div class="grupo-input">
-    <label>Casa</label>
-    <select id="filtroDespesaCasa" onchange="gerarRelatorioDespesas()">
-     <option value="todas">Todas</option>
-     <option value="amarela">Casa Amarela</option>
-     <option value="bege">Casa Bege</option>
-     <option value="marrom">Casa Marrom</option>
-     <option value="branca">Casa Branca</option>
-    </select>
-   </div>
-   <div class="grupo-input">
-    <label>Categoria</label>
-    <select id="filtroDespesaCategoria" onchange="gerarRelatorioDespesas()">
-     <option value="todas">Todas</option>
-     <option value="agua">Água</option><option value="energia">Energia</option><option value="internet">Internet</option>
-     <option value="limpeza">Limpeza</option><option value="manutencao">Manutenção</option><option value="gas">Gás</option>
-     <option value="impostos">Impostos / taxas</option><option value="materiais">Materiais / compras</option><option value="outros">Outros</option>
-    </select>
-   </div>
-   <div class="grupo-input">
-    <label>Forma de pagamento</label>
-    <select id="filtroDespesaPagamento" onchange="gerarRelatorioDespesas()">
-     <option value="todas">Todas</option><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Boleto</option><option>Transferência bancária</option>
-    </select>
-   </div>
-   <div class="grupo-input">
-    <label>Conta / caixa</label>
-    <select id="filtroDespesaConta" onchange="gerarRelatorioDespesas()">
-     <option value="todas">Todas</option><option>Caixa Casa Amarela</option><option>Caixa Casa Bege</option><option>Caixa Casa Marrom</option><option>Caixa Casa Branca</option><option>Caixa Geral</option><option>Conta bancária</option>
-    </select>
-   </div>
-   <div class="grupo-input">
-    <label>Data inicial</label><input type="date" id="filtroDespesaDataInicial" onchange="gerarRelatorioDespesas()">
-   </div>
-   <div class="grupo-input">
-    <label>Data final</label><input type="date" id="filtroDespesaDataFinal" onchange="gerarRelatorioDespesas()">
-   </div>
-  </div>
-  <div class="despesas-relatorio-acoes">
-   <button class="btn-verde" onclick="exportarDespesasCSV()">📊 Exportar CSV</button>
-   <button class="cinza" onclick="imprimirRelatorioDespesas()">🖨️ Imprimir / PDF</button>
-   <button class="vermelho" onclick="limparFiltrosDespesas()">✖ Limpar filtros</button>
-  </div>
- </div>
-
- <div id="despesasResumo" class="despesas-resumo"></div>
- <div id="listaDespesas"></div>
- <div id="paginacaoDespesas" class="paginacao-admin"></div>
-
-</div>
-
-
 <!-- =====================================================
      RELATÓRIOS
 ===================================================== -->
+
+<div id="pagina-despesas" class="pagina">
+ <h2>💸 Despesas / Caixa</h2>
+ <div class="painel-despesas"><h3 id="tituloFormularioDespesa">➕ Novo lançamento de despesa</h3><input type="hidden" id="despesaEditId"><div class="despesas-form-grid" style="margin-top:12px">
+  <div class="grupo-input"><label>Data *</label><input type="date" id="despesaData"></div>
+  <div class="grupo-input"><label>Casa / propriedade *</label><select id="despesaCasa"><option value="amarela">Casa Amarela</option><option value="bege">Casa Bege</option><option value="marrom">Casa Marrom</option><option value="branca">Casa Branca</option><option value="nossa">Nossa Casa — interno</option></select></div>
+  <div class="grupo-input"><label>Categoria *</label><select id="despesaCategoria"><option value="agua">Água</option><option value="energia">Energia</option><option value="internet">Internet</option><option value="limpeza">Pagamento de limpeza</option><option value="manutencao">Manutenção</option><option value="gas">Gás</option><option value="impostos">Impostos / taxas</option><option value="materiais">Materiais / compras</option><option value="outros">Outros</option></select></div>
+  <div class="grupo-input"><label>Valor *</label><input type="number" id="despesaValor" min="0" step="0.01"></div>
+  <div class="grupo-input"><label>Forma de pagamento *</label><select id="despesaFormaPagamento"><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Boleto</option><option>Transferência bancária</option></select></div>
+  <div class="grupo-input"><label>Caixa / conta de origem</label><select id="despesaContaOrigem"><option>Caixa Casa Amarela</option><option>Caixa Casa Bege</option><option>Caixa Casa Marrom</option><option>Caixa Casa Branca</option><option>Caixa Nossa Casa</option><option>Caixa Geral</option><option>Conta bancária</option></select></div>
+  <div class="grupo-input" style="grid-column:1/-1"><label>Descrição</label><input id="despesaDescricao"></div>
+  <div class="grupo-input" style="grid-column:1/-1"><label>Observação</label><textarea id="despesaObservacao" rows="2"></textarea></div>
+ </div><div class="despesas-acoes"><button class="sucesso" id="btnSalvarDespesa" onclick="salvarDespesa()">💾 Lançar despesa</button><button class="cinza" onclick="limparFormularioDespesa()">✖ Limpar</button></div></div>
+ <div class="painel-despesas"><h3>🔎 Filtros e relatório</h3><div class="despesas-form-grid"><div class="grupo-input"><label>Casa</label><select id="filtroDespesaCasa" onchange="gerarRelatorioDespesas()"><option value="todas">Todas</option><option value="amarela">Casa Amarela</option><option value="bege">Casa Bege</option><option value="marrom">Casa Marrom</option><option value="branca">Casa Branca</option><option value="nossa">Nossa Casa</option></select></div><div class="grupo-input"><label>Categoria</label><select id="filtroDespesaCategoria" onchange="gerarRelatorioDespesas()"><option value="todas">Todas</option><option value="agua">Água</option><option value="energia">Energia</option><option value="internet">Internet</option><option value="limpeza">Limpeza</option><option value="manutencao">Manutenção</option><option value="gas">Gás</option><option value="impostos">Impostos / taxas</option><option value="materiais">Materiais / compras</option><option value="outros">Outros</option></select></div><div class="grupo-input"><label>Pagamento</label><select id="filtroDespesaPagamento" onchange="gerarRelatorioDespesas()"><option value="todas">Todas</option><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Boleto</option><option>Transferência bancária</option></select></div><div class="grupo-input"><label>Conta / caixa</label><select id="filtroDespesaConta" onchange="gerarRelatorioDespesas()"><option value="todas">Todas</option><option>Caixa Casa Amarela</option><option>Caixa Casa Bege</option><option>Caixa Casa Marrom</option><option>Caixa Casa Branca</option><option>Caixa Nossa Casa</option><option>Caixa Geral</option><option>Conta bancária</option></select></div><div class="grupo-input"><label>Data inicial</label><input type="date" id="filtroDespesaDataInicial" onchange="gerarRelatorioDespesas()"></div><div class="grupo-input"><label>Data final</label><input type="date" id="filtroDespesaDataFinal" onchange="gerarRelatorioDespesas()"></div></div><div class="despesas-acoes"><button class="btn-verde" onclick="exportarDespesasCSV()">📊 Exportar CSV</button><button class="cinza" onclick="imprimirRelatorioDespesas()">🖨️ Imprimir / PDF</button><button class="vermelho" onclick="limparFiltrosDespesas()">✖ Limpar filtros</button></div></div><div id="despesasResumo" class="despesas-resumo"></div><div id="listaDespesas"></div><div id="paginacaoDespesas" class="paginacao-admin"></div>
+</div>
 
 <div id="pagina-relatorios" class="pagina">
 
@@ -2242,11 +1954,11 @@ textarea{
     <option value="bege">Casa Bege</option>
     <option value="marrom">Casa Marrom</option>
     <option value="branca">Casa Branca</option>
+    <option value="nossa">Nossa Casa — interno</option>
 
    </select>
 
   </div>
-
 
   <div>
    <label>Período</label>
@@ -2266,7 +1978,6 @@ textarea{
 
   </div>
 
-
   <div>
    <label>Status</label>
 
@@ -2283,7 +1994,6 @@ textarea{
 
   </div>
 
-
   <div>
    <label>Hóspede</label>
 
@@ -2293,18 +2003,24 @@ textarea{
 
   </div>
 
-
   <div>
    <label>Forma de recebimento</label>
    <select id="filtroFormaPagamentoRelatorio" onchange="gerarRelatorio()">
-    <option value="todos">Todas</option><option>Pix</option><option>Dinheiro</option><option>Cartão</option>
+    <option value="todos">Todas</option><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Transferência Bancária</option>
+   </select>
+  </div>
+
+  <div>
+   <label>💰 Situação financeira</label>
+   <select id="filtroRecebimentoRelatorio" onchange="gerarRelatorio()">
+    <option value="todos">Todos</option><option value="recebido">Recebido integralmente</option><option value="aReceber">Tem valor a receber</option><option value="parcial">Recebimento parcial</option><option value="semRecebimento">Sem recebimento</option>
    </select>
   </div>
 
   <div>
    <label>Conta / caixa destino</label>
    <select id="filtroContaDestinoRelatorio" onchange="gerarRelatorio()">
-    <option value="todos">Todas</option><option>Caixa Casa Amarela</option><option>Caixa Casa Bege</option><option>Caixa Casa Marrom</option><option>Caixa Casa Branca</option><option>Caixa Geral</option><option>Conta bancária</option>
+    <option value="todos">Todas</option><option>Caixa Casa Amarela</option><option>Caixa Casa Bege</option><option>Caixa Casa Marrom</option><option>Caixa Casa Branca</option><option>Caixa Nossa Casa</option><option>Caixa Geral</option><option>Conta bancária</option>
    </select>
   </div>
 
@@ -2317,7 +2033,6 @@ textarea{
 
   </div>
 
-
   <div>
    <label>Data final</label>
 
@@ -2328,7 +2043,6 @@ textarea{
   </div>
 
  </div>
-
 
  <button class="cinza botao-imprimir"
   onclick="window.print()">
@@ -2349,10 +2063,8 @@ textarea{
 
 </div>
 
-
 </div>
 </div>
-
 
 <!-- =====================================================
      MODAL RESERVA
@@ -2376,28 +2088,23 @@ textarea{
 
  </div>
 
-
  <div id="avisoBloqueio"
   class="aviso-bloqueio">
  </div>
-
 
  <div class="grupo-input">
   <label>Nome Completo</label>
   <input id="hospedeNome">
  </div>
 
-
  <div class="grupo-input">
   <label>Telefone com WhatsApp</label>
   <input id="hospedeTelefone" type="tel">
  </div>
 
-
  <div id="infoCapacidadeReserva"
   class="capacidade">
  </div>
-
 
  <div class="linha-form">
 
@@ -2411,7 +2118,6 @@ textarea{
 
   </div>
 
-
   <div class="grupo-input">
 
    <label>Data Saída</label>
@@ -2424,11 +2130,9 @@ textarea{
 
  </div>
 
-
  <div id="sugestoesDisponibilidade"
   class="sugestoes-disponibilidade">
  </div>
-
 
  <div class="linha-form">
 
@@ -2444,7 +2148,6 @@ textarea{
 
   </div>
 
-
   <div class="grupo-input">
 
    <label>👧 Crianças</label>
@@ -2459,12 +2162,10 @@ textarea{
 
  </div>
 
-
  <div id="avisoCapacidadeReserva"
   class="aviso-capacidade">
   Informe a quantidade de pessoas.
  </div>
-
 
  <div class="grupo-input">
 
@@ -2473,7 +2174,6 @@ textarea{
   <input id="valorDiarias" readonly>
 
  </div>
-
 
  <div class="grupo-input">
 
@@ -2485,7 +2185,6 @@ textarea{
 
  </div>
 
-
  <div class="grupo-input">
 
   <label>Desconto por quantidade de diárias</label>
@@ -2495,7 +2194,6 @@ textarea{
   </strong>
 
  </div>
-
 
  <div class="grupo-input">
 
@@ -2507,7 +2205,6 @@ textarea{
 
  </div>
 
-
  <div class="grupo-input">
 
   <label>Observações</label>
@@ -2518,7 +2215,6 @@ textarea{
   </textarea>
 
  </div>
-
 
  <button class="amarelo"
   id="btnEnviarReserva"
@@ -2545,7 +2241,6 @@ textarea{
 </div>
 
 </div>
-
 
 <!-- =====================================================
      MODAL EDITAR RESERVA
@@ -2670,12 +2365,7 @@ textarea{
 
 </div>
 
-
 <script>
-
-/* =====================================================
-   FIREBASE
-===================================================== */
 
 const firebaseConfig = {
  apiKey: "AIzaSyDDxYq7YRcNNlk3pIZWff7i45RNs6kpDtA",
@@ -2696,10 +2386,6 @@ firebase.initializeApp(firebaseConfig);
 const auth=firebase.auth();
 const db=firebase.firestore();
 
-/* =====================================================
-   EMAILJS - NOTIFICAÇÃO DE NOVA RESERVA
-===================================================== */
-
 const EMAILJS_SERVICE_ID='service_m2u5zmw';
 const EMAILJS_TEMPLATE_ID='template_45tnk3k';
 const EMAILJS_PUBLIC_KEY='x1av_4xY0bu0TQalh';
@@ -2712,12 +2398,9 @@ if(typeof emailjs!=='undefined'){
 
 const $=id=>document.getElementById(id);
 
-
-/* =====================================================
-   DADOS DAS CASAS
-===================================================== */
-
 const casas={
+
+ nossa:{nome:'Nossa Casa',capacidade:12,desc:'Propriedade interna — uso administrativo.',caracteristicas:['🏠 Uso interno','🔒 Não aparece no site público'],fotos:[],taxaLimpeza:0,interna:true},
 
  amarela:{
   nome:'Casa Amarela',
@@ -2785,11 +2468,6 @@ const casas={
 
 };
 
-
-/* =====================================================
-   ESTADO
-===================================================== */
-
 let casaGaleriaAtual=null;
 let indiceFotoAtual=0;
 let dataAtual=new Date();
@@ -2797,12 +2475,6 @@ let dataAtual=new Date();
 let valoresDiarias={};
 let reservasConfirmadas=[];
 let hospedesCadastrados=[];
-let paginaHospedesAtual=1;
-const HOSPEDES_POR_PAGINA=20;
-let despesasCadastradas=[];
-let paginaDespesasAtual=1;
-const DESPESAS_POR_PAGINA=15;
-let ultimasDespesasFiltradas=[];
 
 // Últimas reservas exibidas no relatório, usadas pela exportação CSV.
 let ultimasReservasFiltradas=[];
@@ -2810,6 +2482,7 @@ let ultimasReservasFiltradas=[];
 let filtroReservas='todas';
 let datasSelecionadas=new Set();
 let selecionando=false;
+let bloqueiosCalendario=[];
 
 let casaSelecionadaParaReserva=null;
 
@@ -2822,13 +2495,10 @@ let mesSugestao=new Date();
 let reservasBloqueantesSugestao=[];
 let noitesSugestao=2;
 
-
-/* =====================================================
-   HELPERS
-===================================================== */
-
-const moeda=v=>
- 'R$ '+Number(v||0).toFixed(2).replace('.',',');
+const moeda=v=>{
+ const n=Number(v||0);
+ return 'R$ '+(Number.isFinite(n)?n:0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+};
 
 const dataLocal=s=>{
  if(!s)return null;
@@ -2870,11 +2540,6 @@ function hoje(){
  d.setHours(0,0,0,0);
  return d;
 }
-
-
-/* =====================================================
-   INICIALIZAÇÃO
-===================================================== */
 
 document.addEventListener('DOMContentLoaded',async()=>{
 
@@ -2921,11 +2586,6 @@ document.addEventListener('DOMContentLoaded',async()=>{
  }
 
 });
-
-
-/* =====================================================
-   LOGIN — FIREBASE AUTHENTICATION
-===================================================== */
 
 function abrirLogin(){
  $('overlayLogin').classList.add('aberto');
@@ -3001,11 +2661,6 @@ async function fazerLogout(){
  renderizarPaginaPublica();
 }
 
-
-/* =====================================================
-   NOTIFICAÇÕES NATIVAS
-===================================================== */
-
 function mostrarStatusBotaoNotificacao(){
 
  const b=$('btnNotificacoes');
@@ -3029,7 +2684,6 @@ function mostrarStatusBotaoNotificacao(){
  b.disabled=ativo;
 
 }
-
 
 function mostrarNotificacaoNovaReserva(r,id){
 
@@ -3060,7 +2714,6 @@ function mostrarNotificacaoNovaReserva(r,id){
  };
 
 }
-
 
 function iniciarMonitoramentoReservas(){
 
@@ -3121,7 +2774,6 @@ function iniciarMonitoramentoReservas(){
 
 }
 
-
 function pararMonitoramentoDeReservas(){
 
  if(pararMonitoramentoReservas){
@@ -3133,7 +2785,6 @@ function pararMonitoramentoDeReservas(){
  }
 
 }
-
 
 async function ativarNotificacoes(){
 
@@ -3173,7 +2824,6 @@ async function ativarNotificacoes(){
 
 }
 
-
 function verificarNotificacoesJaAtivas(){
 
  if(!('Notification'in window))return;
@@ -3188,11 +2838,6 @@ function verificarNotificacoesJaAtivas(){
  }
 
 }
-
-
-/* =====================================================
-   PAINEL
-===================================================== */
 
 async function sincronizarDisponibilidadePublica(){
  if(!auth.currentUser || auth.currentUser.uid!==ADMIN_UID)return;
@@ -3225,7 +2870,6 @@ async function processarSolicitacoesHospedes(){
  }catch(e){console.error('Erro ao processar solicitações de hóspedes:',e);}
 }
 
-
 async function inicializarPainel(){
 
  try{
@@ -3237,19 +2881,17 @@ async function inicializarPainel(){
    carregarValoresDiarias(),
    carregarReservasConfirmadas(),
    carregarHospedes(),
-   carregarDespesas(),
-   carregarDadosCasas()
+   carregarDadosCasas(),
+   carregarDespesas()
   ]);
 
   configurarNavegacao();
   configurarFiltrosReservas();
 
-  renderizarCalendario();
+  renderizarCalendarioSeguro();
   renderizarCasasAdmin();
   atualizarListaReservas();
   gerarRelatorio();
-  limparFormularioDespesa();
-  gerarRelatorioDespesas();
 
  }catch(e){
 
@@ -3262,11 +2904,6 @@ async function inicializarPainel(){
  }
 
 }
-
-
-/* =====================================================
-   GALERIA
-===================================================== */
 
 function abrirGaleria(id,i=0){
 
@@ -3285,7 +2922,6 @@ function abrirGaleria(id,i=0){
 
 }
 
-
 function fecharGaleria(){
 
  $('overlayGaleria')
@@ -3294,7 +2930,6 @@ function fecharGaleria(){
  casaGaleriaAtual=null;
 
 }
-
 
 function atualizarFotoGaleria(){
 
@@ -3328,7 +2963,6 @@ function atualizarFotoGaleria(){
 
 }
 
-
 function fotoAnterior(){
  indiceFotoAtual--;
  atualizarFotoGaleria();
@@ -3339,11 +2973,6 @@ function proximaFoto(){
  atualizarFotoGaleria();
 }
 
-
-/* =====================================================
-   PÁGINA PÚBLICA
-===================================================== */
-
 function renderizarPaginaPublica(){
 
  const c=$('listaCasasPublica');
@@ -3352,6 +2981,7 @@ function renderizarPaginaPublica(){
 
  c.innerHTML=
   Object.entries(casas)
+   .filter(([,x])=>!x.interna)
    .map(([id,x])=>{
 
     const f=x.fotos?.[0];
@@ -3372,7 +3002,6 @@ function renderizarPaginaPublica(){
 
       </div>
 
-
       <div class="card-corpo">
 
        <h3>${x.nome}</h3>
@@ -3380,7 +3009,6 @@ function renderizarPaginaPublica(){
        <p class="descricao-casa">
         ${x.desc}
        </p>
-
 
        <div class="caracteristicas-casa">
 
@@ -3393,11 +3021,9 @@ function renderizarPaginaPublica(){
 
        </div>
 
-
        <div class="capacidade">
         👥 Até ${x.capacidade} pessoas
        </div>
-
 
        ${
         x.fotos?.length>1
@@ -3410,7 +3036,6 @@ function renderizarPaginaPublica(){
          `
          :''
        }
-
 
        <button
         class="amarelo"
@@ -3430,11 +3055,6 @@ function renderizarPaginaPublica(){
    .join('');
 
 }
-
-
-/* =====================================================
-   NAVEGAÇÃO
-===================================================== */
 
 function configurarNavegacao(){
 
@@ -3461,7 +3081,6 @@ function configurarNavegacao(){
     $('pagina-'+b.dataset.pagina)
      .classList.add('ativa');
 
-
     if(b.dataset.pagina==='reservas')
      atualizarListaReservas();
 
@@ -3477,13 +3096,9 @@ function configurarNavegacao(){
     if(b.dataset.pagina==='relatorios')
      gerarRelatorio();
 
-    if(b.dataset.pagina==='despesas')
-     gerarRelatorioDespesas();
-
    };
 
   });
-
 
  document
   .querySelectorAll('[data-filtro]')
@@ -3509,7 +3124,6 @@ function configurarNavegacao(){
 
 }
 
-
 function configurarFiltrosReservas(){
  const ids=[
   'filtroHospedeReservas',
@@ -3534,44 +3148,29 @@ function configurarFiltrosReservas(){
  });
 }
 
-
-/* =====================================================
-   CALENDÁRIO
-===================================================== */
-
 function mudarMes(d){
 
  dataAtual.setMonth(
   dataAtual.getMonth()+d
  );
 
- renderizarCalendario();
+ renderizarCalendarioSeguro();
 
 }
-
 
 function trocarCasaCalendario(){
 
  limparSelecao();
 
- renderizarCalendario();
+ renderizarCalendarioSeguro();
 
 }
 
+function verificarDiaBloqueado(casa,s){const reservado=reservasConfirmadas.some(r=>['confirmada','pago'].includes(r.statusPagamento)&&r.casa===casa&&s>=r.entrada&&s<r.saida);const manual=bloqueiosCalendario.some(r=>r.casa===casa&&s>=r.entrada&&s<r.saida);return reservado||manual;}
 
-function verificarDiaBloqueado(casa,s){
+async function carregarBloqueiosCalendario(){const casa=$('casaCalendario')?.value;if(!casa){bloqueiosCalendario=[];return;}try{const snap=await db.collection('bloqueios').where('casa','==',casa).get();bloqueiosCalendario=snap.docs.map(d=>({id:d.id,...d.data()}));}catch(e){console.error(e);bloqueiosCalendario=[];}}
 
- return reservasConfirmadas.some(r=>
-  ['confirmada','pago'].includes(
-   r.statusPagamento
-  ) &&
-  r.casa===casa &&
-  s>=r.entrada &&
-  s<r.saida
- );
-
-}
-
+async function renderizarCalendarioSeguro(){await carregarBloqueiosCalendario();renderizarCalendario();renderizarListaBloqueiosCalendario();}
 
 function renderizarCalendario(){
 
@@ -3596,7 +3195,6 @@ function renderizarCalendario(){
   'Qua','Qui','Sex','Sáb'
  ];
 
-
  $('nomeMes').textContent=
   new Intl.DateTimeFormat(
    'pt-BR',
@@ -3606,7 +3204,6 @@ function renderizarCalendario(){
    }
   ).format(dataAtual);
 
-
  let h=nomes
   .map(x=>
    `<div class="rotulo-dia-semana">
@@ -3615,7 +3212,6 @@ function renderizarCalendario(){
   )
   .join('');
 
-
  for(
   let i=0;
   i<primeiro.getDay();
@@ -3623,7 +3219,6 @@ function renderizarCalendario(){
  ){
   h+='<div></div>';
  }
-
 
  for(
   let d=1;
@@ -3650,7 +3245,6 @@ function renderizarCalendario(){
    valoresDiarias[
     `${casa}_${s}`
    ];
-
 
   h+=`
    <div
@@ -3689,7 +3283,6 @@ function renderizarCalendario(){
 
 }
 
-
 function iniciarSelecao(s){
 
  if(
@@ -3707,7 +3300,6 @@ function iniciarSelecao(s){
  atualizarInfoSelecao();
 
 }
-
 
 function estenderSelecao(s){
 
@@ -3732,7 +3324,6 @@ function estenderSelecao(s){
 
  const passo=
   d<=fim?1:-1;
-
 
  for(;;){
 
@@ -3762,12 +3353,10 @@ function estenderSelecao(s){
 
 }
 
-
 document.addEventListener(
  'mouseup',
  ()=>selecionando=false
 );
-
 
 function atualizarInfoSelecao(){
 
@@ -3782,11 +3371,6 @@ function atualizarInfoSelecao(){
    :'Nenhum dia selecionado';
 
 }
-
-
-/* =====================================================
-   VALORES DAS DIÁRIAS
-===================================================== */
 
 async function salvarValorPeriodo(){
 
@@ -3804,7 +3388,6 @@ async function salvarValorPeriodo(){
    'Selecione os dias e informe o valor.'
   );
  }
-
 
  try{
 
@@ -3841,7 +3424,6 @@ async function salvarValorPeriodo(){
 
 }
 
-
 async function removerValor(){
 
  const c=
@@ -3851,7 +3433,6 @@ async function removerValor(){
   return alert(
    'Selecione os dias.'
   );
-
 
  try{
 
@@ -3883,7 +3464,6 @@ async function removerValor(){
 
 }
 
-
 function limparSelecao(){
 
  datasSelecionadas.clear();
@@ -3894,7 +3474,6 @@ function limparSelecao(){
    'Nenhum dia selecionado';
 
 }
-
 
 async function carregarValoresDiarias(){
 
@@ -3915,11 +3494,6 @@ async function carregarValoresDiarias(){
 
 }
 
-
-/* =====================================================
-   RESERVAS PÚBLICAS
-===================================================== */
-
 function atualizarTotalPessoas(){
 
  const a=
@@ -3936,7 +3510,6 @@ function atualizarTotalPessoas(){
 
  const box=
   $('avisoCapacidadeReserva');
-
 
  if(!t){
 
@@ -3969,7 +3542,6 @@ function atualizarTotalPessoas(){
 
 }
 
-
 function abrirModalReserva(id){
 
  casaSelecionadaParaReserva=id;
@@ -3985,7 +3557,6 @@ function abrirModalReserva(id){
  $('valorTaxaLimpeza').textContent=
   moeda(x.taxaLimpeza);
 
-
  [
   'hospedeNome',
   'hospedeTelefone',
@@ -3997,7 +3568,6 @@ function abrirModalReserva(id){
  ].forEach(id=>{
   $(id).value='';
  });
-
 
  $('qtdAdultos').value=1;
  $('qtdCriancas').value=0;
@@ -4017,7 +3587,6 @@ function abrirModalReserva(id){
 
 }
 
-
 function fecharModal(){
 
  $('modalReserva')
@@ -4028,7 +3597,6 @@ function fecharModal(){
  casaSelecionadaParaReserva=null;
 
 }
-
 
 async function calcularValorDiarias(
  casa,
@@ -4053,7 +3621,6 @@ async function calcularValorDiarias(
  let total=0;
  let n=0;
 
-
  for(
   let d=new Date(da);
   d<ds;
@@ -4074,7 +3641,6 @@ async function calcularValorDiarias(
 
  }
 
-
  return{
   dias:n,
   valor:total
@@ -4082,33 +3648,13 @@ async function calcularValorDiarias(
 
 }
 
+async function verificarPeriodoBloqueado(casa,a,b,ignorarId=null){if(!casa||!a||!b||b<=a)return false;try{const [rs,bs]=await Promise.all([db.collection('disponibilidade').where('casa','==',casa).get(),db.collection('bloqueios').where('casa','==',casa).get()]);if(rs.docs.some(d=>{const r=d.data();return !(ignorarId&&r.reservaId===ignorarId)&&r.entrada&&r.saida&&a<r.saida&&b>r.entrada; }))return true;return bs.docs.some(d=>{const r=d.data();return r.entrada&&r.saida&&a<r.saida&&b>r.entrada;});}catch(e){console.error(e);return true;}}
 
-async function verificarPeriodoBloqueado(casa,a,b,ignorarId=null){
- if(!casa||!a||!b||b<=a)return false;
- try{
-  const snap=await db.collection('disponibilidade').where('casa','==',casa).get();
-  return snap.docs.some(doc=>{
-   const r=doc.data();
-   if(ignorarId && r.reservaId===ignorarId)return false;
-   return r.entrada&&r.saida&&a<r.saida&&b>r.entrada;
-  });
- }catch(e){ console.error('Erro ao consultar disponibilidade:',e); return true; }
-}
+async function bloquearPeriodoSelecionado(){const casa=$('casaCalendario')?.value,datas=[...datasSelecionadas].sort();if(!casa||!datas.length)return alert('⚠️ Selecione um ou mais dias.');const entrada=datas[0],fim=dataLocal(datas[datas.length-1]);fim.setDate(fim.getDate()+1);const saida=dataStr(fim),motivo=$('motivoBloqueioCalendario')?.value.trim()||'Bloqueio manual';if(await verificarPeriodoBloqueado(casa,entrada,saida))return alert('⚠️ Já existe uma reserva ou bloqueio neste período.');try{await db.collection('bloqueios').add({casa,entrada,saida,motivo,criadoEm:firebase.firestore.FieldValue.serverTimestamp(),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()});datasSelecionadas.clear();$('motivoBloqueioCalendario').value='';await renderizarCalendarioSeguro();alert('🔒 Período bloqueado com sucesso.');}catch(e){console.error(e);alert('❌ Não foi possível bloquear o período.');}}
+async function excluirBloqueioCalendario(id){if(!confirm('Excluir este bloqueio e liberar o período?'))return;try{await db.collection('bloqueios').doc(id).delete();await renderizarCalendarioSeguro();alert('✅ Bloqueio removido.');}catch(e){console.error(e);alert('❌ Não foi possível remover o bloqueio.');}}
+function renderizarListaBloqueiosCalendario(){const el=$('listaBloqueiosCalendario');if(!el)return;const arr=[...bloqueiosCalendario].sort((a,b)=>(a.entrada||'').localeCompare(b.entrada||''));el.innerHTML=arr.length?`<div style="font-size:13px"><strong>Bloqueios desta casa:</strong>${arr.map(x=>`<div style="display:flex;justify-content:space-between;gap:8px;align-items:center;padding:7px 0;border-bottom:1px solid #eee"><span>🔒 ${dataBr(x.entrada)} até ${dataBr(x.saida)} — ${escapeHtmlReserva(x.motivo||'Bloqueio manual')}</span><button class="vermelho" onclick="excluirBloqueioCalendario('${x.id}')">Liberar</button></div>`).join('')}</div>`:'<small style="color:var(--cinza)">Nenhum bloqueio manual nesta casa.</small>';}
 
-
-/* =====================================================
-   SUGESTÕES DE DATAS
-===================================================== */
-
-async function carregarReservasBloqueantesSugestoes(){
- if(!casaSelecionadaParaReserva)return [];
- try{
-  const snap=await db.collection('disponibilidade').where('casa','==',casaSelecionadaParaReserva).get();
-  reservasBloqueantesSugestao=snap.docs.map(d=>({id:d.id,...d.data()}));
-  return reservasBloqueantesSugestao;
- }catch(e){ console.error(e); return []; }
-}
-
+async function carregarReservasBloqueantesSugestoes(){if(!casaSelecionadaParaReserva)return [];try{const [rs,bs]=await Promise.all([db.collection('disponibilidade').where('casa','==',casaSelecionadaParaReserva).get(),db.collection('bloqueios').where('casa','==',casaSelecionadaParaReserva).get()]);reservasBloqueantesSugestao=[...rs.docs.map(d=>({id:d.id,tipo:'reserva',...d.data()})),...bs.docs.map(d=>({id:d.id,tipo:'bloqueio',...d.data()}))];return reservasBloqueantesSugestao;}catch(e){console.error(e);return [];}}
 
 function dataDentroDeReserva(
  s,
@@ -4122,7 +3668,6 @@ function dataDentroDeReserva(
 
 }
 
-
 function periodoColideReservas(
  a,
  b,
@@ -4135,7 +3680,6 @@ function periodoColideReservas(
  );
 
 }
-
 
 function encontrarPeriodosDisponiveis(
  inicio,
@@ -4153,7 +3697,6 @@ function encontrarPeriodosDisponiveis(
   base0<hoje()
    ?hoje()
    :base0;
-
 
  for(
   let i=0;
@@ -4176,10 +3719,8 @@ function encontrarPeriodosDisponiveis(
    saida.getDate()+noites
   );
 
-
   const a=dataStr(entrada);
   const b=dataStr(saida);
-
 
   if(
    !periodoColideReservas(
@@ -4203,7 +3744,6 @@ function encontrarPeriodosDisponiveis(
 
 }
 
-
 function formatarPeriodoSugestao(p){
 
  const f=d=>
@@ -4222,7 +3762,6 @@ function formatarPeriodoSugestao(p){
 
 }
 
-
 function selecionarPeriodoSugerido(
  a,
  b
@@ -4240,7 +3779,6 @@ function selecionarPeriodoSugerido(
 
 }
 
-
 function selecionarDataSugestao(s){
 
  const entrada=dataLocal(s);
@@ -4257,7 +3795,6 @@ function selecionarDataSugestao(s){
  const a=dataStr(entrada);
  const b=dataStr(saida);
 
-
  if(
   periodoColideReservas(a,b)
  ){
@@ -4269,7 +3806,6 @@ function selecionarDataSugestao(s){
  selecionarPeriodoSugerido(a,b);
 
 }
-
 
 function ocultarSugestoesDisponibilidade(){
 
@@ -4285,7 +3821,6 @@ function ocultarSugestoesDisponibilidade(){
 
 }
 
-
 async function mostrarSugestoesDisponibilidade(
  mensagem=''
 ){
@@ -4298,16 +3833,13 @@ async function mostrarSugestoesDisponibilidade(
   !casaSelecionadaParaReserva
  )return;
 
-
  await carregarReservasBloqueantesSugestoes();
-
 
  const a=
   $('dataEntrada').value;
 
  const b=
   $('dataSaida').value;
-
 
  noitesSugestao=
   a &&
@@ -4322,19 +3854,16 @@ async function mostrarSugestoesDisponibilidade(
    )
    :2;
 
-
  mesSugestao=
   a
    ?dataLocal(a)
    :new Date();
-
 
  renderizarSugestoesDisponibilidade(
   mensagem
  );
 
 }
-
 
 function renderizarSugestoesDisponibilidade(
  mensagem=''
@@ -4344,7 +3873,6 @@ function renderizarSugestoesDisponibilidade(
   $('sugestoesDisponibilidade');
 
  if(!el)return;
-
 
  const y=
   mesSugestao.getFullYear();
@@ -4363,10 +3891,8 @@ function renderizarSugestoesDisponibilidade(
   'Qua','Qui','Sex','Sáb'
  ];
 
-
  const entradaAtual=
   $('dataEntrada').value;
-
 
  const sugestoes=
   encontrarPeriodosDisponiveis(
@@ -4376,7 +3902,6 @@ function renderizarSugestoesDisponibilidade(
    reservasBloqueantesSugestao,
    5
   );
-
 
  let h=`
   <div class="sugestao-titulo">
@@ -4394,7 +3919,6 @@ function renderizarSugestoesDisponibilidade(
   </div>
  `;
 
-
  if(mensagem){
 
   h+=`
@@ -4404,7 +3928,6 @@ function renderizarSugestoesDisponibilidade(
   `;
 
  }
-
 
  h+=`
   <div style="
@@ -4418,7 +3941,6 @@ function renderizarSugestoesDisponibilidade(
    </strong>
 
   </div>
-
 
   <div class="sugestao-mes">
 
@@ -4444,7 +3966,6 @@ function renderizarSugestoesDisponibilidade(
 
   </div>
 
-
   <div class="sugestao-grade">
 
    ${nomes.map(x=>
@@ -4453,7 +3974,6 @@ function renderizarSugestoesDisponibilidade(
     </div>`
    ).join('')}
  `;
-
 
  for(
   let i=0;
@@ -4465,10 +3985,8 @@ function renderizarSugestoesDisponibilidade(
   `;
  }
 
-
  const hojeStr=
   dataStr(hoje());
-
 
  for(
   let d=1;
@@ -4502,9 +4020,7 @@ function renderizarSugestoesDisponibilidade(
     dataStr(fim)
    );
 
-
   let cls='sugestao-dia';
-
 
   if(ocupado)
    cls+=' bloqueado';
@@ -4515,10 +4031,8 @@ function renderizarSugestoesDisponibilidade(
   else if(!passado)
    cls+=' livre';
 
-
   if(s===hojeStr)
    cls+=' hoje';
-
 
   h+=`
    <div
@@ -4535,10 +4049,8 @@ function renderizarSugestoesDisponibilidade(
 
  }
 
-
  h+=`
   </div>
-
 
   <div style="
    margin-top:15px;
@@ -4553,7 +4065,6 @@ function renderizarSugestoesDisponibilidade(
     class="lista-periodos-sugeridos"
     style="margin-top:8px">
  `;
-
 
  h+=
   sugestoes.length
@@ -4587,19 +4098,16 @@ function renderizarSugestoesDisponibilidade(
     </div>
    `;
 
-
  h+=`
    </div>
   </div>
  `;
-
 
  el.innerHTML=h;
 
  el.classList.add('aberto');
 
 }
-
 
 async function mudarMesSugestao(d){
 
@@ -4611,11 +4119,6 @@ async function mudarMesSugestao(d){
 
 }
 
-
-/* =====================================================
-   DISPONIBILIDADE
-===================================================== */
-
 async function verificarDisponibilidade(){
 
  const a=$('dataEntrada').value;
@@ -4623,7 +4126,6 @@ async function verificarDisponibilidade(){
  const c=casaSelecionadaParaReserva;
 
  if(!c)return;
-
 
  if(!a&&!b){
 
@@ -4639,11 +4141,9 @@ async function verificarDisponibilidade(){
 
  }
 
-
  if(a&&!b){
 
   await carregarReservasBloqueantesSugestoes();
-
 
   if(dataDentroDeReserva(a)){
 
@@ -4677,7 +4177,6 @@ async function verificarDisponibilidade(){
 
  }
 
-
  if(b<=a){
 
   $('avisoBloqueio')
@@ -4695,7 +4194,6 @@ async function verificarDisponibilidade(){
 
  }
 
-
  const bloqueado=
   await verificarPeriodoBloqueado(
    c,
@@ -4703,14 +4201,12 @@ async function verificarDisponibilidade(){
    b
   );
 
-
  const x=
   await calcularValorDiarias(
    c,
    a,
    b
   );
-
 
  const taxa=
   Number(casas[c].taxaLimpeza||0);
@@ -4722,11 +4218,9 @@ async function verificarDisponibilidade(){
    taxa
   );
 
-
  $('avisoBloqueio')
   .style.display=
    bloqueado?'block':'none';
-
 
  if(bloqueado){
 
@@ -4751,12 +4245,10 @@ async function verificarDisponibilidade(){
 
  }
 
-
  $('valorDiarias').value=
   x.dias
    ?`${moeda(x.valor)} (${x.dias} diária(s))`
    :'';
-
 
  $('valorEstimado').value=
   x.dias
@@ -4772,7 +4264,6 @@ async function verificarDisponibilidade(){
  }
 
 }
-
 
 function obterDadosReservaWhatsApp(){
 
@@ -4872,7 +4363,6 @@ function enviarReservaWhatsApp(numero){
  window.open(url,'_blank','noopener');
 }
 
-
 async function enviarNotificacaoEmailReserva(dados){
 
  try{
@@ -4959,7 +4449,6 @@ async function enviarNotificacaoEmailReserva(dados){
 
 }
 
-
 async function enviarReserva(){
 
  const nome=
@@ -4986,7 +4475,6 @@ async function enviarReserva(){
  const obs=
   $('obsReserva').value.trim();
 
-
  if(
   !nome ||
   !tel ||
@@ -4998,7 +4486,6 @@ async function enviarReserva(){
   );
  }
 
-
  if(b<=a){
 
   return alert(
@@ -5007,14 +4494,12 @@ async function enviarReserva(){
 
  }
 
-
  const bloqueado=
   await verificarPeriodoBloqueado(
    c,
    a,
    b
   );
-
 
  if(bloqueado){
 
@@ -5033,13 +4518,11 @@ async function enviarReserva(){
 
  }
 
-
  const totalPessoas=
   adultos+criancas;
 
  const max=
   casas[c].capacidade;
-
 
  if(
   totalPessoas>max &&
@@ -5050,7 +4533,6 @@ async function enviarReserva(){
    'Explique a situação nas observações.'
   );
  }
-
 
  const calc=
   await calcularValorDiarias(
@@ -5068,7 +4550,6 @@ async function enviarReserva(){
    calc.valor,
    taxa
   );
-
 
  try{
 
@@ -5114,7 +4595,6 @@ async function enviarReserva(){
 
   });
 
-
   const emailEnviado=await enviarNotificacaoEmailReserva({
    nome,
    telefone:tel,
@@ -5137,16 +4617,13 @@ async function enviarReserva(){
    reservaId:reservaRef.id
   });
 
-
   await db.collection('solicitacoesHospedes').add({
    nome,
    telefone:tel,
    criadoEm:firebase.firestore.FieldValue.serverTimestamp()
   });
 
-
   fecharModal();
-
 
   alert(
    '✅ Solicitação enviada com sucesso!\n\n'+
@@ -5155,7 +4632,6 @@ async function enviarReserva(){
     ?'\n\n📧 A notificação por e-mail foi enviada.'
     :'\n\n⚠️ A reserva foi salva, mas a notificação por e-mail não pôde ser enviada.')
   );
-
 
  }catch(e){
 
@@ -5169,11 +4645,6 @@ async function enviarReserva(){
 
 }
 
-
-/* =====================================================
-   FIREBASE - RESERVAS / CASAS
-===================================================== */
-
 async function carregarReservasConfirmadas(){
 
  reservasConfirmadas=[];
@@ -5182,7 +4653,6 @@ async function carregarReservasConfirmadas(){
   await db.collection('reservas')
    .orderBy('entrada')
    .get();
-
 
  s.forEach(d=>
   reservasConfirmadas.push({
@@ -5193,7 +4663,6 @@ async function carregarReservasConfirmadas(){
 
 }
 
-
 async function carregarDadosCasas(){
 
  try{
@@ -5203,12 +4672,10 @@ async function carregarDadosCasas(){
     .doc('casas')
     .get();
 
-
   if(d.exists){
 
    const x=
     d.data().casas||{};
-
 
    Object.keys(casas).forEach(id=>{
 
@@ -5217,6 +4684,7 @@ async function carregarDadosCasas(){
      casas[id]={
       ...casas[id],
       ...x[id],
+      interna:id==='nossa'||casas[id].interna===true,
 
       caracteristicas:
        casas[id].caracteristicas||
@@ -5229,7 +4697,6 @@ async function carregarDadosCasas(){
    });
 
   }
-
 
   renderizarPaginaPublica();
 
@@ -5244,7 +4711,6 @@ async function carregarDadosCasas(){
 
 }
 
-
 async function salvarTodasCasas(){
 
  await db.collection('configuracoes')
@@ -5253,13 +4719,11 @@ async function salvarTodasCasas(){
 
 }
 
-
 function renderizarCasasAdmin(){
 
  const g=$('gradeCasas');
 
  if(!g)return;
-
 
  g.innerHTML=
   Object.entries(casas)
@@ -5270,7 +4734,6 @@ function renderizarCasasAdmin(){
      <div class="card-corpo">
 
       <h3>${x.nome}</h3>
-
 
       <div class="grupo-input">
 
@@ -5285,7 +4748,6 @@ function renderizarCasasAdmin(){
 
       </div>
 
-
       <div class="grupo-input">
 
        <label>Descrição</label>
@@ -5295,7 +4757,6 @@ function renderizarCasasAdmin(){
         rows="2">${x.desc||''}</textarea>
 
       </div>
-
 
       <div class="grupo-input">
 
@@ -5309,9 +4770,7 @@ function renderizarCasasAdmin(){
 
       </div>
 
-
       <strong>📷 Fotos</strong>
-
 
       <div id="fotos-${id}">
 
@@ -5347,7 +4806,6 @@ function renderizarCasasAdmin(){
 
       </div>
 
-
       <button
        class="azul"
        style="margin-top:8px"
@@ -5356,7 +4814,6 @@ function renderizarCasasAdmin(){
        + Foto
 
       </button>
-
 
       <button
        class="sucesso"
@@ -5375,7 +4832,6 @@ function renderizarCasasAdmin(){
 
 }
 
-
 function adicionarFotoGaleria(id){
 
  const url=
@@ -5385,12 +4841,10 @@ function adicionarFotoGaleria(id){
 
  if(!url)return;
 
-
  if(!url.includes('imgur.com'))
   return alert(
    '⚠️ Informe um link do Imgur.'
   );
-
 
  casas[id].fotos=
   casas[id].fotos||[];
@@ -5400,7 +4854,6 @@ function adicionarFotoGaleria(id){
  renderizarCasasAdmin();
 
 }
-
 
 function removerFotoGaleria(id,i){
 
@@ -5418,7 +4871,6 @@ function removerFotoGaleria(id,i){
 
 }
 
-
 async function salvarConfiguracoesCasa(id){
 
  casas[id].taxaLimpeza=
@@ -5433,7 +4885,6 @@ async function salvarConfiguracoesCasa(id){
   Number(
    $(`cap-${id}`).value||0
   );
-
 
  try{
 
@@ -5456,11 +4907,6 @@ async function salvarConfiguracoesCasa(id){
  }
 
 }
-
-
-/* =====================================================
-   LISTA DE RESERVAS
-===================================================== */
 
 function reservaConcluida(r){
  const saida=dataLocal(r.saida);
@@ -5571,20 +5017,7 @@ function atualizarListaReservas(){
 
  if(busca)arr=arr.filter(r=>hospedeCorrespondeReserva(r,busca));
  if(casa!=='todas')arr=arr.filter(r=>r.casa===casa);
- if(pagamento!=='todos'){
-  arr=arr.filter(r=>{
-   const status=r.statusPagamento||'pendente';
-   const pago=Number(r.valorPago||0);
-   const total=Number(r.valorTotal||0);
-   if(pagamento==='parcial'){
-    return status==='parcial' || (pago>0 && pago<total);
-   }
-   if(pagamento==='pago'){
-    return status==='pago' || (total>0 && pago>=total);
-   }
-   return status===pagamento;
-  });
- }
+ if(pagamento!=='todos')arr=arr.filter(r=>(r.statusPagamento||'pendente')===pagamento);
 
  if(situacao==='ativas')arr=arr.filter(r=>!reservaConcluida(r));
  if(situacao==='proximas')arr=arr.filter(reservaProxima);
@@ -5638,6 +5071,8 @@ function atualizarListaReservas(){
       <th>👥 Pessoas</th>
       <th>💰 Pagamento</th>
       <th>💵 Total</th>
+      <th>✅ Valor Recebido</th>
+      <th>📌 Valor a Receber</th>
       <th>📌 Situação</th>
       <th>⚙️ Ações</th>
      </tr>
@@ -5677,11 +5112,12 @@ function atualizarListaReservas(){
         </td>
         <td>
          <span class="status-badge badge-status-${status}">${escapeHtmlReserva(statusTexto[status]||status)}</span>
-         <small style="display:block;color:var(--cinza)">Pago: ${moeda(pago)} · Saldo: ${moeda(pendente)}</small>
          ${r.formaPagamento?`<small style="display:block;color:var(--cinza)">💳 ${escapeHtmlReserva(r.formaPagamento)}</small>`:''}
          ${r.contaDestino?`<small style="display:block;color:var(--cinza)">🏦 ${escapeHtmlReserva(r.contaDestino)}</small>`:''}
         </td>
         <td><strong>${moeda(total)}</strong></td>
+        <td><strong style="color:var(--sucesso)">${moeda(pago)}</strong></td>
+        <td><strong style="color:${pendente>0?'#b45309':'var(--sucesso)'}">${moeda(pendente)}</strong></td>
         <td><span class="badge-situacao ${situacaoClasse}">${situacaoTexto}</span></td>
         <td>
          <div class="reserva-acoes">
@@ -5698,20 +5134,9 @@ function atualizarListaReservas(){
  `;
 }
 
-
-/* =====================================================
-   RECIBO DE PAGAMENTO
-===================================================== */
-
-/*
-   Converte números para texto em português.
-   Usado no recibo para escrever o valor pago
-   por extenso.
-*/
-
 function numeroPorExtenso(n){
 
- n=Math.round(Number(n||0));
+ n=Number(n||0);
 
  if(!isFinite(n))
   return '';
@@ -5776,64 +5201,80 @@ function numeroPorExtenso(n){
   v=Number(v);
 
   if(v===0)return '';
+
   if(v===100)return 'cem';
 
   let texto='';
-  const c=Math.floor(v/100);
-  const resto=v%100;
 
-  if(c)texto+=centenas[c];
+  const c=
+   Math.floor(v/100);
+
+  const resto=
+   v%100;
+
+  if(c)
+   texto+=centenas[c];
 
   if(resto){
-   if(texto)texto+=' e ';
+
+   if(texto)
+    texto+=' e ';
 
    if(resto<10){
+
     texto+=unidades[resto];
+
    }else if(resto<20){
+
     texto+=especiais[resto-10];
+
    }else{
-    texto+=dezenas[Math.floor(resto/10)];
+
+    texto+=dezenas[
+     Math.floor(resto/10)
+    ];
+
     if(resto%10)
-     texto+=' e '+unidades[resto%10];
+     texto+=' e '+
+      unidades[resto%10];
+
    }
+
   }
 
   return texto;
+
  }
 
  function parte(v){
 
-  v=Number(v);
+  if(v===0)return '';
 
   if(v<1000)
    return grupo(v);
 
-  const milhares=Math.floor(v/1000);
-  const resto=v%1000;
+  const milhares=
+   Math.floor(v/1000);
+
+  const resto=
+   v%1000;
 
   let texto='';
 
   if(milhares===1)
    texto='mil';
   else
-   texto=parte(milhares)+' mil';
+   texto=
+    numeroPorExtenso(
+     milhares
+    )+' mil';
 
   if(resto)
    texto+=' e '+grupo(resto);
 
   return texto;
+
  }
-
- return parte(n);
-}
-
-function valorPorExtenso(v){
-
- const n=Number(v||0);
-
- if(n===0)
-  return 'zero reais';
-
 
  const reais=
   Math.floor(n);
@@ -5843,9 +5284,52 @@ function valorPorExtenso(v){
    (n-reais)*100
   );
 
-
  let texto='';
 
+ if(reais>0)
+  texto=
+   parte(reais)+
+   (
+    reais===1
+     ?' real'
+     :' reais'
+   );
+
+ if(centavos>0){
+
+  if(texto)
+   texto+=' e ';
+
+  texto+=
+   parte(centavos)+
+   (
+    centavos===1
+     ?' centavo'
+     :' centavos'
+   );
+
+ }
+
+ return texto;
+
+}
+
+function valorPorExtenso(v){
+
+ const n=Number(v||0);
+
+ if(n===0)
+  return 'zero reais';
+
+ const reais=
+  Math.floor(n);
+
+ const centavos=
+  Math.round(
+   (n-reais)*100
+  );
+
+ let texto='';
 
  if(reais>0){
 
@@ -5858,7 +5342,6 @@ function valorPorExtenso(v){
    );
 
  }
-
 
  if(centavos>0){
 
@@ -5875,16 +5358,9 @@ function valorPorExtenso(v){
 
  }
 
-
  return texto;
 
 }
-
-
-/*
-   Abre um recibo limpo em nova janela.
-   O usuário poderá imprimir ou salvar em PDF.
-*/
 
 function emitirRecibo(id){
 
@@ -5898,7 +5374,6 @@ function emitirRecibo(id){
    '❌ Reserva não encontrada.'
   );
 
-
  const total=
   Number(r.valorTotal||0);
 
@@ -5911,7 +5386,6 @@ function emitirRecibo(id){
    total-pago
   );
 
-
  if(pago<=0){
 
   return alert(
@@ -5920,23 +5394,19 @@ function emitirRecibo(id){
 
  }
 
-
  const casa=
   casas[r.casa]?.nome||
   r.casa||
   'Casa';
 
-
  const nome=
   r.nome||
   'Hóspede';
-
 
  const dataEmissao=
   new Intl.DateTimeFormat(
    'pt-BR'
   ).format(new Date());
-
 
  const noites=
   Number(
@@ -5948,22 +5418,28 @@ function emitirRecibo(id){
    0
   );
 
-
  const pagoExtenso=
   valorPorExtenso(pago);
 
-
  const pendenteExtenso=
   valorPorExtenso(pendente);
+
+ const desconto=
+  Number(r.desconto||0);
+
+ const valorDiarias=
+  Number(r.valorDiarias||0);
+
+ const taxaLimpeza=
+  Number(r.taxaLimpeza||0);
 
  const textoWhatsApp=encodeURIComponent(
   `*RECIBO DE PAGAMENTO - CASAS NA PRAIA*\n\n`+
   `Hóspede: ${nome}\n`+
   `Acomodação: ${casa}\n`+
-  `Origem da reserva: ${r.origemReserva||'Não informada'}\n`+
   `Período: ${dataBr(r.entrada)} a ${dataBr(r.saida)} (${noites} diárias)\n`+
   `Valor total da reserva: ${moeda(total)}\n`+
-  `Valor Pago: ${moeda(pago)}\n`+
+  `Valor Recebido: ${moeda(pago)}\n`+
   `Saldo Pendente: ${moeda(pendente)}\n\n`+
   `Obrigado pela preferência! 🏖️`
  );
@@ -5971,14 +5447,12 @@ function emitirRecibo(id){
  const telefoneWhatsApp=
   String(r.telefone||'').replace(/\D/g,'');
 
-
  const janela=
   window.open(
    '',
    '_blank',
    'width=850,height=700'
   );
-
 
  if(!janela){
 
@@ -5988,7 +5462,6 @@ function emitirRecibo(id){
   );
 
  }
-
 
  janela.document.write(`
 <!DOCTYPE html>
@@ -6166,12 +5639,9 @@ body{
 
 </head>
 
-
 <body>
 
-
 <div class="recibo">
-
 
  <div class="cabecalho">
 
@@ -6189,7 +5659,6 @@ body{
 
  </div>
 
-
  <div class="texto">
 
   Recebi de
@@ -6199,7 +5668,6 @@ body{
   <strong>${casa}</strong>.
 
  </div>
-
 
  <div class="dados">
 
@@ -6213,7 +5681,6 @@ body{
 
   </div>
 
-
   <div class="linha">
 
    <span>Casa</span>
@@ -6224,39 +5691,9 @@ body{
 
   </div>
 
-
-  <div class="linha">
-
-   <span>Origem da reserva</span>
-
-   <strong>
-    ${r.origemReserva||'Não informada'}
-   </strong>
-
-  </div>
-
-
-  <div class="linha">
-
-   <span>Forma de recebimento</span>
-
-   <strong>
-    ${r.formaPagamento||'Não informada'}
-   </strong>
-
-  </div>
-
-
-  <div class="linha">
-
-   <span>Caixa / conta de destino</span>
-
-   <strong>
-    ${r.contaDestino||'Não informado'}
-   </strong>
-
-  </div>
-
+  <div class="linha"><span>Origem da reserva</span><strong>${r.origemReserva||'Não informada'}</strong></div>
+  <div class="linha"><span>Forma de recebimento</span><strong>${r.formaPagamento||'Não informada'}</strong></div>
+  <div class="linha"><span>Caixa / conta de destino</span><strong>${r.contaDestino||'Não informado'}</strong></div>
 
   <div class="linha">
 
@@ -6270,7 +5707,6 @@ body{
 
   </div>
 
-
   <div class="linha">
 
    <span>Diárias</span>
@@ -6280,8 +5716,6 @@ body{
    </strong>
 
   </div>
-
-
   <div class="linha">
 
    <span>Valor total da reserva</span>
@@ -6293,7 +5727,6 @@ body{
   </div>
 
  </div>
-
 
  <div class="pagamento">
 
@@ -6311,7 +5744,6 @@ body{
    ${pagoExtenso}
   </div>
 
-
   <div class="saldo">
 
    <strong>
@@ -6328,7 +5760,6 @@ body{
 
  </div>
 
-
  <div class="texto">
 
   Declaro, para os devidos fins, que recebi
@@ -6336,7 +5767,6 @@ body{
   descrita neste recibo.
 
  </div>
-
 
  <div class="assinatura">
 
@@ -6347,7 +5777,6 @@ body{
   </strong>
 
  </div>
-
 
  <div class="rodape">
 
@@ -6360,9 +5789,7 @@ body{
 
  </div>
 
-
 </div>
-
 
 <div class="botoes">
 
@@ -6382,21 +5809,17 @@ body{
 
 </div>
 
-
 </body>
 
 </html>
  `);
 
-
  janela.document.close();
 
 }
 
-
-/* =====================================================
-   EDIÇÃO DE RESERVA
-===================================================== */
+function abrirNovaReservaAdmin(){const c=Object.entries(casas).map(([id,x])=>`<option value="${id}">${x.nome}${x.interna?' — interno':''}</option>`).join('');$('conteudoEditar').innerHTML=`<input type="hidden" id="novaReserva"><div class="grupo-input"><label>Casa</label><select id="novaCasaReserva">${c}</select></div><div class="grupo-input"><label>Hóspede</label><input id="novoNomeReserva"></div><div class="grupo-input"><label>Telefone</label><input id="novoTelefoneReserva"></div><div class="grupo-input"><label>Origem</label><select id="novaOrigemReserva"><option>Reserva direta</option><option>Airbnb</option><option>Booking.com</option><option>WhatsApp</option><option>Telefone</option><option>Outro</option></select></div><div class="linha-form"><div class="grupo-input"><label>Entrada</label><input type="date" id="novaEntrada"></div><div class="grupo-input"><label>Saída</label><input type="date" id="novaSaida"></div></div><div class="linha-form"><div class="grupo-input"><label>Adultos</label><input type="number" id="novoAdultos" value="1"></div><div class="grupo-input"><label>Crianças</label><input type="number" id="novoCriancas" value="0"></div></div><div class="grupo-input"><label>Forma de recebimento</label><select id="novaFormaPagamento"><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Transferência Bancária</option></select></div><div class="grupo-input"><label>Caixa / conta destino</label><select id="novaContaDestino"><option>Caixa Casa Amarela</option><option>Caixa Casa Bege</option><option>Caixa Casa Marrom</option><option>Caixa Casa Branca</option><option>Caixa Nossa Casa</option><option>Caixa Geral</option><option>Conta bancária</option></select></div><div class="grupo-input"><label>Status</label><select id="novoStatus"><option value="pendente">Pendente</option><option value="confirmada">Confirmada</option><option value="parcial">Pagamento Parcial</option><option value="pago">Pago</option></select></div><div class="grupo-input"><label>Valor Antecipado</label><input type="number" id="novoValorAntecipado" value="0" step="0.01"></div><div class="grupo-input"><label>Valor Total</label><input type="number" id="novoValorTotal" step="0.01"></div><div class="grupo-input"><label>Observação</label><textarea id="novaObservacao"></textarea></div><button class="sucesso" style="width:100%" onclick="salvarNovaReservaAdmin()">💾 Salvar reserva</button>`;$('modalEditarReserva').classList.add('aberto');}
+async function salvarNovaReservaAdmin(){const casa=$('novaCasaReserva').value,a=$('novaEntrada').value,b=$('novaSaida').value,nome=$('novoNomeReserva').value.trim(),adultos=Number($('novoAdultos').value||0),criancas=Number($('novoCriancas').value||0);if(!nome||!a||!b||b<=a)return alert('⚠️ Informe hóspede e datas válidas.');if(await verificarPeriodoBloqueado(casa,a,b))return alert('⚠️ O período está bloqueado.');const x=await calcularValorDiarias(casa,a,b),taxa=Number(casas[casa]?.taxaLimpeza||0),f=calcularValorFinalReserva(x.dias,x.valor,taxa),total=Number($('novoValorTotal').value||f.total),ante=Number($('novoValorAntecipado').value||0);if(ante>total)return alert('⚠️ O antecipado não pode ser maior que o total.');try{await db.collection('reservas').add({casa,nome,telefone:$('novoTelefoneReserva').value.trim(),entrada:a,saida:b,adultos,criancas,totalPessoas:adultos+criancas,dias:x.dias,valorDiarias:x.valor,taxaLimpeza:taxa,desconto:f.desconto,percentualDesconto:f.percentualDesconto,acrescimoValor:0,valorTotal:total,valorPago:ante,statusPagamento:$('novoStatus').value,origemReserva:$('novaOrigemReserva').value,formaPagamento:$('novaFormaPagamento').value,contaDestino:$('novaContaDestino').value,observacao:$('novaObservacao').value.trim(),criadoEm:firebase.firestore.FieldValue.serverTimestamp(),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()});await carregarReservasConfirmadas();await sincronizarDisponibilidadePublica();fecharModalEditar();atualizarListaReservas();renderizarCalendarioSeguro();gerarRelatorio();alert('✅ Reserva criada.');}catch(e){console.error(e);alert('❌ Erro ao criar reserva.');}}
 
 function abrirEditarReserva(id){
 
@@ -6407,7 +5830,6 @@ function abrirEditarReserva(id){
 
  if(!r)return;
 
-
  $('conteudoEditar').innerHTML=`
 
   <input
@@ -6415,6 +5837,20 @@ function abrirEditarReserva(id){
    id="editId"
    value="${id}">
 
+  <div class="grupo-input">
+   <label>Casa / propriedade</label>
+   <select id="editCasa">${Object.entries(casas).map(([cid,cx])=>`<option value="${cid}">${cx.nome}${cx.interna?' — interno':''}</option>`).join('')}</select>
+  </div>
+
+  <div class="grupo-input">
+   <label>Origem da reserva</label>
+   <select id="editOrigem"><option value="">Não informada</option><option>Airbnb</option><option>Booking.com</option><option value="Direto">Reserva direta</option><option>WhatsApp</option><option>Telefone</option><option>Outro</option></select>
+  </div>
+
+  <div class="linha-form">
+   <div class="grupo-input"><label>Forma de recebimento</label><select id="editFormaPagamento"><option value="">Não informada</option><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Transferência Bancária</option></select></div>
+   <div class="grupo-input"><label>Caixa / conta de destino</label><select id="editContaDestino"><option value="">Não informado</option><option>Caixa Casa Amarela</option><option>Caixa Casa Bege</option><option>Caixa Casa Marrom</option><option>Caixa Casa Branca</option><option>Caixa Nossa Casa</option><option>Caixa Geral</option><option>Conta bancária</option></select></div>
+  </div>
 
   <div class="grupo-input">
 
@@ -6426,7 +5862,6 @@ function abrirEditarReserva(id){
 
   </div>
 
-
   <div class="grupo-input">
 
    <label>Telefone</label>
@@ -6436,52 +5871,6 @@ function abrirEditarReserva(id){
     value="${r.telefone||''}">
 
   </div>
-
-
-  <div class="grupo-input">
-
-   <label>Origem da reserva</label>
-
-   <select id="editOrigem">
-    <option value="">Não informada</option>
-    <option value="Airbnb">Airbnb</option>
-    <option value="Booking.com">Booking.com</option>
-    <option value="Direto">Reserva direta</option>
-    <option value="WhatsApp">WhatsApp</option>
-    <option value="Telefone">Telefone</option>
-    <option value="Outro">Outro</option>
-   </select>
-
-  </div>
-
-
-  <div class="linha-form">
-
-   <div class="grupo-input">
-    <label>Forma de recebimento</label>
-    <select id="editFormaPagamento">
-     <option value="">Não informada</option>
-     <option value="Pix">Pix</option>
-     <option value="Dinheiro">Dinheiro</option>
-     <option value="Cartão">Cartão</option>
-    </select>
-   </div>
-
-   <div class="grupo-input">
-    <label>Caixa / conta de destino</label>
-    <select id="editContaDestino">
-     <option value="">Não informado</option>
-     <option value="Caixa Casa Amarela">Caixa Casa Amarela</option>
-     <option value="Caixa Casa Bege">Caixa Casa Bege</option>
-     <option value="Caixa Casa Marrom">Caixa Casa Marrom</option>
-     <option value="Caixa Casa Branca">Caixa Casa Branca</option>
-     <option value="Caixa Geral">Caixa Geral</option>
-     <option value="Conta bancária">Conta bancária</option>
-    </select>
-   </div>
-
-  </div>
-
 
   <div class="linha-form">
 
@@ -6497,7 +5886,6 @@ function abrirEditarReserva(id){
 
    </div>
 
-
    <div class="grupo-input">
 
     <label>Saída</label>
@@ -6512,7 +5900,6 @@ function abrirEditarReserva(id){
 
   </div>
 
-
   <div class="linha-form">
 
    <div class="grupo-input">
@@ -6526,7 +5913,6 @@ function abrirEditarReserva(id){
 
    </div>
 
-
    <div class="grupo-input">
 
     <label>Crianças</label>
@@ -6539,7 +5925,6 @@ function abrirEditarReserva(id){
    </div>
 
   </div>
-
 
   <div class="grupo-input">
 
@@ -6567,10 +5952,9 @@ function abrirEditarReserva(id){
 
   </div>
 
-
   <div class="grupo-input">
 
-   <label>Valor Pago</label>
+   <label>Valor Antecipado</label>
 
    <input
     type="number"
@@ -6580,7 +5964,6 @@ function abrirEditarReserva(id){
     oninput="atualizarResumoEdicao()">
 
   </div>
-
 
   <div class="grupo-input">
 
@@ -6595,7 +5978,6 @@ function abrirEditarReserva(id){
     onchange="recalcularTotalEdicao()">
 
   </div>
-
 
   <div class="acrescimo-box">
 
@@ -6616,7 +5998,6 @@ function abrirEditarReserva(id){
      onchange="recalcularTotalEdicao()">
 
    </div>
-
 
    <div class="acrescimo-botoes">
 
@@ -6640,7 +6021,6 @@ function abrirEditarReserva(id){
 
   </div>
 
-
   <div class="grupo-input">
 
    <label>
@@ -6658,7 +6038,6 @@ function abrirEditarReserva(id){
 
   </div>
 
-
   <button
    type="button"
    class="cinza"
@@ -6668,7 +6047,6 @@ function abrirEditarReserva(id){
    🔄 Recalcular pelas diárias
 
   </button>
-
 
   <div class="grupo-input">
 
@@ -6680,12 +6058,10 @@ function abrirEditarReserva(id){
 
   </div>
 
-
   <div
    class="caixa-valores-reserva"
    id="valoresEdicao">
   </div>
-
 
   <button
    class="sucesso"
@@ -6694,7 +6070,6 @@ function abrirEditarReserva(id){
    💾 Salvar Alterações
 
   </button>
-
 
   ${
    Number(r.valorPago||0)>0
@@ -6711,7 +6086,6 @@ function abrirEditarReserva(id){
     :''
   }
 
-
   <button
    class="vermelho"
    onclick="excluirReserva('${id}')"
@@ -6723,19 +6097,11 @@ function abrirEditarReserva(id){
 
  `;
 
-
- $('editStatus').value=
-  r.statusPagamento||
-  'pendente';
-
- if($('editOrigem'))
-  $('editOrigem').value=r.origemReserva||'';
-
- if($('editFormaPagamento'))
-  $('editFormaPagamento').value=r.formaPagamento||'';
-
- if($('editContaDestino'))
-  $('editContaDestino').value=r.contaDestino||'';
+ if($('editCasa'))$('editCasa').value=r.casa||'amarela';
+ $('editStatus').value=r.statusPagamento||'pendente';
+ if($('editOrigem'))$('editOrigem').value=r.origemReserva||'';
+ if($('editFormaPagamento'))$('editFormaPagamento').value=r.formaPagamento||'';
+ if($('editContaDestino'))$('editContaDestino').value=r.contaDestino||'';
 
  atualizarResumoEdicao();
 
@@ -6743,7 +6109,6 @@ function abrirEditarReserva(id){
   .classList.add('aberto');
 
 }
-
 
 function adicionarAcrescimo(v){
 
@@ -6760,7 +6125,6 @@ function adicionarAcrescimo(v){
 
 }
 
-
 async function recalcularTotalEdicao(){
 
  const id=
@@ -6773,13 +6137,11 @@ async function recalcularTotalEdicao(){
 
  if(!r)return;
 
-
  const entrada=
   $('editEntrada').value;
 
  const saida=
   $('editSaida').value;
-
 
  if(
   !entrada ||
@@ -6789,14 +6151,12 @@ async function recalcularTotalEdicao(){
   return atualizarResumoEdicao();
  }
 
-
  const x=
   await calcularValorDiarias(
-   r.casa,
+   casaSelecionada,
    entrada,
    saida
   );
-
 
  const taxa=
   Number(
@@ -6822,7 +6182,6 @@ async function recalcularTotalEdicao(){
    $('editAcrescimo').value||0
   );
 
-
  $('editTotal').value=
   Math.max(
    0,
@@ -6832,11 +6191,9 @@ async function recalcularTotalEdicao(){
    desconto
   ).toFixed(2);
 
-
  atualizarResumoEdicao();
 
 }
-
 
 function atualizarResumoEdicao(){
 
@@ -6849,7 +6206,6 @@ function atualizarResumoEdicao(){
   );
 
  if(!r)return;
-
 
  const total=
   Number(
@@ -6878,20 +6234,17 @@ function atualizarResumoEdicao(){
    0
   );
 
-
  let vd=
   Number(r.valorDiarias||0);
 
  let qd=
   r.dias||0;
 
-
  const entrada=
   $('editEntrada')?.value;
 
  const saida=
   $('editSaida')?.value;
-
 
  if(
   entrada &&
@@ -6910,7 +6263,6 @@ function atualizarResumoEdicao(){
   qd=x.dias;
 
  }
-
 
  $('valoresEdicao').innerHTML=`
 
@@ -6963,7 +6315,6 @@ function atualizarResumoEdicao(){
  `;
 
 }
-
 
 // CONFIGURAÇÃO DE DESCONTOS AUTOMÁTICOS POR QUANTIDADE DE DIÁRIAS
 // Mais de 5 noites = 10% | Mais de 10 noites = 20%
@@ -7022,7 +6373,6 @@ function calcularValorDiariasLocal(
  let valor=0;
  let n=0;
 
-
  if(
   !da ||
   !ds ||
@@ -7033,7 +6383,6 @@ function calcularValorDiariasLocal(
    valor:0
   };
  }
-
 
  for(
   let d=new Date(da);
@@ -7055,7 +6404,6 @@ function calcularValorDiariasLocal(
 
  }
 
-
  return{
   dias:n,
   valor
@@ -7063,14 +6411,12 @@ function calcularValorDiariasLocal(
 
 }
 
-
 function fecharModalEditar(){
 
  $('modalEditarReserva')
   .classList.remove('aberto');
 
 }
-
 
 async function salvarEdicao(id){
 
@@ -7081,16 +6427,14 @@ async function salvarEdicao(id){
 
  if(!r)return;
 
-
  const entrada=
   $('editEntrada').value;
 
  const saida=
   $('editSaida').value;
 
- const status=
-  $('editStatus').value;
-
+ const status=$('editStatus').value;
+ const casaSelecionada=$('editCasa')?.value||r.casa;
 
  if(
   !entrada ||
@@ -7102,10 +6446,9 @@ async function salvarEdicao(id){
   );
  }
 
-
  if(
   await verificarPeriodoBloqueado(
-   r.casa,
+   casaSelecionada,
    entrada,
    saida,
    id
@@ -7120,14 +6463,12 @@ async function salvarEdicao(id){
 
  }
 
-
  const x=
   await calcularValorDiarias(
    r.casa,
    entrada,
    saida
   );
-
 
  const desconto=
   Number(
@@ -7141,7 +6482,7 @@ async function salvarEdicao(id){
 
  const taxa=
   Number(
-   casas[r.casa]?.taxaLimpeza||0
+   casas[casaSelecionada]?.taxaLimpeza||0
   );
 
  const pago=
@@ -7154,18 +6495,18 @@ async function salvarEdicao(id){
    $('editTotal').value||0
   );
 
-
  if(total<0)
   return alert(
    '⚠️ O valor total não pode ser negativo.'
   );
-
 
  try{
 
   await db.collection('reservas')
    .doc(id)
    .update({
+
+    casa:casaSelecionada,
 
     nome:
      $('editNome')
@@ -7175,14 +6516,9 @@ async function salvarEdicao(id){
      $('editTelefone')
       .value.trim(),
 
-    origemReserva:
-     $('editOrigem')?.value||'',
-
-    formaPagamento:
-     $('editFormaPagamento')?.value||'',
-
-    contaDestino:
-     $('editContaDestino')?.value||'',
+    origemReserva:$('editOrigem')?.value||'',
+    formaPagamento:$('editFormaPagamento')?.value||'',
+    contaDestino:$('editContaDestino')?.value||'',
 
     entrada,
     saida,
@@ -7234,7 +6570,6 @@ async function salvarEdicao(id){
 
    });
 
-
   await carregarReservasConfirmadas();
   await sincronizarDisponibilidadePublica();
 
@@ -7244,11 +6579,9 @@ async function salvarEdicao(id){
   renderizarCalendario();
   gerarRelatorio();
 
-
   alert(
    '✅ Reserva atualizada!'
   );
-
 
  }catch(e){
 
@@ -7262,7 +6595,6 @@ async function salvarEdicao(id){
 
 }
 
-
 async function excluirReserva(id){
 
  if(
@@ -7270,7 +6602,6 @@ async function excluirReserva(id){
    'Tem certeza que deseja excluir esta reserva?'
   )
  )return;
-
 
  try{
 
@@ -7286,7 +6617,6 @@ async function excluirReserva(id){
   atualizarListaReservas();
   renderizarCalendario();
   gerarRelatorio();
-
 
   alert(
    '🗑️ Reserva excluída.'
@@ -7304,11 +6634,6 @@ async function excluirReserva(id){
 
 }
 
-
-/* =====================================================
-   RELATÓRIO
-===================================================== */
-
 function limparFiltrosRelatorio(){
 
  $('filtroCasaRelatorio')
@@ -7320,14 +6645,10 @@ function limparFiltrosRelatorio(){
  $('filtroStatusRelatorio')
   .value='todos';
 
- $('filtroHospedeRelatorio')
-  .value='';
-
- $('filtroFormaPagamentoRelatorio')
-  .value='todos';
-
- $('filtroContaDestinoRelatorio')
-  .value='todos';
+ $('filtroHospedeRelatorio').value='';
+ if($('filtroFormaPagamentoRelatorio'))$('filtroFormaPagamentoRelatorio').value='todos';
+ if($('filtroContaDestinoRelatorio'))$('filtroContaDestinoRelatorio').value='todos';
+ if($('filtroRecebimentoRelatorio'))$('filtroRecebimentoRelatorio').value='todos';
 
  $('relatorioDataInicial')
   .value='';
@@ -7339,13 +6660,11 @@ function limparFiltrosRelatorio(){
 
 }
 
-
 function obterReservasRelatorio(){
 
  let arr=[
   ...reservasConfirmadas
  ];
-
 
  const casa=
   $('filtroCasaRelatorio')
@@ -7355,9 +6674,10 @@ function obterReservasRelatorio(){
   $('filtroPeriodoRelatorio')
    ?.value||'todos';
 
- const status=
-  $('filtroStatusRelatorio')
-   ?.value||'todos';
+ const status=$('filtroStatusRelatorio')?.value||'todos';
+ const formaPagamento=$('filtroFormaPagamentoRelatorio')?.value||'todos';
+ const contaDestino=$('filtroContaDestinoRelatorio')?.value||'todos';
+ const situacaoFinanceira=$('filtroRecebimentoRelatorio')?.value||'todos';
 
  const busca=
   normalizar(
@@ -7365,37 +6685,16 @@ function obterReservasRelatorio(){
     ?.value||''
   );
 
- const formaPagamento=
-  $('filtroFormaPagamentoRelatorio')?.value||'todos';
-
- const contaDestino=
-  $('filtroContaDestinoRelatorio')?.value||'todos';
-
-
  if(casa!=='todas')
   arr=arr.filter(
    r=>r.casa===casa
   );
 
+ if(status!=='todos')arr=arr.filter(r=>{const st=r.statusPagamento||'pendente',p=Number(r.valorPago||0),t=Number(r.valorTotal||0);if(status==='parcial')return st==='parcial'||(p>0&&p<t);if(status==='pago')return st==='pago'||(t>0&&p>=t);return st===status;});
 
- if(status!=='todos')
-  arr=arr.filter(r=>{
-   const st=r.statusPagamento||'pendente';
-   const pago=Number(r.valorPago||0);
-   const total=Number(r.valorTotal||0);
-   if(status==='parcial')
-    return st==='parcial' || (pago>0 && pago<total);
-   if(status==='pago')
-    return st==='pago' || (total>0 && pago>=total);
-   return st===status;
-  });
-
- if(formaPagamento!=='todos')
-  arr=arr.filter(r=>r.formaPagamento===formaPagamento);
-
- if(contaDestino!=='todos')
-  arr=arr.filter(r=>r.contaDestino===contaDestino);
-
+ if(formaPagamento!=='todos')arr=arr.filter(r=>r.formaPagamento===formaPagamento);
+ if(contaDestino!=='todos')arr=arr.filter(r=>r.contaDestino===contaDestino);
+ if(situacaoFinanceira!=='todos')arr=arr.filter(r=>{const t=Number(r.valorTotal||0),p=Number(r.valorPago||0),saldo=Math.max(0,t-p);if(situacaoFinanceira==='recebido')return t>0&&p>=t;if(situacaoFinanceira==='aReceber')return saldo>0;if(situacaoFinanceira==='parcial')return p>0&&saldo>0;if(situacaoFinanceira==='semRecebimento')return p<=0;return true;});
 
  if(busca){
 
@@ -7408,9 +6707,7 @@ function obterReservasRelatorio(){
 
  }
 
-
  const agora=hoje();
-
 
  if(periodo==='hoje'){
 
@@ -7421,7 +6718,6 @@ function obterReservasRelatorio(){
   );
 
  }
-
 
  if(periodo==='mes'){
 
@@ -7441,7 +6737,6 @@ function obterReservasRelatorio(){
   });
 
  }
-
 
  if(periodo==='proximoMes'){
 
@@ -7467,7 +6762,6 @@ function obterReservasRelatorio(){
 
  }
 
-
  if(periodo==='30dias'){
 
   const inicio=
@@ -7476,7 +6770,6 @@ function obterReservasRelatorio(){
   inicio.setDate(
    inicio.getDate()-30
   );
-
 
   arr=arr.filter(r=>{
 
@@ -7491,7 +6784,6 @@ function obterReservasRelatorio(){
   });
 
  }
-
 
  if(periodo==='ano'){
 
@@ -7510,7 +6802,6 @@ function obterReservasRelatorio(){
 
  }
 
-
  if(periodo==='personalizado'){
 
   const a=
@@ -7519,12 +6810,10 @@ function obterReservasRelatorio(){
   const b=
    $('relatorioDataFinal').value;
 
-
   if(a)
    arr=arr.filter(
     r=>r.entrada>=a
    );
-
 
   if(b)
    arr=arr.filter(
@@ -7532,7 +6821,6 @@ function obterReservasRelatorio(){
    );
 
  }
-
 
  return arr.sort(
   (a,b)=>
@@ -7544,13 +6832,12 @@ function obterReservasRelatorio(){
 
 }
 
-
 function exportarRelatorioCSV(){
  if(!ultimasReservasFiltradas || !ultimasReservasFiltradas.length){
   return alert('Nenhum dado filtrado para exportar.');
  }
 
- let csv='Casa;Hospede;Telefone;Entrada;Saida;Noites;Origem;Forma Recebimento;Conta Destino;Status;Diarias;Desconto;Taxa Limpeza;Total;Pago;Pendente\n';
+ let csv='Casa;Hospede;Telefone;Entrada;Saida;Noites;Origem;Forma Recebimento;Conta Destino;Status;Diarias;Desconto;Taxa Limpeza;Total;Valor Recebido;Valor a Receber\n';
 
  ultimasReservasFiltradas.forEach(r=>{
   const t=Number(r.valorTotal||0);
@@ -7590,7 +6877,6 @@ function exportarRelatorioCSV(){
  URL.revokeObjectURL(url);
 }
 
-
 function gerarRelatorio(){
 
  const el=
@@ -7598,13 +6884,11 @@ function gerarRelatorio(){
 
  if(!el)return;
 
-
  const arr=
   obterReservasRelatorio();
 
  // Mantém exatamente os registros atualmente filtrados para exportação.
  ultimasReservasFiltradas=[...arr];
-
 
  const total=
   arr.reduce(
@@ -7613,7 +6897,6 @@ function gerarRelatorio(){
    0
   );
 
-
  const recebido=
   arr.reduce(
    (s,r)=>
@@ -7621,13 +6904,11 @@ function gerarRelatorio(){
    0
   );
 
-
  const receber=
   Math.max(
    0,
    total-recebido
   );
-
 
  const noites=
   arr.reduce(
@@ -7644,31 +6925,22 @@ function gerarRelatorio(){
    0
   );
 
-
  const pendentes=
   arr.filter(
    r=>r.statusPagamento==='pendente'
   ).length;
-
 
  const confirmadas=
   arr.filter(
    r=>r.statusPagamento==='confirmada'
   ).length;
 
-
- const parciais=
-  arr.filter(r=>
-   r.statusPagamento==='parcial' ||
-   (Number(r.valorPago||0)>0 && Number(r.valorPago||0)<Number(r.valorTotal||0))
-  ).length;
-
+ const parciais=arr.filter(r=>r.statusPagamento==='parcial'||(Number(r.valorPago||0)>0&&Number(r.valorPago||0)<Number(r.valorTotal||0))).length;
 
  const pagas=
   arr.filter(
    r=>r.statusPagamento==='pago'
   ).length;
-
 
  let tabela=
   arr.length
@@ -7691,13 +6963,12 @@ function gerarRelatorio(){
         <th>Recebimento</th>
         <th>Conta destino</th>
         <th>Total</th>
-        <th>Pago</th>
-        <th>A receber</th>
+        <th>Valor Recebido</th>
+        <th>Valor a Receber</th>
         <th>Status</th>
        </tr>
 
       </thead>
-
 
       <tbody>
 
@@ -7712,7 +6983,6 @@ function gerarRelatorio(){
          Number(
           r.valorPago||0
          );
-
 
         return `
 
@@ -7753,9 +7023,7 @@ function gerarRelatorio(){
           </td>
 
           <td>${r.origemReserva||'—'}</td>
-
           <td>${r.formaPagamento||'—'}</td>
-
           <td>${r.contaDestino||'—'}</td>
 
           <td>
@@ -7795,14 +7063,7 @@ function gerarRelatorio(){
     </p>
    `;
 
-
  el.innerHTML=`
-
-  <div class="print-cabecalho">
-   <h1>CASAS NA PRAIA — RELATÓRIO DE RECEBIMENTOS</h1>
-   <p>Balneário Arroio do Silva/SC · Emitido em ${new Intl.DateTimeFormat('pt-BR',{dateStyle:'short',timeStyle:'short'}).format(new Date())}</p>
-   <p>Casa: ${$('filtroCasaRelatorio')?.selectedOptions?.[0]?.textContent||'Todas'} · Período: ${$('filtroPeriodoRelatorio')?.selectedOptions?.[0]?.textContent||'Todo o período'}</p>
-  </div>
 
   <div class="relatorio-resumo">
 
@@ -7855,11 +7116,6 @@ function gerarRelatorio(){
  `;
 
 }
-
-
-/* =====================================================
-   HÓSPEDES
-===================================================== */
 
 function obterDadosFormularioHospede(){
  return {
@@ -7914,13 +7170,12 @@ async function cadastrarOuAtualizarHospede(nome,telefone,extras={}){
 
 async function carregarHospedes(){
  hospedesCadastrados=[];
- paginaHospedesAtual=1;
  const s=await db.collection('hospedes').orderBy('nome').get();
  s.forEach(d=>hospedesCadastrados.push({id:d.id,...d.data()}));
  filtrarHospedes();
 }
 
-function filtrarHospedes(pagina=paginaHospedesAtual){
+function filtrarHospedes(){
  const el=$('listaHospedes');
  if(!el)return;
 
@@ -7933,33 +7188,17 @@ function filtrarHospedes(pagina=paginaHospedesAtual){
   String(h.cpf||'').includes(q)
  );
 
- const totalPaginas=Math.max(1,Math.ceil(arr.length/HOSPEDES_POR_PAGINA));
- paginaHospedesAtual=Math.min(Math.max(1,Number(pagina)||1),totalPaginas);
- const inicio=(paginaHospedesAtual-1)*HOSPEDES_POR_PAGINA;
- const visiveis=arr.slice(inicio,inicio+HOSPEDES_POR_PAGINA);
-
- el.innerHTML=visiveis.length
-  ?visiveis.map(h=>`
+ el.innerHTML=arr.length
+  ?arr.map(h=>`
    <div class="reserva-item">
-    <strong>👤 ${escapeHtmlReserva(h.nome||'')}</strong>
-    <p>📱 ${escapeHtmlReserva(h.telefone||'—')} ${h.email?` · ✉️ ${escapeHtmlReserva(h.email)}`:''}</p>
-    ${h.cpf?`<p>🪪 CPF: ${escapeHtmlReserva(h.cpf)}</p>`:''}
-    ${h.cidade||h.estado?`<p>📍 ${escapeHtmlReserva([h.cidade,h.estado].filter(Boolean).join(' - '))}</p>`:''}
+    <strong>👤 ${h.nome}</strong>
+    <p>📱 ${h.telefone||'—'} ${h.email?` · ✉️ ${h.email}`:''}</p>
+    ${h.cpf?`<p>🪪 CPF: ${h.cpf}</p>`:''}
+    ${h.cidade||h.estado?`<p>📍 ${[h.cidade,h.estado].filter(Boolean).join(' - ')}</p>`:''}
     <button class="azul" onclick="editarHospede('${h.id}')">✏️ Editar Cadastro</button>
    </div>
   `).join('')
   :`<p style="color:var(--cinza)">Nenhum hóspede encontrado.</p>`;
-
- const pag=$('paginacaoHospedes');
- if(!pag)return;
- if(arr.length<=HOSPEDES_POR_PAGINA){pag.innerHTML='';return;}
- const botoes=[];
- botoes.push(`<button onclick="filtrarHospedes(${paginaHospedesAtual-1})" ${paginaHospedesAtual===1?'disabled':''}>‹ Anterior</button>`);
- const inicioPag=Math.max(1,paginaHospedesAtual-2), fimPag=Math.min(totalPaginas,inicioPag+4);
- for(let i=inicioPag;i<=fimPag;i++) botoes.push(`<button class="${i===paginaHospedesAtual?'ativo':''}" onclick="filtrarHospedes(${i})">${i}</button>`);
- botoes.push(`<button onclick="filtrarHospedes(${paginaHospedesAtual+1})" ${paginaHospedesAtual===totalPaginas?'disabled':''}>Próxima ›</button>`);
- botoes.push(`<span>${arr.length} hóspedes · página ${paginaHospedesAtual}/${totalPaginas}</span>`);
- pag.innerHTML=botoes.join('');
 }
 
 function limparFormularioHospede(){
@@ -8075,149 +7314,21 @@ async function sincronizarHospedesReservas(){
  alert('✅ Sincronização concluída!');
 }
 
-
-/* =====================================================
-   DESPESAS / CONTROLE DE CAIXA
-===================================================== */
-
-const nomesCategoriasDespesa={
- agua:'Água',energia:'Energia',internet:'Internet',limpeza:'Pagamento de limpeza',manutencao:'Manutenção',gas:'Gás',impostos:'Impostos / taxas',materiais:'Materiais / compras',outros:'Outros'
-};
-
+const nomesCategoriasDespesa={agua:'Água',energia:'Energia',internet:'Internet',limpeza:'Pagamento de limpeza',manutencao:'Manutenção',gas:'Gás',impostos:'Impostos / taxas',materiais:'Materiais / compras',outros:'Outros'};
 function nomeCategoriaDespesa(v){return nomesCategoriasDespesa[v]||v||'Outros';}
-
-function contaDestinoCasa(casa){
- return {amarela:'Caixa Casa Amarela',bege:'Caixa Casa Bege',marrom:'Caixa Casa Marrom',branca:'Caixa Casa Branca'}[casa]||'';
-}
-
-async function carregarDespesas(){
- despesasCadastradas=[];
- try{
-  const snap=await db.collection('despesas').orderBy('data','desc').get();
-  snap.forEach(d=>despesasCadastradas.push({id:d.id,...d.data()}));
- }catch(e){console.error('Erro ao carregar despesas:',e);}
- paginaDespesasAtual=1;
- gerarRelatorioDespesas();
-}
-
-function limparFormularioDespesa(){
- $('despesaData').value=dataStr(hoje());
- $('despesaCasa').value='amarela';
- $('despesaCategoria').value='agua';
- $('despesaValor').value='';
- $('despesaFormaPagamento').value='Pix';
- $('despesaContaOrigem').value='Caixa Casa Amarela';
- $('despesaDescricao').value='';
- $('despesaObservacao').value='';
-}
-
-async function salvarDespesa(){
- const data=$('despesaData').value;
- const casa=$('despesaCasa').value;
- const categoria=$('despesaCategoria').value;
- const valor=Number($('despesaValor').value||0);
- const formaPagamento=$('despesaFormaPagamento').value;
- const contaOrigem=$('despesaContaOrigem').value;
- if(!data||!casa||!categoria||valor<=0||!formaPagamento||!contaOrigem)
-  return alert('⚠️ Informe data, casa, categoria, valor, forma de pagamento e caixa/conta.');
- try{
-  await db.collection('despesas').add({
-   data,casa,categoria,valor,formaPagamento,contaOrigem,
-   descricao:$('despesaDescricao').value.trim(),
-   observacao:$('despesaObservacao').value.trim(),
-   criadoEm:firebase.firestore.FieldValue.serverTimestamp(),
-   atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()
-  });
-  await carregarDespesas();
-  limparFormularioDespesa();
-  alert('✅ Despesa lançada com sucesso.');
- }catch(e){console.error(e);alert('❌ Erro ao salvar a despesa.');}
-}
-
-function obterDespesasFiltradas(){
- let arr=[...despesasCadastradas];
- const casa=$('filtroDespesaCasa')?.value||'todas';
- const cat=$('filtroDespesaCategoria')?.value||'todas';
- const pag=$('filtroDespesaPagamento')?.value||'todas';
- const conta=$('filtroDespesaConta')?.value||'todas';
- const a=$('filtroDespesaDataInicial')?.value||'';
- const b=$('filtroDespesaDataFinal')?.value||'';
- if(casa!=='todas')arr=arr.filter(x=>x.casa===casa);
- if(cat!=='todas')arr=arr.filter(x=>x.categoria===cat);
- if(pag!=='todas')arr=arr.filter(x=>x.formaPagamento===pag);
- if(conta!=='todas')arr=arr.filter(x=>x.contaOrigem===conta);
- if(a)arr=arr.filter(x=>x.data>=a);
- if(b)arr=arr.filter(x=>x.data<=b);
- return arr.sort((x,y)=>(y.data||'').localeCompare(x.data||''));
-}
-
-function gerarRelatorioDespesas(){
- const arr=obterDespesasFiltradas();
- ultimasDespesasFiltradas=[...arr];
- const total=arr.reduce((s,x)=>s+Number(x.valor||0),0);
- const pix=arr.filter(x=>x.formaPagamento==='Pix').reduce((s,x)=>s+Number(x.valor||0),0);
- const dinheiro=arr.filter(x=>x.formaPagamento==='Dinheiro').reduce((s,x)=>s+Number(x.valor||0),0);
- const cartao=arr.filter(x=>x.formaPagamento==='Cartão').reduce((s,x)=>s+Number(x.valor||0),0);
- const el=$('listaDespesas');
- const resumo=$('despesasResumo');
- if(resumo)resumo.innerHTML=`
-  <div class="resumo-card"><small>Lançamentos</small><strong>${arr.length}</strong></div>
-  <div class="resumo-card"><small>Total de despesas</small><strong>${moeda(total)}</strong></div>
-  <div class="resumo-card"><small>Pix</small><strong>${moeda(pix)}</strong></div>
-  <div class="resumo-card"><small>Dinheiro / Cartão</small><strong>${moeda(dinheiro+cartao)}</strong></div>`;
- const totalPag=Math.max(1,Math.ceil(arr.length/DESPESAS_POR_PAGINA));
- paginaDespesasAtual=Math.min(Math.max(1,paginaDespesasAtual),totalPag);
- const inicio=(paginaDespesasAtual-1)*DESPESAS_POR_PAGINA;
- const vis=arr.slice(inicio,inicio+DESPESAS_POR_PAGINA);
- if(el)el.innerHTML=vis.length?`<div style="overflow-x:auto"><table class="tabela-admin-compacta"><thead><tr><th>Data</th><th>Casa</th><th>Categoria</th><th>Descrição</th><th>Forma</th><th>Conta / caixa</th><th>Valor</th><th>Ações</th></tr></thead><tbody>${vis.map(x=>`<tr><td>${dataBr(x.data)}</td><td>${casas[x.casa]?.nome||x.casa}</td><td><span class="despesa-badge">${nomeCategoriaDespesa(x.categoria)}</span></td><td>${escapeHtmlReserva(x.descricao||'—')}</td><td>${escapeHtmlReserva(x.formaPagamento||'—')}</td><td>${escapeHtmlReserva(x.contaOrigem||'—')}</td><td class="despesa-valor">${moeda(x.valor)}</td><td class="despesa-acoes"><button class="vermelho" onclick="excluirDespesa('${x.id}')">Excluir</button></td></tr>`).join('')}</tbody></table></div>`:`<p style="color:var(--cinza);margin-top:12px">Nenhuma despesa encontrada com os filtros atuais.</p>`;
- const pagEl=$('paginacaoDespesas');
- if(pagEl){
-  if(arr.length<=DESPESAS_POR_PAGINA)pagEl.innerHTML='';
-  else{
-   const botoes=[`<button onclick="mudarPaginaDespesas(${paginaDespesasAtual-1})" ${paginaDespesasAtual===1?'disabled':''}>‹ Anterior</button>`];
-   const ini=Math.max(1,paginaDespesasAtual-2),fim=Math.min(totalPag,ini+4);
-   for(let i=ini;i<=fim;i++)botoes.push(`<button class="${i===paginaDespesasAtual?'ativo':''}" onclick="mudarPaginaDespesas(${i})">${i}</button>`);
-   botoes.push(`<button onclick="mudarPaginaDespesas(${paginaDespesasAtual+1})" ${paginaDespesasAtual===totalPag?'disabled':''}>Próxima ›</button>`);
-   botoes.push(`<span>${arr.length} lançamentos · página ${paginaDespesasAtual}/${totalPag}</span>`);
-   pagEl.innerHTML=botoes.join('');
-  }
- }
-}
-
+function contaDestinoCasa(casa){return {amarela:'Caixa Casa Amarela',bege:'Caixa Casa Bege',marrom:'Caixa Casa Marrom',branca:'Caixa Casa Branca',nossa:'Caixa Nossa Casa'}[casa]||'';}
+let despesasCadastradas=[],paginaDespesasAtual=1,ultimasDespesasFiltradas=[];const DESPESAS_POR_PAGINA=15;
+async function carregarDespesas(){despesasCadastradas=[];try{const snap=await db.collection('despesas').orderBy('data','desc').get();snap.forEach(d=>despesasCadastradas.push({id:d.id,...d.data()}));}catch(e){console.error(e);}paginaDespesasAtual=1;gerarRelatorioDespesas();}
+function limparFormularioDespesa(){if(!$('despesaData'))return;$('despesaEditId').value='';$('despesaData').value=dataStr(hoje());$('despesaCasa').value='amarela';$('despesaCategoria').value='agua';$('despesaValor').value='';$('despesaFormaPagamento').value='Pix';$('despesaContaOrigem').value='Caixa Casa Amarela';$('despesaDescricao').value='';$('despesaObservacao').value='';$('tituloFormularioDespesa').textContent='➕ Novo lançamento de despesa';$('btnSalvarDespesa').textContent='💾 Lançar despesa';}
+async function salvarDespesa(){const id=$('despesaEditId').value,data=$('despesaData').value,casa=$('despesaCasa').value,categoria=$('despesaCategoria').value,valor=Number($('despesaValor').value||0),formaPagamento=$('despesaFormaPagamento').value,contaOrigem=$('despesaContaOrigem').value;if(!data||!casa||!categoria||valor<=0||!formaPagamento||!contaOrigem)return alert('⚠️ Preencha os campos obrigatórios da despesa.');const dados={data,casa,categoria,valor,formaPagamento,contaOrigem,descricao:$('despesaDescricao').value.trim(),observacao:$('despesaObservacao').value.trim(),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()};try{if(id)await db.collection('despesas').doc(id).update(dados);else await db.collection('despesas').add({...dados,criadoEm:firebase.firestore.FieldValue.serverTimestamp()});await carregarDespesas();limparFormularioDespesa();alert(id?'✅ Despesa alterada.':'✅ Despesa lançada.');}catch(e){console.error(e);alert('❌ Erro ao salvar a despesa.');}}
+function editarDespesa(id){const x=despesasCadastradas.find(d=>d.id===id);if(!x)return;$('despesaEditId').value=id;$('despesaData').value=x.data||'';$('despesaCasa').value=x.casa||'amarela';$('despesaCategoria').value=x.categoria||'outros';$('despesaValor').value=Number(x.valor||0).toFixed(2);$('despesaFormaPagamento').value=x.formaPagamento||'Pix';$('despesaContaOrigem').value=x.contaOrigem||contaDestinoCasa(x.casa);$('despesaDescricao').value=x.descricao||'';$('despesaObservacao').value=x.observacao||'';$('tituloFormularioDespesa').textContent='✏️ Editar lançamento de despesa';$('btnSalvarDespesa').textContent='💾 Salvar alteração';$('pagina-despesas').scrollIntoView({behavior:'smooth',block:'start'});}
+function obterDespesasFiltradas(){let a=[...despesasCadastradas],c=$('filtroDespesaCasa')?.value||'todas',cat=$('filtroDespesaCategoria')?.value||'todas',pag=$('filtroDespesaPagamento')?.value||'todas',cont=$('filtroDespesaConta')?.value||'todas',ini=$('filtroDespesaDataInicial')?.value||'',fim=$('filtroDespesaDataFinal')?.value||'';if(c!=='todas')a=a.filter(x=>x.casa===c);if(cat!=='todas')a=a.filter(x=>x.categoria===cat);if(pag!=='todas')a=a.filter(x=>x.formaPagamento===pag);if(cont!=='todas')a=a.filter(x=>x.contaOrigem===cont);if(ini)a=a.filter(x=>x.data>=ini);if(fim)a=a.filter(x=>x.data<=fim);return a.sort((x,y)=>(y.data||'').localeCompare(x.data||''));}
+function gerarRelatorioDespesas(){const a=obterDespesasFiltradas();ultimasDespesasFiltradas=[...a];const total=a.reduce((s,x)=>s+Number(x.valor||0),0),el=$('listaDespesas'),res=$('despesasResumo');if(res)res.innerHTML=`<div class="resumo-card"><small>Lançamentos</small><strong>${a.length}</strong></div><div class="resumo-card"><small>Total</small><strong>${moeda(total)}</strong></div>`;const pags=Math.max(1,Math.ceil(a.length/DESPESAS_POR_PAGINA));paginaDespesasAtual=Math.min(Math.max(1,paginaDespesasAtual),pags);const vis=a.slice((paginaDespesasAtual-1)*DESPESAS_POR_PAGINA,paginaDespesasAtual*DESPESAS_POR_PAGINA);if(el)el.innerHTML=vis.length?`<div style="overflow-x:auto"><table class="tabela-admin-compacta"><thead><tr><th>Data</th><th>Casa</th><th>Categoria</th><th>Descrição</th><th>Forma</th><th>Conta</th><th>Valor</th><th>Ações</th></tr></thead><tbody>${vis.map(x=>`<tr><td>${dataBr(x.data)}</td><td>${escapeHtmlReserva(casas[x.casa]?.nome||x.casa)}</td><td>${nomeCategoriaDespesa(x.categoria)}</td><td>${escapeHtmlReserva(x.descricao||'—')}</td><td>${escapeHtmlReserva(x.formaPagamento||'—')}</td><td>${escapeHtmlReserva(x.contaOrigem||'—')}</td><td><strong>${moeda(x.valor)}</strong></td><td><button class="azul" onclick="editarDespesa('${x.id}')">✏️ Editar</button><button class="vermelho" onclick="excluirDespesa('${x.id}')">Excluir</button></td></tr>`).join('')}</tbody></table></div>`:'<p style="color:var(--cinza)">Nenhuma despesa encontrada.</p>';const pe=$('paginacaoDespesas');if(pe)pe.innerHTML=a.length<=DESPESAS_POR_PAGINA?'':`<button onclick="mudarPaginaDespesas(${paginaDespesasAtual-1})" ${paginaDespesasAtual===1?'disabled':''}>‹ Anterior</button> <span>${paginaDespesasAtual}/${pags}</span> <button onclick="mudarPaginaDespesas(${paginaDespesasAtual+1})" ${paginaDespesasAtual===pags?'disabled':''}>Próxima ›</button>`;}
 function mudarPaginaDespesas(p){paginaDespesasAtual=p;gerarRelatorioDespesas();}
-
-async function excluirDespesa(id){
- if(!confirm('Tem certeza que deseja excluir este lançamento de despesa?'))return;
- try{await db.collection('despesas').doc(id).delete();await carregarDespesas();alert('🗑️ Despesa excluída.');}
- catch(e){console.error(e);alert('❌ Não foi possível excluir a despesa.');}
-}
-
-function limparFiltrosDespesas(){
- ['filtroDespesaCasa','filtroDespesaCategoria','filtroDespesaPagamento','filtroDespesaConta'].forEach(id=>{if($(id))$(id).value='todas';});
- ['filtroDespesaDataInicial','filtroDespesaDataFinal'].forEach(id=>{if($(id))$(id).value='';});
- paginaDespesasAtual=1;gerarRelatorioDespesas();
-}
-
-function exportarDespesasCSV(){
- const arr=ultimasDespesasFiltradas;
- if(!arr.length)return alert('Nenhum lançamento para exportar.');
- let csv='Data;Casa;Categoria;Descrição;Forma de pagamento;Conta/Caixa;Valor;Observação\n';
- arr.forEach(x=>{csv+=`"${dataBr(x.data)}";"${String(casas[x.casa]?.nome||x.casa||'').replace(/"/g,'""')}";"${nomeCategoriaDespesa(x.categoria)}";"${String(x.descricao||'').replace(/"/g,'""')}";"${String(x.formaPagamento||'').replace(/"/g,'""')}";"${String(x.contaOrigem||'').replace(/"/g,'""')}";"${Number(x.valor||0).toFixed(2)}";"${String(x.observacao||'').replace(/"/g,'""')}"\n`;});
- const blob=new Blob(["\ufeff"+csv],{type:'text/csv;charset=utf-8;'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='relatorio_despesas.csv';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
-}
-
-function imprimirRelatorioDespesas(){
- const arr=ultimasDespesasFiltradas;
- if(!arr.length)return alert('Nenhum lançamento para imprimir.');
- const total=arr.reduce((s,x)=>s+Number(x.valor||0),0);
- const w=window.open('','_blank','width=1000,height=750');
- if(!w)return alert('⚠️ Permita pop-ups para imprimir o relatório.');
- w.document.write(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Relatório de Despesas</title><style>body{font-family:Arial,sans-serif;color:#222;padding:28px}h1{color:#0a4b6e;text-align:center;font-size:22px}p{font-size:12px;color:#555;text-align:center}table{width:100%;border-collapse:collapse;margin-top:20px;font-size:11px}th,td{border:1px solid #ccc;padding:7px;text-align:left}th{background:#e9eef0}.total{margin-top:15px;text-align:right;font-size:16px;font-weight:bold}@media print{button{display:none}}</style></head><body><h1>CASAS NA PRAIA — RELATÓRIO DE DESPESAS</h1><p>Balneário Arroio do Silva/SC · Emitido em ${new Date().toLocaleString('pt-BR')}</p><table><thead><tr><th>Data</th><th>Casa</th><th>Categoria</th><th>Descrição</th><th>Forma</th><th>Conta/Caixa</th><th>Valor</th></tr></thead><tbody>${arr.map(x=>`<tr><td>${dataBr(x.data)}</td><td>${casas[x.casa]?.nome||x.casa}</td><td>${nomeCategoriaDespesa(x.categoria)}</td><td>${escapeHtmlReserva(x.descricao||'')}</td><td>${escapeHtmlReserva(x.formaPagamento||'')}</td><td>${escapeHtmlReserva(x.contaOrigem||'')}</td><td>${moeda(x.valor)}</td></tr>`).join('')}</tbody></table><div class="total">Total de despesas: ${moeda(total)}</div><br><button onclick="window.print()">Imprimir / Salvar PDF</button></body></html>`);w.document.close();setTimeout(()=>w.print(),300);
-}
-
-/* =====================================================
-   TECLADO / ESC
-===================================================== */
+async function excluirDespesa(id){if(!confirm('Excluir esta despesa?'))return;try{await db.collection('despesas').doc(id).delete();await carregarDespesas();}catch(e){console.error(e);alert('❌ Não foi possível excluir.');}}
+function limparFiltrosDespesas(){['filtroDespesaCasa','filtroDespesaCategoria','filtroDespesaPagamento','filtroDespesaConta'].forEach(id=>{if($(id))$(id).value='todas';});['filtroDespesaDataInicial','filtroDespesaDataFinal'].forEach(id=>{if($(id))$(id).value='';});paginaDespesasAtual=1;gerarRelatorioDespesas();}
+function exportarDespesasCSV(){const a=ultimasDespesasFiltradas;if(!a.length)return alert('Nenhuma despesa para exportar.');let csv='Data;Casa;Categoria;Descrição;Forma;Conta;Valor;Observação\n';a.forEach(x=>csv+=`"${dataBr(x.data)}";"${casas[x.casa]?.nome||x.casa}";"${nomeCategoriaDespesa(x.categoria)}";"${String(x.descricao||'').replace(/"/g,'""')}";"${x.formaPagamento||''}";"${x.contaOrigem||''}";"${Number(x.valor||0).toFixed(2)}";"${String(x.observacao||'').replace(/"/g,'""')}"\n`);const blob=new Blob(["\ufeff"+csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),aEl=document.createElement('a');aEl.href=url;aEl.download='relatorio_despesas.csv';aEl.click();URL.revokeObjectURL(url);}
+function imprimirRelatorioDespesas(){const a=ultimasDespesasFiltradas;if(!a.length)return alert('Nenhuma despesa para imprimir.');const total=a.reduce((s,x)=>s+Number(x.valor||0),0),w=window.open('','_blank','width=1000,height=750');if(!w)return alert('⚠️ Permita pop-ups.');w.document.write(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Relatório de Despesas</title><style>body{font-family:Arial;padding:28px;color:#222}h1{text-align:center;color:#0a4b6e}table{width:100%;border-collapse:collapse;font-size:11px}th,td{border:1px solid #ccc;padding:7px}th{background:#e9eef0}.total{text-align:right;font-weight:bold;margin-top:15px}@media print{button{display:none}}</style></head><body><h1>CASAS NA PRAIA — RELATÓRIO DE DESPESAS</h1><p style="text-align:center">Emitido em ${new Date().toLocaleString('pt-BR')}</p><table><tr><th>Data</th><th>Casa</th><th>Categoria</th><th>Descrição</th><th>Forma</th><th>Conta</th><th>Valor</th></tr>${a.map(x=>`<tr><td>${dataBr(x.data)}</td><td>${casas[x.casa]?.nome||x.casa}</td><td>${nomeCategoriaDespesa(x.categoria)}</td><td>${escapeHtmlReserva(x.descricao||'')}</td><td>${escapeHtmlReserva(x.formaPagamento||'')}</td><td>${escapeHtmlReserva(x.contaOrigem||'')}</td><td>${moeda(x.valor)}</td></tr>`).join('')}</table><div class="total">Total: ${moeda(total)}</div><button onclick="window.print()">Imprimir / Salvar PDF</button></body></html>`);w.document.close();setTimeout(()=>w.print(),300);}
 
 document.addEventListener(
  'keydown',
