@@ -6708,95 +6708,51 @@ function obterReservasRelatorio(){
 
  const agora=hoje();
 
+ // Os filtros de período deste relatório são financeiros:
+ // usam a Data de Recebimento, e não a data de entrada da reserva.
+ // Para reservas antigas já pagas sem data de recebimento registrada,
+ // usamos a entrada como referência histórica.
+ const dataFinanceira=r=>{
+  const d=String(r.dataRecebimento||'').slice(0,10);
+  if(d)return d;
+  return Number(r.valorPago||0)>0?String(r.entrada||'').slice(0,10):'';
+ };
+
  if(periodo==='hoje'){
-
   const s=dataStr(agora);
-
-  arr=arr.filter(
-   r=>r.entrada===s
-  );
-
+  arr=arr.filter(r=>dataFinanceira(r)===s);
  }
 
  if(periodo==='mes'){
-
-  arr=arr.filter(r=>{
-
-   const d=
-    dataLocal(r.entrada);
-
-   return(
-    d &&
-    d.getMonth()===
-     agora.getMonth() &&
-    d.getFullYear()===
-     agora.getFullYear()
-   );
-
-  });
-
+  const ref=`${agora.getFullYear()}-${String(agora.getMonth()+1).padStart(2,'0')}`;
+  arr=arr.filter(r=>dataFinanceira(r).slice(0,7)===ref);
  }
 
- if(periodo==='proximoMes'){const d=new Date(agora.getFullYear(),agora.getMonth()+1,1),ref=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;arr=arr.filter(r=>String(r.entrada||'').slice(0,7)===ref);}
+ if(periodo==='proximoMes'){
+  const d=new Date(agora.getFullYear(),agora.getMonth()+1,1);
+  const ref=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+  arr=arr.filter(r=>dataFinanceira(r).slice(0,7)===ref);
+ }
 
  if(periodo==='30dias'){
-
-  const inicio=
-   new Date(agora);
-
-  inicio.setDate(
-   inicio.getDate()-30
-  );
-
-  arr=arr.filter(r=>{
-
-   const d=
-    dataLocal(r.entrada);
-
-   return(
-    d>=inicio &&
-    d<=agora
-   );
-
-  });
-
+  const inicio=new Date(agora);
+  inicio.setHours(0,0,0,0);
+  inicio.setDate(inicio.getDate()-30);
+  const fim=new Date(agora);
+  fim.setHours(23,59,59,999);
+  arr=arr.filter(r=>{const d=dataLocal(dataFinanceira(r));return d&&d>=inicio&&d<=fim;});
  }
 
  if(periodo==='ano'){
-
-  arr=arr.filter(r=>{
-
-   const d=
-    dataLocal(r.entrada);
-
-   return(
-    d &&
-    d.getFullYear()===
-     agora.getFullYear()
-   );
-
-  });
-
+  const ano=String(agora.getFullYear());
+  arr=arr.filter(r=>dataFinanceira(r).slice(0,4)===ano);
  }
 
  if(periodo==='personalizado'){
-
-  const a=
-   $('relatorioDataInicial').value;
-
-  const b=
-   $('relatorioDataFinal').value;
-
-  if(a)
-   arr=arr.filter(
-    r=>r.entrada>=a
-   );
-
-  if(b)
-   arr=arr.filter(
-    r=>r.entrada<=b
-   );
-
+  const a=$('relatorioDataInicial')?.value||'';
+  const b=$('relatorioDataFinal')?.value||'';
+  if(a)arr=arr.filter(r=>{const d=dataFinanceira(r);return d&&d>=a;});
+  if(b)arr=arr.filter(r=>{const d=dataFinanceira(r);return d&&d<=b;});
  }
 
  return arr.sort(
@@ -6814,7 +6770,7 @@ function exportarRelatorioCSV(){
   return alert('Nenhum dado filtrado para exportar.');
  }
 
- let csv='Casa;Hospede;Telefone;Entrada;Saida;Noites;Origem;Forma Recebimento;Conta Destino;Status;Diarias;Desconto;Taxa Limpeza;Total;Valor Recebido;Valor a Receber\n';
+ let csv='Casa;Hospede;Telefone;Entrada;Saida;Data Recebimento;Noites;Origem;Forma Recebimento;Conta Destino;Status;Diarias;Desconto;Taxa Limpeza;Total;Valor Recebido;Valor a Receber\n';
 
  ultimasReservasFiltradas.forEach(r=>{
   const t=Number(r.valorTotal||0);
@@ -6830,6 +6786,7 @@ function exportarRelatorioCSV(){
        `"${String(r.telefone||'').replace(/"/g,'""')}";`+
        `"${dataBr(r.entrada)}";`+
        `"${dataBr(r.saida)}";`+
+       `"${dataBr(r.dataRecebimento||'')}";`+
        `"${noites}";`+
        `"${String(r.origemReserva||'').replace(/"/g,'""')}";`+
        `"${String(r.formaPagamento||'').replace(/"/g,'""')}";`+
@@ -6937,6 +6894,7 @@ function gerarRelatorio(){
         <th>Pessoas</th>
         <th>Noites</th>
         <th>Origem</th>
+        <th>Data Recebimento</th>
         <th>Recebimento</th>
         <th>Conta destino</th>
         <th>Total</th>
@@ -7000,6 +6958,7 @@ function gerarRelatorio(){
           </td>
 
           <td>${r.origemReserva||'—'}</td>
+          <td>${r.dataRecebimento?dataBr(r.dataRecebimento):'—'}</td>
           <td>${r.formaPagamento||'—'}</td>
           <td>${r.contaDestino||'—'}</td>
 
