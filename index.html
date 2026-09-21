@@ -1025,6 +1025,174 @@ textarea{
  border-radius:4px
 }
 
+
+/* =====================================================
+   BUSCA PRÉVIA DE DISPONIBILIDADE
+===================================================== */
+.modal-busca-disponibilidade{
+ display:none;
+ position:fixed;
+ inset:0;
+ z-index:1200;
+ background:#0009;
+ align-items:center;
+ justify-content:center;
+ padding:20px
+}
+.modal-busca-disponibilidade.aberto{
+ display:flex
+}
+.busca-disponibilidade-conteudo{
+ background:#fff;
+ width:min(94vw,760px);
+ max-height:92vh;
+ overflow-y:auto;
+ border-radius:18px;
+ box-shadow:0 20px 60px #0007;
+ padding:24px
+}
+.busca-cabecalho{
+ display:flex;
+ align-items:flex-start;
+ justify-content:space-between;
+ gap:15px;
+ margin-bottom:18px
+}
+.busca-cabecalho h3{
+ margin:0;
+ color:var(--marinho);
+ font-size:22px
+}
+.busca-cabecalho p{
+ margin:5px 0 0;
+ color:var(--cinza);
+ font-size:13px
+}
+.busca-fechar{
+ border:0;
+ background:#eef3f5;
+ color:#456;
+ width:38px;
+ height:38px;
+ border-radius:10px;
+ font-size:24px;
+ cursor:pointer
+}
+.busca-formulario{
+ background:#f7fafb;
+ border:1px solid #dce7eb;
+ border-radius:14px;
+ padding:15px
+}
+.busca-resultado{
+ margin-top:16px
+}
+.busca-resultado.sucesso{
+ background:#edf9f1;
+ border:1px solid #b8e1c5;
+ border-radius:14px;
+ padding:15px
+}
+.busca-resultado.indisponivel{
+ background:#fff8e8;
+ border:1px solid #efd58a;
+ border-radius:14px;
+ padding:15px
+}
+.busca-status{
+ font-weight:700;
+ font-size:16px;
+ color:var(--marinho);
+ margin-bottom:6px
+}
+.busca-detalhes{
+ font-size:13px;
+ line-height:1.55;
+ color:#445
+}
+.busca-acoes{
+ display:flex;
+ gap:8px;
+ flex-wrap:wrap;
+ margin-top:12px
+}
+.busca-acoes button{
+ flex:1;
+ min-width:190px
+}
+.periodos-proximos{
+ display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:9px;
+ margin-top:12px
+}
+.periodo-proximo{
+ border:1px solid #d8e3e7;
+ background:#fff;
+ border-radius:11px;
+ padding:11px;
+ text-align:left;
+ cursor:pointer;
+ transition:.15s
+}
+.periodo-proximo:hover{
+ transform:translateY(-1px);
+ box-shadow:0 5px 16px #0002;
+ border-color:#0ea5e9
+}
+.periodo-proximo strong{
+ display:block;
+ color:var(--marinho);
+ margin-bottom:3px
+}
+.periodo-proximo small{
+ color:var(--cinza)
+}
+.outras-casas-busca{
+ margin-top:16px;
+ padding-top:14px;
+ border-top:1px solid #ddd
+}
+.outras-casas-busca h4{
+ margin:0 0 8px;
+ color:var(--marinho)
+}
+.outra-casa-opcao{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:10px;
+ padding:10px 0;
+ border-bottom:1px solid #eee
+}
+.outra-casa-opcao:last-child{
+ border-bottom:0
+}
+.busca-carregando{
+ text-align:center;
+ padding:18px;
+ color:var(--cinza)
+}
+@media(max-width:600px){
+ .modal-busca-disponibilidade{
+  padding:10px
+ }
+ .busca-disponibilidade-conteudo{
+  width:100%;
+  padding:17px
+ }
+ .periodos-proximos{
+  grid-template-columns:1fr
+ }
+ .outra-casa-opcao{
+  align-items:flex-start;
+  flex-direction:column
+ }
+ .outra-casa-opcao button{
+  width:100%
+ }
+}
+
 .sugestoes-disponibilidade{
  display:none;
  margin:-5px 0 18px;
@@ -2115,6 +2283,92 @@ textarea{
 </div>
 
 <!-- =====================================================
+     BUSCA PRÉVIA DE DISPONIBILIDADE
+===================================================== -->
+
+<div id="modalBuscaDisponibilidade"
+ class="modal-busca-disponibilidade"
+ onclick="if(event.target===this)fecharBuscaDisponibilidade()">
+
+ <div class="busca-disponibilidade-conteudo">
+
+  <div class="busca-cabecalho">
+
+   <div>
+    <h3>🔎 Consultar disponibilidade</h3>
+    <p>
+     <strong id="nomeCasaBuscaDisponibilidade"></strong>
+     — informe o período que deseja ficar.
+    </p>
+   </div>
+
+   <button class="busca-fechar"
+    onclick="fecharBuscaDisponibilidade()">
+    ×
+   </button>
+
+  </div>
+
+  <div class="busca-formulario">
+
+   <div class="linha-form">
+
+    <div class="grupo-input">
+     <label>📅 Data de entrada</label>
+     <input type="date"
+      id="buscaDataEntrada"
+      onchange="limparResultadoBuscaDisponibilidade()">
+    </div>
+
+    <div class="grupo-input">
+     <label>📅 Data de saída</label>
+     <input type="date"
+      id="buscaDataSaida"
+      onchange="limparResultadoBuscaDisponibilidade()">
+    </div>
+
+   </div>
+
+   <div class="linha-form">
+
+    <div class="grupo-input">
+     <label>👨 Adultos</label>
+     <input type="number"
+      id="buscaAdultos"
+      min="0"
+      value="1"
+      onchange="limparResultadoBuscaDisponibilidade()">
+    </div>
+
+    <div class="grupo-input">
+     <label>👧 Crianças</label>
+     <input type="number"
+      id="buscaCriancas"
+      min="0"
+      value="0"
+      onchange="limparResultadoBuscaDisponibilidade()">
+    </div>
+
+   </div>
+
+   <button class="amarelo"
+    id="btnBuscarDisponibilidade"
+    onclick="buscarDisponibilidadePrevia()"
+    style="width:100%">
+    🔎 Verificar disponibilidade
+   </button>
+
+  </div>
+
+  <div id="resultadoBuscaDisponibilidade"
+   class="busca-resultado">
+  </div>
+
+ </div>
+
+</div>
+
+<!-- =====================================================
      MODAL RESERVA
 ===================================================== -->
 
@@ -3120,9 +3374,9 @@ function renderizarPaginaPublica(){
        <button
         class="amarelo"
         style="width:100%;margin-top:8px"
-        onclick="abrirModalReserva('${id}')">
+        onclick="abrirBuscaDisponibilidade('${id}')">
 
-        📅 Solicitar Reserva
+        🔎 Consultar Disponibilidade
 
        </button>
 
@@ -3619,6 +3873,614 @@ function atualizarTotalPessoas(){
  }
 
  verificarDisponibilidade();
+
+}
+
+
+/* =====================================================
+   BUSCA PRÉVIA DE DISPONIBILIDADE
+===================================================== */
+
+let casaBuscaDisponibilidade=null;
+
+function formatarDataBusca(s,comAno=true){
+ const d=dataLocal(s);
+ if(!d)return '—';
+ return new Intl.DateTimeFormat(
+  'pt-BR',
+  comAno
+   ?{day:'2-digit',month:'2-digit',year:'numeric'}
+   :{day:'2-digit',month:'2-digit'}
+ ).format(d);
+}
+
+function limparResultadoBuscaDisponibilidade(){
+ const el=$('resultadoBuscaDisponibilidade');
+ if(el)el.innerHTML='';
+}
+
+function abrirBuscaDisponibilidade(id){
+
+ const casa=casas[id];
+
+ if(!casa || casa.interna)return;
+
+ casaBuscaDisponibilidade=id;
+
+ $('nomeCasaBuscaDisponibilidade').textContent=casa.nome;
+
+ const hojeStr=dataStr(hoje());
+
+ $('buscaDataEntrada').min=hojeStr;
+ $('buscaDataSaida').min=hojeStr;
+
+ $('buscaDataEntrada').value='';
+ $('buscaDataSaida').value='';
+ $('buscaAdultos').value=1;
+ $('buscaCriancas').value=0;
+
+ limparResultadoBuscaDisponibilidade();
+
+ $('modalBuscaDisponibilidade')
+  .classList.add('aberto');
+
+ setTimeout(()=>$('buscaDataEntrada')?.focus(),100);
+}
+
+function fecharBuscaDisponibilidade(){
+ $('modalBuscaDisponibilidade')
+  ?.classList.remove('aberto');
+ casaBuscaDisponibilidade=null;
+}
+
+async function carregarBloqueiosPublicosCasa(casa){
+
+ try{
+
+  const [rs,bs]=await Promise.all([
+   db.collection('disponibilidade')
+    .where('casa','==',casa)
+    .get(),
+   db.collection('bloqueios')
+    .where('casa','==',casa)
+    .get()
+  ]);
+
+  return [
+   ...rs.docs.map(d=>({
+    id:d.id,
+    tipo:'reserva',
+    ...d.data()
+   })),
+   ...bs.docs.map(d=>({
+    id:d.id,
+    tipo:'bloqueio',
+    ...d.data()
+   }))
+  ];
+
+ }catch(e){
+
+  console.error(
+   'Erro ao consultar disponibilidade pública:',
+   e
+  );
+
+  throw e;
+
+ }
+
+}
+
+function periodoDisponivelNaLista(a,b,lista){
+
+ return !lista.some(r=>
+  r.entrada &&
+  r.saida &&
+  a<r.saida &&
+  b>r.entrada
+ );
+
+}
+
+function obterNoitesBusca(a,b){
+
+ const da=dataLocal(a);
+ const dbb=dataLocal(b);
+
+ if(!da || !dbb || dbb<=da)return 0;
+
+ return Math.round(
+  (dbb-da)/86400000
+ );
+
+}
+
+function encontrarAlternativasProximasBusca(
+ casa,
+ a,
+ b,
+ lista,
+ quantidade=6
+){
+
+ const noites=obterNoitesBusca(a,b);
+
+ if(!noites)return [];
+
+ const base=dataLocal(a);
+
+ const candidatos=[];
+
+ /*
+  Procuramos para os dois lados da data desejada.
+  O período precisa ter exatamente a mesma quantidade
+  de noites, para a comparação ficar útil ao hóspede.
+ */
+ for(let distancia=1;distancia<=180;distancia++){
+
+  const deslocamentos=[
+   -distancia,
+   distancia
+  ];
+
+  for(const deslocamento of deslocamentos){
+
+   const entrada=new Date(base);
+
+   entrada.setDate(
+    entrada.getDate()+deslocamento
+   );
+
+   const saida=new Date(entrada);
+
+   saida.setDate(
+    saida.getDate()+noites
+   );
+
+   const ea=dataStr(entrada);
+   const eb=dataStr(saida);
+
+   if(
+    entrada<hoje() ||
+    !periodoDisponivelNaLista(ea,eb,lista)
+   )continue;
+
+   candidatos.push({
+    entrada:ea,
+    saida:eb,
+    noites,
+    distancia:Math.abs(deslocamento)
+   });
+
+  }
+
+  if(candidatos.length>=quantidade*2)break;
+
+ }
+
+ candidatos.sort((x,y)=>
+  x.distancia-y.distancia ||
+  x.entrada.localeCompare(y.entrada)
+ );
+
+ const unicos=[];
+ const vistos=new Set();
+
+ for(const x of candidatos){
+
+  const chave=`${x.entrada}_${x.saida}`;
+
+  if(vistos.has(chave))continue;
+
+  vistos.add(chave);
+  unicos.push(x);
+
+  if(unicos.length>=quantidade)break;
+
+ }
+
+ return unicos;
+}
+
+async function buscarOutrasCasasDisponiveis(
+ casaSelecionada,
+ a,
+ b
+){
+
+ const casasPublicas=Object.entries(casas)
+  .filter(([id,x])=>!x.interna && id!==casaSelecionada);
+
+ const resultados=[];
+
+ for(const [id,x] of casasPublicas){
+
+  try{
+
+   const lista=
+    await carregarBloqueiosPublicosCasa(id);
+
+   if(periodoDisponivelNaLista(a,b,lista)){
+
+    resultados.push({
+     id,
+     nome:x.nome,
+     capacidade:x.capacidade
+    });
+
+   }
+
+  }catch(e){
+
+   console.error(
+    `Erro ao verificar ${id}:`,
+    e
+   );
+
+  }
+
+ }
+
+ return resultados;
+}
+
+function continuarComPeriodoBusca(
+ casa,
+ a,
+ b
+){
+
+ const adultos=
+  Math.max(
+   0,
+   Number($('buscaAdultos').value||0)
+  );
+
+ const criancas=
+  Math.max(
+   0,
+   Number($('buscaCriancas').value||0)
+  );
+
+ fecharBuscaDisponibilidade();
+
+ abrirModalReserva(casa);
+
+ $('dataEntrada').value=a;
+ $('dataSaida').value=b;
+ $('qtdAdultos').value=adultos;
+ $('qtdCriancas').value=criancas;
+
+ atualizarTotalPessoas();
+
+ verificarDisponibilidade();
+
+}
+
+async function buscarDisponibilidadePrevia(){
+
+ const casa=casaBuscaDisponibilidade;
+
+ if(!casa || !casas[casa])return;
+
+ const a=$('buscaDataEntrada').value;
+ const b=$('buscaDataSaida').value;
+
+ const adultos=Math.max(
+  0,
+  Number($('buscaAdultos').value||0)
+ );
+
+ const criancas=Math.max(
+  0,
+  Number($('buscaCriancas').value||0)
+ );
+
+ const totalPessoas=adultos+criancas;
+ const capacidade=Number(
+  casas[casa].capacidade||0
+ );
+
+ const resultado=$('resultadoBuscaDisponibilidade');
+ const botao=$('btnBuscarDisponibilidade');
+
+ if(!a || !b){
+
+  resultado.innerHTML=`
+   <div class="busca-resultado indisponivel">
+    <div class="busca-status">
+     ⚠️ Informe as datas
+    </div>
+    <div class="busca-detalhes">
+     Selecione a data de entrada e a data de saída
+     para consultar a disponibilidade.
+    </div>
+   </div>
+  `;
+
+  return;
+
+ }
+
+ if(dataLocal(a)<hoje()){
+
+  resultado.innerHTML=`
+   <div class="busca-resultado indisponivel">
+    <div class="busca-status">
+     ⚠️ A data de entrada já passou
+    </div>
+    <div class="busca-detalhes">
+     Escolha uma data a partir de
+     <strong>${formatarDataBusca(dataStr(hoje()))}</strong>.
+    </div>
+   </div>
+  `;
+
+  return;
+
+ }
+
+ const noites=obterNoitesBusca(a,b);
+
+ if(noites<=0){
+
+  resultado.innerHTML=`
+   <div class="busca-resultado indisponivel">
+    <div class="busca-status">
+     ⚠️ Período inválido
+    </div>
+    <div class="busca-detalhes">
+     A data de saída deve ser posterior à data de entrada.
+    </div>
+   </div>
+  `;
+
+  return;
+
+ }
+
+ if(totalPessoas<=0){
+
+  resultado.innerHTML=`
+   <div class="busca-resultado indisponivel">
+    <div class="busca-status">
+     ⚠️ Informe pelo menos uma pessoa
+    </div>
+   </div>
+  `;
+
+  return;
+
+ }
+
+ if(totalPessoas>capacidade){
+
+  resultado.innerHTML=`
+   <div class="busca-resultado indisponivel">
+    <div class="busca-status">
+     ⚠️ Quantidade de pessoas acima da capacidade
+    </div>
+    <div class="busca-detalhes">
+     ${casas[casa].nome} comporta até
+     <strong>${capacidade} pessoas</strong>.
+     Você informou <strong>${totalPessoas}</strong>.
+     <br>
+     Você ainda pode consultar outro período ou outra acomodação.
+    </div>
+   </div>
+  `;
+
+  return;
+
+ }
+
+ botao.disabled=true;
+ botao.textContent='🔎 Consultando...';
+
+ resultado.innerHTML=`
+  <div class="busca-resultado">
+   <div class="busca-carregando">
+    ⏳ Verificando reservas e bloqueios...
+   </div>
+  </div>
+ `;
+
+ try{
+
+  const lista=
+   await carregarBloqueiosPublicosCasa(casa);
+
+  const disponivel=
+   periodoDisponivelNaLista(a,b,lista);
+
+  if(disponivel){
+
+   let calculo=null;
+
+   try{
+
+    const calc=
+     await calcularValorDiarias(casa,a,b);
+
+    const taxa=
+     Number(casas[casa].taxaLimpeza||0);
+
+    calculo=
+     calcularValorFinalReserva(
+      calc.dias,
+      calc.valor,
+      taxa
+     );
+
+   }catch(e){
+
+    console.error(
+     'Erro ao calcular estimativa:',
+     e
+    );
+
+   }
+
+   resultado.innerHTML=`
+    <div class="busca-resultado sucesso">
+     <div class="busca-status">
+      ✅ ${casas[casa].nome} está disponível!
+     </div>
+
+     <div class="busca-detalhes">
+      📅 <strong>${formatarDataBusca(a)}</strong>
+      até
+      <strong>${formatarDataBusca(b)}</strong>
+      · ${noites} noite(s)
+      <br>
+      👥 ${totalPessoas} pessoa(s)
+      ${
+       calculo
+        ?`<br>💰 Estimativa da estadia:
+           <strong>${moeda(calculo.total)}</strong>`
+        :''
+      }
+     </div>
+
+     <div class="busca-acoes">
+      <button class="amarelo"
+       onclick="continuarComPeriodoBusca('${casa}','${a}','${b}')">
+       📋 Continuar com este período
+      </button>
+     </div>
+    </div>
+   `;
+
+  }else{
+
+   const alternativas=
+    encontrarAlternativasProximasBusca(
+     casa,
+     a,
+     b,
+     lista,
+     6
+    );
+
+   const outras=
+    await buscarOutrasCasasDisponiveis(
+     casa,
+     a,
+     b
+    );
+
+   let h=`
+    <div class="busca-resultado indisponivel">
+
+     <div class="busca-status">
+      ❌ O período escolhido está ocupado
+     </div>
+
+     <div class="busca-detalhes">
+      ${casas[casa].nome} não está disponível de
+      <strong>${formatarDataBusca(a)}</strong>
+      até
+      <strong>${formatarDataBusca(b)}</strong>.
+      <br>
+      Mantivemos as <strong>${noites} noites</strong>
+      e procuramos datas próximas para você.
+     </div>
+   `;
+
+   if(alternativas.length){
+
+    h+=`
+     <div style="margin-top:14px;font-weight:700;color:var(--marinho)">
+      🔎 Períodos disponíveis mais próximos
+     </div>
+
+     <div class="periodos-proximos">
+      ${alternativas.map(x=>`
+       <button class="periodo-proximo"
+        onclick="continuarComPeriodoBusca('${casa}','${x.entrada}','${x.saida}')">
+        <strong>
+         ${formatarDataBusca(x.entrada)}
+         → ${formatarDataBusca(x.saida)}
+        </strong>
+        <small>
+         ${x.noites} noite(s) · cerca de ${x.distancia} dia(s) da data desejada
+        </small>
+       </button>
+      `).join('')}
+     </div>
+    `;
+
+   }else{
+
+    h+=`
+     <div style="margin-top:14px;color:var(--cinza)">
+      Não encontramos, nos próximos meses,
+      um período equivalente disponível.
+     </div>
+    `;
+
+   }
+
+   if(outras.length){
+
+    h+=`
+     <div class="outras-casas-busca">
+      <h4>🏠 Outra acomodação disponível no mesmo período</h4>
+      <div class="busca-detalhes">
+       Se preferir manter exatamente as datas escolhidas:
+      </div>
+
+      ${outras.map(x=>`
+       <div class="outra-casa-opcao">
+        <div>
+         <strong>${x.nome}</strong>
+         <div style="font-size:12px;color:var(--cinza)">
+          Até ${x.capacidade} pessoas
+         </div>
+        </div>
+
+        <button class="azul"
+         onclick="continuarComPeriodoBusca('${x.id}','${a}','${b}')">
+         Escolher esta casa
+        </button>
+       </div>
+      `).join('')}
+     </div>
+    `;
+
+   }
+
+   h+=`
+     </div>
+   `;
+
+   resultado.innerHTML=h;
+
+  }
+
+ }catch(e){
+
+  console.error(e);
+
+  resultado.innerHTML=`
+   <div class="busca-resultado indisponivel">
+    <div class="busca-status">
+     ⚠️ Não foi possível consultar agora
+    </div>
+    <div class="busca-detalhes">
+     Ocorreu um problema ao consultar a disponibilidade.
+     Tente novamente em alguns instantes.
+    </div>
+   </div>
+  `;
+
+ }finally{
+
+  botao.disabled=false;
+  botao.textContent='🔎 Verificar disponibilidade';
+
+ }
 
 }
 
