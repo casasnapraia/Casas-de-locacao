@@ -215,7 +215,9 @@ button:disabled{
  padding:65px 35px 70px;
  max-width:1400px;
  margin:auto;
- background:#fff
+ background:#eaf7fc;
+ border-top:1px solid #d4edf5;
+ border-bottom:1px solid #d4edf5
 }
 
 .introducao-publica{
@@ -379,7 +381,7 @@ button:disabled{
 
 .info-praia{
  padding:55px 25px;
- background:#f7fbfc;
+ background:#e1f4fb;
  text-align:center
 }
 
@@ -1182,6 +1184,78 @@ textarea{
  text-align:center;
  padding:18px;
  color:var(--cinza)
+}
+
+/* =====================================================
+   RESERVA PÚBLICA — VALOR E AVISO DE PAGAMENTO
+===================================================== */
+.reserva-publica-financeiro{
+ margin:16px 0 20px;
+ padding:18px;
+ background:linear-gradient(135deg,#e6f7fc,#f3fbfe);
+ border:1px solid #b9dfec;
+ border-radius:15px;
+ box-shadow:0 5px 18px #0a4b6e12
+}
+.reserva-publica-financeiro .titulo-valor{
+ color:var(--marinho);
+ font-size:13px;
+ font-weight:700;
+ margin-bottom:5px
+}
+.reserva-publica-financeiro #valorEstimado{
+ width:100%;
+ border:0;
+ background:transparent!important;
+ color:var(--marinho2);
+ font-size:27px;
+ font-weight:800;
+ padding:2px 0 8px;
+ outline:none
+}
+.aviso-pagamento-publico{
+ margin-top:12px;
+ padding:14px 15px;
+ background:#fff;
+ border-left:4px solid var(--turquesa);
+ border-radius:10px;
+ color:#294554;
+ font-size:13px;
+ line-height:1.6
+}
+.pix-publico{
+ margin-top:14px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ gap:18px;
+ flex-wrap:wrap;
+ padding-top:14px;
+ border-top:1px solid #cde6ee
+}
+.pix-publico img{
+ width:170px;
+ height:170px;
+ background:#fff;
+ padding:8px;
+ border-radius:12px;
+ box-shadow:0 4px 14px #00000014
+}
+.pix-publico-info{
+ max-width:310px;
+ text-align:left;
+ font-size:13px;
+ line-height:1.55;
+ color:#294554
+}
+.pix-publico-info strong{
+ color:var(--marinho)
+}
+@media(max-width:600px){
+ .reserva-publica-financeiro{padding:15px}
+ .reserva-publica-financeiro #valorEstimado{font-size:24px}
+ .pix-publico{align-items:center}
+ .pix-publico-info{max-width:100%;text-align:center}
 }
 @media(max-width:600px){
  .modal-busca-disponibilidade{
@@ -2485,6 +2559,37 @@ document.addEventListener('click',function(event){
   class="capacidade">
  </div>
 
+ <div class="reserva-publica-financeiro">
+
+  <div class="titulo-valor">💰 Valor estimado da estadia</div>
+
+  <input id="valorEstimado"
+   readonly
+   value=""
+   aria-label="Valor estimado da estadia">
+
+  <div class="aviso-pagamento-publico">
+   Para confirmar a locação, solicitamos um adiantamento de 25% do valor total da reserva. O pagamento restante será realizado no check-in, na chegada do hóspede. Se desejar confirmar a sua reserva, entre em contato pelo WhatsApp indicado abaixo. O adiantamento deve ser pago via PIX pela chave: <strong>48999578871</strong>.
+  </div>
+
+  <div class="pix-publico">
+   <img
+    alt="QR Code PIX para a chave 48999578871"
+    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAcIAAAHCAQAAAABUY/ToAAADm0lEQVR4nO2cy43bMBCGv4kI7JECtgCXQneQmlJSOhBLcQEGpKMBGpMDSVHSeoFgEcVWMnOQ5ccHicBgHv+IFuVrFr99EQQjjTTSSCONNNLI1yOlmMtnMDnkzF3yQXqQ81R/dX7y3Rr5kmRQVdURdADkDBDFAZNDh0lEBzpVVdU1+Yy7NfKlSFdepx7CTwB/deBvAnQJSE7C+J4AkPLZs+7WyFck3ea9hMtbjTR+RPBXNJ7SljvaOo38m6S/iZwnh+p4F8JYPpbzjtc08shkjUNegQlgelfBK4IfVWJ/RcDlQLQUJI+1TiN3J6NIbr+KTQ7CxUG4vGkNRncpXdufuaaR/wiZ49AyvviExtNNlAk09kiph/x6LHKsdRq5H0lu14NqDTe+dO+t1SfMZ/jyYx2OtU4j9yOzD2XxZ8gOkshnAISxK58VaagzHzJyYyUOjRR/wee8lf1FB6B6WEK1epP5kJGzVR+a4wur2KSaWCS5MGI+ZOTGWo7Sga5kK+aYM1ByWQ5QC1871jqN3I+sUcWrgq9DMx27Ob9BC0FWUxv5wFregnooVZDXOmStZ23waj5k5ANSVW9C0Jssvo9S1cY8xmeeehx2nUb+YXKuh4oglGPOACyqIOa3QS2XGfkJ6RNy9ok85oBO9Ye8KeHiSnnE9KY6TG5LPuNujXwlcqUdjl2uqYsw3aqgxZnpQ0ZurflGTlRzb1+/TWXqoZpWxLHWaeR+ZPGIXAoBC8V62cwXRzJ9yMhPydh3s0iUIJ5SHbJOIssqyN/s2Q8jN1YrnQSbomjRodXosyAsDhlZLdfUYexqUZR9qNPlUyCrWYf5kJFra0o0bVQ2wLIAKu5TvcnqISNXVuMQ1HlZ3UYWajBqDb5pjEY+sNqXzY0YRRpq+xbrM2gtGJkPGbkwbVakxFr2zHpi6fd1LrHNh4xcWG7aBX91hIsA/gr4myiTg/j96sAnRxQg6N3p8+7WyFckl3FIa7Hzoa2fe3urh4z8YDUOZesSUUCZBML4noinWVSc3lc7po+1TiN3J+f6OVfXsW9Ds071x+kmRcAWkSJgH3KdRu5AftzXQUteVbsuB+z5ISN/g8xideyhTcl0mKdksd/hmkb+Y2QY7wLchXgqsw45t9h0sVxm5NZaN1Yk6kdbOrRuHyqSo+UyI5uVdBVzruqQIg11SfDJafx+dxqlS8rU5/9Gk+fdrZGvSIr9x7mRRhpppJFGGvmfk78AKCRNfgKa4KsAAAAASUVORK5CYII=">
+   <div class="pix-publico-info">
+    <strong>📲 Pagamento via PIX</strong><br>
+    Aponte a câmera do celular para o QR Code ou utilize a chave PIX:<br>
+    <strong>48999578871</strong>
+   </div>
+  </div>
+
+  <!-- Campos técnicos mantidos para o cálculo e envio da reserva. -->
+  <input type="hidden" id="valorDiarias" value="">
+  <span id="valorTaxaLimpeza" hidden>R$ 0,00</span>
+  <span id="valorDescontoReserva" hidden>Sem desconto</span>
+
+ </div>
+
  <div class="linha-form">
 
   <div class="grupo-input">
@@ -2546,43 +2651,6 @@ document.addEventListener('click',function(event){
   Informe a quantidade de pessoas.
  </div>
 
- <div class="grupo-input">
-
-  <label>Valor das Diárias</label>
-
-  <input id="valorDiarias" readonly>
-
- </div>
-
- <div class="grupo-input">
-
-  🧹 Taxa de Limpeza:
-
-  <strong id="valorTaxaLimpeza">
-   R$ 0,00
-  </strong>
-
- </div>
-
- <div class="grupo-input">
-
-  <label>Desconto por quantidade de diárias</label>
-
-  <strong id="valorDescontoReserva">
-   Sem desconto
-  </strong>
-
- </div>
-
- <div class="grupo-input">
-
-  <label>Valor Total</label>
-
-  <input id="valorEstimado"
-   readonly
-   style="background:#fef9e7;font-weight:bold">
-
- </div>
 
  <div class="grupo-input">
 
@@ -4378,32 +4446,6 @@ async function buscarDisponibilidadePrevia(){
 
   if(disponivel){
 
-   let calculo=null;
-
-   try{
-
-    const calc=
-     await calcularValorDiarias(casa,a,b);
-
-    const taxa=
-     Number(casas[casa].taxaLimpeza||0);
-
-    calculo=
-     calcularValorFinalReserva(
-      calc.dias,
-      calc.valor,
-      taxa
-     );
-
-   }catch(e){
-
-    console.error(
-     'Erro ao calcular estimativa:',
-     e
-    );
-
-   }
-
    resultado.innerHTML=`
     <div class="busca-resultado sucesso">
      <div class="busca-status">
@@ -4417,18 +4459,12 @@ async function buscarDisponibilidadePrevia(){
       · ${noites} noite(s)
       <br>
       👥 ${totalPessoas} pessoa(s)
-      ${
-       calculo
-        ?`<br>💰 Estimativa da estadia:
-           <strong>${moeda(calculo.total)}</strong>`
-        :''
-      }
      </div>
 
      <div class="busca-acoes">
       <button class="amarelo"
        onclick="continuarComPeriodoBusca('${casa}','${a}','${b}')">
-       📋 Continuar com este período
+       📋 Continuar neste período
       </button>
      </div>
     </div>
