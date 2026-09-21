@@ -1561,6 +1561,34 @@ textarea{
 
 .camera-publica{position:absolute;left:24px;top:50%;transform:translateY(-50%);width:230px;z-index:45;padding:14px;border:1px solid rgba(255,255,255,.28);border-radius:16px;background:rgba(0,35,55,.76);backdrop-filter:blur(8px);box-shadow:0 8px 24px #0005;color:#fff;text-align:left}.camera-publica h3{margin:0 0 6px;font-size:17px}.camera-publica p{margin:0 0 10px;font-size:12px;line-height:1.45;opacity:.92}.camera-publica a{display:block;text-align:center;background:#0ea5e9;color:#fff;text-decoration:none;font-weight:700;padding:10px 12px;border-radius:10px}.camera-publica a:hover{filter:brightness(1.08)}@media(max-width:1150px){.camera-publica{left:12px;width:205px}.camera-publica p{font-size:11px}}@media(max-width:800px){.camera-publica{position:relative;left:auto;top:auto;transform:none;width:min(92vw,360px);margin:12px auto 0;background:rgba(0,35,55,.88);z-index:10}.hero-praia{padding-top:15px;padding-bottom:25px}.hero-conteudo{padding-top:20px}}
 .clima-publico{position:absolute;right:35px;top:78px;width:285px;z-index:55;padding:12px 14px;border:1px solid rgba(255,255,255,.28);border-radius:14px;background:rgba(0,35,55,.72);backdrop-filter:blur(8px);box-shadow:0 8px 24px #0004;color:#fff;text-align:left}.clima-publico .clima-topo{display:flex;justify-content:space-between;align-items:center;gap:10px}.clima-publico .clima-local{font-weight:700;font-size:14px}.clima-publico .clima-atual{display:flex;align-items:center;gap:10px;margin:7px 0}.clima-publico .clima-icone{font-size:34px;line-height:1}.clima-publico .clima-temp{font-size:30px;font-weight:700}.clima-publico .clima-condicao{font-size:12px;opacity:.9}.clima-publico .clima-dias{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:8px}.clima-publico .clima-dia{background:#ffffff14;border-radius:8px;padding:6px 3px;text-align:center;font-size:10px}.clima-publico .clima-dia strong{display:block;font-size:15px}.clima-publico .clima-carregando,.clima-publico .clima-erro{font-size:12px;text-align:center;padding:6px}.clima-publico .clima-atualizado{font-size:9px;opacity:.7;text-align:right;margin-top:6px}@media(max-width:800px){.clima-publico{position:relative;top:auto;right:auto;width:min(92vw,360px);margin:0 auto 12px;background:rgba(0,35,55,.82)}.cabecalho-publico{position:absolute}.cabecalho-publico+ .clima-publico{margin-top:110px}.clima-publico .clima-dias{grid-template-columns:repeat(4,1fr)}}
+
+/* =====================================================
+   COMODIDADES / INFORMAÇÕES DA ACOMODAÇÃO
+===================================================== */
+.comodidades-admin-box{background:#fff;border:1px solid #dfe6ea;border-radius:12px;padding:18px;margin:18px 0;box-shadow:var(--sombra)}
+.comodidades-admin-form{display:grid;grid-template-columns:1.5fr 1fr .45fr auto;gap:10px;align-items:end}
+.comodidades-catalogo{display:grid;gap:8px;margin-top:14px}
+.comodidade-catalogo-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 11px;border:1px solid #e6ecef;border-radius:9px;background:#f9fbfc}
+.comodidade-catalogo-info{display:flex;align-items:center;gap:8px;min-width:0}
+.comodidade-catalogo-info strong{overflow-wrap:anywhere}
+.comodidade-catalogo-meta{font-size:11px;color:var(--cinza)}
+.comodidade-admin-casa{margin-top:14px;padding:13px;border:1px solid #e4eaed;border-radius:10px;background:#f8fbfc}
+.comodidade-admin-casa h4{margin:0 0 8px}
+.comodidade-admin-tabela{width:100%;border-collapse:collapse;font-size:12px}
+.comodidade-admin-tabela th,.comodidade-admin-tabela td{padding:7px;border-bottom:1px solid #e4eaed;text-align:left;vertical-align:middle}
+.comodidade-admin-tabela th:not(:first-child),.comodidade-admin-tabela td:not(:first-child){text-align:center;width:95px}
+.comodidade-admin-tabela input{width:18px;height:18px}
+.comodidades-reserva-publica{margin:12px 0 18px;padding:16px;border-radius:12px;background:linear-gradient(135deg,#f7fbfd,#fffdf5);border:1px solid #dce8ec}
+.comodidades-reserva-publica h4{margin:0 0 7px;color:var(--marinho);font-size:17px}
+.comodidades-reserva-publica .comodidades-intro{font-size:13px;line-height:1.5;color:#52616a;margin-bottom:13px}
+.comodidades-listas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.comodidades-bloco{background:#fff;border:1px solid #e1e7ea;border-radius:10px;padding:12px}
+.comodidades-bloco h5{margin:0 0 8px;font-size:14px}
+.comodidades-bloco ul{list-style:none;margin:0;padding:0}
+.comodidades-bloco li{padding:5px 0;font-size:13px;line-height:1.4;border-bottom:1px solid #f0f2f3}
+.comodidades-bloco li:last-child{border-bottom:0}
+.comodidades-vazia{font-size:12px;color:var(--cinza);font-style:italic}
+@media(max-width:800px){.comodidades-admin-form{grid-template-columns:1fr}.comodidades-listas{grid-template-columns:1fr}.comodidade-admin-tabela th:not(:first-child),.comodidade-admin-tabela td:not(:first-child){width:82px}}
 </style>
 </head>
 
@@ -1950,6 +1978,18 @@ textarea{
   <div class="grupo-input"><label>URL do banner</label><input id="bannerPrincipalUrl" placeholder="https://i.imgur.com/...jpg" oninput="atualizarPreviewBanner()"></div>
   <img id="bannerPreviewAdmin" class="banner-preview" style="display:none">
   <button class="sucesso" onclick="salvarBannerPrincipal()">💾 Salvar banner</button>
+ </div>
+
+ <div class="comodidades-admin-box">
+  <h3>🧳 Cadastro de comodidades e informações</h3>
+  <p style="color:var(--cinza);margin:6px 0 12px">Cadastre os itens uma única vez e, em cada casa, marque o que está <strong>Incluso</strong> ou o que <strong>Não é oferecido</strong>. Essas informações aparecerão para o hóspede antes do formulário de solicitação da reserva.</p>
+  <div class="comodidades-admin-form">
+   <div class="grupo-input"><label>Nome da comodidade</label><input id="novaComodidadeNome" placeholder="Ex.: Toalhas de banho"></div>
+   <div class="grupo-input"><label>Categoria</label><input id="novaComodidadeCategoria" placeholder="Ex.: Banheiro"></div>
+   <div class="grupo-input"><label>Ícone</label><input id="novaComodidadeIcone" value="🏠" maxlength="4" style="text-align:center"></div>
+   <button class="sucesso" onclick="adicionarComodidadeCatalogo()">➕ Cadastrar item</button>
+  </div>
+  <div id="listaCatalogoComodidades" class="comodidades-catalogo"></div>
  </div>
 
  <div class="grade-casas" id="gradeCasas"></div>
@@ -2394,6 +2434,8 @@ textarea{
   class="aviso-bloqueio">
  </div>
 
+ <div id="comodidadesReservaPublica" class="comodidades-reserva-publica"></div>
+
  <div class="grupo-input">
   <label>Nome Completo</label>
   <input id="hospedeNome">
@@ -2731,6 +2773,8 @@ if(typeof emailjs!=='undefined'){
 const $=id=>document.getElementById(id);
 
 let bannerPrincipalUrl="",imgurClientId="",paginaHospedesAtual=1,paginaPrestadoresAtual=1;const HOSPEDES_POR_PAGINA=20,PRESTADORES_POR_PAGINA=20;let prestadoresCadastrados=[];
+let comodidadesCatalogo=[];
+
 const casas={
 
  nossa:{nome:'Nossa Casa',capacidade:12,desc:'Propriedade interna — uso administrativo.',caracteristicas:['🏠 Uso interno','🔒 Não aparece no site público'],fotos:[],taxaLimpeza:0,interna:true},
@@ -4490,6 +4534,8 @@ function abrirModalReserva(id){
 
  const x=casas[id];
 
+ renderizarComodidadesReserva(id);
+
  $('nomeCasaReserva').textContent=
   x.nome;
 
@@ -5616,7 +5662,7 @@ async function carregarDadosCasas(){
 
   if(d.exists){
 
-   const dados=d.data()||{},x=dados.casas||{};bannerPrincipalUrl=dados.bannerPrincipalUrl||'';imgurClientId=dados.imgurClientId||'';
+   const dados=d.data()||{},x=dados.casas||{};bannerPrincipalUrl=dados.bannerPrincipalUrl||'';imgurClientId=dados.imgurClientId||'';comodidadesCatalogo=Array.isArray(dados.comodidadesCatalogo)?dados.comodidadesCatalogo:[];
 
    Object.keys(casas).forEach(id=>{
 
@@ -5630,7 +5676,17 @@ async function carregarDadosCasas(){
       caracteristicas:
        casas[id].caracteristicas||
        x[id].caracteristicas||
-       []
+       [],
+
+      comodidadesIncluidas:
+       Array.isArray(x[id].comodidadesIncluidas)
+        ? x[id].comodidadesIncluidas
+        : (casas[id].comodidadesIncluidas||[]),
+
+      comodidadesNaoOferecidas:
+       Array.isArray(x[id].comodidadesNaoOferecidas)
+        ? x[id].comodidadesNaoOferecidas
+        : (casas[id].comodidadesNaoOferecidas||[])
      };
 
     }
@@ -5640,6 +5696,7 @@ async function carregarDadosCasas(){
   }
 
   renderizarPaginaPublica();
+  renderizarCatalogoComodidades();
   aplicarBannerPrincipal();
   if($('bannerPrincipalUrl')){ $('bannerPrincipalUrl').value=bannerPrincipalUrl; $('imgurClientId').value=imgurClientId; atualizarPreviewBanner(); }
 
@@ -5656,7 +5713,7 @@ async function carregarDadosCasas(){
 
 async function salvarTodasCasas(){
 
- await db.collection('configuracoes').doc('casas').set({casas,bannerPrincipalUrl,imgurClientId});
+ await db.collection('configuracoes').doc('casas').set({casas,bannerPrincipalUrl,imgurClientId,comodidadesCatalogo});
 
 }
 
@@ -5714,6 +5771,12 @@ function renderizarCasasAdmin(){
         value="${x.capacidade||0}"
         min="1">
 
+      </div>
+
+      <div class="comodidade-admin-casa">
+       <h4>🧳 Comodidades para o hóspede</h4>
+       <p style="font-size:11px;color:var(--cinza);margin-bottom:8px">Marque cada item em apenas uma das opções. Itens sem marcação não serão exibidos.</p>
+       <div id="comodidades-admin-${id}"></div>
       </div>
 
       <strong>📷 Fotos</strong>
@@ -5776,6 +5839,145 @@ function renderizarCasasAdmin(){
 
    `).join('');
 
+ Object.keys(casas).forEach(id=>renderizarComodidadesAdminCasa(id));
+ renderizarCatalogoComodidades();
+
+}
+
+function idComodidadeNovo(){
+ return 'com_'+Date.now()+'_'+Math.floor(Math.random()*1000000);
+}
+
+async function adicionarComodidadeCatalogo(){
+ const nome=$('novaComodidadeNome')?.value.trim();
+ const categoria=$('novaComodidadeCategoria')?.value.trim()||'Outros';
+ const icone=$('novaComodidadeIcone')?.value.trim()||'🏠';
+ if(!nome)return alert('⚠️ Informe o nome da comodidade.');
+ if(comodidadesCatalogo.some(x=>String(x.nome||'').trim().toLowerCase()===nome.toLowerCase()))return alert('⚠️ Essa comodidade já está cadastrada.');
+ const novo={id:idComodidadeNovo(),nome,categoria,icone};
+ comodidadesCatalogo.push(novo);
+ try{
+  await salvarTodasCasas();
+  $('novaComodidadeNome').value='';
+  $('novaComodidadeCategoria').value='';
+  $('novaComodidadeIcone').value='🏠';
+  renderizarCatalogoComodidades();
+  renderizarCasasAdmin();
+  alert('✅ Comodidade cadastrada e salva.');
+ }catch(e){
+  console.error(e);
+  comodidadesCatalogo=comodidadesCatalogo.filter(x=>x.id!==novo.id);
+  alert('❌ Não foi possível salvar a nova comodidade.');
+ }
+}
+
+async function excluirComodidadeCatalogo(id){
+ const item=comodidadesCatalogo.find(x=>x.id===id);
+ if(!item)return;
+ if(!confirm(`Excluir a comodidade "${item.nome}" do cadastro?`))return;
+ comodidadesCatalogo=comodidadesCatalogo.filter(x=>x.id!==id);
+ Object.values(casas).forEach(c=>{
+  c.comodidadesIncluidas=(c.comodidadesIncluidas||[]).filter(x=>x!==id);
+  c.comodidadesNaoOferecidas=(c.comodidadesNaoOferecidas||[]).filter(x=>x!==id);
+ });
+ try{
+  await salvarTodasCasas();
+  renderizarCatalogoComodidades();
+  renderizarCasasAdmin();
+  renderizarPaginaPublica();
+ }catch(e){
+  console.error(e);
+  alert('❌ Não foi possível excluir a comodidade.');
+ }
+}
+
+function renderizarCatalogoComodidades(){
+ const el=$('listaCatalogoComodidades');
+ if(!el)return;
+ if(!comodidadesCatalogo.length){
+  el.innerHTML='<div style="font-size:12px;color:var(--cinza);padding:8px 0">Nenhuma comodidade cadastrada ainda.</div>';
+  return;
+ }
+ const grupos={};
+ comodidadesCatalogo.forEach(x=>{
+  const cat=x.categoria||'Outros';
+  (grupos[cat]||(grupos[cat]=[])).push(x);
+ });
+ el.innerHTML=Object.entries(grupos).map(([cat,itens])=>`
+  <div>
+   <div style="font-weight:700;color:var(--marinho);margin:8px 0 5px">${escapeHtmlReserva(cat)}</div>
+   ${itens.map(x=>`
+    <div class="comodidade-catalogo-item">
+     <div class="comodidade-catalogo-info">
+      <span style="font-size:20px">${escapeHtmlReserva(x.icone||'🏠')}</span>
+      <div><strong>${escapeHtmlReserva(x.nome)}</strong><div class="comodidade-catalogo-meta">${escapeHtmlReserva(x.categoria||'Outros')}</div></div>
+     </div>
+     <button class="vermelho" style="padding:6px 9px;font-size:12px" onclick="excluirComodidadeCatalogo('${x.id}')">🗑️ Excluir</button>
+    </div>
+   `).join('')}
+  </div>
+ `).join('');
+}
+
+function renderizarComodidadesAdminCasa(id){
+ const el=$(`comodidades-admin-${id}`);
+ if(!el)return;
+ if(!comodidadesCatalogo.length){
+  el.innerHTML='<div style="font-size:12px;color:var(--cinza)">Cadastre primeiro as comodidades acima.</div>';
+  return;
+ }
+ const casa=casas[id]||{};
+ const inclusas=new Set(casa.comodidadesIncluidas||[]);
+ const nao=new Set(casa.comodidadesNaoOferecidas||[]);
+ const itens=[...comodidadesCatalogo].sort((a,b)=>String(a.categoria||'').localeCompare(String(b.categoria||''),'pt-BR')||String(a.nome||'').localeCompare(String(b.nome||''),'pt-BR'));
+ el.innerHTML=`
+  <table class="comodidade-admin-tabela">
+   <thead><tr><th>Comodidade</th><th>Incluso</th><th>Não oferecido</th></tr></thead>
+   <tbody>
+    ${itens.map(x=>`
+     <tr>
+      <td><span style="font-size:16px">${escapeHtmlReserva(x.icone||'🏠')}</span> ${escapeHtmlReserva(x.nome)} <small style="color:var(--cinza)">(${escapeHtmlReserva(x.categoria||'Outros')})</small></td>
+      <td><input type="checkbox" data-comodidade-casa="${id}" data-comodidade-item="${x.id}" data-comodidade-tipo="inclusa" ${inclusas.has(x.id)?'checked':''} onchange="marcarComodidadeCasa('${id}','${x.id}','inclusa',this.checked)"></td>
+      <td><input type="checkbox" data-comodidade-casa="${id}" data-comodidade-item="${x.id}" data-comodidade-tipo="nao" ${nao.has(x.id)?'checked':''} onchange="marcarComodidadeCasa('${id}','${x.id}','nao',this.checked)"></td>
+     </tr>
+    `).join('')}
+   </tbody>
+  </table>
+ `;
+}
+
+function marcarComodidadeCasa(casaId,itemId,tipo,marcado){
+ if(!marcado)return;
+ const outro=tipo==='inclusa'?'nao':'inclusa';
+ document.querySelectorAll(`[data-comodidade-casa="${casaId}"][data-comodidade-item="${itemId}"][data-comodidade-tipo="${outro}"]`).forEach(el=>el.checked=false);
+}
+
+function renderizarComodidadesReserva(id){
+ const el=$('comodidadesReservaPublica');
+ if(!el)return;
+ const casa=casas[id]||{};
+ const mapa=new Map(comodidadesCatalogo.map(x=>[x.id,x]));
+ const inclusas=(casa.comodidadesIncluidas||[]).map(x=>mapa.get(x)).filter(Boolean);
+ const nao=(casa.comodidadesNaoOferecidas||[]).map(x=>mapa.get(x)).filter(Boolean);
+ if(!inclusas.length&&!nao.length){
+  el.innerHTML='';
+  return;
+ }
+ const lista=(arr)=>arr.length?`<ul>${arr.map(x=>`<li>${escapeHtmlReserva(x.icone||'•')} ${escapeHtmlReserva(x.nome)}</li>`).join('')}</ul>`:'<div class="comodidades-vazia">Nenhum item informado.</div>';
+ const categorias=(arr)=>{
+  const grupos={};
+  arr.forEach(x=>(grupos[x.categoria||'Outros']||(grupos[x.categoria||'Outros']=[])).push(x));
+  return Object.entries(grupos).map(([cat,itens])=>`<div style="margin-bottom:9px"><strong style="font-size:12px;color:#53636c">${escapeHtmlReserva(cat)}</strong>${lista(itens)}</div>`).join('');
+ };
+ el.innerHTML=`
+  <h4>🏠 O que você encontrará nesta casa</h4>
+  <div class="comodidades-intro">Olá! Para que você possa planejar sua estadia com total conforto e tranquilidade, confira abaixo os itens que esta acomodação oferece e também aquilo que não está disponível.</div>
+  <div class="comodidades-listas">
+   <div class="comodidades-bloco"><h5>✅ O que está incluso</h5>${categorias(inclusas)||'<div class="comodidades-vazia">Nenhum item informado.</div>'}</div>
+   <div class="comodidades-bloco"><h5>⚠️ O que não é oferecido</h5>${categorias(nao)||'<div class="comodidades-vazia">Nenhum item informado.</div>'}</div>
+  </div>
+  <div style="font-size:12px;color:#5c6b73;margin-top:11px">Fique à vontade para nos enviar uma mensagem se tiver qualquer dúvida sobre as comodidades. Estamos prontos para receber você.</div>
+ `;
 }
 
 function adicionarFotoGaleria(id){
@@ -5832,11 +6034,18 @@ async function salvarConfiguracoesCasa(id){
    $(`cap-${id}`).value||0
   );
 
+ casas[id].comodidadesIncluidas=[...document.querySelectorAll(`[data-comodidade-casa="${id}"][data-comodidade-tipo="inclusa"]:checked`)]
+  .map(el=>el.dataset.comodidadeItem);
+
+ casas[id].comodidadesNaoOferecidas=[...document.querySelectorAll(`[data-comodidade-casa="${id}"][data-comodidade-tipo="nao"]:checked`)]
+  .map(el=>el.dataset.comodidadeItem);
+
  try{
 
   await salvarTodasCasas();
 
   renderizarPaginaPublica();
+  renderizarCasasAdmin();
 
   alert(
    '✅ Configurações salvas!'
