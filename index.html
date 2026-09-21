@@ -1390,6 +1390,8 @@ textarea{
 .painel-despesas{background:#fff;border:1px solid #ddd;border-radius:10px;padding:16px;margin:15px 0;box-shadow:var(--sombra)}
 .despesas-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.despesas-acoes{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.despesas-resumo{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:15px 0}.despesa-acoes button{margin:2px;padding:5px 8px;font-size:12px}@media(max-width:800px){.despesas-form-grid,.despesas-resumo{grid-template-columns:1fr}}
 
+
+.camera-publica{position:absolute;left:24px;top:50%;transform:translateY(-50%);width:230px;z-index:45;padding:14px;border:1px solid rgba(255,255,255,.28);border-radius:16px;background:rgba(0,35,55,.76);backdrop-filter:blur(8px);box-shadow:0 8px 24px #0005;color:#fff;text-align:left}.camera-publica h3{margin:0 0 6px;font-size:17px}.camera-publica p{margin:0 0 10px;font-size:12px;line-height:1.45;opacity:.92}.camera-publica a{display:block;text-align:center;background:#0ea5e9;color:#fff;text-decoration:none;font-weight:700;padding:10px 12px;border-radius:10px}.camera-publica a:hover{filter:brightness(1.08)}@media(max-width:1150px){.camera-publica{left:12px;width:205px}.camera-publica p{font-size:11px}}@media(max-width:800px){.camera-publica{position:relative;left:auto;top:auto;transform:none;width:min(92vw,360px);margin:12px auto 0;background:rgba(0,35,55,.88);z-index:10}.hero-praia{padding-top:15px;padding-bottom:25px}.hero-conteudo{padding-top:20px}}
 .clima-publico{position:absolute;right:35px;top:78px;width:285px;z-index:55;padding:12px 14px;border:1px solid rgba(255,255,255,.28);border-radius:14px;background:rgba(0,35,55,.72);backdrop-filter:blur(8px);box-shadow:0 8px 24px #0004;color:#fff;text-align:left}.clima-publico .clima-topo{display:flex;justify-content:space-between;align-items:center;gap:10px}.clima-publico .clima-local{font-weight:700;font-size:14px}.clima-publico .clima-atual{display:flex;align-items:center;gap:10px;margin:7px 0}.clima-publico .clima-icone{font-size:34px;line-height:1}.clima-publico .clima-temp{font-size:30px;font-weight:700}.clima-publico .clima-condicao{font-size:12px;opacity:.9}.clima-publico .clima-dias{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:8px}.clima-publico .clima-dia{background:#ffffff14;border-radius:8px;padding:6px 3px;text-align:center;font-size:10px}.clima-publico .clima-dia strong{display:block;font-size:15px}.clima-publico .clima-carregando,.clima-publico .clima-erro{font-size:12px;text-align:center;padding:6px}.clima-publico .clima-atualizado{font-size:9px;opacity:.7;text-align:right;margin-top:6px}@media(max-width:800px){.clima-publico{position:relative;top:auto;right:auto;width:min(92vw,360px);margin:0 auto 12px;background:rgba(0,35,55,.82)}.cabecalho-publico{position:absolute}.cabecalho-publico+ .clima-publico{margin-top:110px}.clima-publico .clima-dias{grid-template-columns:repeat(4,1fr)}}
 </style>
 </head>
@@ -1416,6 +1418,12 @@ textarea{
 </div>
 
 <section class="hero-praia">
+
+ <aside class="camera-publica" aria-label="Câmera ao vivo de Balneário Arroio do Silva">
+  <h3>📹 Câmera ao vivo</h3>
+  <p>Veja em tempo real as imagens de Balneário Arroio do Silva.</p>
+  <a href="https://vejaomar.com/ao-vivo/arroio-do-silva" target="_blank" rel="noopener noreferrer">▶ Assistir câmera ao vivo</a>
+ </aside>
 
  <div class="hero-conteudo">
 
