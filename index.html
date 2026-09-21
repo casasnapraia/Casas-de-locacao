@@ -2182,11 +2182,11 @@ textarea{
  <h2>💸 Despesas / Caixa</h2>
  <div class="painel-despesas"><h3 id="tituloFormularioDespesa">➕ Novo lançamento de despesa</h3><input type="hidden" id="despesaEditId"><div class="despesas-form-grid" style="margin-top:12px">
   <div class="grupo-input"><label>Data *</label><input type="date" id="despesaData"></div>
-  <div class="grupo-input"><label>Casa / propriedade *</label><select id="despesaCasa"><option value="amarela">Casa Amarela</option><option value="bege">Casa Bege</option><option value="marrom">Casa Marrom</option><option value="branca">Casa Branca</option><option value="nossa">Nossa Casa — interno</option></select></div>
+  <div class="grupo-input"><label>Casa / propriedade *</label><select id="despesaCasa" onchange="atualizarCaixaDestinoDespesa()"><option value="amarela">Casa Amarela</option><option value="bege">Casa Bege</option><option value="marrom">Casa Marrom</option><option value="branca">Casa Branca</option><option value="nossa">Nossa Casa — interno</option></select></div>
   <div class="grupo-input"><label>Categoria *</label><select id="despesaCategoria"><option value="agua">Água</option><option value="energia">Energia</option><option value="internet">Internet</option><option value="limpeza">Pagamento de limpeza</option><option value="manutencao">Manutenção</option><option value="gas">Gás</option><option value="impostos">Impostos / taxas</option><option value="materiais">Materiais / compras</option><option value="outros">Outros</option></select></div>
-  <div class="grupo-input"><label>Valor *</label><input type="number" id="despesaValor" min="0" step="0.01"></div>
+  <div class="grupo-input"><label>Valor *</label><input type="text" id="despesaValor" inputmode="decimal" autocomplete="off" placeholder="R$ 0,00" oninput="formatarValorDespesa(this)"></div>
   <div class="grupo-input"><label>Forma de pagamento *</label><select id="despesaFormaPagamento"><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Boleto</option><option>Transferência bancária</option></select></div>
-  <div class="grupo-input"><label>Caixa / conta de origem</label><select id="despesaContaOrigem"><option>Caixa Casa Amarela</option><option>Caixa Casa Bege</option><option>Caixa Casa Marrom</option><option>Caixa Casa Branca</option><option>Caixa Nossa Casa</option><option>Caixa Geral</option><option>Conta bancária</option></select></div>
+  <div class="grupo-input"><label>Caixa Destino</label><select id="despesaContaOrigem"><option>Caixa Casa Amarela</option><option>Caixa Casa Bege</option><option>Caixa Casa Marrom</option><option>Caixa Casa Branca</option><option>Caixa Nossa Casa</option><option>Caixa Geral</option><option>Conta bancária</option></select></div>
   <div class="grupo-input"><label>Prestador / empresa</label><select id="despesaPrestadorId" onchange="selecionarPrestadorDespesa()"><option value="">— Selecionar prestador —</option></select><input type="hidden" id="despesaPrestador"><small id="despesaPrestadorInfo" style="color:var(--cinza)"></small></div><div class="grupo-input"><label>Descrição</label><input id="despesaDescricao"></div>
   <div class="grupo-input" style="grid-column:1/-1"><label>Observação</label><textarea id="despesaObservacao" rows="2"></textarea></div>
  </div><div class="despesas-acoes"><button class="sucesso" id="btnSalvarDespesa" onclick="salvarDespesa()">💾 Lançar despesa</button><button class="cinza" onclick="limparFormularioDespesa()">✖ Limpar</button></div></div>
@@ -2248,6 +2248,20 @@ textarea{
 
    </select>
 
+  </div>
+
+  <div>
+   <label>Origem da Reserva</label>
+   <select id="filtroOrigemRelatorio" onchange="gerarRelatorio()">
+    <option value="todos">Todas as origens</option>
+    <option value="Não informada">Não informada</option>
+    <option value="Airbnb">Airbnb</option>
+    <option value="Booking.com">Booking.com</option>
+    <option value="Reserva direta">Reserva direta</option>
+    <option value="WhatsApp">WhatsApp</option>
+    <option value="Telefone">Telefone</option>
+    <option value="Outro">Outro</option>
+   </select>
   </div>
 
   <div>
@@ -7782,6 +7796,7 @@ function limparFiltrosRelatorio(){
  if($('filtroFormaPagamentoRelatorio'))$('filtroFormaPagamentoRelatorio').value='todos';
  if($('filtroContaDestinoRelatorio'))$('filtroContaDestinoRelatorio').value='todos';
  if($('filtroRecebimentoRelatorio'))$('filtroRecebimentoRelatorio').value='todos';
+ if($('filtroOrigemRelatorio'))$('filtroOrigemRelatorio').value='todos';
 
  $('relatorioDataInicial')
   .value='';
@@ -7811,6 +7826,7 @@ function obterReservasRelatorio(){
  const formaPagamento=$('filtroFormaPagamentoRelatorio')?.value||'todos';
  const contaDestino=$('filtroContaDestinoRelatorio')?.value||'todos';
  const situacaoFinanceira=$('filtroRecebimentoRelatorio')?.value||'todos';
+ const origemReserva=$('filtroOrigemRelatorio')?.value||'todos';
 
  const busca=
   normalizar(
@@ -7828,6 +7844,7 @@ function obterReservasRelatorio(){
  if(formaPagamento!=='todos')arr=arr.filter(r=>r.formaPagamento===formaPagamento);
  if(contaDestino!=='todos')arr=arr.filter(r=>r.contaDestino===contaDestino);
  if(situacaoFinanceira!=='todos')arr=arr.filter(r=>{const t=Number(r.valorTotal||0),p=Number(r.valorPago||0),saldo=Math.max(0,t-p);if(situacaoFinanceira==='recebido')return t>0&&p>=t;if(situacaoFinanceira==='aReceber')return saldo>0;if(situacaoFinanceira==='parcial')return p>0&&saldo>0;if(situacaoFinanceira==='semRecebimento')return p<=0;return true;});
+ if(origemReserva!=='todos')arr=arr.filter(r=>(r.origemReserva||'Não informada')===origemReserva);
 
  if(busca){
 
@@ -8357,6 +8374,31 @@ async function sincronizarHospedesReservas(){
 const nomesCategoriasDespesa={agua:'Água',energia:'Energia',internet:'Internet',limpeza:'Pagamento de limpeza',manutencao:'Manutenção',gas:'Gás',impostos:'Impostos / taxas',materiais:'Materiais / compras',outros:'Outros'};
 function nomeCategoriaDespesa(v){return nomesCategoriasDespesa[v]||v||'Outros';}
 function contaDestinoCasa(casa){return {amarela:'Caixa Casa Amarela',bege:'Caixa Casa Bege',marrom:'Caixa Casa Marrom',branca:'Caixa Casa Branca',nossa:'Caixa Nossa Casa'}[casa]||'';}
+
+function valorNumericoDespesa(v){
+ const s=String(v??'').trim();
+ if(!s)return 0;
+ const limpo=s.replace(/[^0-9,.-]/g,'');
+ if(limpo.includes(',')){
+  return Number(limpo.replace(/\./g,'').replace(',','.'))||0;
+ }
+ return Number(limpo)||0;
+}
+
+function formatarValorDespesa(el){
+ if(!el)return;
+ const somenteDigitos=String(el.value||'').replace(/\D/g,'');
+ if(!somenteDigitos){el.value='';return;}
+ const centavos=Number(somenteDigitos)/100;
+ el.value=centavos.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+}
+
+function atualizarCaixaDestinoDespesa(){
+ const casa=$('despesaCasa')?.value||'';
+ const caixa=contaDestinoCasa(casa);
+ if($('despesaContaOrigem')&&caixa)$('despesaContaOrigem').value=caixa;
+}
+
 let despesasCadastradas=[],paginaDespesasAtual=1,ultimasDespesasFiltradas=[];const DESPESAS_POR_PAGINA=15;
 function tipoPrestador(){return $('prestadorPJ')?.checked?'pj':'pf';}
 function dadosFormularioPrestador(){return {tipo:tipoPrestador(),nome:$('cadPrestadorNome').value.trim(),fantasia:$('cadPrestadorFantasia').value.trim(),documento:$('cadPrestadorDocumento').value.trim(),telefone:$('cadPrestadorTelefone').value.trim(),email:$('cadPrestadorEmail').value.trim(),cep:$('cadPrestadorCep').value.trim(),endereco:$('cadPrestadorEndereco').value.trim(),numero:$('cadPrestadorNumero').value.trim(),complemento:$('cadPrestadorComplemento').value.trim(),bairro:$('cadPrestadorBairro').value.trim(),cidade:$('cadPrestadorCidade').value.trim(),estado:$('cadPrestadorEstado').value.trim().toUpperCase(),observacoes:$('cadPrestadorObservacoes').value.trim()};}
@@ -8373,9 +8415,9 @@ function popularSelectPrestadores(){const opts='<option value="">— Selecionar 
 function selecionarPrestadorDespesa(){const id=$('despesaPrestadorId')?.value||'';const x=prestadoresCadastrados.find(p=>p.id===id);$('despesaPrestador').value=x?x.nome:'';$('despesaPrestadorInfo').textContent=x?`${x.tipo==='pj'?'CNPJ':'CPF'}: ${x.documento||'—'}${x.telefone?' · '+x.telefone:''}`:'';}
 
 async function carregarDespesas(){despesasCadastradas=[];try{const snap=await db.collection('despesas').orderBy('data','desc').get();snap.forEach(d=>despesasCadastradas.push({id:d.id,...d.data()}));}catch(e){console.error(e);}paginaDespesasAtual=1;gerarRelatorioDespesas();}
-function limparFormularioDespesa(){if(!$('despesaData'))return;$('despesaEditId').value='';$('despesaData').value=dataStr(hoje());$('despesaCasa').value='amarela';$('despesaCategoria').value='agua';$('despesaValor').value='';$('despesaFormaPagamento').value='Pix';$('despesaContaOrigem').value='Caixa Casa Amarela';$('despesaPrestadorId').value='';$('despesaPrestador').value='';$('despesaPrestadorInfo').textContent='';$('despesaDescricao').value='';$('despesaObservacao').value='';$('tituloFormularioDespesa').textContent='➕ Novo lançamento de despesa';$('btnSalvarDespesa').textContent='💾 Lançar despesa';}
-async function salvarDespesa(){const id=$('despesaEditId').value,data=$('despesaData').value,casa=$('despesaCasa').value,categoria=$('despesaCategoria').value,valor=Number($('despesaValor').value||0),formaPagamento=$('despesaFormaPagamento').value,contaOrigem=$('despesaContaOrigem').value;if(!data||!casa||!categoria||valor<=0||!formaPagamento||!contaOrigem)return alert('⚠️ Preencha os campos obrigatórios da despesa.');const dados={data,casa,categoria,valor,formaPagamento,contaOrigem,prestadorId:$('despesaPrestadorId').value||'',prestador:$('despesaPrestador').value.trim(),descricao:$('despesaDescricao').value.trim(),observacao:$('despesaObservacao').value.trim(),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()};try{if(id)await db.collection('despesas').doc(id).update(dados);else await db.collection('despesas').add({...dados,criadoEm:firebase.firestore.FieldValue.serverTimestamp()});await carregarDespesas();limparFormularioDespesa();alert(id?'✅ Despesa alterada.':'✅ Despesa lançada.');}catch(e){console.error(e);alert('❌ Erro ao salvar a despesa.');}}
-function editarDespesa(id){const x=despesasCadastradas.find(d=>d.id===id);if(!x)return;$('despesaEditId').value=id;$('despesaData').value=x.data||'';$('despesaCasa').value=x.casa||'amarela';$('despesaCategoria').value=x.categoria||'outros';$('despesaValor').value=Number(x.valor||0).toFixed(2);$('despesaFormaPagamento').value=x.formaPagamento||'Pix';$('despesaContaOrigem').value=x.contaOrigem||contaDestinoCasa(x.casa);$('despesaPrestadorId').value=x.prestadorId||'';$('despesaPrestador').value=x.prestador||'';selecionarPrestadorDespesa();$('despesaDescricao').value=x.descricao||'';$('despesaObservacao').value=x.observacao||'';$('tituloFormularioDespesa').textContent='✏️ Editar lançamento de despesa';$('btnSalvarDespesa').textContent='💾 Salvar alteração';$('pagina-despesas').scrollIntoView({behavior:'smooth',block:'start'});}
+function limparFormularioDespesa(){if(!$('despesaData'))return;$('despesaEditId').value='';$('despesaData').value=dataStr(hoje());$('despesaCasa').value='amarela';$('despesaCategoria').value='agua';$('despesaValor').value='';$('despesaFormaPagamento').value='Pix';$('despesaContaOrigem').value='Caixa Casa Amarela';atualizarCaixaDestinoDespesa();$('despesaPrestadorId').value='';$('despesaPrestador').value='';$('despesaPrestadorInfo').textContent='';$('despesaDescricao').value='';$('despesaObservacao').value='';$('tituloFormularioDespesa').textContent='➕ Novo lançamento de despesa';$('btnSalvarDespesa').textContent='💾 Lançar despesa';}
+async function salvarDespesa(){const id=$('despesaEditId').value,data=$('despesaData').value,casa=$('despesaCasa').value,categoria=$('despesaCategoria').value,valor=valorNumericoDespesa($('despesaValor').value),formaPagamento=$('despesaFormaPagamento').value,contaOrigem=$('despesaContaOrigem').value;if(!data||!casa||!categoria||valor<=0||!formaPagamento||!contaOrigem)return alert('⚠️ Preencha os campos obrigatórios da despesa.');const dados={data,casa,categoria,valor,formaPagamento,contaOrigem,prestadorId:$('despesaPrestadorId').value||'',prestador:$('despesaPrestador').value.trim(),descricao:$('despesaDescricao').value.trim(),observacao:$('despesaObservacao').value.trim(),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()};try{if(id)await db.collection('despesas').doc(id).update(dados);else await db.collection('despesas').add({...dados,criadoEm:firebase.firestore.FieldValue.serverTimestamp()});await carregarDespesas();limparFormularioDespesa();alert(id?'✅ Despesa alterada.':'✅ Despesa lançada.');}catch(e){console.error(e);alert('❌ Erro ao salvar a despesa.');}}
+function editarDespesa(id){const x=despesasCadastradas.find(d=>d.id===id);if(!x)return;$('despesaEditId').value=id;$('despesaData').value=x.data||'';$('despesaCasa').value=x.casa||'amarela';$('despesaCategoria').value=x.categoria||'outros';$('despesaValor').value=Number(x.valor||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});$('despesaFormaPagamento').value=x.formaPagamento||'Pix';$('despesaContaOrigem').value=x.contaOrigem||contaDestinoCasa(x.casa);$('despesaPrestadorId').value=x.prestadorId||'';$('despesaPrestador').value=x.prestador||'';selecionarPrestadorDespesa();$('despesaDescricao').value=x.descricao||'';$('despesaObservacao').value=x.observacao||'';$('tituloFormularioDespesa').textContent='✏️ Editar lançamento de despesa';$('btnSalvarDespesa').textContent='💾 Salvar alteração';$('pagina-despesas').scrollIntoView({behavior:'smooth',block:'start'});}
 function obterDespesasFiltradas(){let a=[...despesasCadastradas],c=$('filtroDespesaCasa')?.value||'todas',cat=$('filtroDespesaCategoria')?.value||'todas',pag=$('filtroDespesaPagamento')?.value||'todas',cont=$('filtroDespesaConta')?.value||'todas',prest=$('filtroDespesaPrestador')?.value||'todos',ini=$('filtroDespesaDataInicial')?.value||'',fim=$('filtroDespesaDataFinal')?.value||'';if(prest!=='todos')a=a.filter(x=>(x.prestadorId||'')===prest);if(c!=='todas')a=a.filter(x=>x.casa===c);if(cat!=='todas')a=a.filter(x=>x.categoria===cat);if(pag!=='todas')a=a.filter(x=>x.formaPagamento===pag);if(cont!=='todas')a=a.filter(x=>x.contaOrigem===cont);if(ini)a=a.filter(x=>x.data>=ini);if(fim)a=a.filter(x=>x.data<=fim);return a.sort((x,y)=>(y.data||'').localeCompare(x.data||''));}
 function gerarRelatorioDespesas(){const a=obterDespesasFiltradas();ultimasDespesasFiltradas=[...a];const total=a.reduce((s,x)=>s+Number(x.valor||0),0),el=$('listaDespesas'),res=$('despesasResumo');if(res)res.innerHTML=`<div class="resumo-card"><small>Lançamentos</small><strong>${a.length}</strong></div><div class="resumo-card"><small>Total</small><strong>${moeda(total)}</strong></div>`;const pags=Math.max(1,Math.ceil(a.length/DESPESAS_POR_PAGINA));paginaDespesasAtual=Math.min(Math.max(1,paginaDespesasAtual),pags);const vis=a.slice((paginaDespesasAtual-1)*DESPESAS_POR_PAGINA,paginaDespesasAtual*DESPESAS_POR_PAGINA);if(el)el.innerHTML=vis.length?`<div style="overflow-x:auto"><table class="tabela-admin-compacta"><thead><tr><th>Data</th><th>Casa</th><th>Categoria</th><th>Prestador</th><th>Descrição</th><th>Forma</th><th>Conta</th><th>Valor</th><th>Ações</th></tr></thead><tbody>${vis.map(x=>`<tr><td>${dataBr(x.data)}</td><td>${escapeHtmlReserva(casas[x.casa]?.nome||x.casa)}</td><td>${nomeCategoriaDespesa(x.categoria)}</td><td>${escapeHtmlReserva(x.prestador||'—')}</td><td>${escapeHtmlReserva(x.descricao||'—')}</td><td>${escapeHtmlReserva(x.formaPagamento||'—')}</td><td>${escapeHtmlReserva(x.contaOrigem||'—')}</td><td><strong>${moeda(x.valor)}</strong></td><td><button class="azul" onclick="editarDespesa('${x.id}')">✏️ Editar</button><button class="vermelho" onclick="excluirDespesa('${x.id}')">Excluir</button></td></tr>`).join('')}</tbody></table></div>`:'<p style="color:var(--cinza)">Nenhuma despesa encontrada.</p>';const pe=$('paginacaoDespesas');if(pe)pe.innerHTML=a.length<=DESPESAS_POR_PAGINA?'':`<button onclick="mudarPaginaDespesas(${paginaDespesasAtual-1})" ${paginaDespesasAtual===1?'disabled':''}>‹ Anterior</button> <span>${paginaDespesasAtual}/${pags}</span> <button onclick="mudarPaginaDespesas(${paginaDespesasAtual+1})" ${paginaDespesasAtual===pags?'disabled':''}>Próxima ›</button>`;}
 function mudarPaginaDespesas(p){paginaDespesasAtual=p;gerarRelatorioDespesas();}
