@@ -7,6 +7,14 @@
 
 <title>Casas na Praia - Disponibilidade e Reservas</title>
 
+<!-- Google Analytics 4 - Casas na Praia -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RL7P77N47C"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-RL7P77N47C');
+</script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
@@ -1566,12 +1574,7 @@ textarea{
    COMODIDADES / INFORMAÇÕES DA ACOMODAÇÃO
 ===================================================== */
 .comodidades-admin-box{background:#fff;border:1px solid #dfe6ea;border-radius:12px;padding:18px;margin:18px 0;box-shadow:var(--sombra)}
-.comodidades-admin-form{display:grid;grid-template-columns:1.5fr 1fr 1.2fr auto;gap:10px;align-items:end}
-.comodidades-modal{position:fixed;inset:0;background:rgba(0,0,0,.58);display:none;align-items:center;justify-content:center;z-index:10000;padding:18px}
-.comodidades-modal.aberto{display:flex}
-.comodidades-modal-card{width:min(560px,96vw);background:#fff;border-radius:14px;padding:20px;box-shadow:0 20px 60px #0008}
-.comodidades-modal-acoes{display:flex;justify-content:flex-end;gap:8px;margin-top:14px;flex-wrap:wrap}
-.comodidades-icone-select{font-size:18px}
+.comodidades-admin-form{display:grid;grid-template-columns:1.5fr 1fr .45fr auto;gap:10px;align-items:end}
 .comodidades-catalogo{display:grid;gap:8px;margin-top:14px}
 .comodidade-catalogo-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 11px;border:1px solid #e6ecef;border-radius:9px;background:#f9fbfc}
 .comodidade-catalogo-info{display:flex;align-items:center;gap:8px;min-width:0}
@@ -1990,28 +1993,11 @@ textarea{
   <p style="color:var(--cinza);margin:6px 0 12px">Cadastre os itens uma única vez e, em cada casa, marque o que está <strong>Incluso</strong> ou o que <strong>Não é oferecido</strong>. Essas informações aparecerão para o hóspede antes do formulário de solicitação da reserva.</p>
   <div class="comodidades-admin-form">
    <div class="grupo-input"><label>Nome da comodidade</label><input id="novaComodidadeNome" placeholder="Ex.: Toalhas de banho"></div>
-   <div class="grupo-input"><label>Categoria</label><select id="novaComodidadeCategoria"></select></div>
-   <div class="grupo-input"><label>Ícone</label><select id="novaComodidadeIcone" class="comodidades-icone-select"></select></div>
+   <div class="grupo-input"><label>Categoria</label><input id="novaComodidadeCategoria" placeholder="Ex.: Banheiro"></div>
+   <div class="grupo-input"><label>Ícone</label><input id="novaComodidadeIcone" value="🏠" maxlength="4" style="text-align:center"></div>
    <button class="sucesso" onclick="adicionarComodidadeCatalogo()">➕ Cadastrar item</button>
   </div>
   <div id="listaCatalogoComodidades" class="comodidades-catalogo"></div>
-
-  <div id="modalEditarComodidade" class="comodidades-modal" onclick="if(event.target===this)fecharEdicaoComodidade()">
-   <div class="comodidades-modal-card">
-    <h3 style="margin:0 0 6px">✏️ Editar comodidade</h3>
-    <p style="margin:0 0 14px;color:var(--cinza);font-size:12px">Altere o nome, a categoria ou o ícone do item. A alteração será aplicada automaticamente às casas que já utilizam esta comodidade.</p>
-    <input type="hidden" id="editarComodidadeId">
-    <div class="linha-form">
-     <div class="grupo-input"><label>Nome da comodidade</label><input id="editarComodidadeNome"></div>
-     <div class="grupo-input"><label>Categoria</label><select id="editarComodidadeCategoria"></select></div>
-     <div class="grupo-input"><label>Ícone</label><select id="editarComodidadeIcone" class="comodidades-icone-select"></select></div>
-    </div>
-    <div class="comodidades-modal-acoes">
-     <button class="cinza" onclick="fecharEdicaoComodidade()">Cancelar</button>
-     <button class="sucesso" onclick="salvarEdicaoComodidade()">💾 Salvar alterações</button>
-    </div>
-   </div>
-  </div>
  </div>
 
  <div class="grade-casas" id="gradeCasas"></div>
@@ -5884,67 +5870,27 @@ function idComodidadeNovo(){
  return 'com_'+Date.now()+'_'+Math.floor(Math.random()*1000000);
 }
 
-const CATEGORIAS_COMODIDADES_PADRAO=[
- 'Banheiro','Quartos','Cozinha e Área de Refeições','Área de Estar e Lazer','Área Externa','Lavanderia e Organização','Climatização e Conforto','Segurança','Acessibilidade','Estacionamento','Entretenimento','Outros'
-];
-
-const ICONES_COMODIDADES=[
- ['🏠','Casa / geral'],['🛏️','Cama'],['🛌','Quarto'],['🧺','Roupa de cama'],['🧣','Cobertas'],['🧻','Papel higiênico'],['🛁','Banheira'],['🚿','Chuveiro'],['🚽','Vaso sanitário'],['🧼','Higiene / limpeza'],['🧴','Produtos de higiene'],['💇','Secador de cabelo'],['🪞','Espelho'],['👕','Cabide / roupas'],['🚪','Armário / guarda-roupa'],['🍳','Cozinha'],['🧊','Geladeira'],['🔥','Fogão / cooktop'],['♨️','Forno'],['📡','Micro-ondas'],['☕','Cafeteira'],['🫖','Chaleira'],['🍞','Torradeira'],['🍽️','Utensílios / louças'],['🥤','Copos / taças'],['🥄','Talheres'],['🪑','Mesa / cadeiras'],['🛋️','Sofá'],['📺','TV'],['🎮','Jogos / videogame'],['🎱','Mesa de sinuca'],['🔥','Churrasqueira'],['🍖','Área gourmet'],['🏊','Piscina'],['🏖️','Praia / proximidade'],['🌳','Jardim / pátio'],['☀️','Área externa'],['🧹','Limpeza'],['🧵','Varal'],['❄️','Ar-condicionado'],['💨','Ventilador'],['🌡️','Aquecimento'],['📶','Wi-Fi'],['🔒','Cofre / segurança'],['🚨','Segurança / alarme'],['🚗','Garagem'],['🅿️','Estacionamento'],['♿','Acessibilidade'],['🐾','Aceita animais'],['🔑','Chaves / acesso'],['🧯','Extintor'],['🧰','Manutenção'],['🧸','Itens infantis'],['👶','Berço'],['🪟','Janela / vista'],['🌊','Vista para o mar'],['🔊','Som / áudio'],['💡','Iluminação'],['📚','Livros'],['🧩','Brinquedos / jogos'],['🫗','Liquidificador'],['🍲','Panelas'],['🧂','Itens básicos de cozinha'],['🧽','Esponja / limpeza'],['📱','Carregador / tomada'],['🔌','Tomada / elétrica'],['🛜','Internet'],['📷','Câmera / monitoramento'],['🌴','Ambiente praiano']
-];
-
-function preencherSelectIcones(id,valorAtual=''){
- const el=$(id); if(!el)return;
- const atual=valorAtual||el.value||'🏠';
- const usados=new Set(ICONES_COMODIDADES.map(x=>x[0]));
- let html=ICONES_COMODIDADES.map(([ico,nome])=>`<option value="${escapeHtmlReserva(ico)}">${ico} ${escapeHtmlReserva(nome)}</option>`).join('');
- if(atual&&!usados.has(atual))html+=`<option value="${escapeHtmlReserva(atual)}">${escapeHtmlReserva(atual)} Ícone atual</option>`;
- el.innerHTML=html; el.value=atual; if(el.value!==atual)el.value='🏠';
-}
-
-function preencherSelectCategorias(id,valorAtual=''){
- const el=$(id); if(!el)return;
- const categorias=[...CATEGORIAS_COMODIDADES_PADRAO,...comodidadesCatalogo.map(x=>String(x.categoria||'').trim()).filter(Boolean)];
- const unicas=[...new Set(categorias)].sort((a,b)=>a.localeCompare(b,'pt-BR'));
- const atual=valorAtual||el.value||'';
- if(atual&&!unicas.includes(atual))unicas.push(atual);
- el.innerHTML=unicas.map(c=>`<option value="${escapeHtmlReserva(c)}">${escapeHtmlReserva(c)}</option>`).join('');
- if(atual&&unicas.includes(atual))el.value=atual;
-}
-
-function prepararCamposComodidade(){
- preencherSelectCategorias('novaComodidadeCategoria','Banheiro');
- preencherSelectIcones('novaComodidadeIcone','🏠');
-}
-
 async function adicionarComodidadeCatalogo(){
  const nome=$('novaComodidadeNome')?.value.trim();
  const categoria=$('novaComodidadeCategoria')?.value.trim()||'Outros';
  const icone=$('novaComodidadeIcone')?.value.trim()||'🏠';
  if(!nome)return alert('⚠️ Informe o nome da comodidade.');
  if(comodidadesCatalogo.some(x=>String(x.nome||'').trim().toLowerCase()===nome.toLowerCase()))return alert('⚠️ Essa comodidade já está cadastrada.');
- const novo={id:idComodidadeNovo(),nome,categoria,icone}; comodidadesCatalogo.push(novo);
+ const novo={id:idComodidadeNovo(),nome,categoria,icone};
+ comodidadesCatalogo.push(novo);
  try{
-  await salvarTodasCasas(); $('novaComodidadeNome').value=''; prepararCamposComodidade(); renderizarCatalogoComodidades(); renderizarCasasAdmin();
+  await salvarTodasCasas();
+  $('novaComodidadeNome').value='';
+  $('novaComodidadeCategoria').value='';
+  $('novaComodidadeIcone').value='🏠';
+  renderizarCatalogoComodidades();
+  renderizarCasasAdmin();
   alert('✅ Comodidade cadastrada e salva.');
- }catch(e){ console.error(e); comodidadesCatalogo=comodidadesCatalogo.filter(x=>x.id!==novo.id); alert('❌ Não foi possível salvar a nova comodidade.'); }
-}
-
-function abrirEdicaoComodidade(id){
- const item=comodidadesCatalogo.find(x=>x.id===id); if(!item)return;
- $('editarComodidadeId').value=item.id; $('editarComodidadeNome').value=item.nome||'';
- preencherSelectCategorias('editarComodidadeCategoria',item.categoria||'Outros'); preencherSelectIcones('editarComodidadeIcone',item.icone||'🏠');
- $('modalEditarComodidade').classList.add('aberto'); setTimeout(()=>$('editarComodidadeNome')?.focus(),50);
-}
-function fecharEdicaoComodidade(){ $('modalEditarComodidade')?.classList.remove('aberto'); }
-
-async function salvarEdicaoComodidade(){
- const id=$('editarComodidadeId')?.value; const item=comodidadesCatalogo.find(x=>x.id===id); if(!item)return;
- const nome=$('editarComodidadeNome')?.value.trim(); const categoria=$('editarComodidadeCategoria')?.value.trim()||'Outros'; const icone=$('editarComodidadeIcone')?.value.trim()||'🏠';
- if(!nome)return alert('⚠️ Informe o nome da comodidade.');
- if(comodidadesCatalogo.some(x=>x.id!==id&&String(x.nome||'').trim().toLowerCase()===nome.toLowerCase()))return alert('⚠️ Já existe outra comodidade com esse nome.');
- const anterior={...item}; Object.assign(item,{nome,categoria,icone});
- try{ await salvarTodasCasas(); fecharEdicaoComodidade(); renderizarCatalogoComodidades(); renderizarCasasAdmin(); renderizarPaginaPublica(); alert('✅ Comodidade alterada e salva.'); }
- catch(e){ console.error(e); Object.assign(item,anterior); alert('❌ Não foi possível salvar a alteração.'); }
+ }catch(e){
+  console.error(e);
+  comodidadesCatalogo=comodidadesCatalogo.filter(x=>x.id!==novo.id);
+  alert('❌ Não foi possível salvar a nova comodidade.');
+ }
 }
 
 async function excluirComodidadeCatalogo(id){
@@ -5968,7 +5914,6 @@ async function excluirComodidadeCatalogo(id){
 }
 
 function renderizarCatalogoComodidades(){
- prepararCamposComodidade();
  const el=$('listaCatalogoComodidades');
  if(!el)return;
  if(!comodidadesCatalogo.length){
@@ -5989,10 +5934,7 @@ function renderizarCatalogoComodidades(){
       <span style="font-size:20px">${escapeHtmlReserva(x.icone||'🏠')}</span>
       <div><strong>${escapeHtmlReserva(x.nome)}</strong><div class="comodidade-catalogo-meta">${escapeHtmlReserva(x.categoria||'Outros')}</div></div>
      </div>
-     <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">
-      <button class="azul" style="padding:6px 9px;font-size:12px" onclick="abrirEdicaoComodidade('${x.id}')">✏️ Editar</button>
-      <button class="vermelho" style="padding:6px 9px;font-size:12px" onclick="excluirComodidadeCatalogo('${x.id}')">🗑️ Excluir</button>
-     </div>
+     <button class="vermelho" style="padding:6px 9px;font-size:12px" onclick="excluirComodidadeCatalogo('${x.id}')">🗑️ Excluir</button>
     </div>
    `).join('')}
   </div>
