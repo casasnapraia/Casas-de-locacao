@@ -12,6 +12,16 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RL7P77N47C"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-RL7P77N47C');
+function registrarEventoGA(nome, parametros){try{if(typeof gtag==='function')gtag('event',nome,parametros||{});}catch(e){console.warn('Analytics:',e);}}
+</script>
+
 <style>
 
 :root{
@@ -1590,22 +1600,16 @@ textarea{
 .comodidades-vazia{font-size:12px;color:var(--cinza);font-style:italic}
 @media(max-width:800px){.comodidades-admin-form{grid-template-columns:1fr}.comodidades-listas{grid-template-columns:1fr}.comodidade-admin-tabela th:not(:first-child),.comodidade-admin-tabela td:not(:first-child){width:82px}}
 </style>
+
 <script>
-(function(){
-  window.registrarEventoGA=function(nome,params){try{if(typeof gtag==='function')gtag('event',nome,params||{});}catch(e){}};
-  document.addEventListener('click',function(e){
-    var a=e.target.closest&&e.target.closest('a'); if(!a) return;
-    var href=(a.getAttribute('href')||'').toLowerCase();
-    if(href.indexOf('wa.me')>=0 || href.indexOf('whatsapp')>=0) registrarEventoGA('whatsapp_click',{link_url:a.href});
-    var txt=(a.textContent||'').trim().toLowerCase();
-    if(txt.indexOf('solicitar')>=0 && txt.indexOf('reserva')>=0) registrarEventoGA('reservation_request_start');
-  },true);
-  document.addEventListener('change',function(e){
-    var el=e.target; if(!el || el.tagName!=='SELECT') return;
-    var id=(el.id||'').toLowerCase();
-    if(id.indexOf('casa')>=0 && el.value) registrarEventoGA('house_selected',{house:el.value});
-  },true);
-})();
+document.addEventListener('click',function(event){
+ var alvo=event.target&&event.target.closest?event.target.closest('a,button'):null;
+ if(!alvo)return;
+ var href=(alvo.getAttribute('href')||'').toLowerCase();
+ var texto=(alvo.textContent||'').toLowerCase();
+ var classe=(alvo.className||'').toString().toLowerCase();
+ if(href.indexOf('wa.me')>=0||href.indexOf('whatsapp')>=0||classe.indexOf('btn-whatsapp')>=0||texto.indexOf('whatsapp')>=0) registrarEventoGA('whatsapp_click');
+},true);
 </script>
 </head>
 
@@ -3977,6 +3981,7 @@ function limparResultadoBuscaDisponibilidade(){
 function abrirBuscaDisponibilidade(id){
 
  const casa=casas[id];
+ if(casa && !casa.interna) registrarEventoGA('house_viewed',{house:casa.nome || id});
 
  if(!casa || casa.interna)return;
 
@@ -4238,6 +4243,8 @@ async function buscarDisponibilidadePrevia(){
  const casa=casaBuscaDisponibilidade;
 
  if(!casa || !casas[casa])return;
+
+ registrarEventoGA('availability_search',{house:casas[casa].nome || casa});
 
  const a=$('buscaDataEntrada').value;
  const b=$('buscaDataSaida').value;
@@ -4562,6 +4569,8 @@ async function buscarDisponibilidadePrevia(){
 function abrirModalReserva(id){
 
  casaSelecionadaParaReserva=id;
+ const casaReservaAnalytics=casas[id];
+ if(casaReservaAnalytics && !casaReservaAnalytics.interna) registrarEventoGA('reservation_request_start',{house:casaReservaAnalytics.nome || id});
 
  const x=casas[id];
 
@@ -6826,23 +6835,6 @@ body{
 
 </style>
 
-<script>
-(function(){
-  window.registrarEventoGA=function(nome,params){try{if(typeof gtag==='function')gtag('event',nome,params||{});}catch(e){}};
-  document.addEventListener('click',function(e){
-    var a=e.target.closest&&e.target.closest('a'); if(!a) return;
-    var href=(a.getAttribute('href')||'').toLowerCase();
-    if(href.indexOf('wa.me')>=0 || href.indexOf('whatsapp')>=0) registrarEventoGA('whatsapp_click',{link_url:a.href});
-    var txt=(a.textContent||'').trim().toLowerCase();
-    if(txt.indexOf('solicitar')>=0 && txt.indexOf('reserva')>=0) registrarEventoGA('reservation_request_start');
-  },true);
-  document.addEventListener('change',function(e){
-    var el=e.target; if(!el || el.tagName!=='SELECT') return;
-    var id=(el.id||'').toLowerCase();
-    if(id.indexOf('casa')>=0 && el.value) registrarEventoGA('house_selected',{house:el.value});
-  },true);
-})();
-</script>
 </head>
 
 <body>
@@ -7016,15 +7008,6 @@ body{
 
 </div>
 
-<script>
-document.addEventListener('DOMContentLoaded',function(){
-  document.querySelectorAll('button,a').forEach(function(el){
-    var t=(el.textContent||'').trim().toLowerCase();
-    if(t.indexOf('consultar disponibilidade')>=0){el.addEventListener('click',function(){registrarEventoGA('availability_search');});}
-    if(t.indexOf('continuar')>=0 && t.indexOf('reserva')>=0){el.addEventListener('click',function(){registrarEventoGA('reservation_request');});}
-  });
-});
-</script>
 </body>
 
 </html>
@@ -8467,33 +8450,7 @@ function mudarPaginaDespesas(p){paginaDespesasAtual=p;gerarRelatorioDespesas();}
 async function excluirDespesa(id){if(!confirm('Excluir esta despesa?'))return;try{await db.collection('despesas').doc(id).delete();await carregarDespesas();}catch(e){console.error(e);alert('❌ Não foi possível excluir.');}}
 function limparFiltrosDespesas(){['filtroDespesaCasa','filtroDespesaCategoria','filtroDespesaPagamento','filtroDespesaConta'].forEach(id=>{if($(id))$(id).value='todas';});if($('filtroDespesaPrestador'))$('filtroDespesaPrestador').value='todos';['filtroDespesaDataInicial','filtroDespesaDataFinal'].forEach(id=>{if($(id))$(id).value='';});paginaDespesasAtual=1;gerarRelatorioDespesas();}
 function exportarDespesasCSV(){const a=ultimasDespesasFiltradas;if(!a.length)return alert('Nenhuma despesa para exportar.');let csv='Data;Casa;Categoria;Prestador;Descrição;Forma;Conta;Valor;Observação\n';a.forEach(x=>csv+=`"${dataBr(x.data)}";"${casas[x.casa]?.nome||x.casa}";"${nomeCategoriaDespesa(x.categoria)}";"${String(x.prestador||'').replace(/"/g,'""')}";"${String(x.descricao||'').replace(/"/g,'""')}";"${x.formaPagamento||''}";"${x.contaOrigem||''}";"${Number(x.valor||0).toFixed(2)}";"${String(x.observacao||'').replace(/"/g,'""')}"\n`);const blob=new Blob(["\ufeff"+csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),aEl=document.createElement('a');aEl.href=url;aEl.download='relatorio_despesas.csv';aEl.click();URL.revokeObjectURL(url);}
-function imprimirRelatorioDespesas(){const a=ultimasDespesasFiltradas;if(!a.length)return alert('Nenhuma despesa para imprimir.');const total=a.reduce((s,x)=>s+Number(x.valor||0),0),w=window.open('','_blank','width=1000,height=750');if(!w)return alert('⚠️ Permita pop-ups.');w.document.write(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Relatório de Despesas</title><style>body{font-family:Arial;padding:28px;color:#222}h1{text-align:center;color:#0a4b6e}table{width:100%;border-collapse:collapse;font-size:11px}th,td{border:1px solid #ccc;padding:7px}th{background:#e9eef0}.total{text-align:right;font-weight:bold;margin-top:15px}@media print{button{display:none}}</style><script>
-(function(){
-  window.registrarEventoGA=function(nome,params){try{if(typeof gtag==='function')gtag('event',nome,params||{});}catch(e){}};
-  document.addEventListener('click',function(e){
-    var a=e.target.closest&&e.target.closest('a'); if(!a) return;
-    var href=(a.getAttribute('href')||'').toLowerCase();
-    if(href.indexOf('wa.me')>=0 || href.indexOf('whatsapp')>=0) registrarEventoGA('whatsapp_click',{link_url:a.href});
-    var txt=(a.textContent||'').trim().toLowerCase();
-    if(txt.indexOf('solicitar')>=0 && txt.indexOf('reserva')>=0) registrarEventoGA('reservation_request_start');
-  },true);
-  document.addEventListener('change',function(e){
-    var el=e.target; if(!el || el.tagName!=='SELECT') return;
-    var id=(el.id||'').toLowerCase();
-    if(id.indexOf('casa')>=0 && el.value) registrarEventoGA('house_selected',{house:el.value});
-  },true);
-})();
-</script>
-</head><body><h1>CASAS NA PRAIA — RELATÓRIO DE DESPESAS</h1><p style="text-align:center">Emitido em ${new Date().toLocaleString('pt-BR')}</p><table><tr><th>Data</th><th>Casa</th><th>Categoria</th><th>Prestador</th><th>Descrição</th><th>Forma</th><th>Conta</th><th>Valor</th></tr>${a.map(x=>`<tr><td>${dataBr(x.data)}</td><td>${casas[x.casa]?.nome||x.casa}</td><td>${nomeCategoriaDespesa(x.categoria)}</td><td>${escapeHtmlReserva(x.prestador||'')}</td><td>${escapeHtmlReserva(x.descricao||'')}</td><td>${escapeHtmlReserva(x.formaPagamento||'')}</td><td>${escapeHtmlReserva(x.contaOrigem||'')}</td><td>${moeda(x.valor)}</td></tr>`).join('')}</table><div class="total">Total: ${moeda(total)}</div><button onclick="window.print()">Imprimir / Salvar PDF</button><script>
-document.addEventListener('DOMContentLoaded',function(){
-  document.querySelectorAll('button,a').forEach(function(el){
-    var t=(el.textContent||'').trim().toLowerCase();
-    if(t.indexOf('consultar disponibilidade')>=0){el.addEventListener('click',function(){registrarEventoGA('availability_search');});}
-    if(t.indexOf('continuar')>=0 && t.indexOf('reserva')>=0){el.addEventListener('click',function(){registrarEventoGA('reservation_request');});}
-  });
-});
-</script>
-</body></html>`);w.document.close();setTimeout(()=>w.print(),300);}
+function imprimirRelatorioDespesas(){const a=ultimasDespesasFiltradas;if(!a.length)return alert('Nenhuma despesa para imprimir.');const total=a.reduce((s,x)=>s+Number(x.valor||0),0),w=window.open('','_blank','width=1000,height=750');if(!w)return alert('⚠️ Permita pop-ups.');w.document.write(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Relatório de Despesas</title><style>body{font-family:Arial;padding:28px;color:#222}h1{text-align:center;color:#0a4b6e}table{width:100%;border-collapse:collapse;font-size:11px}th,td{border:1px solid #ccc;padding:7px}th{background:#e9eef0}.total{text-align:right;font-weight:bold;margin-top:15px}@media print{button{display:none}}</style></head><body><h1>CASAS NA PRAIA — RELATÓRIO DE DESPESAS</h1><p style="text-align:center">Emitido em ${new Date().toLocaleString('pt-BR')}</p><table><tr><th>Data</th><th>Casa</th><th>Categoria</th><th>Prestador</th><th>Descrição</th><th>Forma</th><th>Conta</th><th>Valor</th></tr>${a.map(x=>`<tr><td>${dataBr(x.data)}</td><td>${casas[x.casa]?.nome||x.casa}</td><td>${nomeCategoriaDespesa(x.categoria)}</td><td>${escapeHtmlReserva(x.prestador||'')}</td><td>${escapeHtmlReserva(x.descricao||'')}</td><td>${escapeHtmlReserva(x.formaPagamento||'')}</td><td>${escapeHtmlReserva(x.contaOrigem||'')}</td><td>${moeda(x.valor)}</td></tr>`).join('')}</table><div class="total">Total: ${moeda(total)}</div><button onclick="window.print()">Imprimir / Salvar PDF</button></body></html>`);w.document.close();setTimeout(()=>w.print(),300);}
 
 document.addEventListener(
  'keydown',
@@ -8522,14 +8479,5 @@ carregarClimaPublico();setInterval(carregarClimaPublico,30*60*1000);
 
 </script>
 
-<script>
-document.addEventListener('DOMContentLoaded',function(){
-  document.querySelectorAll('button,a').forEach(function(el){
-    var t=(el.textContent||'').trim().toLowerCase();
-    if(t.indexOf('consultar disponibilidade')>=0){el.addEventListener('click',function(){registrarEventoGA('availability_search');});}
-    if(t.indexOf('continuar')>=0 && t.indexOf('reserva')>=0){el.addEventListener('click',function(){registrarEventoGA('reservation_request');});}
-  });
-});
-</script>
 </body>
 </html>
