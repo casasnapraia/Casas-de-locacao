@@ -215,9 +215,14 @@ button:disabled{
  padding:65px 35px 70px;
  max-width:1400px;
  margin:auto;
- background:#eaf7fc;
- border-top:1px solid #d4edf5;
- border-bottom:1px solid #d4edf5
+ background:linear-gradient(180deg,#eef9ff 0%,#f7fcff 48%,#eaf6fb 100%);
+ border-top:1px solid #d7edf7;
+ border-bottom:1px solid #d7edf7
+}
+
+#areaPublica{
+ min-height:100vh;
+ background:linear-gradient(180deg,#dff3fb 0%,#eef9ff 48%,#e6f5fa 100%);
 }
 
 .introducao-publica{
@@ -259,7 +264,21 @@ button:disabled{
  border-radius:18px;
  overflow:hidden;
  box-shadow:var(--sombra);
- border:1px solid #0000000d
+ border:1px solid #0000000d;
+ position:relative
+}
+
+.card-casa button{
+ position:relative;
+ z-index:5;
+ pointer-events:auto
+}
+
+.card-casa .amarelo{
+ position:relative;
+ z-index:6;
+ pointer-events:auto;
+ cursor:pointer
 }
 
 .card-imagem{
@@ -381,7 +400,7 @@ button:disabled{
 
 .info-praia{
  padding:55px 25px;
- background:#e1f4fb;
+ background:#f7fbfc;
  text-align:center
 }
 
@@ -517,7 +536,17 @@ button:disabled{
 
 .overlay-login,
 .modal{
- background:#0008
+ background:#0008;
+ z-index:1000
+}
+
+/* A área de autenticação do cliente precisa ficar acima da solicitação de reserva. */
+.modal-cliente{
+ z-index:3000 !important;
+}
+
+.modal-busca-disponibilidade{
+ z-index:2000;
 }
 
 .caixa-login,
@@ -1049,11 +1078,15 @@ textarea{
  background:#0009;
  align-items:center;
  justify-content:center;
- padding:20px
+ padding:20px;
+ pointer-events:none
 }
+
 .modal-busca-disponibilidade.aberto{
- display:flex
+ display:flex;
+ pointer-events:auto
 }
+
 .busca-disponibilidade-conteudo{
  background:#fff;
  width:min(96vw,1080px);
@@ -1073,81 +1106,23 @@ textarea{
  background:linear-gradient(135deg,#eef9fd,#f7fcff);
  border:1px solid #cfe8f1;
 }
-.busca-galeria{
- display:grid;
- grid-template-columns:repeat(3,minmax(0,1fr));
- gap:9px;
- min-height:210px;
-}
-.busca-galeria img{
- width:100%;
- height:210px;
- object-fit:cover;
- border-radius:12px;
- background:#dcecf2;
- cursor:pointer;
-}
-.busca-galeria-vazia{
- grid-column:1/-1;
- min-height:210px;
- display:flex;
- align-items:center;
- justify-content:center;
- border-radius:12px;
- background:linear-gradient(135deg,#dff3fa,#edf9fc);
- color:#52707c;
- font-size:14px;
- text-align:center;
- padding:20px;
-}
-.busca-casa-info{
- display:flex;
- flex-direction:column;
- justify-content:center;
- gap:10px;
-}
-.busca-casa-info h4{
- margin:0;
- color:var(--marinho);
- font-size:22px;
-}
-.busca-casa-descricao{
- margin:0;
- color:#52616a;
- font-size:14px;
- line-height:1.5;
-}
-.busca-casa-especificacoes{
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:8px;
-}
-.busca-especificacao{
- padding:9px 10px;
- border-radius:10px;
+.busca-galeria{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;min-height:210px}
+.busca-galeria img{width:100%;height:105px;object-fit:cover;border-radius:12px;display:block;cursor:pointer;border:1px solid #dce8ed}
+.busca-galeria-vazia{grid-column:1/-1;min-height:210px;display:flex;align-items:center;justify-content:center;border-radius:12px;background:linear-gradient(135deg,#dff3fa,#edf9fc);color:#52707c;font-size:14px;text-align:center;padding:20px}
+.busca-casa-info{display:flex;flex-direction:column;justify-content:center;gap:10px}
+.busca-casa-descricao{margin:0;color:#52616a;font-size:14px;line-height:1.5}
+.busca-casa-especificacoes{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.busca-especificacao{padding:9px 10px;border-radius:10px;background:#fff;border:1px solid #dce8ed;font-size:13px;color:#354a54}
+.busca-caracteristicas{margin:2px 0 0;padding:0;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:5px 10px}
+@media(max-width:800px){.busca-disponibilidade-conteudo{width:96vw;padding:18px}.busca-casa-detalhes{grid-template-columns:1fr}.busca-galeria{grid-template-columns:repeat(2,minmax(0,1fr));min-height:0}.busca-caracteristicas{grid-template-columns:1fr}}
+.busca-disponibilidade-conteudo{
  background:#fff;
- border:1px solid #dce8ed;
- font-size:13px;
- color:#354a54;
-}
-.busca-caracteristicas{
- margin:2px 0 0;
- padding:0;
- list-style:none;
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:5px 10px;
-}
-.busca-caracteristicas li{
- font-size:12px;
- color:#4d626b;
-}
-@media(max-width:800px){
- .busca-disponibilidade-conteudo{width:96vw;padding:18px}
- .busca-casa-detalhes{grid-template-columns:1fr}
- .busca-galeria{grid-template-columns:repeat(2,minmax(0,1fr));min-height:0}
- .busca-galeria img{height:150px}
- .busca-casa-especificacoes,.busca-caracteristicas{grid-template-columns:1fr}
+ width:min(94vw,760px);
+ max-height:92vh;
+ overflow-y:auto;
+ border-radius:18px;
+ box-shadow:0 20px 60px #0007;
+ padding:24px
 }
 .busca-cabecalho{
  display:flex;
@@ -1270,78 +1245,6 @@ textarea{
  text-align:center;
  padding:18px;
  color:var(--cinza)
-}
-
-/* =====================================================
-   RESERVA PÚBLICA — VALOR E AVISO DE PAGAMENTO
-===================================================== */
-.reserva-publica-financeiro{
- margin:16px 0 20px;
- padding:18px;
- background:linear-gradient(135deg,#e6f7fc,#f3fbfe);
- border:1px solid #b9dfec;
- border-radius:15px;
- box-shadow:0 5px 18px #0a4b6e12
-}
-.reserva-publica-financeiro .titulo-valor{
- color:var(--marinho);
- font-size:13px;
- font-weight:700;
- margin-bottom:5px
-}
-.reserva-publica-financeiro #valorEstimado{
- width:100%;
- border:0;
- background:transparent!important;
- color:var(--marinho2);
- font-size:27px;
- font-weight:800;
- padding:2px 0 8px;
- outline:none
-}
-.aviso-pagamento-publico{
- margin-top:12px;
- padding:14px 15px;
- background:#fff;
- border-left:4px solid var(--turquesa);
- border-radius:10px;
- color:#294554;
- font-size:13px;
- line-height:1.6
-}
-.pix-publico{
- margin-top:14px;
- display:flex;
- align-items:center;
- justify-content:center;
- gap:18px;
- flex-wrap:wrap;
- padding-top:14px;
- border-top:1px solid #cde6ee
-}
-.pix-publico img{
- width:170px;
- height:170px;
- background:#fff;
- padding:8px;
- border-radius:12px;
- box-shadow:0 4px 14px #00000014
-}
-.pix-publico-info{
- max-width:310px;
- text-align:left;
- font-size:13px;
- line-height:1.55;
- color:#294554
-}
-.pix-publico-info strong{
- color:var(--marinho)
-}
-@media(max-width:600px){
- .reserva-publica-financeiro{padding:15px}
- .reserva-publica-financeiro #valorEstimado{font-size:24px}
- .pix-publico{align-items:center}
- .pix-publico-info{max-width:100%;text-align:center}
 }
 @media(max-width:600px){
  .modal-busca-disponibilidade{
@@ -1759,6 +1662,41 @@ textarea{
 .comodidades-bloco li:last-child{border-bottom:0}
 .comodidades-vazia{font-size:12px;color:var(--cinza);font-style:italic}
 @media(max-width:800px){.comodidades-admin-form{grid-template-columns:1fr}.comodidades-listas{grid-template-columns:1fr}.comodidade-admin-tabela th:not(:first-child),.comodidade-admin-tabela td:not(:first-child){width:82px}}
+
+/* ===== TEXTO INSTITUCIONAL / PLATAFORMAS ===== */
+.institucional-reserva{
+ margin-top:14px;
+ padding:14px;
+ background:linear-gradient(135deg,#eef9ff,#f8fcff);
+ border:1px solid #cfe8f5;
+ border-radius:11px;
+ color:#334155;
+ font-size:13px;
+ line-height:1.55
+}
+.institucional-reserva strong{color:#075985}
+.institucional-links{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.institucional-links a{display:inline-block;text-decoration:none;padding:8px 11px;border-radius:8px;font-weight:700;background:#fff;border:1px solid #d7e7ee;color:#075985}
+.institucional-links a:hover{filter:brightness(.97)}
+
+/* ===== AREA DO CLIENTE ===== */
+.botao-cliente{background:#0ea5e9;color:#fff;border:0;padding:10px 14px;border-radius:9px;font-weight:700;cursor:pointer;margin-left:8px}
+.botao-cliente:hover{background:#0284c7}
+.cliente-status{display:inline-flex;align-items:center;gap:6px;background:#e0f2fe;color:#075985;border-radius:999px;padding:7px 11px;font-size:13px;font-weight:700;margin-left:8px}
+.modal-cliente .modal-conteudo{max-width:560px}
+.cliente-abas{display:flex;gap:8px;margin-bottom:16px;border-bottom:1px solid #dbe5ea;padding-bottom:8px}
+.cliente-aba{flex:1;border:0;background:#eef6f9;padding:10px;border-radius:8px;font-weight:700;cursor:pointer}
+.cliente-aba.ativa{background:#0ea5e9;color:#fff}
+.cliente-box{background:#f5fbfe;border:1px solid #d9eef7;border-radius:10px;padding:14px;margin:12px 0}
+.cliente-reserva{border:1px solid #dfe7eb;border-radius:10px;background:#fff;padding:14px;margin:10px 0;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.cliente-reserva-cab{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap}
+.cliente-status-reserva{display:inline-block;padding:5px 8px;border-radius:999px;background:#e0f2fe;color:#075985;font-size:12px;font-weight:700}
+.cliente-acoes{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.cliente-link{border:0;background:none;color:#0369a1;text-decoration:underline;cursor:pointer;padding:4px}
+.cliente-erro{color:#b91c1c;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:10px;margin:10px 0;font-size:13px}
+.cliente-sucesso{color:#166534;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:10px;margin:10px 0;font-size:13px}
+@media(max-width:800px){.botao-cliente{margin:8px 0 0;width:100%}.cliente-status{margin:8px 0 0;width:100%;justify-content:center}}
+
 </style>
 
 <script>
@@ -1784,9 +1722,15 @@ document.addEventListener('click',function(event){
 <header class="cabecalho-publico">
  <h1>🏖️ Casas na Praia — Balneário Arroio do Silva/SC</h1>
 
- <button class="botao-login" onclick="abrirLogin()">
-  🔐 Acesso Administrativo
- </button>
+ <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end">
+  <span id="clienteStatusHeader" class="cliente-status" style="display:none"></span>
+  <button id="btnClienteHeader" class="botao-cliente" onclick="abrirAreaCliente()">
+   👤 Minha conta / Minhas reservas
+  </button>
+  <button class="botao-login" onclick="abrirLogin()">
+   🔐 Acesso Administrativo
+  </button>
+ </div>
 </header>
 
 
@@ -1957,6 +1901,64 @@ document.addEventListener('click',function(event){
 
  </div>
 
+</div>
+
+<!-- =====================================================
+     ÁREA DO CLIENTE
+===================================================== -->
+<div id="modalCliente" class="modal modal-cliente">
+ <div class="modal-conteudo">
+  <div class="cabecalho-modal">
+   <h3 id="tituloModalCliente">👤 Minha conta</h3>
+   <button class="fechar" onclick="fecharAreaCliente()">×</button>
+  </div>
+
+  <div id="clienteAutenticacao">
+   <div class="cliente-abas">
+    <button id="abaClienteEntrar" class="cliente-aba ativa" onclick="mostrarAbaCliente('entrar')">Entrar</button>
+    <button id="abaClienteCriar" class="cliente-aba" onclick="mostrarAbaCliente('criar')">Criar conta</button>
+   </div>
+
+   <div id="clientePainelErro" class="cliente-erro" style="display:none"></div>
+
+   <div id="clienteFormEntrar">
+    <div class="cliente-box">
+     <strong>Entre para acompanhar sua reserva</strong>
+     <p style="margin:6px 0 0;color:var(--cinza);font-size:13px">Use o e-mail e a senha cadastrados na sua conta.</p>
+    </div>
+    <div class="grupo-input"><label>E-mail</label><input id="clienteEmailLogin" type="email" autocomplete="email"></div>
+    <div class="grupo-input"><label>Senha</label><input id="clienteSenhaLogin" type="password" autocomplete="current-password"></div>
+    <button class="azul" style="width:100%" onclick="entrarCliente()">🔐 Entrar</button>
+    <div style="text-align:center;margin-top:10px"><button class="cliente-link" onclick="recuperarSenhaCliente()">Esqueci minha senha</button></div>
+   </div>
+
+   <div id="clienteFormCriar" style="display:none">
+    <div class="cliente-box">
+     <strong>Crie sua conta para solicitar e acompanhar reservas</strong>
+     <p style="margin:6px 0 0;color:var(--cinza);font-size:13px">A conta será vinculada às suas reservas. Sua senha fica protegida pelo Firebase Authentication.</p>
+    </div>
+    <div class="grupo-input"><label>Nome completo</label><input id="clienteNomeCadastro" autocomplete="name"></div>
+    <div class="grupo-input"><label>WhatsApp / telefone</label><input id="clienteTelefoneCadastro" type="tel" autocomplete="tel"></div>
+    <div class="grupo-input"><label>E-mail</label><input id="clienteEmailCadastro" type="email" autocomplete="email"></div>
+    <div class="grupo-input"><label>Senha</label><input id="clienteSenhaCadastro" type="password" autocomplete="new-password" minlength="6"></div>
+    <div class="grupo-input"><label>Confirmar senha</label><input id="clienteSenhaCadastro2" type="password" autocomplete="new-password" minlength="6"></div>
+    <button class="sucesso" style="width:100%" onclick="criarContaCliente()">👤 Criar minha conta</button>
+   </div>
+  </div>
+
+  <div id="clienteLogado" style="display:none">
+   <div id="clientePainelSucesso" class="cliente-sucesso" style="display:none"></div>
+   <div class="cliente-box">
+    <strong id="clienteNomeLogado">Olá!</strong>
+    <div id="clienteEmailLogado" style="font-size:13px;color:var(--cinza);margin-top:4px"></div>
+   </div>
+   <h4 style="margin:14px 0 8px">📅 Minhas reservas</h4>
+   <div id="listaMinhasReservas"><div style="color:var(--cinza)">Carregando...</div></div>
+   <div class="cliente-acoes">
+    <button class="cinza" onclick="sairContaCliente()">Sair da conta</button>
+   </div>
+  </div>
+ </div>
 </div>
 
 <!-- =====================================================
@@ -2647,37 +2649,6 @@ document.addEventListener('click',function(event){
   class="capacidade">
  </div>
 
- <div class="reserva-publica-financeiro">
-
-  <div class="titulo-valor">💰 Valor estimado da estadia</div>
-
-  <input id="valorEstimado"
-   readonly
-   value=""
-   aria-label="Valor estimado da estadia">
-
-  <div class="aviso-pagamento-publico">
-   Para confirmar a locação, solicitamos um adiantamento de 25% do valor total da reserva. O pagamento restante será realizado no check-in, na chegada do hóspede. Se desejar confirmar a sua reserva, entre em contato pelo WhatsApp indicado abaixo. Trabalhamos com locação segura: além desta página oficial, hospedamos pelas plataformas Airbnb e Booking.com há mais de 7 anos.
-  </div>
-
-  <div class="pix-publico">
-   <img
-    alt="QR Code PIX para a chave 48999578871"
-    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAcIAAAHCAQAAAABUY/ToAAADm0lEQVR4nO2cy43bMBCGv4kI7JECtgCXQneQmlJSOhBLcQEGpKMBGpMDSVHSeoFgEcVWMnOQ5ccHicBgHv+IFuVrFr99EQQjjTTSSCONNNLI1yOlmMtnMDnkzF3yQXqQ81R/dX7y3Rr5kmRQVdURdADkDBDFAZNDh0lEBzpVVdU1+Yy7NfKlSFdepx7CTwB/deBvAnQJSE7C+J4AkPLZs+7WyFck3ea9hMtbjTR+RPBXNJ7SljvaOo38m6S/iZwnh+p4F8JYPpbzjtc08shkjUNegQlgelfBK4IfVWJ/RcDlQLQUJI+1TiN3J6NIbr+KTQ7CxUG4vGkNRncpXdufuaaR/wiZ49AyvviExtNNlAk09kiph/x6LHKsdRq5H0lu14NqDTe+dO+t1SfMZ/jyYx2OtU4j9yOzD2XxZ8gOkshnAISxK58VaagzHzJyYyUOjRR/wee8lf1FB6B6WEK1epP5kJGzVR+a4wur2KSaWCS5MGI+ZOTGWo7Sga5kK+aYM1ByWQ5QC1871jqN3I+sUcWrgq9DMx27Ob9BC0FWUxv5wFregnooVZDXOmStZ23waj5k5ANSVW9C0Jssvo9S1cY8xmeeehx2nUb+YXKuh4oglGPOACyqIOa3QS2XGfkJ6RNy9ok85oBO9Ye8KeHiSnnE9KY6TG5LPuNujXwlcqUdjl2uqYsw3aqgxZnpQ0ZurflGTlRzb1+/TWXqoZpWxLHWaeR+ZPGIXAoBC8V62cwXRzJ9yMhPydh3s0iUIJ5SHbJOIssqyN/s2Q8jN1YrnQSbomjRodXosyAsDhlZLdfUYexqUZR9qNPlUyCrWYf5kJFra0o0bVQ2wLIAKu5TvcnqISNXVuMQ1HlZ3UYWajBqDb5pjEY+sNqXzY0YRRpq+xbrM2gtGJkPGbkwbVakxFr2zHpi6fd1LrHNh4xcWG7aBX91hIsA/gr4myiTg/j96sAnRxQg6N3p8+7WyFckl3FIa7Hzoa2fe3urh4z8YDUOZesSUUCZBML4noinWVSc3lc7po+1TiN3J+f6OVfXsW9Ds071x+kmRcAWkSJgH3KdRu5AftzXQUteVbsuB+z5ISN/g8xideyhTcl0mKdksd/hmkb+Y2QY7wLchXgqsw45t9h0sVxm5NZaN1Yk6kdbOrRuHyqSo+UyI5uVdBVzruqQIg11SfDJafx+dxqlS8rU5/9Gk+fdrZGvSIr9x7mRRhpppJFGGvmfk78AKCRNfgKa4KsAAAAASUVORK5CYII=">
-   <div class="pix-publico-info">
-    <strong>📲 Pagamento via PIX</strong><br>
-    Aponte a câmera do celular para o QR Code ou utilize a chave PIX:<br>
-    <strong>48999578871</strong>
-   </div>
-  </div>
-
-  <!-- Campos técnicos mantidos para o cálculo e envio da reserva. -->
-  <input type="hidden" id="valorDiarias" value="">
-  <span id="valorTaxaLimpeza" hidden>R$ 0,00</span>
-  <span id="valorDescontoReserva" hidden>Sem desconto</span>
-
- </div>
-
  <div class="linha-form">
 
   <div class="grupo-input">
@@ -2739,6 +2710,43 @@ document.addEventListener('click',function(event){
   Informe a quantidade de pessoas.
  </div>
 
+ <div class="grupo-input">
+
+  <label>Valor das Diárias</label>
+
+  <input id="valorDiarias" readonly>
+
+ </div>
+
+ <div class="grupo-input">
+
+  🧹 Taxa de Limpeza:
+
+  <strong id="valorTaxaLimpeza">
+   R$ 0,00
+  </strong>
+
+ </div>
+
+ <div class="grupo-input">
+
+  <label>Desconto por quantidade de diárias</label>
+
+  <strong id="valorDescontoReserva">
+   Sem desconto
+  </strong>
+
+ </div>
+
+ <div class="grupo-input">
+
+  <label>Valor Total</label>
+
+  <input id="valorEstimado"
+   readonly
+   style="background:#fef9e7;font-weight:bold">
+
+ </div>
 
  <div class="grupo-input">
 
@@ -2751,12 +2759,17 @@ document.addEventListener('click',function(event){
 
  </div>
 
+ <div class="cliente-box" style="margin-top:14px">
+  🔐 <strong>Para solicitar sua reserva, é necessário criar uma conta ou entrar na sua conta.</strong>
+  <div style="font-size:12px;color:var(--cinza);margin-top:5px">Sua conta permitirá acompanhar sua reserva, pagamentos e informações da hospedagem.</div>
+ </div>
+
  <button class="amarelo"
   id="btnEnviarReserva"
   onclick="enviarReserva()"
   style="width:100%">
 
-  📤 Enviar Solicitação
+  📤 Solicitar reserva
 
  </button>
 
@@ -2770,6 +2783,21 @@ document.addEventListener('click',function(event){
    <button type="button" class="btn-whatsapp" onclick="enviarReservaWhatsApp('5548999578871')">
     🟢 WhatsApp — (48) 99957-8871
    </button>
+
+  <div class="institucional-reserva">
+   <strong>🔐 Locação segura</strong><br>
+   Para confirmar a locação, solicitamos um adiantamento de 25% do valor total da reserva. O pagamento restante será realizado no check-in, na chegada do hóspede. Se desejar confirmar a sua reserva, entre em contato pelo WhatsApp indicado acima.
+   <br><br>
+   Trabalhamos com locação segura: além desta página oficial, hospedamos pelas plataformas <a href="https://www.airbnb.com.br/" target="_blank" rel="noopener noreferrer">Airbnb</a> e <a href="https://www.booking.com/" target="_blank" rel="noopener noreferrer">Booking.com</a> há mais de 7 anos.
+   <div style="margin-top:8px"><strong>Conheça também nossos anúncios oficiais:</strong></div>
+   <div class="institucional-links">
+    <a href="https://www.airbnb.com.br/rooms/28412743" target="_blank" rel="noopener noreferrer">🏡 Casa Amarela</a>
+    <a href="https://www.airbnb.com.br/rooms/47527594" target="_blank" rel="noopener noreferrer">🏡 Casa Bege</a>
+    <a href="https://www.airbnb.com.br/rooms/603007308110317130" target="_blank" rel="noopener noreferrer">🏡 Casa Marrom</a>
+    <a href="https://www.airbnb.com.br/rooms/1569825550883737848" target="_blank" rel="noopener noreferrer">🏡 Casa Branca</a>
+   </div>
+   <div style="font-size:11px;color:var(--cinza);margin-top:7px">Links oficiais dos quatro anúncios identificados no Airbnb.</div>
+  </div>
   </div>
  </div>
 
@@ -3130,6 +3158,7 @@ document.addEventListener('DOMContentLoaded',async()=>{
  }
 
  renderizarPaginaPublica();
+ atualizarCabecalhoCliente(auth.currentUser);
 
  // Mantém a sessão administrativa controlada pelo Firebase Authentication.
  if(typeof firebase!=='undefined' && firebase.auth){
@@ -3138,6 +3167,7 @@ document.addEventListener('DOMContentLoaded',async()=>{
    if(user && user.uid===ADMIN_UID){
     $('areaPublica').classList.add('oculto');
     $('painelAdmin').classList.remove('oculto');
+    atualizarCabecalhoCliente(null);
 
     try{
      await inicializarPainel();
@@ -3148,12 +3178,250 @@ document.addEventListener('DOMContentLoaded',async()=>{
    }else{
     $('painelAdmin').classList.add('oculto');
     $('areaPublica').classList.remove('oculto');
+    atualizarCabecalhoCliente(user);
+    if(user && $('modalCliente')?.classList.contains('aberto')){
+     await carregarPerfilCliente(user.uid);
+     await carregarMinhasReservas();
+    }
    }
 
   });
  }
 
 });
+
+
+
+let clienteAutenticacaoPendente=false;
+let clientePerfilAtual=null;
+
+function atualizarCabecalhoCliente(user){
+ const btn=$('btnClienteHeader');
+ const status=$('clienteStatusHeader');
+ if(!btn)return;
+ if(user && user.uid!==ADMIN_UID){
+  btn.textContent='👤 Minha conta / Minhas reservas';
+  if(status){status.style.display='inline-flex';status.textContent='✓ Conta conectada';}
+ }else{
+  btn.textContent='👤 Minha conta / Minhas reservas';
+  if(status)status.style.display='none';
+ }
+}
+
+function mostrarErroCliente(msg){
+ const el=$('clientePainelErro');
+ if(!el)return;
+ el.textContent=msg||'';
+ el.style.display=msg?'block':'none';
+}
+
+function mostrarSucessoCliente(msg){
+ const el=$('clientePainelSucesso');
+ if(!el)return;
+ el.textContent=msg||'';
+ el.style.display=msg?'block':'none';
+}
+
+function mostrarAbaCliente(aba){
+ const entrar=aba==='entrar';
+ $('clienteFormEntrar').style.display=entrar?'block':'none';
+ $('clienteFormCriar').style.display=entrar?'none':'block';
+ $('abaClienteEntrar').classList.toggle('ativa',entrar);
+ $('abaClienteCriar').classList.toggle('ativa',!entrar);
+ mostrarErroCliente('');
+}
+
+async function abrirAreaCliente(){
+ mostrarErroCliente('');
+ const user=auth.currentUser;
+ $('modalCliente').classList.add('aberto');
+ if(user && user.uid!==ADMIN_UID){
+  $('clienteAutenticacao').style.display='none';
+  $('clienteLogado').style.display='block';
+  await carregarPerfilCliente(user.uid);
+  await carregarMinhasReservas();
+ }else{
+  $('clienteAutenticacao').style.display='block';
+  $('clienteLogado').style.display='none';
+  mostrarAbaCliente('entrar');
+  setTimeout(()=>$('clienteEmailLogin')?.focus(),100);
+ }
+}
+
+function fecharAreaCliente(){
+ $('modalCliente')?.classList.remove('aberto');
+ mostrarErroCliente('');
+}
+
+async function carregarPerfilCliente(uid){
+ try{
+  const d=await db.collection('clientes').doc(uid).get();
+  clientePerfilAtual=d.exists?d.data():null;
+  const nome=clientePerfilAtual?.nome||auth.currentUser?.displayName||'Minha conta';
+  $('clienteNomeLogado').textContent='Olá, '+nome+'!';
+  $('clienteEmailLogado').textContent=auth.currentUser?.email||clientePerfilAtual?.email||'';
+ }catch(e){
+  console.error('Erro ao carregar perfil do cliente:',e);
+ }
+}
+
+async function criarContaCliente(){
+ const nome=$('clienteNomeCadastro').value.trim();
+ const telefone=$('clienteTelefoneCadastro').value.trim();
+ const email=$('clienteEmailCadastro').value.trim().toLowerCase();
+ const senha=$('clienteSenhaCadastro').value;
+ const senha2=$('clienteSenhaCadastro2').value;
+ if(!nome||!telefone||!email||!senha)return mostrarErroCliente('⚠️ Preencha nome, telefone, e-mail e senha.');
+ if(senha.length<6)return mostrarErroCliente('⚠️ A senha deve ter pelo menos 6 caracteres.');
+ if(senha!==senha2)return mostrarErroCliente('⚠️ As senhas não conferem.');
+ try{
+  mostrarErroCliente('');
+  const cred=await auth.createUserWithEmailAndPassword(email,senha);
+  await cred.user.updateProfile({displayName:nome});
+  await db.collection('clientes').doc(cred.user.uid).set({nome,telefone,email,criadoEm:firebase.firestore.FieldValue.serverTimestamp(),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
+
+  // Feedback visível antes de seguir para a reserva.
+  $('clienteAutenticacao').style.display='none';
+  $('clienteLogado').style.display='block';
+  mostrarSucessoCliente('✅ Conta criada com sucesso! Você já está conectado.');
+  await carregarPerfilCliente(cred.user.uid);
+
+  if(clienteAutenticacaoPendente){
+   clienteAutenticacaoPendente=false;
+   setTimeout(async()=>{
+    fecharAreaCliente();
+    $('modalReserva')?.classList.add('aberto');
+    await enviarReserva();
+   },900);
+  }else{
+   await carregarMinhasReservas();
+  }
+ }catch(e){
+  console.error(e);
+  let msg='❌ Não foi possível criar a conta.';
+  if(e?.code==='auth/email-already-in-use')msg='⚠️ Este e-mail já possui uma conta. Entre na sua conta.';
+  else if(e?.code==='auth/invalid-email')msg='⚠️ Informe um e-mail válido.';
+  else if(e?.code==='auth/weak-password')msg='⚠️ A senha deve ter pelo menos 6 caracteres.';
+  else if(e?.code==='auth/operation-not-allowed')msg='❌ O cadastro por e-mail e senha não está habilitado no Firebase Authentication.';
+  else if(e?.code==='auth/network-request-failed')msg='❌ Falha de conexão. Verifique a internet e tente novamente.';
+  else if(e?.code==='permission-denied')msg='❌ A conta foi criada, mas o perfil não pôde ser salvo. Verifique as regras do Firestore.';
+  mostrarErroCliente(msg);
+ }
+}
+
+async function entrarCliente(){
+ const email=$('clienteEmailLogin').value.trim().toLowerCase();
+ const senha=$('clienteSenhaLogin').value;
+ if(!email||!senha)return mostrarErroCliente('⚠️ Informe e-mail e senha.');
+ try{
+  mostrarErroCliente('');
+  const cred=await auth.signInWithEmailAndPassword(email,senha);
+  if(cred.user.uid===ADMIN_UID){
+   await auth.signOut();
+   return mostrarErroCliente('❌ Esta conta é administrativa. Use o acesso administrativo.');
+  }
+
+  $('clienteAutenticacao').style.display='none';
+  $('clienteLogado').style.display='block';
+  mostrarSucessoCliente('✅ Login realizado com sucesso!');
+  await carregarPerfilCliente(cred.user.uid);
+
+  if(clienteAutenticacaoPendente){
+   clienteAutenticacaoPendente=false;
+   setTimeout(async()=>{
+    fecharAreaCliente();
+    $('modalReserva')?.classList.add('aberto');
+    await enviarReserva();
+   },700);
+  }else{
+   await carregarMinhasReservas();
+  }
+ }catch(e){
+  console.error(e);
+  let msg='❌ Não foi possível entrar. Confira o e-mail e a senha.';
+  if(e?.code==='auth/invalid-email')msg='❌ O formato do e-mail informado é inválido.';
+  else if(e?.code==='auth/wrong-password')msg='❌ A senha informada está incorreta.';
+  else if(e?.code==='auth/user-not-found')msg='❌ Não encontramos uma conta com este e-mail.';
+  else if(e?.code==='auth/invalid-login-credentials')msg='❌ E-mail ou senha incorretos.';
+  else if(e?.code==='auth/invalid-credential')msg='❌ E-mail ou senha incorretos.';
+  else if(e?.code==='auth/user-disabled')msg='❌ Esta conta foi desativada.';
+  else if(e?.code==='auth/too-many-requests')msg='⚠️ Muitas tentativas de login. Aguarde alguns minutos e tente novamente.';
+  else if(e?.code==='auth/network-request-failed')msg='❌ Falha de conexão. Verifique a internet e tente novamente.';
+  else if(e?.code==='auth/operation-not-allowed')msg='❌ O login por e-mail e senha não está habilitado no Firebase Authentication.';
+  mostrarErroCliente(msg);
+ }
+}
+
+async function recuperarSenhaCliente(){
+ const email=$('clienteEmailLogin').value.trim().toLowerCase();
+ if(!email)return mostrarErroCliente('⚠️ Informe seu e-mail para receber o link de recuperação.');
+ try{
+  await auth.sendPasswordResetEmail(email);
+  mostrarErroCliente('');
+  mostrarSucessoCliente('📧 Enviamos as instruções de recuperação para o e-mail informado.');
+ }catch(e){
+  console.error(e);
+  mostrarErroCliente('❌ Não foi possível enviar a recuperação de senha. Confira o e-mail informado.');
+ }
+}
+
+async function sairContaCliente(){
+ try{await auth.signOut();fecharAreaCliente();}catch(e){console.error(e);}
+}
+
+function statusReservaCliente(status){
+ const mapa={pendente:'⏳ Aguardando confirmação',confirmada:'✅ Confirmada',parcial:'💰 Pagamento parcial',pago:'💚 Paga'};
+ return mapa[status]||status||'Em análise';
+}
+
+async function carregarMinhasReservas(){
+ const el=$('listaMinhasReservas');
+ const user=auth.currentUser;
+ if(!el||!user||user.uid===ADMIN_UID)return;
+ el.innerHTML='<div style="color:var(--cinza)">⏳ Carregando suas reservas...</div>';
+ try{
+  const snap=await db.collection('reservas').where('clienteUid','==',user.uid).get();
+  const arr=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.entrada||'').localeCompare(a.entrada||''));
+  if(!arr.length){
+   el.innerHTML='<div class="cliente-box">Você ainda não possui reservas vinculadas à sua conta.</div>';
+   return;
+  }
+  el.innerHTML=arr.map(r=>{
+   const total=Number(r.valorTotal||0),pago=Number(r.valorPago||0),saldo=Math.max(0,total-pago);
+   return `<div class="cliente-reserva">
+    <div class="cliente-reserva-cab">
+     <div><strong>${escapeHtmlReserva(casas[r.casa]?.nome||r.casa||'Casa')}</strong><div style="font-size:13px;color:var(--cinza);margin-top:4px">📅 ${dataBr(r.entrada)} até ${dataBr(r.saida)}</div></div>
+     <span class="cliente-status-reserva">${statusReservaCliente(r.statusPagamento)}</span>
+    </div>
+    <div style="margin-top:10px;font-size:13px;line-height:1.6">
+     👥 ${Number(r.totalPessoas||((r.adultos||0)+(r.criancas||0)))} pessoa(s)<br>
+     💰 Total: <strong>${moeda(total)}</strong><br>
+     💵 Antecipado: <strong>${moeda(pago)}</strong><br>
+     📌 Saldo: <strong>${moeda(saldo)}</strong>
+    </div>
+   </div>`;
+  }).join('');
+ }catch(e){
+  console.error('Erro ao carregar reservas do cliente:',e);
+  el.innerHTML='<div class="cliente-erro">❌ Não foi possível carregar suas reservas agora.</div>';
+ }
+}
+
+function abrirCadastroClienteParaReserva(){
+ clienteAutenticacaoPendente=true;
+
+ // Fecha somente a camada visual da solicitação, preservando os dados preenchidos
+ // para que a reserva continue depois do login/cadastro.
+ $('modalReserva')?.classList.remove('aberto');
+ $('modalBuscaDisponibilidade')?.classList.remove('aberto');
+
+ $('modalCliente').classList.add('aberto');
+ $('clienteAutenticacao').style.display='block';
+ $('clienteLogado').style.display='none';
+ mostrarAbaCliente('criar');
+ mostrarErroCliente('');
+ setTimeout(()=>$('clienteNomeCadastro')?.focus(),100);
+}
 
 function abrirLogin(){
  $('overlayLogin').classList.add('aberto');
@@ -3607,7 +3875,9 @@ function renderizarPaginaPublica(){
        }
 
        <button
+        type="button"
         class="amarelo"
+        data-consultar-disponibilidade="${id}"
         style="width:100%;margin-top:8px"
         onclick="abrirBuscaDisponibilidade('${id}')">
 
@@ -4134,12 +4404,21 @@ function limparResultadoBuscaDisponibilidade(){
  if(el)el.innerHTML='';
 }
 
-function renderizarDetalhesCasaBuscaDisponibilidade(id){
+// Fallback de clique para os botões públicos de disponibilidade.
+// Mantém a ação funcionando mesmo se o HTML dos cards for recriado dinamicamente.
+document.addEventListener('click',function(event){
+ const botao=event.target?.closest?.('[data-consultar-disponibilidade]');
+ if(!botao)return;
+ event.preventDefault();
+ event.stopPropagation();
+ const id=botao.getAttribute('data-consultar-disponibilidade');
+ if(id) abrirBuscaDisponibilidade(id);
+},true);
 
+function renderizarDetalhesCasaBuscaDisponibilidade(id){
  const casa=casas[id];
  const el=$('detalhesCasaBuscaDisponibilidade');
  if(!el || !casa)return;
-
  const fotos=Array.isArray(casa.fotos)?casa.fotos.filter(Boolean):[];
  const galeria=fotos.length
   ? fotos.slice(0,6).map((url,i)=>`
@@ -4150,9 +4429,7 @@ function renderizarDetalhesCasaBuscaDisponibilidade(id){
      onerror="this.style.display='none'">
    `).join('')
   : `<div class="busca-galeria-vazia">📷 As fotos desta acomodação serão exibidas aqui conforme a galeria cadastrada.</div>`;
-
  const caracteristicas=Array.isArray(casa.caracteristicas)?casa.caracteristicas.filter(Boolean):[];
-
  el.innerHTML=`
   <div>
    <div class="busca-galeria">${galeria}</div>
@@ -4166,10 +4443,7 @@ function renderizarDetalhesCasaBuscaDisponibilidade(id){
     <div class="busca-especificacao">🕚 <strong>Check-out:</strong> 11h</div>
     <div class="busca-especificacao">🏖️ <strong>Localização:</strong> poucos passos da praia</div>
    </div>
-   ${caracteristicas.length?`
-    <ul class="busca-caracteristicas">
-     ${caracteristicas.map(x=>`<li>${escapeHtmlReserva(x)}</li>`).join('')}
-    </ul>`:''}
+   ${caracteristicas.length?`<ul class="busca-caracteristicas">${caracteristicas.map(x=>`<li>${escapeHtmlReserva(x)}</li>`).join('')}</ul>`:''}
   </div>
  `;
 }
@@ -4575,6 +4849,9 @@ async function buscarDisponibilidadePrevia(){
 
   if(disponivel){
 
+   // Nesta primeira consulta mostramos somente disponibilidade.
+   // O valor será calculado na próxima etapa, após “Continuar com este período”.
+
    resultado.innerHTML=`
     <div class="busca-resultado sucesso">
      <div class="busca-status">
@@ -4593,7 +4870,7 @@ async function buscarDisponibilidadePrevia(){
      <div class="busca-acoes">
       <button class="amarelo"
        onclick="continuarComPeriodoBusca('${casa}','${a}','${b}')">
-       📋 Continuar neste período
+       📋 Continuar com este período
       </button>
      </div>
     </div>
@@ -5644,6 +5921,12 @@ async function enviarNotificacaoEmailReserva(dados){
 
 async function enviarReserva(){
 
+ const usuarioCliente=auth.currentUser;
+ if(!usuarioCliente || usuarioCliente.uid===ADMIN_UID){
+  abrirCadastroClienteParaReserva();
+  return;
+ }
+
  const nome=
   $('hospedeNome').value.trim();
 
@@ -5746,9 +6029,18 @@ async function enviarReserva(){
 
  try{
 
+  await db.collection('clientes').doc(usuarioCliente.uid).set({
+   nome,
+   telefone:tel,
+   email:usuarioCliente.email||'',
+   atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()
+  },{merge:true});
+
   const reservaRef=await db.collection('reservas').add({
 
    casa:c,
+   clienteUid:usuarioCliente.uid,
+   clienteEmail:usuarioCliente.email||'',
    nome,
    telefone:tel,
 
@@ -5811,6 +6103,8 @@ async function enviarReserva(){
   });
 
   await db.collection('solicitacoesHospedes').add({
+   clienteUid:usuarioCliente.uid,
+   clienteEmail:usuarioCliente.email||'',
    nome,
    telefone:tel,
    criadoEm:firebase.firestore.FieldValue.serverTimestamp()
