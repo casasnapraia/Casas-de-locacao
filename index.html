@@ -922,6 +922,9 @@ textarea{
  flex-wrap:wrap;
  margin-top:14px;
 }
+
+.controle-pagamentos-reservas{background:#fffdf2;border:1px solid #eadb91;border-radius:12px;padding:15px;margin:15px 0}.controle-pagamentos-reservas h3{margin:0 0 6px;color:var(--marinho)}.controle-pagamentos-reservas p{margin:0 0 12px;color:var(--cinza);font-size:13px}.pagamentos-filtros-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.pagamentos-filtro label{display:block;font-size:13px;font-weight:600;margin-bottom:5px;color:var(--texto)}.pagamentos-acoes{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:12px}.pagamentos-selecao-info{font-size:13px;font-weight:600;color:var(--marinho)}.checkbox-reserva{width:18px;height:18px;cursor:pointer}.tabela-reservas th.coluna-selecao,.tabela-reservas td.coluna-selecao{text-align:center;width:42px}.botao-marcar-pagas{background:#198754;color:#fff;border:0;padding:10px 15px;border-radius:7px;font-weight:700}.botao-marcar-pagas:hover{background:#146c43}@media(max-width:700px){.pagamentos-filtros-grid{grid-template-columns:1fr}}
+
 .reservas-indicadores{
  display:grid;
  grid-template-columns:repeat(4,minmax(0,1fr));
@@ -2303,6 +2306,16 @@ document.addEventListener('click',function(event){
    </div>
 
    <div class="reservas-filtro">
+    <label>📤 Saída a partir de</label>
+    <input type="date" id="filtroSaidaInicialReservas">
+   </div>
+
+   <div class="reservas-filtro">
+    <label>📤 Saída até</label>
+    <input type="date" id="filtroSaidaFinalReservas">
+   </div>
+
+   <div class="reservas-filtro">
     <label>🔎 Período inclui a data</label>
     <input type="date" id="filtroPeriodoReservas">
    </div>
@@ -2328,6 +2341,23 @@ document.addEventListener('click',function(event){
    💡 Por padrão, reservas cuja data de saída já passou ficam ocultas. Use “Concluídas” ou “Todas” para visualizá-las.
   </div>
 
+ </div>
+
+ <div class="controle-pagamentos-reservas">
+  <h3>💰 Controle de pagamentos em lote</h3>
+  <p>Filtre por data de saída e selecione as reservas que já foram totalmente pagas. A ação altera somente <strong>statusPagamento</strong>; <strong>valorPago</strong> e <strong>valorTotal</strong> não serão alterados.</p>
+  <div class="pagamentos-filtros-grid">
+   <div class="pagamentos-filtro"><label>📤 Saída a partir de</label><input type="date" id="filtroPagamentoSaidaInicial"></div>
+   <div class="pagamentos-filtro"><label>📤 Saída até</label><input type="date" id="filtroPagamentoSaidaFinal"></div>
+  </div>
+  <div class="pagamentos-acoes">
+   <button class="azul" onclick="filtrarControlePagamentos()">🔎 Filtrar não pagas</button>
+   <button class="cinza" onclick="limparControlePagamentos()">✖ Limpar</button>
+   <button class="cinza" onclick="selecionarTodasReservasFiltradas()">☑ Selecionar todas</button>
+   <button class="cinza" onclick="desmarcarTodasReservasFiltradas()">☐ Desmarcar todas</button>
+   <span id="contadorSelecaoPagamentos" class="pagamentos-selecao-info">0 reservas selecionadas</span>
+   <button class="botao-marcar-pagas" onclick="marcarReservasSelecionadasComoPagas()">✅ Marcar selecionadas como PAGAS</button>
+  </div>
  </div>
 
  <div class="reservas-indicadores">
@@ -3070,6 +3100,11 @@ let dataAtual=new Date();
 
 let valoresDiarias={};
 let reservasConfirmadas=[];
+let reservasPagamentoSelecionadas=new Set();
+let reservasPagamentoFiltradas=[];
+let controlePagamentosAtivo=false;
+let controlePagamentoSaidaInicial="";
+let controlePagamentoSaidaFinal="";
 let hospedesCadastrados=[];
 
 // Últimas reservas exibidas no relatório, usadas pela exportação CSV.
@@ -3974,6 +4009,8 @@ function configurarFiltrosReservas(){
   'filtroPagamentoReservas',
   'filtroEntradaInicialReservas',
   'filtroEntradaFinalReservas',
+  'filtroSaidaInicialReservas',
+  'filtroSaidaFinalReservas',
   'filtroPeriodoReservas',
   'filtroOrdenacaoReservas'
  ];
@@ -6647,6 +6684,8 @@ function limparFiltrosReservas(){
  if($('filtroPagamentoReservas'))$('filtroPagamentoReservas').value='todos';
  if($('filtroEntradaInicialReservas'))$('filtroEntradaInicialReservas').value='';
  if($('filtroEntradaFinalReservas'))$('filtroEntradaFinalReservas').value='';
+ if($('filtroSaidaInicialReservas'))$('filtroSaidaInicialReservas').value='';
+ if($('filtroSaidaFinalReservas'))$('filtroSaidaFinalReservas').value='';
  if($('filtroPeriodoReservas'))$('filtroPeriodoReservas').value='';
  if($('filtroOrdenacaoReservas'))$('filtroOrdenacaoReservas').value='entradaAsc';
  atualizarListaReservas();
@@ -6664,6 +6703,8 @@ function atualizarListaReservas(){
  const pagamento=$('filtroPagamentoReservas')?.value||'todos';
  const entradaInicial=$('filtroEntradaInicialReservas')?.value||'';
  const entradaFinal=$('filtroEntradaFinalReservas')?.value||'';
+ const saidaInicial=$('filtroSaidaInicialReservas')?.value||'';
+ const saidaFinal=$('filtroSaidaFinalReservas')?.value||'';
  const periodo=$('filtroPeriodoReservas')?.value||'';
  const ordenacao=$('filtroOrdenacaoReservas')?.value||'entradaAsc';
 
@@ -6680,6 +6721,8 @@ function atualizarListaReservas(){
 
  if(entradaInicial)arr=arr.filter(r=>!!r.entrada && r.entrada>=entradaInicial);
  if(entradaFinal)arr=arr.filter(r=>!!r.entrada && r.entrada<=entradaFinal);
+ if(saidaInicial)arr=arr.filter(r=>!!r.saida && String(r.saida).substring(0,10)>=saidaInicial);
+ if(saidaFinal)arr=arr.filter(r=>!!r.saida && String(r.saida).substring(0,10)<=saidaFinal);
 
  if(periodo){
   arr=arr.filter(r=>{
@@ -6689,6 +6732,18 @@ function atualizarListaReservas(){
    return !!entrada && !!saida && !!alvo && entrada<=alvo && alvo<saida;
   });
  }
+
+ if(controlePagamentosAtivo){
+  arr=arr.filter(r=>{
+   const saida=String(r.saida||'').substring(0,10);
+   if(!saida)return false;
+   if(controlePagamentoSaidaInicial && saida<controlePagamentoSaidaInicial)return false;
+   if(controlePagamentoSaidaFinal && saida>controlePagamentoSaidaFinal)return false;
+   return String(r.statusPagamento||'pendente').toLowerCase()!=='pago';
+  });
+ }
+
+ reservasPagamentoFiltradas=arr.map(r=>r.id);
 
  arr.sort((a,b)=>{
   if(ordenacao==='entradaDesc')return String(b.entrada||'').localeCompare(String(a.entrada||''));
@@ -6718,6 +6773,7 @@ function atualizarListaReservas(){
    <table class="tabela-reservas">
     <thead>
      <tr>
+      <th class="coluna-selecao"><input class="checkbox-reserva" type="checkbox" title="Selecionar todas as reservas exibidas" onclick="toggleTodasReservasExibidas(this)"></th>
       <th>📅 Período</th>
       <th>🏠 Casa</th>
       <th>🌐 Origem</th>
@@ -6749,6 +6805,7 @@ function atualizarListaReservas(){
 
       return `
        <tr>
+        <td class="coluna-selecao"><input class="checkbox-reserva" type="checkbox" data-reserva-pagamento-id="${escapeHtmlReserva(r.id)}" ${reservasPagamentoSelecionadas.has(r.id)?'checked':''} onchange="alternarSelecaoReservaPagamento('${r.id}',this.checked)"></td>
         <td class="reserva-datas">
          <strong>${dataBr(r.entrada)} → ${dataBr(r.saida)}</strong>
          <small>${Number(r.dias||0)} diária(s)</small>
@@ -6787,7 +6844,19 @@ function atualizarListaReservas(){
    </table>
   </div>
  `;
+ atualizarContadorSelecaoPagamentos();
+ atualizarCheckboxTodasReservasExibidas();
 }
+
+function atualizarContadorSelecaoPagamentos(){const el=$('contadorSelecaoPagamentos');if(el){const n=reservasPagamentoSelecionadas.size;el.textContent=`${n} ${n===1?'reserva selecionada':'reservas selecionadas'}`;}}
+function alternarSelecaoReservaPagamento(id,marcado){if(marcado)reservasPagamentoSelecionadas.add(id);else reservasPagamentoSelecionadas.delete(id);atualizarContadorSelecaoPagamentos();atualizarCheckboxTodasReservasExibidas();}
+function selecionarTodasReservasFiltradas(){reservasPagamentoFiltradas.forEach(id=>reservasPagamentoSelecionadas.add(id));atualizarListaReservas();}
+function desmarcarTodasReservasFiltradas(){reservasPagamentoFiltradas.forEach(id=>reservasPagamentoSelecionadas.delete(id));atualizarListaReservas();}
+function toggleTodasReservasExibidas(el){if(el?.checked)selecionarTodasReservasFiltradas();else desmarcarTodasReservasFiltradas();}
+function atualizarCheckboxTodasReservasExibidas(){const el=document.querySelector('.tabela-reservas th.coluna-selecao input[type="checkbox"]');if(!el)return;const ids=reservasPagamentoFiltradas;el.checked=ids.length>0&&ids.every(id=>reservasPagamentoSelecionadas.has(id));el.indeterminate=ids.some(id=>reservasPagamentoSelecionadas.has(id))&&!el.checked;}
+function filtrarControlePagamentos(){const ini=$('filtroPagamentoSaidaInicial')?.value||'';const fim=$('filtroPagamentoSaidaFinal')?.value||'';if(ini&&fim&&ini>fim)return alert('⚠️ A data inicial de saída não pode ser maior que a data final.');controlePagamentosAtivo=true;controlePagamentoSaidaInicial=ini;controlePagamentoSaidaFinal=fim;reservasPagamentoSelecionadas.clear();if($('filtroSituacaoReservas'))$('filtroSituacaoReservas').value='todas';if($('filtroPagamentoReservas'))$('filtroPagamentoReservas').value='todos';if($('filtroSaidaInicialReservas'))$('filtroSaidaInicialReservas').value=ini;if($('filtroSaidaFinalReservas'))$('filtroSaidaFinalReservas').value=fim;atualizarListaReservas();}
+function limparControlePagamentos(){controlePagamentosAtivo=false;controlePagamentoSaidaInicial='';controlePagamentoSaidaFinal='';if($('filtroPagamentoSaidaInicial'))$('filtroPagamentoSaidaInicial').value='';if($('filtroPagamentoSaidaFinal'))$('filtroPagamentoSaidaFinal').value='';if($('filtroSaidaInicialReservas'))$('filtroSaidaInicialReservas').value='';if($('filtroSaidaFinalReservas'))$('filtroSaidaFinalReservas').value='';reservasPagamentoSelecionadas.clear();atualizarListaReservas();}
+async function marcarReservasSelecionadasComoPagas(){const ids=[...reservasPagamentoSelecionadas];if(!ids.length)return alert('⚠️ Selecione pelo menos uma reserva.');const selecionadas=ids.map(id=>reservasConfirmadas.find(r=>r.id===id)).filter(Boolean);const naoPagas=selecionadas.filter(r=>String(r.statusPagamento||'pendente').toLowerCase()!=='pago');if(!naoPagas.length){reservasPagamentoSelecionadas.clear();atualizarListaReservas();return alert('✅ Todas as reservas selecionadas já estão como Paga.');}const resumo=naoPagas.slice(0,8).map(r=>`• ${r.nome||'Sem nome'} — ${casas[r.casa]?.nome||r.casa} — saída ${dataBr(r.saida)}`).join('\n');const extra=naoPagas.length>8?`\n• ... e mais ${naoPagas.length-8}`:'';if(!confirm(`Confirmar marcação de ${naoPagas.length} reserva(s) como PAGAS?\n\n${resumo}${extra}\n\nSomente statusPagamento será alterado.\nvalorPago e valorTotal NÃO serão modificados.`))return;try{for(let i=0;i<naoPagas.length;i+=400){const lote=db.batch();naoPagas.slice(i,i+400).forEach(r=>lote.update(db.collection('reservas').doc(r.id),{statusPagamento:'pago',atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()}));await lote.commit();}reservasPagamentoSelecionadas.clear();await carregarReservasConfirmadas();atualizarListaReservas();gerarRelatorio();alert(`✅ ${naoPagas.length} reserva(s) foram marcadas como PAGAS.\n\nOs valores de valorPago e valorTotal foram preservados.`);}catch(e){console.error(e);alert('❌ Não foi possível concluir a atualização em lote.');}}
 
 async function quitarRecebimentoFinal(id){const r=reservasConfirmadas.find(x=>x.id===id);if(!r)return;const total=Number(r.valorTotal||0),recebido=Number(r.valorPago||0),saldo=Math.max(0,total-recebido);if(saldo<=0)return alert('✅ Esta reserva já está quitada.');if(dataLocal(r.entrada)>hoje())return alert('⚠️ A quitação final fica disponível a partir da data de check-in.');const forma=prompt('Forma de recebimento do saldo final:\n1 - Pix\n2 - Dinheiro\n3 - Cartão\n4 - Transferência Bancária',r.formaPagamento||'Pix');const formas={'1':'Pix','2':'Dinheiro','3':'Cartão','4':'Transferência Bancária'};const fp=formas[forma?.trim()]||forma?.trim();if(!fp)return;if(!confirm(`Confirmar recebimento final de ${moeda(saldo)}?\n\nHóspede: ${r.nome||'—'}\nCasa: ${casas[r.casa]?.nome||r.casa}`))return;try{await db.collection('reservas').doc(id).update({valorPago:total,statusPagamento:'pago',formaPagamento:fp,dataRecebimento:dataStr(hoje()),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()});await carregarReservasConfirmadas();await sincronizarDisponibilidadePublica();atualizarListaReservas();gerarRelatorio();alert(`✅ Recebimento final baixado: ${moeda(saldo)}`);}catch(e){console.error(e);alert('❌ Não foi possível quitar o recebimento final.');}}
 
