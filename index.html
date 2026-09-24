@@ -1737,6 +1737,48 @@ textarea{
 /* Relatórios gerenciais organizados em telas internas */
 .dashboard-relatorios-organizado{display:flex;flex-direction:column;gap:16px}.dashboard-relatorios-intro{margin-bottom:0}.relatorio-consulta-box{padding:18px}.relatorio-consulta-grid{display:grid;grid-template-columns:minmax(180px,1fr) minmax(220px,1.2fr) auto;gap:14px;align-items:end}.relatorio-consulta-acao{display:flex;align-items:end;height:100%}.relatorio-consulta-acao button{min-height:42px;white-space:nowrap}.dashboard-ajuda{display:block;color:var(--cinza);margin-top:10px}.tela-relatorio-interna{margin-top:18px}.tela-relatorio-filtro-nota{margin:0 0 14px;padding:10px 12px;background:#f7fafb;border-left:4px solid #0ea5e9;border-radius:7px;color:#4b5563;font-size:12px}.relatorio-paginacao{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin:15px 0}.relatorio-paginacao button{padding:7px 12px;border:1px solid #d7e0e4;background:#fff;border-radius:7px;color:#0a4b6e}.relatorio-paginacao button:disabled{opacity:.45;cursor:not-allowed} .relatorio-paginacao-relatorio{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin:15px 0}.relatorio-paginacao-relatorio button{padding:7px 12px;border:1px solid #d7e0e4;background:#fff;border-radius:7px;color:#0a4b6e}.relatorio-paginacao-relatorio button:disabled{opacity:.45;cursor:not-allowed}.tela-relatorio-interna.oculto{display:none!important}.cabecalho-tela-relatorio{margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid #ddd}.cabecalho-tela-relatorio h3{margin:12px 0 4px}.cabecalho-tela-relatorio p{margin:0;color:var(--cinza)}.relatorio-resultado-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:14px 0 20px}.relatorio-resultado-card{background:#fff;border:1px solid #ddd;border-radius:10px;padding:14px}.relatorio-resultado-card small{display:block;color:var(--cinza);margin-bottom:5px}.relatorio-resultado-card strong{font-size:20px}.relatorio-tabela-wrap{overflow-x:auto;margin-top:16px}.relatorio-tabela-gerencial{width:100%;border-collapse:collapse;min-width:760px;background:#fff}.relatorio-tabela-gerencial th,.relatorio-tabela-gerencial td{border:1px solid #ddd;padding:9px 10px;text-align:right}.relatorio-tabela-gerencial th:first-child,.relatorio-tabela-gerencial td:first-child{text-align:left}.relatorio-tabela-gerencial thead th{background:#eef3f5}.relatorio-tabela-gerencial .consolidado{font-weight:700;background:#f7f3df}.relatorio-grafico-simples{margin-top:18px;padding:16px;border:1px solid #ddd;border-radius:10px;background:#fff}.relatorio-grafico-linhas{display:flex;flex-direction:column;gap:9px}.relatorio-grafico-linha{display:grid;grid-template-columns:170px 1fr 120px;gap:10px;align-items:center}.relatorio-grafico-barra-fundo{height:22px;background:#edf0f2;border-radius:12px;overflow:hidden}.relatorio-grafico-barra{height:100%;border-radius:12px;background:linear-gradient(90deg,#1677a8,#35a36d)}
 @media(max-width:760px){.relatorio-consulta-grid{grid-template-columns:1fr}.relatorio-consulta-acao{height:auto}.relatorio-consulta-acao button{width:100%}.relatorio-grafico-linha{grid-template-columns:1fr}.relatorio-grafico-linha strong{text-align:left}}
+
+/* AJUSTE V8 — JANELAS PÚBLICAS DE DISPONIBILIDADE E RESERVA */
+.modal-busca-disponibilidade .busca-disponibilidade-conteudo{
+ width:min(98vw,1400px) !important;
+ max-width:1400px !important;
+ max-height:97vh !important;
+ overflow-y:auto;
+ padding:26px;
+ box-sizing:border-box;
+}
+
+.modal-busca-disponibilidade .busca-formulario{
+ margin-bottom:14px;
+}
+
+.modal-busca-disponibilidade #resultadoConsultaDisponibilidade{
+ max-height:none;
+ overflow:visible;
+}
+
+.modal .modal-conteudo{
+ width:min(96vw,1200px) !important;
+ max-width:1200px !important;
+ max-height:96vh !important;
+ overflow-y:auto;
+ box-sizing:border-box;
+}
+
+@media(max-width:800px){
+ .modal-busca-disponibilidade .busca-disponibilidade-conteudo{
+  width:96vw !important;
+  max-width:96vw !important;
+  max-height:96vh !important;
+  padding:18px;
+ }
+ .modal .modal-conteudo{
+  width:96vw !important;
+  max-width:96vw !important;
+  max-height:96vh !important;
+  padding:20px;
+ }
+}
 </style>
 
 <script>
@@ -2252,14 +2294,12 @@ document.addEventListener('click',function(event){
    + Novo Cadastro
   </button>
 
-  <button class="azul"
-   onclick="sincronizarHospedesReservas()">
-   🔄 Sincronizar
-  </button>
+  <button class="azul" onclick="carregarHospedes()">🔎 Consultar cadastros</button>
+  <button class="azul" onclick="processarSolicitacoesEAtualizarHospedes()">🔄 Processar solicitações</button>
 
  </div>
 
- <div id="listaHospedes"></div>
+ <div id="listaHospedes"><div class="dashboard-vazio">A lista não é carregada automaticamente. Clique em “Consultar cadastros” quando precisar.</div></div>
  <div id="paginacaoHospedes" class="paginacao-hospedes"></div>
 
 </div>
@@ -2273,8 +2313,8 @@ document.addEventListener('click',function(event){
   <button class="sucesso" onclick="abrirCadastroPrestador()">➕ Novo Prestador</button>
  </div>
  <p style="color:var(--cinza);margin:8px 0">Cadastre pessoas físicas ou jurídicas para selecionar diretamente nos lançamentos de despesas.</p>
- <div class="linha-form"><input id="buscarPrestador" placeholder="Buscar nome, CPF, CNPJ, telefone ou e-mail..." oninput="filtrarPrestadores()"></div>
- <div id="listaPrestadores"></div><div id="paginacaoPrestadores" class="paginacao-prestadores"></div>
+ <div class="linha-form"><input id="buscarPrestador" placeholder="Buscar nome, CPF, CNPJ, telefone ou e-mail..." oninput="filtrarPrestadores()"><button class="azul" onclick="carregarPrestadores()">🔎 Consultar cadastros</button></div>
+ <div id="listaPrestadores"><div class="dashboard-vazio">A lista não é carregada automaticamente. Clique em “Consultar cadastros” quando precisar.</div></div><div id="paginacaoPrestadores" class="paginacao-prestadores"></div>
 </div>
 
 <!-- =====================================================
@@ -2360,7 +2400,7 @@ document.addEventListener('click',function(event){
    <div class="reservas-filtro">
     <label>↕️ Ordenar por</label>
     <select id="filtroOrdenacaoReservas">
-     <option value="entradaAsc">Entrada mais próxima</option>
+     <option value="entradaAsc">Em andamento e próximas</option>
      <option value="entradaDesc">Entrada mais distante</option>
      <option value="criacaoDesc">Mais recentes cadastradas</option>
      <option value="criacaoAsc">Mais antigas cadastradas</option>
@@ -2420,6 +2460,12 @@ document.addEventListener('click',function(event){
   <h3>Resultados <small id="contadorResultadosReservas">0 reservas</small></h3>
  </div>
 
+ <div id="resumoCargaReservas" class="dashboard-nota" style="margin-top:12px">Mostrando inicialmente as 5 reservas mais recentes. A paginação carrega mais; ao usar filtros, o sistema consulta todas as reservas somente nesse momento.</div>
+ <div class="linha-form" style="align-items:end">
+  <div class="grupo-input"><label>Itens por página</label><select id="tamanhoPaginaReservas" onchange="alterarTamanhoPaginaReservas()"><option value="5" selected>5</option><option value="10">10</option><option value="15">15</option><option value="25">25</option></select></div>
+  <button class="azul" onclick="carregarProximaPaginaReservas()">➡️ Carregar próxima página</button>
+  <button class="cinza" onclick="consultarTodasReservas()">🔎 Consultar todas as reservas</button>
+ </div>
  <div id="listaReservas"></div>
 
 </div>
@@ -2440,7 +2486,7 @@ document.addEventListener('click',function(event){
   <div class="grupo-input"><label>Prestador / empresa</label><select id="despesaPrestadorId" onchange="selecionarPrestadorDespesa()"><option value="">— Selecionar prestador —</option></select><input type="hidden" id="despesaPrestador"><small id="despesaPrestadorInfo" style="color:var(--cinza)"></small></div><div class="grupo-input"><label>Descrição</label><input id="despesaDescricao"></div>
   <div class="grupo-input" style="grid-column:1/-1"><label>Observação</label><textarea id="despesaObservacao" rows="2"></textarea></div>
  </div><div class="despesas-acoes"><button class="sucesso" id="btnSalvarDespesa" onclick="salvarDespesa()">💾 Lançar despesa</button><button class="cinza" onclick="limparFormularioDespesa()">✖ Limpar</button></div></div>
- <div class="painel-despesas"><h3>🔎 Filtros e relatório</h3><div class="despesas-form-grid"><div class="grupo-input"><label>Casa</label><select id="filtroDespesaCasa" onchange="gerarRelatorioDespesas()"><option value="todas">Todas</option><option value="amarela">Casa Amarela</option><option value="bege">Casa Bege</option><option value="marrom">Casa Marrom</option><option value="branca">Casa Branca</option><option value="nossa">Nossa Casa</option></select></div><div class="grupo-input"><label>Prestador / empresa</label><select id="filtroDespesaPrestador" onchange="gerarRelatorioDespesas()"><option value="todos">Todos</option></select></div><div class="grupo-input"><label>Categoria</label><select id="filtroDespesaCategoria" onchange="gerarRelatorioDespesas()"><option value="todas">Todas</option><option value="agua">Água</option><option value="energia">Energia</option><option value="internet">Internet</option><option value="limpeza">Limpeza</option><option value="manutencao">Manutenção</option><option value="gas">Gás</option><option value="impostos">Impostos / taxas</option><option value="materiais">Materiais / compras</option><option value="outros">Outros</option></select></div><div class="grupo-input"><label>Pagamento</label><select id="filtroDespesaPagamento" onchange="gerarRelatorioDespesas()"><option value="todas">Todas</option><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Boleto</option><option>Transferência bancária</option></select></div><div class="grupo-input"><label>Conta / caixa</label><select id="filtroDespesaConta" onchange="gerarRelatorioDespesas()"><option value="todas">Todas</option><option>Caixa Casa Amarela</option><option>Caixa Casa Bege</option><option>Caixa Casa Marrom</option><option>Caixa Casa Branca</option><option>Caixa Nossa Casa</option><option>Caixa Geral</option><option>Conta bancária</option></select></div><div class="grupo-input"><label>Data inicial</label><input type="date" id="filtroDespesaDataInicial" onchange="gerarRelatorioDespesas()"></div><div class="grupo-input"><label>Data final</label><input type="date" id="filtroDespesaDataFinal" onchange="gerarRelatorioDespesas()"></div></div><div class="despesas-acoes"><button class="btn-verde" onclick="exportarDespesasCSV()">📊 Exportar CSV</button><button class="cinza" onclick="imprimirRelatorioDespesas()">🖨️ Imprimir / PDF</button><button class="vermelho" onclick="limparFiltrosDespesas()">✖ Limpar filtros</button></div></div><div id="despesasResumo" class="despesas-resumo"></div><div id="listaDespesas"></div><div id="paginacaoDespesas" class="paginacao-admin"></div>
+ <div class="painel-despesas"><h3>🔎 Filtros e relatório</h3><div class="despesas-acoes"><button class="azul" onclick="carregarDespesas();carregarPrestadores()">🔎 Consultar lançamentos</button></div><div class="despesas-form-grid"><div class="grupo-input"><label>Casa</label><select id="filtroDespesaCasa" onchange="gerarRelatorioDespesas()"><option value="todas">Todas</option><option value="amarela">Casa Amarela</option><option value="bege">Casa Bege</option><option value="marrom">Casa Marrom</option><option value="branca">Casa Branca</option><option value="nossa">Nossa Casa</option></select></div><div class="grupo-input"><label>Prestador / empresa</label><select id="filtroDespesaPrestador" onchange="gerarRelatorioDespesas()"><option value="todos">Todos</option></select></div><div class="grupo-input"><label>Categoria</label><select id="filtroDespesaCategoria" onchange="gerarRelatorioDespesas()"><option value="todas">Todas</option><option value="agua">Água</option><option value="energia">Energia</option><option value="internet">Internet</option><option value="limpeza">Limpeza</option><option value="manutencao">Manutenção</option><option value="gas">Gás</option><option value="impostos">Impostos / taxas</option><option value="materiais">Materiais / compras</option><option value="outros">Outros</option></select></div><div class="grupo-input"><label>Pagamento</label><select id="filtroDespesaPagamento" onchange="gerarRelatorioDespesas()"><option value="todas">Todas</option><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Boleto</option><option>Transferência bancária</option></select></div><div class="grupo-input"><label>Conta / caixa</label><select id="filtroDespesaConta" onchange="gerarRelatorioDespesas()"><option value="todas">Todas</option><option>Caixa Casa Amarela</option><option>Caixa Casa Bege</option><option>Caixa Casa Marrom</option><option>Caixa Casa Branca</option><option>Caixa Nossa Casa</option><option>Caixa Geral</option><option>Conta bancária</option></select></div><div class="grupo-input"><label>Data inicial</label><input type="date" id="filtroDespesaDataInicial" onchange="gerarRelatorioDespesas()"></div><div class="grupo-input"><label>Data final</label><input type="date" id="filtroDespesaDataFinal" onchange="gerarRelatorioDespesas()"></div></div><div class="despesas-acoes"><button class="btn-verde" onclick="exportarDespesasCSV()">📊 Exportar CSV</button><button class="cinza" onclick="imprimirRelatorioDespesas()">🖨️ Imprimir / PDF</button><button class="vermelho" onclick="limparFiltrosDespesas()">✖ Limpar filtros</button></div></div><div id="despesasResumo" class="despesas-resumo"><div class="dashboard-vazio">Os lançamentos não são carregados automaticamente. Clique em “Consultar lançamentos” para ver quantidade e total.</div></div><div id="listaDespesas"></div><div id="paginacaoDespesas" class="paginacao-admin"></div>
 </div>
 
 <div id="pagina-relatorios" class="pagina">
@@ -3068,6 +3114,8 @@ if(typeof emailjs!=='undefined'){
 const $=id=>document.getElementById(id);
 
 let bannerPrincipalUrl="",imgurClientId="",paginaHospedesAtual=1,paginaPrestadoresAtual=1;const HOSPEDES_POR_PAGINA=20,PRESTADORES_POR_PAGINA=20;let prestadoresCadastrados=[];
+let hospedesCarregados=false, prestadoresCarregados=false, despesasCarregadas=false, reservasCarregadas=false, relatoriosCarregados=false;
+let reservasCalendario=[];
 let comodidadesCatalogo=[];
 
 const casas={
@@ -3147,7 +3195,7 @@ let dataAtual=new Date();
 let valoresDiarias={};
 let reservasConfirmadas=[];
 let reservasPagamentoSelecionadas=new Set();
-let reservasPagamentoFiltradas=[],paginaReservasAtual=1;const RESERVAS_POR_PAGINA=15;let paginaRelatorioAtual=1;const RELATORIO_POR_PAGINA=15;
+let reservasPagamentoFiltradas=[],paginaReservasAtual=1;let RESERVAS_POR_PAGINA=5;let reservasCursorAtual=null;let reservasCursorFuturas=null;let reservasPaginaStack=[];let reservasCarregamentoEmAndamento=false;let reservasUltimaPagina=false;let reservasConsultaCompleta=false;let paginaRelatorioAtual=1;const RELATORIO_POR_PAGINA=15;
 let controlePagamentosAtivo=false;
 let controlePagamentoSaidaInicial="";
 let controlePagamentoSaidaFinal="";
@@ -3222,12 +3270,6 @@ document.addEventListener('DOMContentLoaded',async()=>{
 
  try{
   await carregarValoresDiarias();
- }catch(e){
-  console.error(e);
- }
-
- try{
-  await carregarReservasConfirmadas();
  }catch(e){
   console.error(e);
  }
@@ -3756,51 +3798,30 @@ function verificarNotificacoesJaAtivas(){
 
 }
 
-async function sincronizarDisponibilidadePublica(reservaId=null,reservaDados=null,remover=false){
- if(!auth.currentUser || auth.currentUser.uid!==ADMIN_UID)return;
- if(!reservaId)return;
+async function sincronizarDisponibilidadeReserva(id,reservaDados=null){
+ if(!auth.currentUser || auth.currentUser.uid!==ADMIN_UID || !id)return;
  try{
-  const ref=db.collection('disponibilidade').doc(reservaId);
-  if(remover){
-   await ref.delete();
-   return;
+  let r=reservaDados;
+  if(!r){
+   const d=await db.collection('reservas').doc(id).get();
+   r=d.exists?d.data():null;
   }
-  const r=reservaDados||{};
-  if(!['confirmada','pago'].includes(String(r.statusPagamento||'').toLowerCase())||!r.entrada||!r.saida||!r.casa){
+  const ref=db.collection('disponibilidade').doc(id);
+  if(r && ['confirmada','pago'].includes(String(r.statusPagamento||'').toLowerCase()) && r.entrada && r.saida && r.casa){
+   await ref.set({reservaId:id,casa:r.casa,entrada:r.entrada,saida:r.saida,atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
+  }else{
    await ref.delete();
-   return;
   }
-  await ref.set({
-   reservaId,
-   casa:r.casa,
-   entrada:r.entrada,
-   saida:r.saida,
-   atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()
-  });
  }catch(e){
-  console.error('Erro ao sincronizar disponibilidade pública:',e);
+  console.error('Erro ao sincronizar disponibilidade da reserva:',e);
+  throw e;
  }
 }
 
-async function sincronizarDisponibilidadePublicaLote(reservas=[]){
- if(!auth.currentUser || auth.currentUser.uid!==ADMIN_UID || !Array.isArray(reservas) || !reservas.length)return;
- try{
-  for(let i=0;i<reservas.length;i+=400){
-   const lote=db.batch();
-   reservas.slice(i,i+400).forEach(r=>{
-    if(!r?.id)return;
-    const ref=db.collection('disponibilidade').doc(r.id);
-    if(['confirmada','pago'].includes(String(r.statusPagamento||'').toLowerCase())&&r.entrada&&r.saida&&r.casa){
-     lote.set(ref,{reservaId:r.id,casa:r.casa,entrada:r.entrada,saida:r.saida,atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()});
-    }else{
-     lote.delete(ref);
-    }
-   });
-   await lote.commit();
-  }
- }catch(e){
-  console.error('Erro ao sincronizar disponibilidade em lote:',e);
- }
+// Compatibilidade: mantida para chamadas antigas, mas sem apagar/recriar a coleção inteira.
+async function sincronizarDisponibilidadePublica(id,reservaDados=null){
+ if(id)return sincronizarDisponibilidadeReserva(id,reservaDados);
+ console.warn('sincronizarDisponibilidadePublica chamada sem ID; operação global ignorada para proteger a quota do Firestore.');
 }
 
 async function processarSolicitacoesHospedes(){
@@ -3809,6 +3830,12 @@ async function processarSolicitacoesHospedes(){
   const snap=await db.collection('solicitacoesHospedes').orderBy('criadoEm').get();
   for(const doc of snap.docs){const x=doc.data();await cadastrarOuAtualizarHospede(x.nome||'',x.telefone||'');await doc.ref.delete();}
  }catch(e){console.error('Erro ao processar solicitações de hóspedes:',e);}
+}
+
+async function processarSolicitacoesEAtualizarHospedes(){
+ await processarSolicitacoesHospedes();
+ hospedesCarregados=false;
+ await carregarHospedes();
 }
 
 async function inicializarPainel(){
@@ -3826,18 +3853,12 @@ async function inicializarPainel(){
   // gerando milhares de gravações/exclusões e consumindo a quota do Firestore.
   // A disponibilidade continua sendo sincronizada somente após alterações
   // reais nas reservas.
-  await processarSolicitacoesHospedes();
-
-  // Os dados públicos já foram carregados no DOMContentLoaded. Evitamos
-  // repetir as mesmas leituras ao entrar no painel administrativo.
-  await Promise.all([
-   carregarHospedes(),
-   carregarPrestadores(),
-   carregarDespesas()
-  ]);
-
-  mesclarHospedesDasReservas();
-  mesclarPrestadoresDasDespesas();
+  // Carregamento sob demanda: Hóspedes, Prestadores e Despesas só são
+  // consultados quando o administrador abre/solicita a respectiva lista.
+  // Reservas também não são carregadas integralmente na abertura do painel.
+  // Isso reduz drasticamente as leituras automáticas.
+  reservasConfirmadas=[];
+  reservasCarregadas=false;
 
   renderizarCalendarioSeguro();
   renderizarCasasAdmin();
@@ -4034,24 +4055,32 @@ function configurarNavegacao(){
     $('pagina-'+b.dataset.pagina)
      .classList.add('ativa');
 
-    if(b.dataset.pagina==='reservas')
-     atualizarListaReservas();
+    if(b.dataset.pagina==='reservas'){
+     if(!reservasCarregadas || !reservasConfirmadas.length)carregarReservasRecentes(true);
+     else atualizarListaReservas();
+    }
 
     if(b.dataset.pagina==='calendario')
-     renderizarCalendario();
+     renderizarCalendarioSeguro();
 
-    if(b.dataset.pagina==='hospedes')
-     filtrarHospedes();
+    if(b.dataset.pagina==='hospedes'){
+     if(hospedesCarregados)filtrarHospedes();
+    }
 
-    if(b.dataset.pagina==='prestadores')
-     filtrarPrestadores();
+    if(b.dataset.pagina==='prestadores'){
+     if(prestadoresCarregados)filtrarPrestadores();
+    }
+
+    if(b.dataset.pagina==='despesas'){
+     if(despesasCarregadas)gerarRelatorioDespesas();
+    }
 
     if(b.dataset.pagina==='casas')
      renderizarCasasAdmin();
 
     if(b.dataset.pagina==='relatorios'){
      paginaRelatorioAtual=1;
-     gerarRelatorio();
+     carregarDadosRelatoriosSobDemanda();
     }
 
    };
@@ -4126,11 +4155,12 @@ function trocarCasaCalendario(){
 
 }
 
-function verificarDiaBloqueado(casa,s){const reservado=reservasConfirmadas.some(r=>['confirmada','pago'].includes(r.statusPagamento)&&r.casa===casa&&s>=r.entrada&&s<r.saida);const manual=bloqueiosCalendario.some(r=>r.casa===casa&&s>=r.entrada&&s<r.saida);return reservado||manual;}
+function verificarDiaBloqueado(casa,s){const reservado=reservasCalendario.some(r=>['confirmada','pago'].includes(String(r.statusPagamento||'').toLowerCase())&&r.casa===casa&&s>=r.entrada&&s<r.saida);const manual=bloqueiosCalendario.some(r=>r.casa===casa&&s>=r.entrada&&s<r.saida);return reservado||manual;}
+async function carregarReservasCalendario(){const casa=$('casaCalendario')?.value;if(!casa){reservasCalendario=[];return;}try{const snap=await db.collection('disponibilidade').where('casa','==',casa).get();reservasCalendario=snap.docs.map(d=>({id:d.id,...d.data(),statusPagamento:'confirmada'}));}catch(e){console.error('Reservas do calendário:',e);reservasCalendario=[];}}
 
 async function carregarBloqueiosCalendario(){const casa=$('casaCalendario')?.value;if(!casa){bloqueiosCalendario=[];return;}try{const snap=await db.collection('bloqueios').where('casa','==',casa).get();bloqueiosCalendario=snap.docs.map(d=>({id:d.id,...d.data()}));}catch(e){console.error(e);bloqueiosCalendario=[];}}
 
-async function renderizarCalendarioSeguro(){await carregarBloqueiosCalendario();renderizarCalendario();renderizarListaBloqueiosCalendario();}
+async function renderizarCalendarioSeguro(){await Promise.all([carregarBloqueiosCalendario(),carregarReservasCalendario()]);renderizarCalendario();renderizarListaBloqueiosCalendario();}
 
 function renderizarCalendario(){
 
@@ -4818,7 +4848,9 @@ function continuarComPeriodoBusca(
 
  $('dataEntrada').value=a;
  $('dataSaida').value=b;
- $('qtdAdultos').value=adultos;
+ // Na janela de reserva, o campo Adultos começa vazio para facilitar
+ // a digitação no celular, sem obrigar o hóspede a apagar o “1”.
+ $('qtdAdultos').value='';
  $('qtdCriancas').value=criancas;
 
  atualizarTotalPessoas();
@@ -4993,6 +5025,12 @@ async function buscarDisponibilidadePrevia(){
      </div>
     </div>
    `;
+
+   // Após a consulta, leva automaticamente o hóspede até o resultado.
+   // Assim o botão “Continuar com este período” fica visível também no celular.
+   setTimeout(()=>{
+    resultado.scrollIntoView({behavior:'smooth',block:'start'});
+   },80);
 
   }else{
 
@@ -6251,21 +6289,116 @@ async function enviarReserva(){
 }
 
 async function carregarReservasConfirmadas(){
-
  reservasConfirmadas=[];
+ const s=await db.collection('reservas').orderBy('entrada').get();
+ s.forEach(d=>reservasConfirmadas.push({id:d.id,...d.data()}));
+ reservasCarregadas=true;
+}
 
- const s=
-  await db.collection('reservas')
-   .orderBy('entrada')
-   .get();
+async function carregarReservasRecentes(reset=true){
+ if(reservasCarregamentoEmAndamento)return;
+ reservasCarregamentoEmAndamento=true;
+ try{
+  const tamanho=Math.max(1,Number(RESERVAS_POR_PAGINA)||5);
+  if(reset){
+   reservasConfirmadas=[];
+   reservasCursorAtual=null;
+   reservasCursorFuturas=null;
+   reservasPaginaStack=[];
+   reservasUltimaPagina=false;
+   reservasConsultaCompleta=false;
+   paginaReservasAtual=1;
 
- s.forEach(d=>
-  reservasConfirmadas.push({
-   id:d.id,
-   ...d.data()
-  })
- );
+   // A primeira página prioriza uma reserva em andamento e, em seguida,
+   // as próximas pela data de entrada. São feitas duas consultas pequenas,
+   // evitando carregar toda a coleção.
+   const h=hoje();
+   const hojeIso=[h.getFullYear(),String(h.getMonth()+1).padStart(2,'0'),String(h.getDate()).padStart(2,'0')].join('-');
+   // Busca diretamente as reservas que ainda não terminaram, usando a data de
+   // saída. Assim uma reserva em andamento continua sendo encontrada mesmo que
+   // sua data de entrada seja antiga. A consulta é limitada para preservar a quota.
+   const [snapAtivas,snapFuturas]=await Promise.all([
+    db.collection('reservas').where('saida','>',hojeIso).orderBy('saida','asc').limit(tamanho).get(),
+    db.collection('reservas').orderBy('entrada','asc').startAt(hojeIso).limit(tamanho).get()
+   ]);
 
+   const ativas=snapAtivas.docs
+    .map(d=>({id:d.id,...d.data()}))
+    .filter(r=>reservaEmAndamento(r));
+
+   const futuros=snapFuturas.docs
+    .map(d=>({id:d.id,...d.data()}))
+    .filter(r=>reservaProxima(r));
+
+   // Primeiro todas as reservas em andamento; depois as próximas por entrada.
+   // O resultado inicial é limitado a RESERVAS_POR_PAGINA.
+   ativas.sort((a,b)=>String(a.saida||'').localeCompare(String(b.saida||'')));
+   futuros.sort((a,b)=>String(a.entrada||'').localeCompare(String(b.entrada||'')));
+
+   const iniciais=[];
+   [...ativas,...futuros].forEach(r=>{
+    if(iniciais.length<tamanho && !iniciais.some(x=>x.id===r.id))iniciais.push(r);
+   });
+
+   reservasConfirmadas=iniciais;
+   reservasCursorFuturas=snapFuturas.docs.length?snapFuturas.docs[snapFuturas.docs.length-1]:null;
+   reservasCursorAtual=reservasCursorFuturas;
+   reservasUltimaPagina=(!snapFuturas.docs.length || snapFuturas.docs.length<tamanho) && ativas.length===0;
+   reservasCarregadas=true;
+  }else{
+   // As páginas seguintes continuam somente pelas próximas reservas, em ordem cronológica.
+   let q=db.collection('reservas').orderBy('entrada','asc').limit(tamanho);
+   if(reservasCursorFuturas)q=q.startAfter(reservasCursorFuturas);
+   const snap=await q.get();
+   if(snap.empty){
+    reservasUltimaPagina=true;
+    reservasConsultaCompleta=true;
+   }else{
+    const docs=snap.docs;
+    const novos=docs.map(d=>({id:d.id,...d.data()}));
+    const ids=new Set(reservasConfirmadas.map(r=>r.id));
+    novos.forEach(r=>{if(!ids.has(r.id))reservasConfirmadas.push(r);});
+    reservasCursorFuturas=docs[docs.length-1];
+    reservasCursorAtual=reservasCursorFuturas;
+    reservasUltimaPagina=docs.length<tamanho;
+    reservasCarregadas=true;
+   }
+  }
+  atualizarListaReservas();
+ }catch(e){
+  console.error('Reservas sob demanda:',e);
+  alert('❌ Não foi possível consultar as reservas agora.');
+ }finally{
+  reservasCarregamentoEmAndamento=false;
+ }
+}
+
+async function carregarReservasPaginaAnterior(){
+ // A lista acumulada mantém as páginas já consultadas. Voltamos apenas na visualização.
+ if(paginaReservasAtual<=1)return;
+ paginaReservasAtual--;
+ atualizarListaReservas();
+}
+
+async function carregarProximaPaginaReservas(){
+ if(reservasUltimaPagina)return;
+ paginaReservasAtual++;
+ await carregarReservasRecentes(false);
+}
+
+async function consultarTodasReservas(){
+ if(reservasCarregamentoEmAndamento)return;
+ try{
+  reservasCarregamentoEmAndamento=true;
+  await carregarReservasConfirmadas();
+  paginaReservasAtual=1;
+  reservasUltimaPagina=true;
+  reservasConsultaCompleta=true;
+  atualizarListaReservas();
+ }catch(e){
+  console.error('Consulta completa de reservas:',e);
+  alert('❌ Não foi possível carregar todas as reservas.');
+ }finally{reservasCarregamentoEmAndamento=false;}
 }
 
 async function carregarDadosCasas(){
@@ -6754,8 +6887,11 @@ function atualizarIndicadoresReservas(){
  if($('indicadorReservasConcluidas'))$('indicadorReservasConcluidas').textContent=concluidas.length;
 }
 
-function aplicarFiltrosReservas(){
+async function aplicarFiltrosReservas(){
  paginaReservasAtual=1;
+ if(!reservasConsultaCompleta){
+  await consultarTodasReservas();
+ }
  atualizarListaReservas();
 }
 
@@ -6833,7 +6969,16 @@ function atualizarListaReservas(){
   if(ordenacao==='entradaDesc')return String(b.entrada||'').localeCompare(String(a.entrada||''));
   if(ordenacao==='criacaoDesc')return timestampCriacaoReserva(b)-timestampCriacaoReserva(a);
   if(ordenacao==='criacaoAsc')return timestampCriacaoReserva(a)-timestampCriacaoReserva(b);
-  return String(a.entrada||'').localeCompare(String(b.entrada||''));
+
+  // Padrão operacional: reserva em andamento primeiro; depois as próximas
+  // em ordem crescente de entrada. Reservas já concluídas ficam por último.
+  const aAndamento=reservaEmAndamento(a), bAndamento=reservaEmAndamento(b);
+  if(aAndamento!==bAndamento)return aAndamento?-1:1;
+  const aProxima=reservaProxima(a), bProxima=reservaProxima(b);
+  if(aProxima!==bProxima)return aProxima?-1:1;
+  if(aProxima&&bProxima)return String(a.entrada||'').localeCompare(String(b.entrada||''));
+  if(aAndamento&&bAndamento)return String(a.saida||'').localeCompare(String(b.saida||''));
+  return String(b.entrada||'').localeCompare(String(a.entrada||''));
  });
 
  const totalResultadosReservas=arr.length;
@@ -6933,7 +7078,7 @@ function atualizarListaReservas(){
     </tbody>
    </table>
   </div>
- ${semFiltroReservas && totalResultadosReservas>RESERVAS_POR_PAGINA ? `<div class="relatorio-paginacao"><button onclick="mudarPaginaReservas(${paginaReservasAtual-1})" ${paginaReservasAtual===1?'disabled':''}>‹ Anterior</button><span>Página ${paginaReservasAtual} de ${paginasReservas} · ${totalResultadosReservas} reservas</span><button onclick="mudarPaginaReservas(${paginaReservasAtual+1})" ${paginaReservasAtual===paginasReservas?'disabled':''}>Próxima ›</button></div>` : ''}
+ ${semFiltroReservas && totalResultadosReservas>RESERVAS_POR_PAGINA ? `<div class="relatorio-paginacao"><button onclick="mudarPaginaReservas(${paginaReservasAtual-1})" ${paginaReservasAtual===1?'disabled':''}>‹ Anterior</button><span>Página ${paginaReservasAtual} de ${paginasReservas} · ${totalResultadosReservas} carregadas${reservasConsultaCompleta?'':' + mais disponíveis'}</span><button onclick="${paginaReservasAtual===paginasReservas&&!reservasUltimaPagina?'carregarProximaPaginaReservas()':`mudarPaginaReservas(${paginaReservasAtual+1})`}" ${paginaReservasAtual===paginasReservas&&reservasUltimaPagina?'disabled':''}>Próxima ›</button></div>` : ''}
  `;
  atualizarContadorSelecaoPagamentos();
  atualizarCheckboxTodasReservasExibidas();
@@ -6946,14 +7091,15 @@ function desmarcarTodasReservasFiltradas(){reservasPagamentoFiltradas.forEach(id
 function mudarPaginaRelatorio(pagina){paginaRelatorioAtual=Math.max(1,Number(pagina)||1);gerarRelatorio();window.scrollTo({top:0,behavior:"smooth"});}
 
 function mudarPaginaReservas(pagina){paginaReservasAtual=Math.max(1,Number(pagina)||1);atualizarListaReservas();window.scrollTo({top:0,behavior:'smooth'});}
+function alterarTamanhoPaginaReservas(){RESERVAS_POR_PAGINA=Math.max(1,Number($('tamanhoPaginaReservas')?.value)||5);carregarReservasRecentes(true);}
 
 function toggleTodasReservasExibidas(el){if(el?.checked)selecionarTodasReservasFiltradas();else desmarcarTodasReservasFiltradas();}
 function atualizarCheckboxTodasReservasExibidas(){const el=document.querySelector('.tabela-reservas th.coluna-selecao input[type="checkbox"]');if(!el)return;const ids=reservasPagamentoFiltradas;el.checked=ids.length>0&&ids.every(id=>reservasPagamentoSelecionadas.has(id));el.indeterminate=ids.some(id=>reservasPagamentoSelecionadas.has(id))&&!el.checked;}
 function filtrarControlePagamentos(){const ini=$('filtroPagamentoSaidaInicial')?.value||'';const fim=$('filtroPagamentoSaidaFinal')?.value||'';if(ini&&fim&&ini>fim)return alert('⚠️ A data inicial de saída não pode ser maior que a data final.');controlePagamentosAtivo=true;controlePagamentoSaidaInicial=ini;controlePagamentoSaidaFinal=fim;reservasPagamentoSelecionadas.clear();if($('filtroSituacaoReservas'))$('filtroSituacaoReservas').value='todas';if($('filtroPagamentoReservas'))$('filtroPagamentoReservas').value='todos';if($('filtroSaidaInicialReservas'))$('filtroSaidaInicialReservas').value=ini;if($('filtroSaidaFinalReservas'))$('filtroSaidaFinalReservas').value=fim;atualizarListaReservas();}
 function limparControlePagamentos(){controlePagamentosAtivo=false;controlePagamentoSaidaInicial='';controlePagamentoSaidaFinal='';if($('filtroPagamentoSaidaInicial'))$('filtroPagamentoSaidaInicial').value='';if($('filtroPagamentoSaidaFinal'))$('filtroPagamentoSaidaFinal').value='';if($('filtroSaidaInicialReservas'))$('filtroSaidaInicialReservas').value='';if($('filtroSaidaFinalReservas'))$('filtroSaidaFinalReservas').value='';reservasPagamentoSelecionadas.clear();atualizarListaReservas();}
-async function marcarReservasSelecionadasComoPagas(){const ids=[...reservasPagamentoSelecionadas];if(!ids.length)return alert('⚠️ Selecione pelo menos uma reserva.');const selecionadas=ids.map(id=>reservasConfirmadas.find(r=>r.id===id)).filter(Boolean);const naoPagas=selecionadas.filter(r=>String(r.statusPagamento||'pendente').toLowerCase()!=='pago');if(!naoPagas.length){reservasPagamentoSelecionadas.clear();atualizarListaReservas();return alert('✅ Todas as reservas selecionadas já estão como Paga.');}const resumo=naoPagas.slice(0,8).map(r=>`• ${r.nome||'Sem nome'} — ${casas[r.casa]?.nome||r.casa} — saída ${dataBr(r.saida)}`).join('\n');const extra=naoPagas.length>8?`\n• ... e mais ${naoPagas.length-8}`:'';if(!confirm(`Confirmar marcação de ${naoPagas.length} reserva(s) como PAGAS?\n\n${resumo}${extra}\n\nSomente statusPagamento será alterado.\nvalorPago e valorTotal NÃO serão modificados.`))return;try{for(let i=0;i<naoPagas.length;i+=400){const lote=db.batch();naoPagas.slice(i,i+400).forEach(r=>lote.update(db.collection('reservas').doc(r.id),{statusPagamento:'pago',atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()}));await lote.commit();}reservasPagamentoSelecionadas.clear();await carregarReservasConfirmadas();const atualizadas=naoPagas.map(x=>reservasConfirmadas.find(r=>r.id===x.id)).filter(Boolean);await sincronizarDisponibilidadePublicaLote(atualizadas);atualizarListaReservas();gerarRelatorio();alert(`✅ ${naoPagas.length} reserva(s) foram marcadas como PAGAS.\n\nOs valores de valorPago e valorTotal foram preservados.`);}catch(e){console.error(e);alert('❌ Não foi possível concluir a atualização em lote.');}}
+async function marcarReservasSelecionadasComoPagas(){const ids=[...reservasPagamentoSelecionadas];if(!ids.length)return alert('⚠️ Selecione pelo menos uma reserva.');const selecionadas=ids.map(id=>reservasConfirmadas.find(r=>r.id===id)).filter(Boolean);const naoPagas=selecionadas.filter(r=>String(r.statusPagamento||'pendente').toLowerCase()!=='pago');if(!naoPagas.length){reservasPagamentoSelecionadas.clear();atualizarListaReservas();return alert('✅ Todas as reservas selecionadas já estão como Paga.');}const resumo=naoPagas.slice(0,8).map(r=>`• ${r.nome||'Sem nome'} — ${casas[r.casa]?.nome||r.casa} — saída ${dataBr(r.saida)}`).join('\n');const extra=naoPagas.length>8?`\n• ... e mais ${naoPagas.length-8}`:'';if(!confirm(`Confirmar marcação de ${naoPagas.length} reserva(s) como PAGAS?\n\n${resumo}${extra}\n\nSomente statusPagamento será alterado.\nvalorPago e valorTotal NÃO serão modificados.`))return;try{for(let i=0;i<naoPagas.length;i+=400){const lote=db.batch();naoPagas.slice(i,i+400).forEach(r=>lote.update(db.collection('reservas').doc(r.id),{statusPagamento:'pago',atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()}));await lote.commit();}reservasPagamentoSelecionadas.clear();await carregarReservasConfirmadas();atualizarListaReservas();gerarRelatorio();alert(`✅ ${naoPagas.length} reserva(s) foram marcadas como PAGAS.\n\nOs valores de valorPago e valorTotal foram preservados.`);}catch(e){console.error(e);alert('❌ Não foi possível concluir a atualização em lote.');}}
 
-async function quitarRecebimentoFinal(id){const r=reservasConfirmadas.find(x=>x.id===id);if(!r)return;const total=Number(r.valorTotal||0),recebido=Number(r.valorPago||0),saldo=Math.max(0,total-recebido);if(saldo<=0)return alert('✅ Esta reserva já está quitada.');if(dataLocal(r.entrada)>hoje())return alert('⚠️ A quitação final fica disponível a partir da data de check-in.');const forma=prompt('Forma de recebimento do saldo final:\n1 - Pix\n2 - Dinheiro\n3 - Cartão\n4 - Transferência Bancária',r.formaPagamento||'Pix');const formas={'1':'Pix','2':'Dinheiro','3':'Cartão','4':'Transferência Bancária'};const fp=formas[forma?.trim()]||forma?.trim();if(!fp)return;if(!confirm(`Confirmar recebimento final de ${moeda(saldo)}?\n\nHóspede: ${r.nome||'—'}\nCasa: ${casas[r.casa]?.nome||r.casa}`))return;try{await db.collection('reservas').doc(id).update({valorPago:total,statusPagamento:'pago',formaPagamento:fp,dataRecebimento:dataStr(hoje()),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()});await carregarReservasConfirmadas();const reservaAtual=reservasConfirmadas.find(x=>x.id===id);await sincronizarDisponibilidadePublica(id,reservaAtual);atualizarListaReservas();gerarRelatorio();alert(`✅ Recebimento final baixado: ${moeda(saldo)}`);}catch(e){console.error(e);alert('❌ Não foi possível quitar o recebimento final.');}}
+async function quitarRecebimentoFinal(id){const r=reservasConfirmadas.find(x=>x.id===id);if(!r)return;const total=Number(r.valorTotal||0),recebido=Number(r.valorPago||0),saldo=Math.max(0,total-recebido);if(saldo<=0)return alert('✅ Esta reserva já está quitada.');if(dataLocal(r.entrada)>hoje())return alert('⚠️ A quitação final fica disponível a partir da data de check-in.');const forma=prompt('Forma de recebimento do saldo final:\n1 - Pix\n2 - Dinheiro\n3 - Cartão\n4 - Transferência Bancária',r.formaPagamento||'Pix');const formas={'1':'Pix','2':'Dinheiro','3':'Cartão','4':'Transferência Bancária'};const fp=formas[forma?.trim()]||forma?.trim();if(!fp)return;if(!confirm(`Confirmar recebimento final de ${moeda(saldo)}?\n\nHóspede: ${r.nome||'—'}\nCasa: ${casas[r.casa]?.nome||r.casa}`))return;try{await db.collection('reservas').doc(id).update({valorPago:total,statusPagamento:'pago',formaPagamento:fp,dataRecebimento:dataStr(hoje()),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()});const idxQ=reservasConfirmadas.findIndex(x=>x.id===id);if(idxQ>=0)reservasConfirmadas[idxQ]={...reservasConfirmadas[idxQ],valorPago:total,statusPagamento:'pago',formaPagamento:fp,dataRecebimento:dataStr(hoje())};await sincronizarDisponibilidadeReserva(id,reservasConfirmadas[idxQ]);atualizarListaReservas();gerarRelatorio();alert(`✅ Recebimento final baixado: ${moeda(saldo)}`);}catch(e){console.error(e);alert('❌ Não foi possível quitar o recebimento final.');}}
 
 function numeroPorExtenso(n){
 
@@ -7641,8 +7787,7 @@ body{
 }
 
 function abrirNovaReservaAdmin(){const c=Object.entries(casas).map(([id,x])=>`<option value="${id}">${x.nome}${x.interna?' — interno':''}</option>`).join('');$('conteudoEditar').innerHTML=`<input type="hidden" id="novaReserva"><div class="grupo-input"><label>Casa</label><select id="novaCasaReserva">${c}</select></div><div class="grupo-input"><label>Hóspede</label><input id="novoNomeReserva"></div><div class="grupo-input"><label>Telefone</label><input id="novoTelefoneReserva"></div><div class="grupo-input"><label>Origem</label><select id="novaOrigemReserva"><option>Reserva direta</option><option>Airbnb</option><option>Booking.com</option><option>WhatsApp</option><option>Telefone</option><option>Outro</option></select></div><div class="linha-form"><div class="grupo-input"><label>Entrada</label><input type="date" id="novaEntrada"></div><div class="grupo-input"><label>Saída</label><input type="date" id="novaSaida"></div></div><div class="linha-form"><div class="grupo-input"><label>Adultos</label><input type="number" id="novoAdultos" value="1"></div><div class="grupo-input"><label>Crianças</label><input type="number" id="novoCriancas" value="0"></div></div><div class="grupo-input"><label>Forma de recebimento</label><select id="novaFormaPagamento"><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Transferência Bancária</option></select></div><div class="grupo-input"><label>Caixa / conta destino</label><select id="novaContaDestino"><option>Caixa Casa Amarela</option><option>Caixa Casa Bege</option><option>Caixa Casa Marrom</option><option>Caixa Casa Branca</option><option>Caixa Nossa Casa</option><option>Caixa Geral</option><option>Conta bancária</option></select></div><div class="grupo-input"><label>Data de Recebimento</label><input type="date" id="novaDataRecebimento"><small style="color:var(--cinza)">Data prevista ou efetiva do repasse.</small></div><div class="grupo-input"><label>Status</label><select id="novoStatus"><option value="pendente">Pendente</option><option value="confirmada">Confirmada</option><option value="parcial">Pagamento Parcial</option><option value="pago">Pago</option></select></div><div class="grupo-input"><label>Valor Antecipado</label><input type="number" id="novoValorAntecipado" value="0" step="0.01"></div><div class="grupo-input"><label>Valor Total</label><input type="number" id="novoValorTotal" step="0.01"></div><div class="grupo-input"><label>Observação</label><textarea id="novaObservacao"></textarea></div><button class="sucesso" style="width:100%" onclick="salvarNovaReservaAdmin()">💾 Salvar reserva</button>`;$('modalEditarReserva').classList.add('aberto');}
-async function salvarNovaReservaAdmin(){const casa=$('novaCasaReserva').value,a=$('novaEntrada').value,b=$('novaSaida').value,nome=$('novoNomeReserva').value.trim(),adultos=Number($('novoAdultos').value||0),criancas=Number($('novoCriancas').value||0);if(!nome||!a||!b||b<=a)return alert('⚠️ Informe hóspede e datas válidas.');const hojeStr=dataStr(hoje());if(b>=hojeStr&&await verificarPeriodoBloqueado(casa,a,b))return alert('⚠️ O período está bloqueado.');const x=await calcularValorDiarias(casa,a,b),taxa=Number(casas[casa]?.taxaLimpeza||0),f=calcularValorFinalReserva(x.dias,x.valor,taxa),total=Number($('novoValorTotal').value||f.total),ante=Number($('novoValorAntecipado').value||0);if(ante>total)return alert('⚠️ O antecipado não pode ser maior que o total.');try{const ref=await db.collection('reservas').add({casa,nome,telefone:$('novoTelefoneReserva').value.trim(),entrada:a,saida:b,adultos,criancas,totalPessoas:adultos+criancas,dias:x.dias,valorDiarias:x.valor,taxaLimpeza:taxa,desconto:f.desconto,percentualDesconto:f.percentualDesconto,acrescimoValor:0,valorTotal:total,valorPago:ante,statusPagamento:$('novoStatus').value,origemReserva:$('novaOrigemReserva').value,formaPagamento:$('novaFormaPagamento').value,contaDestino:$('novaContaDestino').value,dataRecebimento:$('novaDataRecebimento')?.value||'',observacao:$('novaObservacao').value.trim(),criadoEm:firebase.firestore.FieldValue.serverTimestamp(),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()});try{await carregarReservasConfirmadas();}catch(e){console.error('Atualização da lista:',e);}const reservaAtual=reservasConfirmadas.find(x=>x.id===ref.id);
-try{await sincronizarDisponibilidadePublica(ref.id,reservaAtual);}catch(e){console.error('Sincronização:',e);}fecharModalEditar();
+async function salvarNovaReservaAdmin(){const casa=$('novaCasaReserva').value,a=$('novaEntrada').value,b=$('novaSaida').value,nome=$('novoNomeReserva').value.trim(),adultos=Number($('novoAdultos').value||0),criancas=Number($('novoCriancas').value||0);if(!nome||!a||!b||b<=a)return alert('⚠️ Informe hóspede e datas válidas.');const hojeStr=dataStr(hoje());if(b>=hojeStr&&await verificarPeriodoBloqueado(casa,a,b))return alert('⚠️ O período está bloqueado.');const x=await calcularValorDiarias(casa,a,b),taxa=Number(casas[casa]?.taxaLimpeza||0),f=calcularValorFinalReserva(x.dias,x.valor,taxa),total=Number($('novoValorTotal').value||f.total),ante=Number($('novoValorAntecipado').value||0);if(ante>total)return alert('⚠️ O antecipado não pode ser maior que o total.');try{const ref=await db.collection('reservas').add({casa,nome,telefone:$('novoTelefoneReserva').value.trim(),entrada:a,saida:b,adultos,criancas,totalPessoas:adultos+criancas,dias:x.dias,valorDiarias:x.valor,taxaLimpeza:taxa,desconto:f.desconto,percentualDesconto:f.percentualDesconto,acrescimoValor:0,valorTotal:total,valorPago:ante,statusPagamento:$('novoStatus').value,origemReserva:$('novaOrigemReserva').value,formaPagamento:$('novaFormaPagamento').value,contaDestino:$('novaContaDestino').value,dataRecebimento:$('novaDataRecebimento')?.value||'',observacao:$('novaObservacao').value.trim(),criadoEm:firebase.firestore.FieldValue.serverTimestamp(),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()});reservasConfirmadas.unshift({id:ref.id,casa,nome,telefone:$('novoTelefoneReserva').value.trim(),entrada:a,saida:b,adultos,criancas,totalPessoas:adultos+criancas,valorTotal:total,valorPago:ante,statusPagamento:$('novoStatus').value,criadoEm:null});reservasCarregadas=true;try{await sincronizarDisponibilidadeReserva(ref.id,reservasConfirmadas[0]);}catch(e){console.error('Sincronização:',e);}fecharModalEditar();
    fecharModalPrestador();atualizarListaReservas();try{renderizarCalendarioSeguro();}catch(e){console.error(e);}try{gerarRelatorio();}catch(e){console.error(e);}alert(`✅ Reserva criada com sucesso.\nID: ${ref.id}`);}catch(e){console.error('Erro ao criar reserva administrativa:',e);alert(`❌ Erro ao criar reserva.\n\n${e?.code==='permission-denied'?'Permissão negada pelo Firestore. As regras precisam permitir gravação administrativa.':(e?.message||'Verifique os dados e tente novamente.')}`);}}
 
 function abrirEditarReserva(id){
@@ -8402,9 +8547,10 @@ async function salvarEdicao(id){
 
    });
 
-  await carregarReservasConfirmadas();
-  const reservaAtual=reservasConfirmadas.find(x=>x.id===id);
-  await sincronizarDisponibilidadePublica(id,reservaAtual);
+  const reservaAtualizada={...r,casa:casaSelecionada,nome:$('editNome').value.trim(),telefone:$('editTelefone').value.trim(),entrada,saida,adultos:Number($('editAdultos').value||0),criancas:Number($('editCriancas').value||0),totalPessoas:Number($('editAdultos').value||0)+Number($('editCriancas').value||0),statusPagamento:status};
+  const idxReserva=reservasConfirmadas.findIndex(x=>x.id===id);
+  if(idxReserva>=0)reservasConfirmadas[idxReserva]={...reservasConfirmadas[idxReserva],...reservaAtualizada};
+  await sincronizarDisponibilidadeReserva(id,reservaAtualizada);
 
   fecharModalEditar();
    fecharModalPrestador();
@@ -8429,7 +8575,7 @@ async function salvarEdicao(id){
 
 }
 
-async function excluirReserva(id){if(!id||typeof id!=='string')return alert('❌ Identificador da reserva inválido.');const r=reservasConfirmadas.find(x=>x.id===id);if(!r)return alert('❌ Reserva não encontrada.');if(!confirm(`Excluir somente esta reserva?\n\n${r.nome||'Hóspede sem nome'} — ${dataBr(r.entrada)} a ${dataBr(r.saida)}\n${casas[r.casa]?.nome||r.casa}`))return;try{const ref=db.collection('reservas').doc(id);await ref.delete();const ainda=await ref.get();if(ainda.exists)throw new Error('O documento não foi excluído.');reservasConfirmadas=reservasConfirmadas.filter(x=>x.id!==id);try{await sincronizarDisponibilidadePublica(id,null,true);}catch(e){console.error('Sincronização após exclusão:',e);}if($('filtroSituacaoReservas')?.value==='ativas'&&reservaConcluida(r))$('filtroSituacaoReservas').value='todas';fecharModalEditar();
+async function excluirReserva(id){if(!id||typeof id!=='string')return alert('❌ Identificador da reserva inválido.');const r=reservasConfirmadas.find(x=>x.id===id);if(!r)return alert('❌ Reserva não encontrada.');if(!confirm(`Excluir somente esta reserva?\n\n${r.nome||'Hóspede sem nome'} — ${dataBr(r.entrada)} a ${dataBr(r.saida)}\n${casas[r.casa]?.nome||r.casa}`))return;try{const ref=db.collection('reservas').doc(id);await ref.delete();reservasConfirmadas=reservasConfirmadas.filter(x=>x.id!==id);try{await db.collection('disponibilidade').doc(id).delete();}catch(e){console.error('Limpeza da disponibilidade após exclusão:',e);}if($('filtroSituacaoReservas')?.value==='ativas'&&reservaConcluida(r))$('filtroSituacaoReservas').value='todas';fecharModalEditar();
    fecharModalPrestador();atualizarListaReservas();try{renderizarCalendario();}catch(e){console.error(e);}try{gerarRelatorio();}catch(e){console.error(e);}alert('🗑️ Somente a reserva selecionada foi excluída.');}catch(e){console.error(e);alert('❌ Erro ao excluir a reserva selecionada.');}}
 
 function limparFiltrosRelatorio(){
@@ -8790,10 +8936,30 @@ function renderizarResultadoGastos(){
  if(!ano&&anos.length){html+='<div class="relatorio-tabela-wrap"><h4>Histórico por ano</h4><table class="relatorio-tabela-gerencial"><thead><tr><th>Ano</th><th>Total de gastos</th></tr></thead><tbody>';anos.forEach(a=>{let t=0;Object.values(dados.porAno[a]||{}).forEach(v=>t+=Number(v||0));html+=`<tr><td><strong>${a}</strong></td><td>${moeda(t)}</td></tr>`});html+='</tbody></table></div>'}
  $('resultadoRelatorioGastos').innerHTML=html;
 }
-function abrirRelatorioRecebimentos(){dashboardPopularSeletoresRelatorios();$('relatorioConteudo')?.classList.add('oculto');$('telaRelatorioGastos')?.classList.add('oculto');$('telaRelatorioRecebimentos')?.classList.remove('oculto');renderizarResultadoRecebimentos();window.scrollTo({top:0,behavior:'smooth'})}
-function abrirRelatorioGastos(){dashboardPopularSeletoresRelatorios();$('relatorioConteudo')?.classList.add('oculto');$('telaRelatorioRecebimentos')?.classList.add('oculto');$('telaRelatorioGastos')?.classList.remove('oculto');renderizarResultadoGastos();window.scrollTo({top:0,behavior:'smooth'})}
+async function abrirRelatorioRecebimentos(){await carregarDadosRelatoriosSobDemanda();dashboardPopularSeletoresRelatorios();$('relatorioConteudo')?.classList.add('oculto');$('telaRelatorioGastos')?.classList.add('oculto');$('telaRelatorioRecebimentos')?.classList.remove('oculto');renderizarResultadoRecebimentos();window.scrollTo({top:0,behavior:'smooth'})}
+async function abrirRelatorioGastos(){await carregarDadosRelatoriosSobDemanda();dashboardPopularSeletoresRelatorios();$('relatorioConteudo')?.classList.add('oculto');$('telaRelatorioRecebimentos')?.classList.add('oculto');$('telaRelatorioGastos')?.classList.remove('oculto');renderizarResultadoGastos();window.scrollTo({top:0,behavior:'smooth'})}
 function voltarRelatoriosDashboard(){$('telaRelatorioRecebimentos')?.classList.add('oculto');$('telaRelatorioGastos')?.classList.add('oculto');$('relatorioConteudo')?.classList.remove('oculto');$('dashboardAnualRelatorios')?.classList.remove('oculto');dashboardPopularSeletoresRelatorios();window.scrollTo({top:0,behavior:'smooth'})}
 function atualizarDashboardAnual(){dashboardPopularSeletoresRelatorios()}
+
+async function carregarDadosRelatoriosSobDemanda(){
+ if(!auth.currentUser || auth.currentUser.uid!==ADMIN_UID)return;
+ try{
+  $('relatorioConteudo').innerHTML='<div class="dashboard-vazio">⏳ Carregando dados do relatório somente porque você solicitou esta consulta...</div>';
+  await Promise.all([
+   reservasCarregadas?Promise.resolve():carregarReservasConfirmadas(),
+   despesasCarregadas?Promise.resolve():carregarDespesas(),
+   prestadoresCarregados?Promise.resolve():carregarPrestadores()
+  ]);
+  mesclarHospedesDasReservas();
+  mesclarPrestadoresDasDespesas();
+  relatoriosCarregados=true;
+  dashboardPopularSeletoresRelatorios();
+  gerarRelatorio();
+ }catch(e){
+  console.error('Relatórios sob demanda:',e);
+  $('relatorioConteudo').innerHTML='<div class="dashboard-vazio">❌ Não foi possível carregar os dados dos relatórios.</div>';
+ }
+}
 
 function gerarRelatorio(){
 
@@ -9112,6 +9278,7 @@ async function cadastrarOuAtualizarHospede(nome,telefone,extras={}){
 }
 
 async function carregarHospedes(){
+ if(hospedesCarregados){filtrarHospedes();return;}
  hospedesCadastrados=[];
  try{
   // Uma única leitura da coleção. Os hóspedes que também aparecem nas
@@ -9124,6 +9291,7 @@ async function carregarHospedes(){
   });
  }catch(e){console.error('Hóspedes cadastrados:',e);}
  hospedesCadastrados.sort((a,b)=>String(a.nome||'').localeCompare(String(b.nome||''),'pt-BR'));
+ hospedesCarregados=true;
  paginaHospedesAtual=1;filtrarHospedes();
 }
 
@@ -9242,6 +9410,7 @@ async function salvarHospedeFormulario(){
 }
 
 async function sincronizarHospedesReservas(){
+ if(!reservasConsultaCompleta)await consultarTodasReservas();
  for(const r of reservasConfirmadas){
   if(r.nome){
    try{
@@ -9294,6 +9463,7 @@ function editarPrestador(id){const x=prestadoresCadastrados.find(p=>p.id===id);i
 function fecharModalPrestador(){$('modalPrestador')?.classList.remove('aberto');}
 async function salvarPrestadorFormulario(){const d=dadosFormularioPrestador(),id=$('prestadorEdicaoId').value;if(!d.nome)return alert('⚠️ Informe o nome/razão social.');if(!d.documento)return alert(`⚠️ Informe o ${d.tipo==='pj'?'CNPJ':'CPF'}.`);try{const ref=id?db.collection('prestadores').doc(id):db.collection('prestadores').doc();await ref.set({...d,nomeNormalizado:normalizar(d.nome),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp(),...(id?{}:{criadoEm:firebase.firestore.FieldValue.serverTimestamp()})},{merge:true});fecharModalPrestador();await carregarPrestadores();popularSelectPrestadores();alert(id?'✅ Prestador alterado.':'✅ Prestador cadastrado.');}catch(e){console.error(e);alert('❌ Erro ao salvar o prestador.');}}
 async function carregarPrestadores(){
+ if(prestadoresCarregados){popularSelectPrestadores();filtrarPrestadores();return;}
  prestadoresCadastrados=[];
  try{
   // Uma única leitura da coleção. Os prestadores usados nas despesas são
@@ -9306,6 +9476,7 @@ async function carregarPrestadores(){
   });
  }catch(e){console.error('Prestadores cadastrados:',e);}
  prestadoresCadastrados.sort((a,b)=>String(a.nome||'').localeCompare(String(b.nome||''),'pt-BR'));
+ prestadoresCarregados=true;
  paginaPrestadoresAtual=1;popularSelectPrestadores();filtrarPrestadores();
 }
 
@@ -9328,6 +9499,7 @@ function popularSelectPrestadores(){const opts='<option value="">— Selecionar 
 function selecionarPrestadorDespesa(){const id=$('despesaPrestadorId')?.value||'';const x=prestadoresCadastrados.find(p=>p.id===id);$('despesaPrestador').value=x?x.nome:'';$('despesaPrestadorInfo').textContent=x?`${x.tipo==='pj'?'CNPJ':'CPF'}: ${x.documento||'—'}${x.telefone?' · '+x.telefone:''}`:'';}
 
 async function carregarDespesas(){
+ if(despesasCarregadas){gerarRelatorioDespesas();return;}
  despesasCadastradas=[];
  try{
   // Não depende de orderBy/índice. Ordenamos no navegador para garantir
@@ -9339,6 +9511,7 @@ async function carregarDespesas(){
  }catch(e){
   console.error('Despesas cadastradas:',e);
  }
+ despesasCarregadas=true;
  paginaDespesasAtual=1;
  gerarRelatorioDespesas();
  if($('dashboardAnualRelatorios'))atualizarDashboardAnual();
@@ -9352,7 +9525,8 @@ function mudarPaginaDespesas(p){paginaDespesasAtual=p;gerarRelatorioDespesas();}
 async function excluirDespesa(id){if(!confirm('Excluir esta despesa?'))return;try{await db.collection('despesas').doc(id).delete();await carregarDespesas();if($('dashboardAnualRelatorios'))atualizarDashboardAnual();}catch(e){console.error(e);alert('❌ Não foi possível excluir.');}}
 function limparFiltrosDespesas(){['filtroDespesaCasa','filtroDespesaCategoria','filtroDespesaPagamento','filtroDespesaConta'].forEach(id=>{if($(id))$(id).value='todas';});if($('filtroDespesaPrestador'))$('filtroDespesaPrestador').value='todos';['filtroDespesaDataInicial','filtroDespesaDataFinal'].forEach(id=>{if($(id))$(id).value='';});paginaDespesasAtual=1;gerarRelatorioDespesas();}
 function exportarDespesasCSV(){const a=ultimasDespesasFiltradas;if(!a.length)return alert('Nenhuma despesa para exportar.');let csv='Data;Casa;Categoria;Prestador;Descrição;Forma;Conta;Valor;Observação\n';a.forEach(x=>csv+=`"${dataBr(x.data)}";"${casas[x.casa]?.nome||x.casa}";"${nomeCategoriaDespesa(x.categoria)}";"${String(x.prestador||'').replace(/"/g,'""')}";"${String(x.descricao||'').replace(/"/g,'""')}";"${x.formaPagamento||''}";"${x.contaOrigem||''}";"${Number(x.valor||0).toFixed(2)}";"${String(x.observacao||'').replace(/"/g,'""')}"\n`);const blob=new Blob(["\ufeff"+csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),aEl=document.createElement('a');aEl.href=url;aEl.download='relatorio_despesas.csv';aEl.click();URL.revokeObjectURL(url);}
-function imprimirRelatorioDespesas(){const a=ultimasDespesasFiltradas;if(!a.length)return alert('Nenhuma despesa para imprimir.');const total=a.reduce((s,x)=>s+Number(x.valor||0),0),w=window.open('','_blank','width=1000,height=750');if(!w)return alert('⚠️ Permita pop-ups.');w.document.write(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Relatório de Despesas</title><style>body{font-family:Arial;padding:28px;color:#222}h1{text-align:center;color:#0a4b6e}table{width:100%;border-collapse:collapse;font-size:11px}th,td{border:1px solid #ccc;padding:7px}th{background:#e9eef0}.total{text-align:right;font-weight:bold;margin-top:15px}@media print{button{display:none}}</style></head><body><h1>CASAS NA PRAIA — RELATÓRIO DE DESPESAS</h1><p style="text-align:center">Emitido em ${new Date().toLocaleString('pt-BR')}</p><table><tr><th>Data</th><th>Casa</th><th>Categoria</th><th>Prestador</th><th>Descrição</th><th>Forma</th><th>Conta</th><th>Valor</th></tr>${a.map(x=>`<tr><td>${dataBr(x.data)}</td><td>${casas[x.casa]?.nome||x.casa}</td><td>${nomeCategoriaDespesa(x.categoria)}</td><td>${escapeHtmlReserva(x.prestador||'')}</td><td>${escapeHtmlReserva(x.descricao||'')}</td><td>${escapeHtmlReserva(x.formaPagamento||'')}</td><td>${escapeHtmlReserva(x.contaOrigem||'')}</td><td>${moeda(x.valor)}</td></tr>`).join('')}</table><div class="total">Total: ${moeda(total)}</div><button onclick="window.print()">Imprimir / Salvar PDF</button></body></html>`);w.document.close();setTimeout(()=>w.print(),300);}
+function imprimirRelatorioDespesas(){const a=ultimasDespesasFiltradas;if(!a.length)return alert('Nenhuma despesa para imprimir.');const total=a.reduce((s,x)=>s+Number(x.valor||0),0),w=window.open('','_blank','width=1000,height=750');if(!w)return alert('⚠️ Permita pop-ups.');w.document.write(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Relatório de Despesas</title><style>body{font-family:Arial;padding:28px;color:#222}h1{text-align:center;color:#0a4b6e}table{width:100%;border-collapse:collapse;font-size:11px}th,td{border:1px solid #ccc;padding:7px}th{background:#e9eef0}.total{text-align:right;font-weight:bold;margin-top:15px}@media print{button{display:none}}
+</style></head><body><h1>CASAS NA PRAIA — RELATÓRIO DE DESPESAS</h1><p style="text-align:center">Emitido em ${new Date().toLocaleString('pt-BR')}</p><table><tr><th>Data</th><th>Casa</th><th>Categoria</th><th>Prestador</th><th>Descrição</th><th>Forma</th><th>Conta</th><th>Valor</th></tr>${a.map(x=>`<tr><td>${dataBr(x.data)}</td><td>${casas[x.casa]?.nome||x.casa}</td><td>${nomeCategoriaDespesa(x.categoria)}</td><td>${escapeHtmlReserva(x.prestador||'')}</td><td>${escapeHtmlReserva(x.descricao||'')}</td><td>${escapeHtmlReserva(x.formaPagamento||'')}</td><td>${escapeHtmlReserva(x.contaOrigem||'')}</td><td>${moeda(x.valor)}</td></tr>`).join('')}</table><div class="total">Total: ${moeda(total)}</div><button onclick="window.print()">Imprimir / Salvar PDF</button></body></html>`);w.document.close();setTimeout(()=>w.print(),300);}
 
 document.addEventListener(
  'keydown',
