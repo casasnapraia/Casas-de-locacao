@@ -3789,6 +3789,12 @@ async function processarSolicitacoesHospedes(){
 
 async function inicializarPainel(){
 
+ // A navegação deve ser configurada antes das consultas ao Firestore.
+ // Assim, se alguma carga de dados falhar ou demorar, os botões do menu
+ // lateral continuam funcionando normalmente.
+ configurarNavegacao();
+ configurarFiltrosReservas();
+
  try{
 
   await processarSolicitacoesHospedes();
@@ -3803,9 +3809,6 @@ async function inicializarPainel(){
    carregarDespesas()
   ]);
 
-  configurarNavegacao();
-  configurarFiltrosReservas();
-
   renderizarCalendarioSeguro();
   renderizarCasasAdmin();
   atualizarListaReservas();
@@ -3816,7 +3819,7 @@ async function inicializarPainel(){
   console.error(e);
 
   alert(
-   '⚠️ O painel abriu, mas houve erro ao carregar alguns dados.'
+   '⚠️ O painel abriu, mas houve erro ao carregar alguns dados. A navegação continua disponível.'
   );
 
  }
