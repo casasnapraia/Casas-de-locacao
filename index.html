@@ -3756,27 +3756,51 @@ function verificarNotificacoesJaAtivas(){
 
 }
 
-async function sincronizarDisponibilidadePublica(){
+async function sincronizarDisponibilidadePublica(reservaId=null,reservaDados=null,remover=false){
  if(!auth.currentUser || auth.currentUser.uid!==ADMIN_UID)return;
+ if(!reservaId)return;
  try{
-  const atual=await db.collection('disponibilidade').get();
-  let batch=db.batch(), ops=0;
-  for(const doc of atual.docs){
-   batch.delete(doc.ref); ops++;
-   if(ops===450){await batch.commit(); batch=db.batch(); ops=0;}
+  const ref=db.collection('disponibilidade').doc(reservaId);
+  if(remover){
+   await ref.delete();
+   return;
   }
-  if(ops)await batch.commit();
-  const snap=await db.collection('reservas').get();
-  batch=db.batch(); ops=0;
-  for(const doc of snap.docs){
-   const r=doc.data();
-   if(!['confirmada','pago'].includes(r.statusPagamento)||!r.entrada||!r.saida||!r.casa)continue;
-   batch.set(db.collection('disponibilidade').doc(doc.id),{reservaId:doc.id,casa:r.casa,entrada:r.entrada,saida:r.saida,atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()});
-   ops++;
-   if(ops===450){await batch.commit();batch=db.batch();ops=0;}
+  const r=reservaDados||{};
+  if(!['confirmada','pago'].includes(String(r.statusPagamento||'').toLowerCase())||!r.entrada||!r.saida||!r.casa){
+   await ref.delete();
+   return;
   }
-  if(ops)await batch.commit();
- }catch(e){console.error('Erro ao sincronizar disponibilidade pública:',e);}
+  await ref.set({
+   reservaId,
+   casa:r.casa,
+   entrada:r.entrada,
+   saida:r.saida,
+   atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()
+  });
+ }catch(e){
+  console.error('Erro ao sincronizar disponibilidade pública:',e);
+ }
+}
+
+async function sincronizarDisponibilidadePublicaLote(reservas=[]){
+ if(!auth.currentUser || auth.currentUser.uid!==ADMIN_UID || !Array.isArray(reservas) || !reservas.length)return;
+ try{
+  for(let i=0;i<reservas.length;i+=400){
+   const lote=db.batch();
+   reservas.slice(i,i+400).forEach(r=>{
+    if(!r?.id)return;
+    const ref=db.collection('disponibilidade').doc(r.id);
+    if(['confirmada','pago'].includes(String(r.statusPagamento||'').toLowerCase())&&r.entrada&&r.saida&&r.casa){
+     lote.set(ref,{reservaId:r.id,casa:r.casa,entrada:r.entrada,saida:r.saida,atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()});
+    }else{
+     lote.delete(ref);
+    }
+   });
+   await lote.commit();
+  }
+ }catch(e){
+  console.error('Erro ao sincronizar disponibilidade em lote:',e);
+ }
 }
 
 async function processarSolicitacoesHospedes(){
@@ -3797,17 +3821,23 @@ async function inicializarPainel(){
 
  try{
 
+  // IMPORTANTE: não reconstruímos a coleção disponibilidade a cada abertura
+  // do painel. A rotina anterior apagava e recriava todos os documentos,
+  // gerando milhares de gravações/exclusões e consumindo a quota do Firestore.
+  // A disponibilidade continua sendo sincronizada somente após alterações
+  // reais nas reservas.
   await processarSolicitacoesHospedes();
-  await sincronizarDisponibilidadePublica();
 
+  // Os dados públicos já foram carregados no DOMContentLoaded. Evitamos
+  // repetir as mesmas leituras ao entrar no painel administrativo.
   await Promise.all([
-   carregarValoresDiarias(),
-   carregarReservasConfirmadas(),
    carregarHospedes(),
    carregarPrestadores(),
-   carregarDadosCasas(),
    carregarDespesas()
   ]);
+
+  mesclarHospedesDasReservas();
+  mesclarPrestadoresDasDespesas();
 
   renderizarCalendarioSeguro();
   renderizarCasasAdmin();
@@ -6921,9 +6951,9 @@ function toggleTodasReservasExibidas(el){if(el?.checked)selecionarTodasReservasF
 function atualizarCheckboxTodasReservasExibidas(){const el=document.querySelector('.tabela-reservas th.coluna-selecao input[type="checkbox"]');if(!el)return;const ids=reservasPagamentoFiltradas;el.checked=ids.length>0&&ids.every(id=>reservasPagamentoSelecionadas.has(id));el.indeterminate=ids.some(id=>reservasPagamentoSelecionadas.has(id))&&!el.checked;}
 function filtrarControlePagamentos(){const ini=$('filtroPagamentoSaidaInicial')?.value||'';const fim=$('filtroPagamentoSaidaFinal')?.value||'';if(ini&&fim&&ini>fim)return alert('⚠️ A data inicial de saída não pode ser maior que a data final.');controlePagamentosAtivo=true;controlePagamentoSaidaInicial=ini;controlePagamentoSaidaFinal=fim;reservasPagamentoSelecionadas.clear();if($('filtroSituacaoReservas'))$('filtroSituacaoReservas').value='todas';if($('filtroPagamentoReservas'))$('filtroPagamentoReservas').value='todos';if($('filtroSaidaInicialReservas'))$('filtroSaidaInicialReservas').value=ini;if($('filtroSaidaFinalReservas'))$('filtroSaidaFinalReservas').value=fim;atualizarListaReservas();}
 function limparControlePagamentos(){controlePagamentosAtivo=false;controlePagamentoSaidaInicial='';controlePagamentoSaidaFinal='';if($('filtroPagamentoSaidaInicial'))$('filtroPagamentoSaidaInicial').value='';if($('filtroPagamentoSaidaFinal'))$('filtroPagamentoSaidaFinal').value='';if($('filtroSaidaInicialReservas'))$('filtroSaidaInicialReservas').value='';if($('filtroSaidaFinalReservas'))$('filtroSaidaFinalReservas').value='';reservasPagamentoSelecionadas.clear();atualizarListaReservas();}
-async function marcarReservasSelecionadasComoPagas(){const ids=[...reservasPagamentoSelecionadas];if(!ids.length)return alert('⚠️ Selecione pelo menos uma reserva.');const selecionadas=ids.map(id=>reservasConfirmadas.find(r=>r.id===id)).filter(Boolean);const naoPagas=selecionadas.filter(r=>String(r.statusPagamento||'pendente').toLowerCase()!=='pago');if(!naoPagas.length){reservasPagamentoSelecionadas.clear();atualizarListaReservas();return alert('✅ Todas as reservas selecionadas já estão como Paga.');}const resumo=naoPagas.slice(0,8).map(r=>`• ${r.nome||'Sem nome'} — ${casas[r.casa]?.nome||r.casa} — saída ${dataBr(r.saida)}`).join('\n');const extra=naoPagas.length>8?`\n• ... e mais ${naoPagas.length-8}`:'';if(!confirm(`Confirmar marcação de ${naoPagas.length} reserva(s) como PAGAS?\n\n${resumo}${extra}\n\nSomente statusPagamento será alterado.\nvalorPago e valorTotal NÃO serão modificados.`))return;try{for(let i=0;i<naoPagas.length;i+=400){const lote=db.batch();naoPagas.slice(i,i+400).forEach(r=>lote.update(db.collection('reservas').doc(r.id),{statusPagamento:'pago',atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()}));await lote.commit();}reservasPagamentoSelecionadas.clear();await carregarReservasConfirmadas();atualizarListaReservas();gerarRelatorio();alert(`✅ ${naoPagas.length} reserva(s) foram marcadas como PAGAS.\n\nOs valores de valorPago e valorTotal foram preservados.`);}catch(e){console.error(e);alert('❌ Não foi possível concluir a atualização em lote.');}}
+async function marcarReservasSelecionadasComoPagas(){const ids=[...reservasPagamentoSelecionadas];if(!ids.length)return alert('⚠️ Selecione pelo menos uma reserva.');const selecionadas=ids.map(id=>reservasConfirmadas.find(r=>r.id===id)).filter(Boolean);const naoPagas=selecionadas.filter(r=>String(r.statusPagamento||'pendente').toLowerCase()!=='pago');if(!naoPagas.length){reservasPagamentoSelecionadas.clear();atualizarListaReservas();return alert('✅ Todas as reservas selecionadas já estão como Paga.');}const resumo=naoPagas.slice(0,8).map(r=>`• ${r.nome||'Sem nome'} — ${casas[r.casa]?.nome||r.casa} — saída ${dataBr(r.saida)}`).join('\n');const extra=naoPagas.length>8?`\n• ... e mais ${naoPagas.length-8}`:'';if(!confirm(`Confirmar marcação de ${naoPagas.length} reserva(s) como PAGAS?\n\n${resumo}${extra}\n\nSomente statusPagamento será alterado.\nvalorPago e valorTotal NÃO serão modificados.`))return;try{for(let i=0;i<naoPagas.length;i+=400){const lote=db.batch();naoPagas.slice(i,i+400).forEach(r=>lote.update(db.collection('reservas').doc(r.id),{statusPagamento:'pago',atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()}));await lote.commit();}reservasPagamentoSelecionadas.clear();await carregarReservasConfirmadas();const atualizadas=naoPagas.map(x=>reservasConfirmadas.find(r=>r.id===x.id)).filter(Boolean);await sincronizarDisponibilidadePublicaLote(atualizadas);atualizarListaReservas();gerarRelatorio();alert(`✅ ${naoPagas.length} reserva(s) foram marcadas como PAGAS.\n\nOs valores de valorPago e valorTotal foram preservados.`);}catch(e){console.error(e);alert('❌ Não foi possível concluir a atualização em lote.');}}
 
-async function quitarRecebimentoFinal(id){const r=reservasConfirmadas.find(x=>x.id===id);if(!r)return;const total=Number(r.valorTotal||0),recebido=Number(r.valorPago||0),saldo=Math.max(0,total-recebido);if(saldo<=0)return alert('✅ Esta reserva já está quitada.');if(dataLocal(r.entrada)>hoje())return alert('⚠️ A quitação final fica disponível a partir da data de check-in.');const forma=prompt('Forma de recebimento do saldo final:\n1 - Pix\n2 - Dinheiro\n3 - Cartão\n4 - Transferência Bancária',r.formaPagamento||'Pix');const formas={'1':'Pix','2':'Dinheiro','3':'Cartão','4':'Transferência Bancária'};const fp=formas[forma?.trim()]||forma?.trim();if(!fp)return;if(!confirm(`Confirmar recebimento final de ${moeda(saldo)}?\n\nHóspede: ${r.nome||'—'}\nCasa: ${casas[r.casa]?.nome||r.casa}`))return;try{await db.collection('reservas').doc(id).update({valorPago:total,statusPagamento:'pago',formaPagamento:fp,dataRecebimento:dataStr(hoje()),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()});await carregarReservasConfirmadas();await sincronizarDisponibilidadePublica();atualizarListaReservas();gerarRelatorio();alert(`✅ Recebimento final baixado: ${moeda(saldo)}`);}catch(e){console.error(e);alert('❌ Não foi possível quitar o recebimento final.');}}
+async function quitarRecebimentoFinal(id){const r=reservasConfirmadas.find(x=>x.id===id);if(!r)return;const total=Number(r.valorTotal||0),recebido=Number(r.valorPago||0),saldo=Math.max(0,total-recebido);if(saldo<=0)return alert('✅ Esta reserva já está quitada.');if(dataLocal(r.entrada)>hoje())return alert('⚠️ A quitação final fica disponível a partir da data de check-in.');const forma=prompt('Forma de recebimento do saldo final:\n1 - Pix\n2 - Dinheiro\n3 - Cartão\n4 - Transferência Bancária',r.formaPagamento||'Pix');const formas={'1':'Pix','2':'Dinheiro','3':'Cartão','4':'Transferência Bancária'};const fp=formas[forma?.trim()]||forma?.trim();if(!fp)return;if(!confirm(`Confirmar recebimento final de ${moeda(saldo)}?\n\nHóspede: ${r.nome||'—'}\nCasa: ${casas[r.casa]?.nome||r.casa}`))return;try{await db.collection('reservas').doc(id).update({valorPago:total,statusPagamento:'pago',formaPagamento:fp,dataRecebimento:dataStr(hoje()),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()});await carregarReservasConfirmadas();const reservaAtual=reservasConfirmadas.find(x=>x.id===id);await sincronizarDisponibilidadePublica(id,reservaAtual);atualizarListaReservas();gerarRelatorio();alert(`✅ Recebimento final baixado: ${moeda(saldo)}`);}catch(e){console.error(e);alert('❌ Não foi possível quitar o recebimento final.');}}
 
 function numeroPorExtenso(n){
 
@@ -7611,7 +7641,8 @@ body{
 }
 
 function abrirNovaReservaAdmin(){const c=Object.entries(casas).map(([id,x])=>`<option value="${id}">${x.nome}${x.interna?' — interno':''}</option>`).join('');$('conteudoEditar').innerHTML=`<input type="hidden" id="novaReserva"><div class="grupo-input"><label>Casa</label><select id="novaCasaReserva">${c}</select></div><div class="grupo-input"><label>Hóspede</label><input id="novoNomeReserva"></div><div class="grupo-input"><label>Telefone</label><input id="novoTelefoneReserva"></div><div class="grupo-input"><label>Origem</label><select id="novaOrigemReserva"><option>Reserva direta</option><option>Airbnb</option><option>Booking.com</option><option>WhatsApp</option><option>Telefone</option><option>Outro</option></select></div><div class="linha-form"><div class="grupo-input"><label>Entrada</label><input type="date" id="novaEntrada"></div><div class="grupo-input"><label>Saída</label><input type="date" id="novaSaida"></div></div><div class="linha-form"><div class="grupo-input"><label>Adultos</label><input type="number" id="novoAdultos" value="1"></div><div class="grupo-input"><label>Crianças</label><input type="number" id="novoCriancas" value="0"></div></div><div class="grupo-input"><label>Forma de recebimento</label><select id="novaFormaPagamento"><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Transferência Bancária</option></select></div><div class="grupo-input"><label>Caixa / conta destino</label><select id="novaContaDestino"><option>Caixa Casa Amarela</option><option>Caixa Casa Bege</option><option>Caixa Casa Marrom</option><option>Caixa Casa Branca</option><option>Caixa Nossa Casa</option><option>Caixa Geral</option><option>Conta bancária</option></select></div><div class="grupo-input"><label>Data de Recebimento</label><input type="date" id="novaDataRecebimento"><small style="color:var(--cinza)">Data prevista ou efetiva do repasse.</small></div><div class="grupo-input"><label>Status</label><select id="novoStatus"><option value="pendente">Pendente</option><option value="confirmada">Confirmada</option><option value="parcial">Pagamento Parcial</option><option value="pago">Pago</option></select></div><div class="grupo-input"><label>Valor Antecipado</label><input type="number" id="novoValorAntecipado" value="0" step="0.01"></div><div class="grupo-input"><label>Valor Total</label><input type="number" id="novoValorTotal" step="0.01"></div><div class="grupo-input"><label>Observação</label><textarea id="novaObservacao"></textarea></div><button class="sucesso" style="width:100%" onclick="salvarNovaReservaAdmin()">💾 Salvar reserva</button>`;$('modalEditarReserva').classList.add('aberto');}
-async function salvarNovaReservaAdmin(){const casa=$('novaCasaReserva').value,a=$('novaEntrada').value,b=$('novaSaida').value,nome=$('novoNomeReserva').value.trim(),adultos=Number($('novoAdultos').value||0),criancas=Number($('novoCriancas').value||0);if(!nome||!a||!b||b<=a)return alert('⚠️ Informe hóspede e datas válidas.');const hojeStr=dataStr(hoje());if(b>=hojeStr&&await verificarPeriodoBloqueado(casa,a,b))return alert('⚠️ O período está bloqueado.');const x=await calcularValorDiarias(casa,a,b),taxa=Number(casas[casa]?.taxaLimpeza||0),f=calcularValorFinalReserva(x.dias,x.valor,taxa),total=Number($('novoValorTotal').value||f.total),ante=Number($('novoValorAntecipado').value||0);if(ante>total)return alert('⚠️ O antecipado não pode ser maior que o total.');try{const ref=await db.collection('reservas').add({casa,nome,telefone:$('novoTelefoneReserva').value.trim(),entrada:a,saida:b,adultos,criancas,totalPessoas:adultos+criancas,dias:x.dias,valorDiarias:x.valor,taxaLimpeza:taxa,desconto:f.desconto,percentualDesconto:f.percentualDesconto,acrescimoValor:0,valorTotal:total,valorPago:ante,statusPagamento:$('novoStatus').value,origemReserva:$('novaOrigemReserva').value,formaPagamento:$('novaFormaPagamento').value,contaDestino:$('novaContaDestino').value,dataRecebimento:$('novaDataRecebimento')?.value||'',observacao:$('novaObservacao').value.trim(),criadoEm:firebase.firestore.FieldValue.serverTimestamp(),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()});try{await carregarReservasConfirmadas();}catch(e){console.error('Atualização da lista:',e);}try{await sincronizarDisponibilidadePublica();}catch(e){console.error('Sincronização:',e);}fecharModalEditar();
+async function salvarNovaReservaAdmin(){const casa=$('novaCasaReserva').value,a=$('novaEntrada').value,b=$('novaSaida').value,nome=$('novoNomeReserva').value.trim(),adultos=Number($('novoAdultos').value||0),criancas=Number($('novoCriancas').value||0);if(!nome||!a||!b||b<=a)return alert('⚠️ Informe hóspede e datas válidas.');const hojeStr=dataStr(hoje());if(b>=hojeStr&&await verificarPeriodoBloqueado(casa,a,b))return alert('⚠️ O período está bloqueado.');const x=await calcularValorDiarias(casa,a,b),taxa=Number(casas[casa]?.taxaLimpeza||0),f=calcularValorFinalReserva(x.dias,x.valor,taxa),total=Number($('novoValorTotal').value||f.total),ante=Number($('novoValorAntecipado').value||0);if(ante>total)return alert('⚠️ O antecipado não pode ser maior que o total.');try{const ref=await db.collection('reservas').add({casa,nome,telefone:$('novoTelefoneReserva').value.trim(),entrada:a,saida:b,adultos,criancas,totalPessoas:adultos+criancas,dias:x.dias,valorDiarias:x.valor,taxaLimpeza:taxa,desconto:f.desconto,percentualDesconto:f.percentualDesconto,acrescimoValor:0,valorTotal:total,valorPago:ante,statusPagamento:$('novoStatus').value,origemReserva:$('novaOrigemReserva').value,formaPagamento:$('novaFormaPagamento').value,contaDestino:$('novaContaDestino').value,dataRecebimento:$('novaDataRecebimento')?.value||'',observacao:$('novaObservacao').value.trim(),criadoEm:firebase.firestore.FieldValue.serverTimestamp(),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()});try{await carregarReservasConfirmadas();}catch(e){console.error('Atualização da lista:',e);}const reservaAtual=reservasConfirmadas.find(x=>x.id===ref.id);
+try{await sincronizarDisponibilidadePublica(ref.id,reservaAtual);}catch(e){console.error('Sincronização:',e);}fecharModalEditar();
    fecharModalPrestador();atualizarListaReservas();try{renderizarCalendarioSeguro();}catch(e){console.error(e);}try{gerarRelatorio();}catch(e){console.error(e);}alert(`✅ Reserva criada com sucesso.\nID: ${ref.id}`);}catch(e){console.error('Erro ao criar reserva administrativa:',e);alert(`❌ Erro ao criar reserva.\n\n${e?.code==='permission-denied'?'Permissão negada pelo Firestore. As regras precisam permitir gravação administrativa.':(e?.message||'Verifique os dados e tente novamente.')}`);}}
 
 function abrirEditarReserva(id){
@@ -8372,7 +8403,8 @@ async function salvarEdicao(id){
    });
 
   await carregarReservasConfirmadas();
-  await sincronizarDisponibilidadePublica();
+  const reservaAtual=reservasConfirmadas.find(x=>x.id===id);
+  await sincronizarDisponibilidadePublica(id,reservaAtual);
 
   fecharModalEditar();
    fecharModalPrestador();
@@ -8397,7 +8429,7 @@ async function salvarEdicao(id){
 
 }
 
-async function excluirReserva(id){if(!id||typeof id!=='string')return alert('❌ Identificador da reserva inválido.');const r=reservasConfirmadas.find(x=>x.id===id);if(!r)return alert('❌ Reserva não encontrada.');if(!confirm(`Excluir somente esta reserva?\n\n${r.nome||'Hóspede sem nome'} — ${dataBr(r.entrada)} a ${dataBr(r.saida)}\n${casas[r.casa]?.nome||r.casa}`))return;try{const ref=db.collection('reservas').doc(id);await ref.delete();const ainda=await ref.get();if(ainda.exists)throw new Error('O documento não foi excluído.');reservasConfirmadas=reservasConfirmadas.filter(x=>x.id!==id);try{await sincronizarDisponibilidadePublica();}catch(e){console.error('Sincronização após exclusão:',e);}if($('filtroSituacaoReservas')?.value==='ativas'&&reservaConcluida(r))$('filtroSituacaoReservas').value='todas';fecharModalEditar();
+async function excluirReserva(id){if(!id||typeof id!=='string')return alert('❌ Identificador da reserva inválido.');const r=reservasConfirmadas.find(x=>x.id===id);if(!r)return alert('❌ Reserva não encontrada.');if(!confirm(`Excluir somente esta reserva?\n\n${r.nome||'Hóspede sem nome'} — ${dataBr(r.entrada)} a ${dataBr(r.saida)}\n${casas[r.casa]?.nome||r.casa}`))return;try{const ref=db.collection('reservas').doc(id);await ref.delete();const ainda=await ref.get();if(ainda.exists)throw new Error('O documento não foi excluído.');reservasConfirmadas=reservasConfirmadas.filter(x=>x.id!==id);try{await sincronizarDisponibilidadePublica(id,null,true);}catch(e){console.error('Sincronização após exclusão:',e);}if($('filtroSituacaoReservas')?.value==='ativas'&&reservaConcluida(r))$('filtroSituacaoReservas').value='todas';fecharModalEditar();
    fecharModalPrestador();atualizarListaReservas();try{renderizarCalendario();}catch(e){console.error(e);}try{gerarRelatorio();}catch(e){console.error(e);}alert('🗑️ Somente a reserva selecionada foi excluída.');}catch(e){console.error(e);alert('❌ Erro ao excluir a reserva selecionada.');}}
 
 function limparFiltrosRelatorio(){
@@ -9079,8 +9111,36 @@ async function cadastrarOuAtualizarHospede(nome,telefone,extras={}){
  }
 }
 
-async function carregarHospedes(){hospedesCadastrados=[];const s=await db.collection('hospedes').orderBy('nome').get();s.forEach(d=>hospedesCadastrados.push({id:d.id,...d.data()}));paginaHospedesAtual=1;filtrarHospedes();}
-function filtrarHospedes(pagina=1){const el=$('listaHospedes');if(!el)return;const q=normalizar($('buscarHospede')?.value||'');const arr=hospedesCadastrados.filter(h=>!q||normalizar(h.nome).includes(q)||String(h.telefone||'').includes(q)||normalizar(h.email).includes(q)||String(h.cpf||'').includes(q));const paginas=Math.max(1,Math.ceil(arr.length/HOSPEDES_POR_PAGINA));paginaHospedesAtual=Math.min(Math.max(1,pagina),paginas);const vis=arr.slice((paginaHospedesAtual-1)*HOSPEDES_POR_PAGINA,paginaHospedesAtual*HOSPEDES_POR_PAGINA);el.innerHTML=vis.length?vis.map(h=>`<div class="reserva-item"><strong>👤 ${escapeHtmlReserva(h.nome)}</strong><p>📱 ${escapeHtmlReserva(h.telefone||'—')} ${h.email?` · ✉️ ${escapeHtmlReserva(h.email)}`:''}</p>${h.cpf?`<p>🪪 CPF: ${escapeHtmlReserva(h.cpf)}</p>`:''}${h.cidade||h.estado?`<p>📍 ${escapeHtmlReserva([h.cidade,h.estado].filter(Boolean).join(' - '))}</p>`:''}<button class="azul" onclick="editarHospede('${h.id}')">✏️ Editar Cadastro</button></div>`).join(''):`<p style="color:var(--cinza)">Nenhum hóspede encontrado.</p>`;const pg=$('paginacaoHospedes');if(pg)pg.innerHTML=arr.length<=HOSPEDES_POR_PAGINA?'':`<button onclick="filtrarHospedes(${paginaHospedesAtual-1})" ${paginaHospedesAtual===1?'disabled':''}>‹ Anterior</button><span>Página ${paginaHospedesAtual} de ${paginas} · ${arr.length} hóspedes</span><button onclick="filtrarHospedes(${paginaHospedesAtual+1})" ${paginaHospedesAtual===paginas?'disabled':''}>Próxima ›</button>`;}
+async function carregarHospedes(){
+ hospedesCadastrados=[];
+ try{
+  // Uma única leitura da coleção. Os hóspedes que também aparecem nas
+  // reservas são mesclados depois, usando reservasConfirmadas já carregadas.
+  const s=await db.collection('hospedes').get();
+  s.forEach(d=>{
+   const x=d.data()||{};
+   const nome=x.nome||x.nomeCompleto||x.nomeHospede||x.hospede||x.cliente||'';
+   hospedesCadastrados.push({id:d.id,...x,nome:nome||'Hóspede sem nome'});
+  });
+ }catch(e){console.error('Hóspedes cadastrados:',e);}
+ hospedesCadastrados.sort((a,b)=>String(a.nome||'').localeCompare(String(b.nome||''),'pt-BR'));
+ paginaHospedesAtual=1;filtrarHospedes();
+}
+
+function mesclarHospedesDasReservas(){
+ const existentes=new Set(hospedesCadastrados.map(h=>normalizar(h.nome)));
+ (reservasConfirmadas||[]).forEach(r=>{
+  const nome=String(r.nome||'').trim(),n=normalizar(nome);
+  if(nome&&n&&!existentes.has(n)){
+   hospedesCadastrados.push({id:'reserva-hospede-'+n,nome,telefone:r.telefone||'',email:r.email||'',origemLancamento:true});
+   existentes.add(n);
+  }
+ });
+ hospedesCadastrados.sort((a,b)=>String(a.nome||'').localeCompare(String(b.nome||''),'pt-BR'));
+ paginaHospedesAtual=1;
+ filtrarHospedes();
+}
+function filtrarHospedes(pagina=1){const el=$('listaHospedes');if(!el)return;const q=normalizar($('buscarHospede')?.value||'');const arr=hospedesCadastrados.filter(h=>!q||normalizar(h.nome).includes(q)||String(h.telefone||'').includes(q)||normalizar(h.email).includes(q)||String(h.cpf||'').includes(q));const paginas=Math.max(1,Math.ceil(arr.length/HOSPEDES_POR_PAGINA));paginaHospedesAtual=Math.min(Math.max(1,pagina),paginas);const vis=arr.slice((paginaHospedesAtual-1)*HOSPEDES_POR_PAGINA,paginaHospedesAtual*HOSPEDES_POR_PAGINA);el.innerHTML=vis.length?vis.map(h=>`<div class="reserva-item"><strong>👤 ${escapeHtmlReserva(h.nome)}</strong><p>📱 ${escapeHtmlReserva(h.telefone||'—')} ${h.email?` · ✉️ ${escapeHtmlReserva(h.email)}`:''}</p>${h.cpf?`<p>🪪 CPF: ${escapeHtmlReserva(h.cpf)}</p>`:''}${h.cidade||h.estado?`<p>📍 ${escapeHtmlReserva([h.cidade,h.estado].filter(Boolean).join(' - '))}</p>`:''}${h.origemLancamento?'<span style="display:inline-block;margin-top:8px;color:var(--cinza);font-size:12px">ℹ️ Encontrado nas reservas; cadastre os dados completos para editar.</span>':`<button class="azul" onclick="editarHospede('${h.id}')">✏️ Editar Cadastro</button>`}</div>`).join(''):`<p style="color:var(--cinza)">Nenhum hóspede encontrado.</p>`;const pg=$('paginacaoHospedes');if(pg)pg.innerHTML=arr.length<=HOSPEDES_POR_PAGINA?'':`<button onclick="filtrarHospedes(${paginaHospedesAtual-1})" ${paginaHospedesAtual===1?'disabled':''}>‹ Anterior</button><span>Página ${paginaHospedesAtual} de ${paginas} · ${arr.length} hóspedes</span><button onclick="filtrarHospedes(${paginaHospedesAtual+1})" ${paginaHospedesAtual===paginas?'disabled':''}>Próxima ›</button>`;}
 
 function limparFormularioHospede(){
  ['hospedeEdicaoId','cadHospedeNome','cadHospedeTelefone','cadHospedeEmail','cadHospedeCpf','cadHospedeNascimento','cadHospedeCep','cadHospedeEndereco','cadHospedeNumero','cadHospedeComplemento','cadHospedeBairro','cadHospedeCidade','cadHospedeEstado','cadHospedeObservacoes']
@@ -9233,12 +9293,56 @@ function abrirCadastroPrestador(){limparFormularioPrestador();$('tituloModalPres
 function editarPrestador(id){const x=prestadoresCadastrados.find(p=>p.id===id);if(!x)return;preencherFormularioPrestador(x);$('tituloModalPrestador').textContent='Editar Cadastro de Prestador';$('modalPrestador').classList.add('aberto');}
 function fecharModalPrestador(){$('modalPrestador')?.classList.remove('aberto');}
 async function salvarPrestadorFormulario(){const d=dadosFormularioPrestador(),id=$('prestadorEdicaoId').value;if(!d.nome)return alert('⚠️ Informe o nome/razão social.');if(!d.documento)return alert(`⚠️ Informe o ${d.tipo==='pj'?'CNPJ':'CPF'}.`);try{const ref=id?db.collection('prestadores').doc(id):db.collection('prestadores').doc();await ref.set({...d,nomeNormalizado:normalizar(d.nome),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp(),...(id?{}:{criadoEm:firebase.firestore.FieldValue.serverTimestamp()})},{merge:true});fecharModalPrestador();await carregarPrestadores();popularSelectPrestadores();alert(id?'✅ Prestador alterado.':'✅ Prestador cadastrado.');}catch(e){console.error(e);alert('❌ Erro ao salvar o prestador.');}}
-async function carregarPrestadores(){prestadoresCadastrados=[];try{const s=await db.collection('prestadores').orderBy('nome').get();s.forEach(d=>prestadoresCadastrados.push({id:d.id,...d.data()}));}catch(e){console.error('Prestadores:',e);}paginaPrestadoresAtual=1;popularSelectPrestadores();filtrarPrestadores();}
-function filtrarPrestadores(pagina=1){const el=$('listaPrestadores');if(!el)return;const q=normalizar($('buscarPrestador')?.value||'');const arr=prestadoresCadastrados.filter(x=>!q||normalizar(x.nome).includes(q)||normalizar(x.fantasia).includes(q)||normalizar(x.documento).includes(q)||normalizar(x.telefone).includes(q)||normalizar(x.email).includes(q));const pags=Math.max(1,Math.ceil(arr.length/PRESTADORES_POR_PAGINA));paginaPrestadoresAtual=Math.min(Math.max(1,pagina),pags);const vis=arr.slice((paginaPrestadoresAtual-1)*PRESTADORES_POR_PAGINA,paginaPrestadoresAtual*PRESTADORES_POR_PAGINA);el.innerHTML=vis.length?vis.map(x=>`<div class="reserva-item"><strong>👷 ${escapeHtmlReserva(x.nome)}</strong>${x.fantasia?`<p>🏷️ ${escapeHtmlReserva(x.fantasia)}</p>`:''}<p>${x.tipo==='pj'?'🏢 CNPJ':'🪪 CPF'}: ${escapeHtmlReserva(x.documento||'—')} · 📱 ${escapeHtmlReserva(x.telefone||'—')}</p>${x.email?`<p>✉️ ${escapeHtmlReserva(x.email)}</p>`:''}<button class="azul" onclick="editarPrestador('${x.id}')">✏️ Editar Cadastro</button></div>`).join(''):'<p style="color:var(--cinza)">Nenhum prestador encontrado.</p>';const pg=$('paginacaoPrestadores');if(pg)pg.innerHTML=arr.length<=PRESTADORES_POR_PAGINA?'':`<button onclick="filtrarPrestadores(${paginaPrestadoresAtual-1})" ${paginaPrestadoresAtual===1?'disabled':''}>‹ Anterior</button><span>Página ${paginaPrestadoresAtual} de ${pags} · ${arr.length} prestadores</span><button onclick="filtrarPrestadores(${paginaPrestadoresAtual+1})" ${paginaPrestadoresAtual===pags?'disabled':''}>Próxima ›</button>`;}
+async function carregarPrestadores(){
+ prestadoresCadastrados=[];
+ try{
+  // Uma única leitura da coleção. Os prestadores usados nas despesas são
+  // mesclados depois, usando despesasCadastradas já carregadas.
+  const s=await db.collection('prestadores').get();
+  s.forEach(d=>{
+   const x=d.data()||{};
+   const nome=x.nome||x.razaoSocial||x.nomePrestador||x.prestador||x.fantasia||'';
+   prestadoresCadastrados.push({id:d.id,...x,nome:nome||'Prestador sem nome'});
+  });
+ }catch(e){console.error('Prestadores cadastrados:',e);}
+ prestadoresCadastrados.sort((a,b)=>String(a.nome||'').localeCompare(String(b.nome||''),'pt-BR'));
+ paginaPrestadoresAtual=1;popularSelectPrestadores();filtrarPrestadores();
+}
+
+function mesclarPrestadoresDasDespesas(){
+ const existentes=new Set(prestadoresCadastrados.map(x=>normalizar(x.nome||x.fantasia||'')));
+ (despesasCadastradas||[]).forEach(x=>{
+  const nome=String(x.prestador||'').trim(),n=normalizar(nome);
+  if(nome&&n&&!existentes.has(n)){
+   prestadoresCadastrados.push({id:'lancamento-prestador-'+n,nome,origemLancamento:true});
+   existentes.add(n);
+  }
+ });
+ prestadoresCadastrados.sort((a,b)=>String(a.nome||'').localeCompare(String(b.nome||''),'pt-BR'));
+ paginaPrestadoresAtual=1;
+ popularSelectPrestadores();
+ filtrarPrestadores();
+}
+function filtrarPrestadores(pagina=1){const el=$('listaPrestadores');if(!el)return;const q=normalizar($('buscarPrestador')?.value||'');const arr=prestadoresCadastrados.filter(x=>!q||normalizar(x.nome).includes(q)||normalizar(x.fantasia).includes(q)||normalizar(x.documento).includes(q)||normalizar(x.telefone).includes(q)||normalizar(x.email).includes(q));const pags=Math.max(1,Math.ceil(arr.length/PRESTADORES_POR_PAGINA));paginaPrestadoresAtual=Math.min(Math.max(1,pagina),pags);const vis=arr.slice((paginaPrestadoresAtual-1)*PRESTADORES_POR_PAGINA,paginaPrestadoresAtual*PRESTADORES_POR_PAGINA);el.innerHTML=vis.length?vis.map(x=>`<div class="reserva-item"><strong>👷 ${escapeHtmlReserva(x.nome)}</strong>${x.fantasia?`<p>🏷️ ${escapeHtmlReserva(x.fantasia)}</p>`:''}<p>${x.tipo==='pj'?'🏢 CNPJ':'🪪 CPF'}: ${escapeHtmlReserva(x.documento||'—')} · 📱 ${escapeHtmlReserva(x.telefone||'—')}</p>${x.email?`<p>✉️ ${escapeHtmlReserva(x.email)}</p>`:''}${x.origemLancamento?'<span style="display:inline-block;margin-top:8px;color:var(--cinza);font-size:12px">ℹ️ Encontrado nos lançamentos; cadastre o prestador para editar os dados.</span>':`<button class="azul" onclick="editarPrestador('${x.id}')">✏️ Editar Cadastro</button>`}</div>`).join(''):'<p style="color:var(--cinza)">Nenhum prestador encontrado.</p>';const pg=$('paginacaoPrestadores');if(pg)pg.innerHTML=arr.length<=PRESTADORES_POR_PAGINA?'':`<button onclick="filtrarPrestadores(${paginaPrestadoresAtual-1})" ${paginaPrestadoresAtual===1?'disabled':''}>‹ Anterior</button><span>Página ${paginaPrestadoresAtual} de ${pags} · ${arr.length} prestadores</span><button onclick="filtrarPrestadores(${paginaPrestadoresAtual+1})" ${paginaPrestadoresAtual===pags?'disabled':''}>Próxima ›</button>`;}
 function popularSelectPrestadores(){const opts='<option value="">— Selecionar prestador —</option>'+prestadoresCadastrados.map(x=>`<option value="${x.id}">${escapeHtmlReserva(x.nome)} — ${x.tipo==='pj'?'CNPJ':'CPF'} ${escapeHtmlReserva(x.documento||'')}</option>`).join('');if($('despesaPrestadorId')){const v=$('despesaPrestadorId').value;$('despesaPrestadorId').innerHTML=opts;if(v)$('despesaPrestadorId').value=v;}if($('filtroDespesaPrestador')){const v=$('filtroDespesaPrestador').value;$('filtroDespesaPrestador').innerHTML='<option value="todos">Todos</option>'+prestadoresCadastrados.map(x=>`<option value="${x.id}">${escapeHtmlReserva(x.nome)}</option>`).join('');if(v)$('filtroDespesaPrestador').value=v;}}
 function selecionarPrestadorDespesa(){const id=$('despesaPrestadorId')?.value||'';const x=prestadoresCadastrados.find(p=>p.id===id);$('despesaPrestador').value=x?x.nome:'';$('despesaPrestadorInfo').textContent=x?`${x.tipo==='pj'?'CNPJ':'CPF'}: ${x.documento||'—'}${x.telefone?' · '+x.telefone:''}`:'';}
 
-async function carregarDespesas(){despesasCadastradas=[];try{const snap=await db.collection('despesas').orderBy('data','desc').get();snap.forEach(d=>despesasCadastradas.push({id:d.id,...d.data()}));}catch(e){console.error(e);}paginaDespesasAtual=1;gerarRelatorioDespesas();if($('dashboardAnualRelatorios'))atualizarDashboardAnual();}
+async function carregarDespesas(){
+ despesasCadastradas=[];
+ try{
+  // Não depende de orderBy/índice. Ordenamos no navegador para garantir
+  // que lançamentos antigos continuem aparecendo mesmo que algum documento
+  // tenha campo data ausente ou diferente.
+  const snap=await db.collection('despesas').get();
+  snap.forEach(d=>despesasCadastradas.push({id:d.id,...(d.data()||{})}));
+  despesasCadastradas.sort((a,b)=>String(b.data||'').localeCompare(String(a.data||'')));
+ }catch(e){
+  console.error('Despesas cadastradas:',e);
+ }
+ paginaDespesasAtual=1;
+ gerarRelatorioDespesas();
+ if($('dashboardAnualRelatorios'))atualizarDashboardAnual();
+}
 function limparFormularioDespesa(){if(!$('despesaData'))return;$('despesaEditId').value='';$('despesaData').value=dataStr(hoje());$('despesaCasa').value='amarela';$('despesaCategoria').value='agua';$('despesaValor').value='';$('despesaFormaPagamento').value='Pix';$('despesaContaOrigem').value='Caixa Casa Amarela';atualizarCaixaDestinoDespesa();$('despesaPrestadorId').value='';$('despesaPrestador').value='';$('despesaPrestadorInfo').textContent='';$('despesaDescricao').value='';$('despesaObservacao').value='';$('tituloFormularioDespesa').textContent='➕ Novo lançamento de despesa';$('btnSalvarDespesa').textContent='💾 Lançar despesa';}
 async function salvarDespesa(){const id=$('despesaEditId').value,data=$('despesaData').value,casa=$('despesaCasa').value,categoria=$('despesaCategoria').value,valor=valorNumericoDespesa($('despesaValor').value),formaPagamento=$('despesaFormaPagamento').value,contaOrigem=$('despesaContaOrigem').value;if(!data||!casa||!categoria||valor<=0||!formaPagamento||!contaOrigem)return alert('⚠️ Preencha os campos obrigatórios da despesa.');const dados={data,casa,categoria,valor,formaPagamento,contaOrigem,prestadorId:$('despesaPrestadorId').value||'',prestador:$('despesaPrestador').value.trim(),descricao:$('despesaDescricao').value.trim(),observacao:$('despesaObservacao').value.trim(),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()};try{if(id)await db.collection('despesas').doc(id).update(dados);else await db.collection('despesas').add({...dados,criadoEm:firebase.firestore.FieldValue.serverTimestamp()});await carregarDespesas();limparFormularioDespesa();if($('dashboardAnualRelatorios'))atualizarDashboardAnual();alert(id?'✅ Despesa alterada.':'✅ Despesa lançada.');}catch(e){console.error(e);alert('❌ Erro ao salvar a despesa.');}}
 function editarDespesa(id){const x=despesasCadastradas.find(d=>d.id===id);if(!x)return;$('despesaEditId').value=id;$('despesaData').value=x.data||'';$('despesaCasa').value=x.casa||'amarela';$('despesaCategoria').value=x.categoria||'outros';$('despesaValor').value=Number(x.valor||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});$('despesaFormaPagamento').value=x.formaPagamento||'Pix';$('despesaContaOrigem').value=x.contaOrigem||contaDestinoCasa(x.casa);$('despesaPrestadorId').value=x.prestadorId||'';$('despesaPrestador').value=x.prestador||'';selecionarPrestadorDespesa();$('despesaDescricao').value=x.descricao||'';$('despesaObservacao').value=x.observacao||'';$('tituloFormularioDespesa').textContent='✏️ Editar lançamento de despesa';$('btnSalvarDespesa').textContent='💾 Salvar alteração';$('pagina-despesas').scrollIntoView({behavior:'smooth',block:'start'});}
