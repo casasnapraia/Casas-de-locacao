@@ -1631,6 +1631,39 @@ textarea{
  }
 }
 
+
+/* =====================================================
+   DASHBOARD ANUAL DE RESERVAS E GASTOS — SEM FILTROS
+===================================================== */
+.dashboard-anual{margin:18px 0 24px;display:grid;gap:16px}
+.dashboard-box{background:#fff;border:1px solid #dfe6ea;border-radius:12px;padding:18px;box-shadow:var(--sombra)}
+.dashboard-box h3{margin:0 0 6px;color:#0a4b6e}
+.dashboard-box>p{margin:0 0 14px;color:var(--cinza);font-size:13px;line-height:1.45}
+.dashboard-nota{background:#f7fafb;border-left:4px solid #0ea5e9;padding:10px 12px;border-radius:7px;margin-bottom:14px;font-size:12px;color:#4b5563}
+.dashboard-graficos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.dashboard-grafico{border:1px solid #e4eaed;border-radius:10px;padding:12px;background:#fbfdfe;min-width:0}
+.dashboard-grafico h4{margin:0 0 10px;font-size:14px;color:#123b50}
+.dashboard-anos{display:grid;gap:14px}
+.dashboard-ano-bloco{border:1px solid #e6ecef;border-radius:9px;padding:10px;background:#fff}
+.dashboard-ano-titulo{font-weight:700;color:#123b50;margin-bottom:10px;font-size:13px}
+.dashboard-colunas{height:190px;display:flex;align-items:flex-end;gap:8px;overflow-x:auto;padding:4px 2px 0}
+.dashboard-coluna{min-width:62px;flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%}
+.dashboard-barra-wrap{height:145px;width:100%;display:flex;align-items:flex-end;justify-content:center}
+.dashboard-barra{width:70%;min-height:2px;border-radius:5px 5px 0 0;background:linear-gradient(180deg,#0ea5e9,#0a4b6e);position:relative}
+.dashboard-barra:hover{filter:brightness(1.08)}
+.dashboard-barra-valor{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(100% + 3px);font-size:9px;font-weight:700;white-space:nowrap;color:#123b50}
+.dashboard-coluna-legenda{font-size:9px;text-align:center;color:#4b5563;margin-top:5px;line-height:1.15;max-width:72px;word-break:break-word}
+.dashboard-tabela-wrap{overflow-x:auto;margin-top:14px}
+.dashboard-tabela{width:100%;border-collapse:collapse;font-size:12px;min-width:720px}
+.dashboard-tabela th,.dashboard-tabela td{border:1px solid #e2e8ec;padding:7px 8px;text-align:right;white-space:nowrap}
+.dashboard-tabela th{background:#eef5f8;color:#123b50;font-weight:700}
+.dashboard-tabela th:first-child,.dashboard-tabela td:first-child{text-align:left}
+.dashboard-tabela tbody tr:nth-child(even){background:#fafcfd}
+.dashboard-tabela .consolidado{font-weight:700;background:#f0f7fa}
+.dashboard-vazio{padding:18px;text-align:center;color:var(--cinza);border:1px dashed #cfd9de;border-radius:8px}
+@media(max-width:1100px){.dashboard-graficos{grid-template-columns:1fr}.dashboard-colunas{height:180px}}
+@media(max-width:700px){.dashboard-box{padding:12px}.dashboard-coluna{min-width:56px}.dashboard-barra{width:62%}}
+
 .painel-despesas{background:#fff;border:1px solid #ddd;border-radius:10px;padding:16px;margin:15px 0;box-shadow:var(--sombra)}
 .despesas-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.despesas-acoes{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.despesas-resumo{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:15px 0}.despesa-acoes button{margin:2px;padding:5px 8px;font-size:12px}@media(max-width:800px){.despesas-form-grid,.despesas-resumo{grid-template-columns:1fr}}
 
@@ -1700,6 +1733,10 @@ textarea{
 .cliente-sucesso{color:#166534;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:10px;margin:10px 0;font-size:13px}
 @media(max-width:800px){.botao-cliente{margin:8px 0 0;width:100%}.cliente-status{margin:8px 0 0;width:100%;justify-content:center}}
 
+
+/* Relatórios gerenciais organizados em telas internas */
+.dashboard-relatorios-organizado{display:flex;flex-direction:column;gap:16px}.dashboard-relatorios-intro{margin-bottom:0}.relatorio-consulta-box{padding:18px}.relatorio-consulta-grid{display:grid;grid-template-columns:minmax(180px,1fr) minmax(220px,1.2fr) auto;gap:14px;align-items:end}.relatorio-consulta-acao{display:flex;align-items:end;height:100%}.relatorio-consulta-acao button{min-height:42px;white-space:nowrap}.dashboard-ajuda{display:block;color:var(--cinza);margin-top:10px}.tela-relatorio-interna{margin-top:18px}.tela-relatorio-filtro-nota{margin:0 0 14px;padding:10px 12px;background:#f7fafb;border-left:4px solid #0ea5e9;border-radius:7px;color:#4b5563;font-size:12px}.relatorio-paginacao{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin:15px 0}.relatorio-paginacao button{padding:7px 12px;border:1px solid #d7e0e4;background:#fff;border-radius:7px;color:#0a4b6e}.relatorio-paginacao button:disabled{opacity:.45;cursor:not-allowed} .relatorio-paginacao-relatorio{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin:15px 0}.relatorio-paginacao-relatorio button{padding:7px 12px;border:1px solid #d7e0e4;background:#fff;border-radius:7px;color:#0a4b6e}.relatorio-paginacao-relatorio button:disabled{opacity:.45;cursor:not-allowed}.tela-relatorio-interna.oculto{display:none!important}.cabecalho-tela-relatorio{margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid #ddd}.cabecalho-tela-relatorio h3{margin:12px 0 4px}.cabecalho-tela-relatorio p{margin:0;color:var(--cinza)}.relatorio-resultado-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:14px 0 20px}.relatorio-resultado-card{background:#fff;border:1px solid #ddd;border-radius:10px;padding:14px}.relatorio-resultado-card small{display:block;color:var(--cinza);margin-bottom:5px}.relatorio-resultado-card strong{font-size:20px}.relatorio-tabela-wrap{overflow-x:auto;margin-top:16px}.relatorio-tabela-gerencial{width:100%;border-collapse:collapse;min-width:760px;background:#fff}.relatorio-tabela-gerencial th,.relatorio-tabela-gerencial td{border:1px solid #ddd;padding:9px 10px;text-align:right}.relatorio-tabela-gerencial th:first-child,.relatorio-tabela-gerencial td:first-child{text-align:left}.relatorio-tabela-gerencial thead th{background:#eef3f5}.relatorio-tabela-gerencial .consolidado{font-weight:700;background:#f7f3df}.relatorio-grafico-simples{margin-top:18px;padding:16px;border:1px solid #ddd;border-radius:10px;background:#fff}.relatorio-grafico-linhas{display:flex;flex-direction:column;gap:9px}.relatorio-grafico-linha{display:grid;grid-template-columns:170px 1fr 120px;gap:10px;align-items:center}.relatorio-grafico-barra-fundo{height:22px;background:#edf0f2;border-radius:12px;overflow:hidden}.relatorio-grafico-barra{height:100%;border-radius:12px;background:linear-gradient(90deg,#1677a8,#35a36d)}
+@media(max-width:760px){.relatorio-consulta-grid{grid-template-columns:1fr}.relatorio-consulta-acao{height:auto}.relatorio-consulta-acao button{width:100%}.relatorio-grafico-linha{grid-template-columns:1fr}.relatorio-grafico-linha strong{text-align:left}}
 </style>
 
 <script>
@@ -2542,6 +2579,15 @@ document.addEventListener('click',function(event){
   ✖ Limpar filtros
  </button>
 
+
+ <div id="dashboardAnualRelatorios" class="dashboard-anual dashboard-relatorios-organizado">
+  <div class="dashboard-box dashboard-relatorios-intro"><h3>📊 Relatórios gerenciais</h3><p>Escolha o ano e a casa. O resultado será aberto em uma tela própria, mantendo o painel principal curto e organizado.</p></div>
+  <div class="dashboard-box relatorio-consulta-box"><h3>💰 Recebimentos</h3><div class="relatorio-consulta-grid"><div class="grupo-input"><label>Ano</label><select id="dashboardRecebimentoAno"></select></div><div class="grupo-input"><label>Casa</label><select id="dashboardRecebimentoCasa"></select></div><div class="relatorio-consulta-acao"><button class="btn-verde" onclick="abrirRelatorioRecebimentos()">📊 Consultar recebimentos</button></div></div><small class="dashboard-ajuda">Use um ano específico ou todos os anos, e uma casa específica ou todas as casas.</small></div>
+  <div class="dashboard-box relatorio-consulta-box"><h3>💸 Gastos</h3><div class="relatorio-consulta-grid"><div class="grupo-input"><label>Ano</label><select id="dashboardGastosAno"></select></div><div class="grupo-input"><label>Casa</label><select id="dashboardGastosCasa"></select></div><div class="grupo-input"><label>Prestador / empresa</label><select id="dashboardGastosPrestador"></select></div><div class="grupo-input"><label>Categoria</label><select id="dashboardGastosCategoria"></select></div><div class="relatorio-consulta-acao"><button class="btn-verde" onclick="abrirRelatorioGastos()">📊 Consultar gastos</button></div></div><small class="dashboard-ajuda">Filtre por ano, casa, prestador e categoria. Os gastos são apresentados por casa, categoria e prestador.</small></div>
+</div>
+<div id="telaRelatorioRecebimentos" class="tela-relatorio-interna oculto"><div class="cabecalho-tela-relatorio"><div><button class="cinza" onclick="voltarRelatoriosDashboard()">← Voltar para Relatórios</button><h3>💰 Resultado — Recebimentos</h3><p id="resumoFiltroRecebimentos"></p></div></div><div class="tela-relatorio-filtro-nota">Os filtros permanecem disponíveis acima enquanto você consulta o resultado. Altere ano ou casa e consulte novamente para atualizar esta tela.</div><div id="resultadoRelatorioRecebimentos"></div></div>
+<div id="telaRelatorioGastos" class="tela-relatorio-interna oculto"><div class="cabecalho-tela-relatorio"><div><button class="cinza" onclick="voltarRelatoriosDashboard()">← Voltar para Relatórios</button><h3>💸 Resultado — Gastos</h3><p id="resumoFiltroGastos"></p></div></div><div class="tela-relatorio-filtro-nota">Os filtros permanecem disponíveis acima enquanto você consulta o resultado. Altere ano ou casa e consulte novamente para atualizar esta tela.</div><div id="resultadoRelatorioGastos"></div></div>
+
  <div id="relatorioConteudo"></div>
 
 </div>
@@ -3101,7 +3147,7 @@ let dataAtual=new Date();
 let valoresDiarias={};
 let reservasConfirmadas=[];
 let reservasPagamentoSelecionadas=new Set();
-let reservasPagamentoFiltradas=[];
+let reservasPagamentoFiltradas=[],paginaReservasAtual=1;const RESERVAS_POR_PAGINA=15;let paginaRelatorioAtual=1;const RELATORIO_POR_PAGINA=15;
 let controlePagamentosAtivo=false;
 let controlePagamentoSaidaInicial="";
 let controlePagamentoSaidaFinal="";
@@ -3970,8 +4016,10 @@ function configurarNavegacao(){
     if(b.dataset.pagina==='casas')
      renderizarCasasAdmin();
 
-    if(b.dataset.pagina==='relatorios')
+    if(b.dataset.pagina==='relatorios'){
+     paginaRelatorioAtual=1;
      gerarRelatorio();
+    }
 
    };
 
@@ -6674,10 +6722,12 @@ function atualizarIndicadoresReservas(){
 }
 
 function aplicarFiltrosReservas(){
+ paginaReservasAtual=1;
  atualizarListaReservas();
 }
 
 function limparFiltrosReservas(){
+ paginaReservasAtual=1;
  if($('filtroHospedeReservas'))$('filtroHospedeReservas').value='';
  if($('filtroCasaReservas'))$('filtroCasaReservas').value='todas';
  if($('filtroSituacaoReservas'))$('filtroSituacaoReservas').value='ativas';
@@ -6743,6 +6793,7 @@ function atualizarListaReservas(){
   });
  }
 
+ const semFiltroReservas=(!busca && casa==='todas' && pagamento==='todos' && situacao==='ativas' && !entradaInicial && !entradaFinal && !saidaInicial && !saidaFinal && !periodo && !controlePagamentosAtivo);
  reservasPagamentoFiltradas=arr.map(r=>r.id);
 
  arr.sort((a,b)=>{
@@ -6751,6 +6802,12 @@ function atualizarListaReservas(){
   if(ordenacao==='criacaoAsc')return timestampCriacaoReserva(a)-timestampCriacaoReserva(b);
   return String(a.entrada||'').localeCompare(String(b.entrada||''));
  });
+
+ const totalResultadosReservas=arr.length;
+ const paginasReservas=Math.max(1,Math.ceil(totalResultadosReservas/RESERVAS_POR_PAGINA));
+ if(!semFiltroReservas) paginaReservasAtual=1;
+ paginaReservasAtual=Math.min(Math.max(1,paginaReservasAtual),paginasReservas);
+ const arrExibicao=semFiltroReservas ? arr.slice((paginaReservasAtual-1)*RESERVAS_POR_PAGINA,paginaReservasAtual*RESERVAS_POR_PAGINA) : arr;
 
  if($('contadorResultadosReservas')){
   $('contadorResultadosReservas').textContent=`${arr.length} ${arr.length===1?'reserva':'reservas'}`;
@@ -6788,7 +6845,7 @@ function atualizarListaReservas(){
      </tr>
     </thead>
     <tbody>
-     ${arr.map(r=>{
+     ${arrExibicao.map(r=>{
       const status=r.statusPagamento||'pendente';
       const pago=Number(r.valorPago||0);
       const total=Number(r.valorTotal||0);
@@ -6843,6 +6900,7 @@ function atualizarListaReservas(){
     </tbody>
    </table>
   </div>
+ ${semFiltroReservas && totalResultadosReservas>RESERVAS_POR_PAGINA ? `<div class="relatorio-paginacao"><button onclick="mudarPaginaReservas(${paginaReservasAtual-1})" ${paginaReservasAtual===1?'disabled':''}>‹ Anterior</button><span>Página ${paginaReservasAtual} de ${paginasReservas} · ${totalResultadosReservas} reservas</span><button onclick="mudarPaginaReservas(${paginaReservasAtual+1})" ${paginaReservasAtual===paginasReservas?'disabled':''}>Próxima ›</button></div>` : ''}
  `;
  atualizarContadorSelecaoPagamentos();
  atualizarCheckboxTodasReservasExibidas();
@@ -6852,6 +6910,10 @@ function atualizarContadorSelecaoPagamentos(){const el=$('contadorSelecaoPagamen
 function alternarSelecaoReservaPagamento(id,marcado){if(marcado)reservasPagamentoSelecionadas.add(id);else reservasPagamentoSelecionadas.delete(id);atualizarContadorSelecaoPagamentos();atualizarCheckboxTodasReservasExibidas();}
 function selecionarTodasReservasFiltradas(){reservasPagamentoFiltradas.forEach(id=>reservasPagamentoSelecionadas.add(id));atualizarListaReservas();}
 function desmarcarTodasReservasFiltradas(){reservasPagamentoFiltradas.forEach(id=>reservasPagamentoSelecionadas.delete(id));atualizarListaReservas();}
+function mudarPaginaRelatorio(pagina){paginaRelatorioAtual=Math.max(1,Number(pagina)||1);gerarRelatorio();window.scrollTo({top:0,behavior:"smooth"});}
+
+function mudarPaginaReservas(pagina){paginaReservasAtual=Math.max(1,Number(pagina)||1);atualizarListaReservas();window.scrollTo({top:0,behavior:'smooth'});}
+
 function toggleTodasReservasExibidas(el){if(el?.checked)selecionarTodasReservasFiltradas();else desmarcarTodasReservasFiltradas();}
 function atualizarCheckboxTodasReservasExibidas(){const el=document.querySelector('.tabela-reservas th.coluna-selecao input[type="checkbox"]');if(!el)return;const ids=reservasPagamentoFiltradas;el.checked=ids.length>0&&ids.every(id=>reservasPagamentoSelecionadas.has(id));el.indeterminate=ids.some(id=>reservasPagamentoSelecionadas.has(id))&&!el.checked;}
 function filtrarControlePagamentos(){const ini=$('filtroPagamentoSaidaInicial')?.value||'';const fim=$('filtroPagamentoSaidaFinal')?.value||'';if(ini&&fim&&ini>fim)return alert('⚠️ A data inicial de saída não pode ser maior que a data final.');controlePagamentosAtivo=true;controlePagamentoSaidaInicial=ini;controlePagamentoSaidaFinal=fim;reservasPagamentoSelecionadas.clear();if($('filtroSituacaoReservas'))$('filtroSituacaoReservas').value='todas';if($('filtroPagamentoReservas'))$('filtroPagamentoReservas').value='todos';if($('filtroSaidaInicialReservas'))$('filtroSaidaInicialReservas').value=ini;if($('filtroSaidaFinalReservas'))$('filtroSaidaFinalReservas').value=fim;atualizarListaReservas();}
@@ -8516,6 +8578,188 @@ function exportarRelatorioCSV(){
  URL.revokeObjectURL(url);
 }
 
+
+
+/* =====================================================
+   DASHBOARD ANUAL — RESERVAS / RECEBIMENTOS / GASTOS
+   Os dados desta seção ignoram os filtros do relatório detalhado.
+===================================================== */
+function dashboardNomeCasa(casa){
+ const mapa={
+  amarela:'Casa Amarela',
+  bege:'Casa Bege',
+  marrom:'Casa Marrom',
+  branca:'Casa Branca',
+  nossa:'Nossa Casa'
+ };
+ return mapa[casa]||casas[casa]?.nome||casa||'Não informada';
+}
+
+function dashboardCasas(){
+ return ['amarela','bege','marrom','branca','nossa'];
+}
+
+function dashboardAnoEntrada(r){
+ const d=dataLocal(r.entrada);
+ return d&& !isNaN(d.getTime()) ? d.getFullYear() : null;
+}
+
+function dashboardAnos(){
+ const anos=new Set();
+ (reservasConfirmadas||[]).forEach(r=>{const a=dashboardAnoEntrada(r);if(a)anos.add(a);});
+ (despesasCadastradas||[]).forEach(x=>{const a=Number(String(x.data||'').slice(0,4));if(a)anos.add(a);});
+ return [...anos].sort((a,b)=>a-b);
+}
+
+function dashboardInicialPorCasa(){
+ const o={};
+ dashboardCasas().forEach(c=>o[c]=0);
+ return o;
+}
+
+function dashboardDadosReservas(){
+ const porAno={};
+ (reservasConfirmadas||[]).forEach(r=>{
+  const ano=dashboardAnoEntrada(r);
+  if(!ano)return;
+  const casa=dashboardCasas().includes(r.casa)?r.casa:null;
+  if(!casa)return;
+  if(!porAno[ano])porAno[ano]={reservas:dashboardInicialPorCasa(),noites:dashboardInicialPorCasa(),recebido:dashboardInicialPorCasa()};
+  porAno[ano].reservas[casa]+=1;
+  const n=Number(r.dias||dias(dataLocal(r.entrada),dataLocal(r.saida))||0);
+  porAno[ano].noites[casa]+=Math.max(0,n);
+  porAno[ano].recebido[casa]+=Number(r.valorPago||0);
+ });
+ return porAno;
+}
+
+function dashboardDadosGastos(){
+ const porAno={};
+ (despesasCadastradas||[]).forEach(x=>{
+  const ano=Number(String(x.data||'').slice(0,4));
+  if(!ano)return;
+  const casa=dashboardCasas().includes(x.casa)?x.casa:null;
+  if(!casa)return;
+  if(!porAno[ano])porAno[ano]=dashboardInicialPorCasa();
+  porAno[ano][casa]+=Number(x.valor||0);
+ });
+ return porAno;
+}
+
+function dashboardNumero(v){
+ return Number(v||0).toLocaleString('pt-BR',{maximumFractionDigits:0});
+}
+
+function dashboardMoeda(v){
+ return moeda(Number(v||0));
+}
+
+function dashboardTabela(anos,dados,modo){
+ if(!anos.length)return '<div class="dashboard-vazio">Nenhum dado disponível para apresentar.</div>';
+ let h='<div class="dashboard-tabela-wrap"><table class="dashboard-tabela"><thead><tr><th>Ano</th>';
+ dashboardCasas().forEach(c=>h+=`<th>${dashboardNomeCasa(c)}</th>`);
+ h+='<th class="consolidado">Consolidado</th></tr></thead><tbody>';
+ anos.forEach(ano=>{
+  const linha=dados[ano]||dashboardInicialPorCasa();
+  let consolidado=0;
+  h+=`<tr><td><strong>${ano}</strong></td>`;
+  dashboardCasas().forEach(c=>{
+   const v=Number(linha[c]||0);consolidado+=v;
+   h+=`<td>${modo==='moeda'?dashboardMoeda(v):dashboardNumero(v)}</td>`;
+  });
+  h+=`<td class="consolidado">${modo==='moeda'?dashboardMoeda(consolidado):dashboardNumero(consolidado)}</td></tr>`;
+ });
+ h+='</tbody></table></div>';
+ return h;
+}
+
+function dashboardGraficoColunas(containerId,anos,dados,modo){
+ const el=$(containerId);
+ if(!el)return;
+ if(!anos.length){el.innerHTML='<div class="dashboard-vazio">Nenhum dado disponível.</div>';return;}
+ let max=0;
+ anos.forEach(ano=>dashboardCasas().forEach(c=>{max=Math.max(max,Number((dados[ano]||dashboardInicialPorCasa())[c]||0));}));
+ if(max<=0){el.innerHTML='<div class="dashboard-vazio">Nenhum lançamento no período.</div>';return;}
+ let html='<div class="dashboard-anos">';
+ anos.forEach(ano=>{
+  const linha=dados[ano]||dashboardInicialPorCasa();
+  html+=`<div class="dashboard-ano-bloco"><div class="dashboard-ano-titulo">${ano}</div><div class="dashboard-colunas">`;
+  dashboardCasas().forEach(c=>{
+   const v=Number(linha[c]||0);
+   const altura=v>0?Math.max(4,(v/max)*100):0;
+   const valor=modo==='moeda'?dashboardMoeda(v):dashboardNumero(v);
+   html+=`<div class="dashboard-coluna"><div class="dashboard-barra-wrap"><div class="dashboard-barra" style="height:${altura}%"><span class="dashboard-barra-valor">${valor}</span></div></div><div class="dashboard-coluna-legenda">${dashboardNomeCasa(c)}</div></div>`;
+  });
+  html+='</div></div>';
+ });
+ html+='</div>';
+ el.innerHTML=html;
+}
+
+function dashboardPopularSeletoresRelatorios(){
+ const anos=dashboardAnos();
+ const opAno='<option value="todos">Todos os anos</option>'+anos.map(a=>`<option value="${a}">${a}</option>`).join('');
+ ['dashboardRecebimentoAno','dashboardGastosAno'].forEach(id=>{const el=$(id);if(el){const atual=el.value;el.innerHTML=opAno;if([...el.options].some(o=>o.value===atual))el.value=atual;}});
+ const casasOpts='<option value="todas">Todas as casas</option>'+dashboardCasas().map(c=>`<option value="${c}">${dashboardNomeCasa(c)}</option>`).join('');
+ ['dashboardRecebimentoCasa','dashboardGastosCasa'].forEach(id=>{const el=$(id);if(el){const atual=el.value;el.innerHTML=casasOpts;if([...el.options].some(o=>o.value===atual))el.value=atual;}});
+ const prestadoresOpts='<option value="todos">Todos os prestadores</option>'+(prestadoresCadastrados||[]).slice().sort((a,b)=>String(a.nome||a.fantasia||'').localeCompare(String(b.nome||b.fantasia||''),'pt-BR')).map(x=>{const nome=x.fantasia||x.nome||'Prestador sem nome';return `<option value="${escapeHtmlReserva(x.id||'')}">${escapeHtmlReserva(nome)}</option>`}).join('');
+ const pe=$('dashboardGastosPrestador');
+ if(pe){const atual=pe.value;pe.innerHTML=prestadoresOpts;if([...pe.options].some(o=>o.value===atual))pe.value=atual;}
+ const categoriasOpts='<option value="todas">Todas as categorias</option>'+Object.entries(nomesCategoriasDespesa||{}).map(([id,nome])=>`<option value="${escapeHtmlReserva(id)}">${escapeHtmlReserva(nome)}</option>`).join('');
+ const ce=$('dashboardGastosCategoria');
+ if(ce){const atual=ce.value;ce.innerHTML=categoriasOpts;if([...ce.options].some(o=>o.value===atual))ce.value=atual;}
+}
+function dashboardCasasSelecionadas(casa){return casa&&casa!=='todas'?[casa]:dashboardCasas();}
+function dashboardAnoSelecionado(v){return v&&v!=='todos'?Number(v):null;}
+function dashboardReservaValidaRelatorio(r){return r&&r.entrada&&r.saida&&dashboardCasas().includes(r.casa);}
+function dashboardAnosRecebimentos(){const s=new Set();(reservasConfirmadas||[]).forEach(r=>{if(dashboardReservaValidaRelatorio(r)){const a=dashboardAnoEntrada(r);if(a)s.add(a);}});return [...s].sort((a,b)=>a-b);}
+function dashboardAnosGastos(){const s=new Set();(despesasCadastradas||[]).forEach(x=>{const a=Number(String(x.data||'').slice(0,4));if(a)s.add(a);});return [...s].sort((a,b)=>a-b);}
+function dashboardDadosRecebimentosFiltrados(ano,casa){
+ const porCasa={};dashboardCasasSelecionadas(casa).forEach(c=>porCasa[c]={reservas:0,noites:0,recebido:0});const porAno={};
+ (reservasConfirmadas||[]).forEach(r=>{if(!dashboardReservaValidaRelatorio(r))return;const a=dashboardAnoEntrada(r);if(!a||(ano&&a!==ano)||(casa!=='todas'&&r.casa!==casa))return;const c=r.casa,n=Number(r.dias||dias(dataLocal(r.entrada),dataLocal(r.saida))||0),p=Number(r.valorPago||0);if(!porCasa[c])porCasa[c]={reservas:0,noites:0,recebido:0};porCasa[c].reservas++;porCasa[c].noites+=Math.max(0,n);porCasa[c].recebido+=p;if(!porAno[a])porAno[a]={};if(!porAno[a][c])porAno[a][c]={reservas:0,noites:0,recebido:0};porAno[a][c].reservas++;porAno[a][c].noites+=Math.max(0,n);porAno[a][c].recebido+=p;});return{porCasa,porAno};
+}
+function dashboardDadosGastosFiltrados(ano,casa,prestador='todos',categoria='todas'){
+ const porCasa={};dashboardCasasSelecionadas(casa).forEach(c=>porCasa[c]=0);const porAno={};const linhas=[];
+ (despesasCadastradas||[]).forEach(x=>{
+  const a=Number(String(x.data||'').slice(0,4));
+  if(!a||(ano&&a!==ano)||(casa!=='todas'&&x.casa!==casa)||!dashboardCasas().includes(x.casa))return;
+  if(prestador!=='todos' && String(x.prestadorId||'')!==String(prestador))return;
+  if(categoria!=='todas' && String(x.categoria||'outros')!==String(categoria))return;
+  const valor=Number(x.valor||0), nomePrestador=x.prestador||((prestadoresCadastrados||[]).find(p=>String(p.id)===String(x.prestadorId))?.fantasia||((prestadoresCadastrados||[]).find(p=>String(p.id)===String(x.prestadorId))?.nome||'Não informado'));
+  const nomeCategoria=nomeCategoriaDespesa(x.categoria);
+  porCasa[x.casa]=(porCasa[x.casa]||0)+valor;
+  if(!porAno[a])porAno[a]={};
+  porAno[a][x.casa]=(porAno[a][x.casa]||0)+valor;
+  linhas.push({casa:x.casa,prestador:nomePrestador,prestadorId:x.prestadorId||'',categoria:x.categoria||'outros',nomeCategoria,valor});
+ });
+ const agrupadas={};linhas.forEach(x=>{const k=x.casa+'|'+(x.prestadorId||x.prestador)+'|'+x.categoria;if(!agrupadas[k])agrupadas[k]={casa:x.casa,prestador:x.prestador,valor:0,categoria:x.categoria,nomeCategoria:x.nomeCategoria};agrupadas[k].valor+=x.valor;});
+ return{porCasa,porAno,linhas:Object.values(agrupadas).sort((a,b)=>a.casa.localeCompare(b.casa)||a.nomeCategoria.localeCompare(b.nomeCategoria,'pt-BR')||a.prestador.localeCompare(b.prestador,'pt-BR'))};
+}
+function dashboardCardRelatorio(titulo,valor){return`<div class="relatorio-resultado-card"><small>${titulo}</small><strong>${valor}</strong></div>`}
+function dashboardNomeFiltroCasa(c){return c==='todas'?'Todas as casas':dashboardNomeCasa(c)}
+function dashboardGraficoGerencial(dados,modo,titulo){const vals=Object.entries(dados||{});if(!vals.length)return'';const max=Math.max(...vals.map(([,v])=>Number(v||0)),0);if(max<=0)return'';return`<div class="relatorio-grafico-simples"><h4>${titulo}</h4><div class="relatorio-grafico-linhas">${vals.map(([c,v])=>{const pct=Math.max(0,Math.min(100,Number(v||0)/max*100));return`<div class="relatorio-grafico-linha"><span>${dashboardNomeCasa(c)}</span><div class="relatorio-grafico-barra-fundo"><div class="relatorio-grafico-barra" style="width:${pct}%"></div></div><strong>${modo==='moeda'?moeda(v):dashboardNumero(v)}</strong></div>`}).join('')}</div></div>`}
+function renderizarResultadoRecebimentos(){
+ const ano=dashboardAnoSelecionado($('dashboardRecebimentoAno')?.value||'todos'),casa=$('dashboardRecebimentoCasa')?.value||'todas',dados=dashboardDadosRecebimentosFiltrados(ano,casa),casasSel=dashboardCasasSelecionadas(casa);const resumo=Object.values(dados.porCasa).reduce((a,x)=>({reservas:a.reservas+x.reservas,noites:a.noites+x.noites,recebido:a.recebido+x.recebido}),{reservas:0,noites:0,recebido:0});$('resumoFiltroRecebimentos').textContent=`Período: ${ano||'todos os anos'} · Casa: ${dashboardNomeFiltroCasa(casa)}`;let html=`<div class="relatorio-resultado-grid">${dashboardCardRelatorio('Reservas',dashboardNumero(resumo.reservas))}${dashboardCardRelatorio('Noites',dashboardNumero(resumo.noites))}${dashboardCardRelatorio('Valor recebido',moeda(resumo.recebido))}</div>`;html+=dashboardGraficoGerencial(Object.fromEntries(casasSel.map(c=>[c,dados.porCasa[c]?.recebido||0])),'moeda','Valor recebido por casa');html+='<div class="relatorio-tabela-wrap"><table class="relatorio-tabela-gerencial"><thead><tr><th>Casa</th><th>Reservas</th><th>Noites</th><th>Valor recebido</th><th class="consolidado">Consolidado</th></tr></thead><tbody>';casasSel.forEach(c=>{const x=dados.porCasa[c]||{reservas:0,noites:0,recebido:0};html+=`<tr><td><strong>${dashboardNomeCasa(c)}</strong></td><td>${dashboardNumero(x.reservas)}</td><td>${dashboardNumero(x.noites)}</td><td>${moeda(x.recebido)}</td><td class="consolidado">${moeda(x.recebido)}</td></tr>`});html+=`<tr><td><strong>CONSOLIDADO</strong></td><td><strong>${dashboardNumero(resumo.reservas)}</strong></td><td><strong>${dashboardNumero(resumo.noites)}</strong></td><td><strong>${moeda(resumo.recebido)}</strong></td><td class="consolidado"><strong>${moeda(resumo.recebido)}</strong></td></tr></tbody></table></div>`;const anos=ano?[ano]:dashboardAnosRecebimentos();if(!ano&&anos.length){html+='<div class="relatorio-tabela-wrap"><h4>Histórico por ano</h4><table class="relatorio-tabela-gerencial"><thead><tr><th>Ano</th><th>Reservas</th><th>Noites</th><th>Valor recebido</th></tr></thead><tbody>';anos.forEach(a=>{let rr=0,nn=0,pp=0;Object.values(dados.porAno[a]||{}).forEach(x=>{rr+=x.reservas;nn+=x.noites;pp+=x.recebido});html+=`<tr><td><strong>${a}</strong></td><td>${dashboardNumero(rr)}</td><td>${dashboardNumero(nn)}</td><td>${moeda(pp)}</td></tr>`});html+='</tbody></table></div>'}$('resultadoRelatorioRecebimentos').innerHTML=html;
+}
+function renderizarResultadoGastos(){
+ const ano=dashboardAnoSelecionado($('dashboardGastosAno')?.value||'todos'),casa=$('dashboardGastosCasa')?.value||'todas',prestador=$('dashboardGastosPrestador')?.value||'todos',categoria=$('dashboardGastosCategoria')?.value||'todas',dados=dashboardDadosGastosFiltrados(ano,casa,prestador,categoria),casasSel=dashboardCasasSelecionadas(casa),total=Object.values(dados.porCasa).reduce((s,v)=>s+Number(v||0),0);
+ const nomePrestadorFiltro=prestador==='todos'?'Todos os prestadores':((prestadoresCadastrados||[]).find(p=>String(p.id)===String(prestador))?.fantasia||((prestadoresCadastrados||[]).find(p=>String(p.id)===String(prestador))?.nome||'Prestador'));
+ const nomeCategoriaFiltro=categoria==='todas'?'Todas as categorias':nomeCategoriaDespesa(categoria);
+ $('resumoFiltroGastos').textContent=`Período: ${ano||'todos os anos'} · Casa: ${dashboardNomeFiltroCasa(casa)} · Prestador: ${nomePrestadorFiltro} · Categoria: ${nomeCategoriaFiltro}`;
+ let html=`<div class="relatorio-resultado-grid">${dashboardCardRelatorio('Total de gastos',moeda(total))}${dashboardCardRelatorio('Casas apresentadas',dashboardNumero(casasSel.length))}${dashboardCardRelatorio('Prestador',nomePrestadorFiltro)}${dashboardCardRelatorio('Categoria',nomeCategoriaFiltro)}</div>`;
+ html+=dashboardGraficoGerencial(dados.porCasa,'moeda','Total de gastos por casa');
+ html+='<div class="relatorio-tabela-wrap"><table class="relatorio-tabela-gerencial"><thead><tr><th>Casa</th><th>Categoria</th><th>Prestador / empresa</th><th>Total de gastos</th><th class="consolidado">Consolidado</th></tr></thead><tbody>';
+ if(dados.linhas.length){dados.linhas.forEach(x=>{html+=`<tr><td><strong>${dashboardNomeCasa(x.casa)}</strong></td><td>${escapeHtmlReserva(x.nomeCategoria||'Outros')}</td><td>${escapeHtmlReserva(x.prestador||'Não informado')}</td><td>${moeda(x.valor)}</td><td class="consolidado">${moeda(x.valor)}</td></tr>`});}else{html+='<tr><td colspan="5">Nenhum gasto encontrado para os filtros selecionados.</td></tr>';}
+ html+=`<tr><td colspan="3"><strong>CONSOLIDADO</strong></td><td><strong>${moeda(total)}</strong></td><td class="consolidado"><strong>${moeda(total)}</strong></td></tr></tbody></table></div>`;
+ const anos=ano?[ano]:dashboardAnosGastos();
+ if(!ano&&anos.length){html+='<div class="relatorio-tabela-wrap"><h4>Histórico por ano</h4><table class="relatorio-tabela-gerencial"><thead><tr><th>Ano</th><th>Total de gastos</th></tr></thead><tbody>';anos.forEach(a=>{let t=0;Object.values(dados.porAno[a]||{}).forEach(v=>t+=Number(v||0));html+=`<tr><td><strong>${a}</strong></td><td>${moeda(t)}</td></tr>`});html+='</tbody></table></div>'}
+ $('resultadoRelatorioGastos').innerHTML=html;
+}
+function abrirRelatorioRecebimentos(){dashboardPopularSeletoresRelatorios();$('relatorioConteudo')?.classList.add('oculto');$('telaRelatorioGastos')?.classList.add('oculto');$('telaRelatorioRecebimentos')?.classList.remove('oculto');renderizarResultadoRecebimentos();window.scrollTo({top:0,behavior:'smooth'})}
+function abrirRelatorioGastos(){dashboardPopularSeletoresRelatorios();$('relatorioConteudo')?.classList.add('oculto');$('telaRelatorioRecebimentos')?.classList.add('oculto');$('telaRelatorioGastos')?.classList.remove('oculto');renderizarResultadoGastos();window.scrollTo({top:0,behavior:'smooth'})}
+function voltarRelatoriosDashboard(){$('telaRelatorioRecebimentos')?.classList.add('oculto');$('telaRelatorioGastos')?.classList.add('oculto');$('relatorioConteudo')?.classList.remove('oculto');$('dashboardAnualRelatorios')?.classList.remove('oculto');dashboardPopularSeletoresRelatorios();window.scrollTo({top:0,behavior:'smooth'})}
+function atualizarDashboardAnual(){dashboardPopularSeletoresRelatorios()}
+
 function gerarRelatorio(){
 
  const el=
@@ -8581,6 +8825,23 @@ function gerarRelatorio(){
    r=>r.statusPagamento==='pago'
   ).length;
 
+ const semFiltroRelatorio=!$('filtroCasaRelatorio')?.value || (
+  ($('filtroCasaRelatorio')?.value||'todas')==='todas' &&
+  ($('filtroPeriodoRelatorio')?.value||'todos')==='todos' &&
+  ($('filtroStatusRelatorio')?.value||'todos')==='todos' &&
+  ($('filtroOrigemRelatorio')?.value||'todos')==='todos' &&
+  !($('filtroHospedeRelatorio')?.value||'').trim() &&
+  ($('filtroFormaPagamentoRelatorio')?.value||'todos')==='todos' &&
+  ($('filtroRecebimentoRelatorio')?.value||'todos')==='todos' &&
+  ($('filtroContaDestinoRelatorio')?.value||'todos')==='todos' &&
+  !($('relatorioDataInicial')?.value||'') &&
+  !($('relatorioDataFinal')?.value||'')
+ );
+ const paginasRelatorio=Math.max(1,Math.ceil(arr.length/RELATORIO_POR_PAGINA));
+ if(!semFiltroRelatorio) paginaRelatorioAtual=1;
+ paginaRelatorioAtual=Math.min(Math.max(1,paginaRelatorioAtual),paginasRelatorio);
+ const arrExibicaoRelatorio=semFiltroRelatorio ? arr.slice((paginaRelatorioAtual-1)*RELATORIO_POR_PAGINA,paginaRelatorioAtual*RELATORIO_POR_PAGINA) : arr;
+
  let tabela=
   arr.length
    ?`
@@ -8612,7 +8873,7 @@ function gerarRelatorio(){
 
       <tbody>
 
-       ${arr.map(r=>{
+       ${arrExibicaoRelatorio.map(r=>{
 
         const t=
          Number(
@@ -8703,6 +8964,12 @@ function gerarRelatorio(){
      Nenhuma reserva encontrada com os filtros atuais.
     </p>
    `;
+
+ if(semFiltroRelatorio && arr.length>RELATORIO_POR_PAGINA){
+  tabela+=`<div class="relatorio-paginacao-relatorio"><button onclick="mudarPaginaRelatorio(${paginaRelatorioAtual-1})" ${paginaRelatorioAtual===1?'disabled':''}>‹ Anterior</button><span>Página ${paginaRelatorioAtual} de ${paginasRelatorio} · ${arr.length} reservas</span><button onclick="mudarPaginaRelatorio(${paginaRelatorioAtual+1})" ${paginaRelatorioAtual===paginasRelatorio?'disabled':''}>Próxima ›</button></div>`;
+ }
+
+ atualizarDashboardAnual();
 
  el.innerHTML=`
 
@@ -8968,14 +9235,14 @@ function filtrarPrestadores(pagina=1){const el=$('listaPrestadores');if(!el)retu
 function popularSelectPrestadores(){const opts='<option value="">— Selecionar prestador —</option>'+prestadoresCadastrados.map(x=>`<option value="${x.id}">${escapeHtmlReserva(x.nome)} — ${x.tipo==='pj'?'CNPJ':'CPF'} ${escapeHtmlReserva(x.documento||'')}</option>`).join('');if($('despesaPrestadorId')){const v=$('despesaPrestadorId').value;$('despesaPrestadorId').innerHTML=opts;if(v)$('despesaPrestadorId').value=v;}if($('filtroDespesaPrestador')){const v=$('filtroDespesaPrestador').value;$('filtroDespesaPrestador').innerHTML='<option value="todos">Todos</option>'+prestadoresCadastrados.map(x=>`<option value="${x.id}">${escapeHtmlReserva(x.nome)}</option>`).join('');if(v)$('filtroDespesaPrestador').value=v;}}
 function selecionarPrestadorDespesa(){const id=$('despesaPrestadorId')?.value||'';const x=prestadoresCadastrados.find(p=>p.id===id);$('despesaPrestador').value=x?x.nome:'';$('despesaPrestadorInfo').textContent=x?`${x.tipo==='pj'?'CNPJ':'CPF'}: ${x.documento||'—'}${x.telefone?' · '+x.telefone:''}`:'';}
 
-async function carregarDespesas(){despesasCadastradas=[];try{const snap=await db.collection('despesas').orderBy('data','desc').get();snap.forEach(d=>despesasCadastradas.push({id:d.id,...d.data()}));}catch(e){console.error(e);}paginaDespesasAtual=1;gerarRelatorioDespesas();}
+async function carregarDespesas(){despesasCadastradas=[];try{const snap=await db.collection('despesas').orderBy('data','desc').get();snap.forEach(d=>despesasCadastradas.push({id:d.id,...d.data()}));}catch(e){console.error(e);}paginaDespesasAtual=1;gerarRelatorioDespesas();if($('dashboardAnualRelatorios'))atualizarDashboardAnual();}
 function limparFormularioDespesa(){if(!$('despesaData'))return;$('despesaEditId').value='';$('despesaData').value=dataStr(hoje());$('despesaCasa').value='amarela';$('despesaCategoria').value='agua';$('despesaValor').value='';$('despesaFormaPagamento').value='Pix';$('despesaContaOrigem').value='Caixa Casa Amarela';atualizarCaixaDestinoDespesa();$('despesaPrestadorId').value='';$('despesaPrestador').value='';$('despesaPrestadorInfo').textContent='';$('despesaDescricao').value='';$('despesaObservacao').value='';$('tituloFormularioDespesa').textContent='➕ Novo lançamento de despesa';$('btnSalvarDespesa').textContent='💾 Lançar despesa';}
-async function salvarDespesa(){const id=$('despesaEditId').value,data=$('despesaData').value,casa=$('despesaCasa').value,categoria=$('despesaCategoria').value,valor=valorNumericoDespesa($('despesaValor').value),formaPagamento=$('despesaFormaPagamento').value,contaOrigem=$('despesaContaOrigem').value;if(!data||!casa||!categoria||valor<=0||!formaPagamento||!contaOrigem)return alert('⚠️ Preencha os campos obrigatórios da despesa.');const dados={data,casa,categoria,valor,formaPagamento,contaOrigem,prestadorId:$('despesaPrestadorId').value||'',prestador:$('despesaPrestador').value.trim(),descricao:$('despesaDescricao').value.trim(),observacao:$('despesaObservacao').value.trim(),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()};try{if(id)await db.collection('despesas').doc(id).update(dados);else await db.collection('despesas').add({...dados,criadoEm:firebase.firestore.FieldValue.serverTimestamp()});await carregarDespesas();limparFormularioDespesa();alert(id?'✅ Despesa alterada.':'✅ Despesa lançada.');}catch(e){console.error(e);alert('❌ Erro ao salvar a despesa.');}}
+async function salvarDespesa(){const id=$('despesaEditId').value,data=$('despesaData').value,casa=$('despesaCasa').value,categoria=$('despesaCategoria').value,valor=valorNumericoDespesa($('despesaValor').value),formaPagamento=$('despesaFormaPagamento').value,contaOrigem=$('despesaContaOrigem').value;if(!data||!casa||!categoria||valor<=0||!formaPagamento||!contaOrigem)return alert('⚠️ Preencha os campos obrigatórios da despesa.');const dados={data,casa,categoria,valor,formaPagamento,contaOrigem,prestadorId:$('despesaPrestadorId').value||'',prestador:$('despesaPrestador').value.trim(),descricao:$('despesaDescricao').value.trim(),observacao:$('despesaObservacao').value.trim(),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()};try{if(id)await db.collection('despesas').doc(id).update(dados);else await db.collection('despesas').add({...dados,criadoEm:firebase.firestore.FieldValue.serverTimestamp()});await carregarDespesas();limparFormularioDespesa();if($('dashboardAnualRelatorios'))atualizarDashboardAnual();alert(id?'✅ Despesa alterada.':'✅ Despesa lançada.');}catch(e){console.error(e);alert('❌ Erro ao salvar a despesa.');}}
 function editarDespesa(id){const x=despesasCadastradas.find(d=>d.id===id);if(!x)return;$('despesaEditId').value=id;$('despesaData').value=x.data||'';$('despesaCasa').value=x.casa||'amarela';$('despesaCategoria').value=x.categoria||'outros';$('despesaValor').value=Number(x.valor||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});$('despesaFormaPagamento').value=x.formaPagamento||'Pix';$('despesaContaOrigem').value=x.contaOrigem||contaDestinoCasa(x.casa);$('despesaPrestadorId').value=x.prestadorId||'';$('despesaPrestador').value=x.prestador||'';selecionarPrestadorDespesa();$('despesaDescricao').value=x.descricao||'';$('despesaObservacao').value=x.observacao||'';$('tituloFormularioDespesa').textContent='✏️ Editar lançamento de despesa';$('btnSalvarDespesa').textContent='💾 Salvar alteração';$('pagina-despesas').scrollIntoView({behavior:'smooth',block:'start'});}
 function obterDespesasFiltradas(){let a=[...despesasCadastradas],c=$('filtroDespesaCasa')?.value||'todas',cat=$('filtroDespesaCategoria')?.value||'todas',pag=$('filtroDespesaPagamento')?.value||'todas',cont=$('filtroDespesaConta')?.value||'todas',prest=$('filtroDespesaPrestador')?.value||'todos',ini=$('filtroDespesaDataInicial')?.value||'',fim=$('filtroDespesaDataFinal')?.value||'';if(prest!=='todos')a=a.filter(x=>(x.prestadorId||'')===prest);if(c!=='todas')a=a.filter(x=>x.casa===c);if(cat!=='todas')a=a.filter(x=>x.categoria===cat);if(pag!=='todas')a=a.filter(x=>x.formaPagamento===pag);if(cont!=='todas')a=a.filter(x=>x.contaOrigem===cont);if(ini)a=a.filter(x=>x.data>=ini);if(fim)a=a.filter(x=>x.data<=fim);return a.sort((x,y)=>(y.data||'').localeCompare(x.data||''));}
 function gerarRelatorioDespesas(){const a=obterDespesasFiltradas();ultimasDespesasFiltradas=[...a];const total=a.reduce((s,x)=>s+Number(x.valor||0),0),el=$('listaDespesas'),res=$('despesasResumo');if(res)res.innerHTML=`<div class="resumo-card"><small>Lançamentos</small><strong>${a.length}</strong></div><div class="resumo-card"><small>Total</small><strong>${moeda(total)}</strong></div>`;const pags=Math.max(1,Math.ceil(a.length/DESPESAS_POR_PAGINA));paginaDespesasAtual=Math.min(Math.max(1,paginaDespesasAtual),pags);const vis=a.slice((paginaDespesasAtual-1)*DESPESAS_POR_PAGINA,paginaDespesasAtual*DESPESAS_POR_PAGINA);if(el)el.innerHTML=vis.length?`<div style="overflow-x:auto"><table class="tabela-admin-compacta"><thead><tr><th>Data</th><th>Casa</th><th>Categoria</th><th>Prestador</th><th>Descrição</th><th>Forma</th><th>Conta</th><th>Valor</th><th>Ações</th></tr></thead><tbody>${vis.map(x=>`<tr><td>${dataBr(x.data)}</td><td>${escapeHtmlReserva(casas[x.casa]?.nome||x.casa)}</td><td>${nomeCategoriaDespesa(x.categoria)}</td><td>${escapeHtmlReserva(x.prestador||'—')}</td><td>${escapeHtmlReserva(x.descricao||'—')}</td><td>${escapeHtmlReserva(x.formaPagamento||'—')}</td><td>${escapeHtmlReserva(x.contaOrigem||'—')}</td><td><strong>${moeda(x.valor)}</strong></td><td><button class="azul" onclick="editarDespesa('${x.id}')">✏️ Editar</button><button class="vermelho" onclick="excluirDespesa('${x.id}')">Excluir</button></td></tr>`).join('')}</tbody></table></div>`:'<p style="color:var(--cinza)">Nenhuma despesa encontrada.</p>';const pe=$('paginacaoDespesas');if(pe)pe.innerHTML=a.length<=DESPESAS_POR_PAGINA?'':`<button onclick="mudarPaginaDespesas(${paginaDespesasAtual-1})" ${paginaDespesasAtual===1?'disabled':''}>‹ Anterior</button> <span>${paginaDespesasAtual}/${pags}</span> <button onclick="mudarPaginaDespesas(${paginaDespesasAtual+1})" ${paginaDespesasAtual===pags?'disabled':''}>Próxima ›</button>`;}
 function mudarPaginaDespesas(p){paginaDespesasAtual=p;gerarRelatorioDespesas();}
-async function excluirDespesa(id){if(!confirm('Excluir esta despesa?'))return;try{await db.collection('despesas').doc(id).delete();await carregarDespesas();}catch(e){console.error(e);alert('❌ Não foi possível excluir.');}}
+async function excluirDespesa(id){if(!confirm('Excluir esta despesa?'))return;try{await db.collection('despesas').doc(id).delete();await carregarDespesas();if($('dashboardAnualRelatorios'))atualizarDashboardAnual();}catch(e){console.error(e);alert('❌ Não foi possível excluir.');}}
 function limparFiltrosDespesas(){['filtroDespesaCasa','filtroDespesaCategoria','filtroDespesaPagamento','filtroDespesaConta'].forEach(id=>{if($(id))$(id).value='todas';});if($('filtroDespesaPrestador'))$('filtroDespesaPrestador').value='todos';['filtroDespesaDataInicial','filtroDespesaDataFinal'].forEach(id=>{if($(id))$(id).value='';});paginaDespesasAtual=1;gerarRelatorioDespesas();}
 function exportarDespesasCSV(){const a=ultimasDespesasFiltradas;if(!a.length)return alert('Nenhuma despesa para exportar.');let csv='Data;Casa;Categoria;Prestador;Descrição;Forma;Conta;Valor;Observação\n';a.forEach(x=>csv+=`"${dataBr(x.data)}";"${casas[x.casa]?.nome||x.casa}";"${nomeCategoriaDespesa(x.categoria)}";"${String(x.prestador||'').replace(/"/g,'""')}";"${String(x.descricao||'').replace(/"/g,'""')}";"${x.formaPagamento||''}";"${x.contaOrigem||''}";"${Number(x.valor||0).toFixed(2)}";"${String(x.observacao||'').replace(/"/g,'""')}"\n`);const blob=new Blob(["\ufeff"+csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),aEl=document.createElement('a');aEl.href=url;aEl.download='relatorio_despesas.csv';aEl.click();URL.revokeObjectURL(url);}
 function imprimirRelatorioDespesas(){const a=ultimasDespesasFiltradas;if(!a.length)return alert('Nenhuma despesa para imprimir.');const total=a.reduce((s,x)=>s+Number(x.valor||0),0),w=window.open('','_blank','width=1000,height=750');if(!w)return alert('⚠️ Permita pop-ups.');w.document.write(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Relatório de Despesas</title><style>body{font-family:Arial;padding:28px;color:#222}h1{text-align:center;color:#0a4b6e}table{width:100%;border-collapse:collapse;font-size:11px}th,td{border:1px solid #ccc;padding:7px}th{background:#e9eef0}.total{text-align:right;font-weight:bold;margin-top:15px}@media print{button{display:none}}</style></head><body><h1>CASAS NA PRAIA — RELATÓRIO DE DESPESAS</h1><p style="text-align:center">Emitido em ${new Date().toLocaleString('pt-BR')}</p><table><tr><th>Data</th><th>Casa</th><th>Categoria</th><th>Prestador</th><th>Descrição</th><th>Forma</th><th>Conta</th><th>Valor</th></tr>${a.map(x=>`<tr><td>${dataBr(x.data)}</td><td>${casas[x.casa]?.nome||x.casa}</td><td>${nomeCategoriaDespesa(x.categoria)}</td><td>${escapeHtmlReserva(x.prestador||'')}</td><td>${escapeHtmlReserva(x.descricao||'')}</td><td>${escapeHtmlReserva(x.formaPagamento||'')}</td><td>${escapeHtmlReserva(x.contaOrigem||'')}</td><td>${moeda(x.valor)}</td></tr>`).join('')}</table><div class="total">Total: ${moeda(total)}</div><button onclick="window.print()">Imprimir / Salvar PDF</button></body></html>`);w.document.close();setTimeout(()=>w.print(),300);}
