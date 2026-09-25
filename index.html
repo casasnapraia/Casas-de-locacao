@@ -2340,10 +2340,9 @@ document.addEventListener('click',function(event){
   <div class="reservas-filtros-grid">
    <div class="reservas-filtro"><label>🏠 Casa</label><select id="filtroManutencaoCasa" onchange="filtrarManutencoes()"><option value="todas">Todas as casas</option><option value="amarela">Casa Amarela</option><option value="bege">Casa Bege</option><option value="marrom">Casa Marrom</option><option value="branca">Casa Branca</option><option value="nossa">Nossa Casa</option></select></div>
    <div class="reservas-filtro"><label>📌 Status</label><select id="filtroManutencaoStatus" onchange="filtrarManutencoes()"><option value="todos">Todos</option><option value="pendente">🟠 Pendente</option><option value="concluida">🟢 Concluída</option></select></div>
-   <div class="reservas-filtro"><label>🔧 Item</label><input id="filtroManutencaoItem" placeholder="Ex.: lâmpada, chuveiro..." oninput="filtrarManutencoes()"></div>
-   <div class="reservas-filtro"><label>👷 Prestador</label><select id="filtroManutencaoPrestador" onchange="filtrarManutencoes()"><option value="todos">Todos</option></select></div>
+   <div class="reservas-filtro"><label>🔧 Item</label><select id="filtroManutencaoItem" onchange="filtrarManutencoes()"><option value="todos">Todos os itens</option></select></div>
   </div>
-  <div class="reservas-filtros-acoes"><button class="azul" onclick="carregarManutencoes()">🔎 Consultar manutenções</button><button class="cinza" onclick="limparFiltrosManutencoes()">✖ Limpar filtros</button></div>
+  <div class="reservas-filtros-acoes"><button class="azul" onclick="carregarManutencoes()">🔎 Consultar manutenções</button><button class="amarelo" onclick="abrirEmissaoManutencoes()">📋 Emitir manutenção para prestador</button><button class="cinza" onclick="limparFiltrosManutencoes()">✖ Limpar filtros</button></div>
  </div>
  <div id="resumoManutencoes" class="despesas-resumo"><div class="dashboard-vazio">As manutenções não são carregadas automaticamente. Consulte quando precisar.</div></div>
  <div id="listaManutencoes"></div>
@@ -9538,19 +9537,172 @@ function popularSelectPrestadores(){const opts='<option value="">— Selecionar 
 function selecionarPrestadorDespesa(){const id=$('despesaPrestadorId')?.value||'';const x=prestadoresCadastrados.find(p=>p.id===id);$('despesaPrestador').value=x?x.nome:'';$('despesaPrestadorInfo').textContent=x?`${x.tipo==='pj'?'CNPJ':'CPF'}: ${x.documento||'—'}${x.telefone?' · '+x.telefone:''}`:'';}
 
 function nomeStatusManutencao(s){return String(s||'pendente').toLowerCase()==='concluida'?'Concluída':'Pendente';}
-async function abrirNovaManutencao(){if(!prestadoresCarregados)await carregarPrestadores();const hojeStr=dataStr(hoje());const prest=prestadoresCadastrados;const opPrest='<option value="">— Não informado —</option>'+prest.map(x=>`<option value="${escapeHtmlReserva(x.id)}">${escapeHtmlReserva(x.nome)}</option>`).join('');const opCasa='<option value="amarela">Casa Amarela</option><option value="bege">Casa Bege</option><option value="marrom">Casa Marrom</option><option value="branca">Casa Branca</option><option value="nossa">Nossa Casa</option>';const html=`<div class="modal-conteudo" style="max-width:760px"><button class="fechar-modal" onclick="fecharModalManutencao()">×</button><h2 id="tituloModalManutencao">🔧 Nova manutenção</h2><input type="hidden" id="manutencaoEdicaoId"><div class="despesas-form-grid"><div class="grupo-input"><label>Casa *</label><select id="manutencaoCasa">${opCasa}</select></div><div class="grupo-input"><label>Data da identificação *</label><input type="date" id="manutencaoData" value="${hojeStr}"></div><div class="grupo-input"><label>Item *</label><input id="manutencaoItem" list="listaItensManutencao" placeholder="Ex.: Lâmpada, chuveiro..." autocomplete="off"><datalist id="listaItensManutencao">${itensManutencao.map(x=>`<option value="${escapeHtmlReserva(x.nome)}">`).join('')}</datalist></div><div class="grupo-input"><label>Prestador</label><select id="manutencaoPrestadorId">${opPrest}</select></div><div class="grupo-input" style="grid-column:1/-1"><label>Descrição do problema *</label><textarea id="manutencaoDescricao" rows="3" placeholder="Descreva o que precisa ser feito..."></textarea></div><div class="grupo-input"><label>Status</label><select id="manutencaoStatus"><option value="pendente">🟠 Pendente</option><option value="concluida">🟢 Concluída</option></select></div><div class="grupo-input"><label>Data da conclusão</label><input type="date" id="manutencaoDataConclusao"></div><div class="grupo-input" style="grid-column:1/-1"><label>Observação</label><textarea id="manutencaoObservacao" rows="2"></textarea></div></div><div style="display:flex;justify-content:flex-end;gap:10px;margin-top:18px"><button class="cinza" onclick="fecharModalManutencao()">Cancelar</button><button class="sucesso" onclick="salvarManutencao()">💾 Salvar manutenção</button></div></div>`;const m=document.createElement('div');m.id='modalManutencao';m.className='modal aberto';m.onclick=e=>{if(e.target===m)fecharModalManutencao()};m.innerHTML=html;document.body.appendChild(m);}
+async function abrirNovaManutencao(){if(!prestadoresCarregados)await carregarPrestadores();const hojeStr=dataStr(hoje());const prest=prestadoresCadastrados;const opPrest='<option value="">— Não informado —</option>'+prest.map(x=>`<option value="${escapeHtmlReserva(x.id)}">${escapeHtmlReserva(x.nome)}</option>`).join('');const opCasa='<option value="amarela">Casa Amarela</option><option value="bege">Casa Bege</option><option value="marrom">Casa Marrom</option><option value="branca">Casa Branca</option><option value="nossa">Nossa Casa</option>';const html=`<div class="modal-conteudo" style="max-width:760px"><button class="fechar-modal" onclick="fecharModalManutencao()">×</button><h2 id="tituloModalManutencao">🔧 Nova manutenção</h2><input type="hidden" id="manutencaoEdicaoId"><div class="despesas-form-grid"><div class="grupo-input"><label>Casa *</label><select id="manutencaoCasa">${opCasa}</select></div><div class="grupo-input"><label>Data da identificação *</label><input type="date" id="manutencaoData" value="${hojeStr}"></div><div class="grupo-input"><label>Item *</label><input id="manutencaoItem" list="listaItensManutencao" placeholder="Ex.: Lâmpada, chuveiro..." autocomplete="off"><datalist id="listaItensManutencao">${itensManutencao.map(x=>`<option value="${escapeHtmlReserva(x.nome)}">`).join('')}</datalist></div><div class="grupo-input"><label>Prestador</label><select id="manutencaoPrestadorId">${opPrest}</select></div><div class="grupo-input" style="grid-column:1/-1"><label>Descrição do problema *</label><textarea id="manutencaoDescricao" rows="3" lang="pt-BR" spellcheck="true" autocorrect="on" autocapitalize="sentences" inputmode="text" placeholder="Descreva o que precisa ser feito..."></textarea><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:7px"><button type="button" class="cinza" onclick="verificarTextoManutencao()">🔎 Verificar texto</button><span style="font-size:12px;color:var(--cinza)">O Chrome também pode mostrar sugestões de ortografia quando a verificação em Português (Brasil) estiver ativada.</span></div><div id="sugestoesTextoManutencao" style="margin-top:8px"></div></div><div class="grupo-input"><label>Status</label><select id="manutencaoStatus"><option value="pendente">🟠 Pendente</option><option value="concluida">🟢 Concluída</option></select></div><div class="grupo-input"><label>Data da conclusão</label><input type="date" id="manutencaoDataConclusao"></div><div class="grupo-input" style="grid-column:1/-1"><label>Observação</label><textarea id="manutencaoObservacao" rows="2"></textarea></div></div><div style="display:flex;justify-content:flex-end;gap:10px;margin-top:18px"><button class="cinza" onclick="fecharModalManutencao()">Cancelar</button><button class="sucesso" onclick="salvarManutencao()">💾 Salvar manutenção</button></div></div>`;const m=document.createElement('div');m.id='modalManutencao';m.className='modal aberto';m.onclick=e=>{if(e.target===m)fecharModalManutencao()};m.innerHTML=html;document.body.appendChild(m);}
 function fecharModalManutencao(){document.getElementById('modalManutencao')?.remove();}
+async function verificarTextoManutencao(){
+ const el=$('manutencaoDescricao'),box=$('sugestoesTextoManutencao');
+ if(!el||!box)return;
+ const texto=String(el.value||'').trim();
+ if(!texto){box.innerHTML='<span style="color:var(--cinza);font-size:13px">Digite a descrição para verificar o texto.</span>';return;}
+ box.innerHTML='<span style="color:var(--cinza);font-size:13px">⏳ Verificando o texto...</span>';
+ try{
+  const body=new URLSearchParams();body.set('text',texto);body.set('language','pt-BR');body.set('enabledOnly','false');
+  const resp=await fetch('https://api.languagetool.org/v2/check',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body});
+  if(!resp.ok)throw new Error('Falha no serviço de correção');
+  const dados=await resp.json();
+  const matches=Array.isArray(dados.matches)?dados.matches:[];
+  if(!matches.length){box.innerHTML='<div style="padding:8px 10px;border-radius:8px;background:#eef8ee;color:#246b24;font-size:13px">✅ Nenhum erro encontrado.</div>';return;}
+  box.innerHTML='<div style="border:1px solid #ddd;border-radius:8px;padding:10px;background:#fafafa"><strong>✍️ Sugestões encontradas:</strong>'+matches.slice(0,8).map((m,i)=>{const sugestao=(m.replacements||[]).slice(0,3).map(r=>r.value);const atual=texto.slice(m.offset,m.offset+m.length);return `<div style="margin-top:8px;padding-top:8px;border-top:1px solid #eee"><span>“${escapeHtmlReserva(atual)}”</span>${sugestao.length?` → ${sugestao.map(v=>`<button type="button" class="cinza" style="margin:2px 4px 2px 0" onclick="aplicarSugestaoTextoManutencao(${m.offset},${m.length},${JSON.stringify(v)})">${escapeHtmlReserva(v)}</button>`).join('')}`:' <span style="color:var(--cinza)">Sugestão não disponível</span>'}</div>`;}).join('')+'</div>';
+ }catch(e){console.error('Correção ortográfica:',e);box.innerHTML='<div style="padding:8px 10px;border-radius:8px;background:#fff4e5;color:#8a5300;font-size:13px">⚠️ Não foi possível consultar o corretor agora. A verificação ortográfica nativa do Chrome continua disponível no campo.</div>';}
+}
+function aplicarSugestaoTextoManutencao(offset,length,novo){const el=$('manutencaoDescricao');if(!el)return;const t=el.value||'';el.value=t.slice(0,offset)+novo+t.slice(offset+length);el.focus();const pos=offset+String(novo).length;try{el.setSelectionRange(pos,pos);}catch(e){};verificarTextoManutencao();}
 async function salvarItemManutencao(nome){const n=String(nome||'').trim();if(!n)return;const id=normalizar(n).replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,80)||('item-'+Date.now());if(!itensManutencao.some(x=>normalizar(x.nome)===normalizar(n))){try{await db.collection('itensManutencao').doc(id).set({nome:n,nomeNormalizado:normalizar(n),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});itensManutencao.push({id,nome:n,nomeNormalizado:normalizar(n)});itensManutencao.sort((a,b)=>a.nome.localeCompare(b.nome,'pt-BR'));}catch(e){console.error('Erro ao salvar item de manutenção:',e);}}}
 async function salvarManutencao(){const id=$('manutencaoEdicaoId')?.value||'',casa=$('manutencaoCasa')?.value||'',data=$('manutencaoData')?.value||'',item=$('manutencaoItem')?.value.trim()||'',prestadorId=$('manutencaoPrestadorId')?.value||'',descricao=$('manutencaoDescricao')?.value.trim()||'',status=$('manutencaoStatus')?.value||'pendente';let dataConclusao=$('manutencaoDataConclusao')?.value||'',observacao=$('manutencaoObservacao')?.value.trim()||'';if(!casa||!data||!item||!descricao)return alert('⚠️ Informe a casa, data, item e descrição.');if(status==='concluida'&&!dataConclusao)dataConclusao=dataStr(hoje());if(status==='pendente')dataConclusao='';const p=prestadoresCadastrados.find(x=>x.id===prestadorId),dados={casa,data,item,itemNormalizado:normalizar(item),descricao,prestadorId:prestadorId||'',prestador:p?.nome||'',status,dataConclusao,observacao,atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()};try{await salvarItemManutencao(item);if(id)await db.collection('manutencoes').doc(id).update(dados);else await db.collection('manutencoes').add({...dados,criadoEm:firebase.firestore.FieldValue.serverTimestamp()});fecharModalManutencao();manutencoesCarregadas=false;await carregarManutencoes();await carregarResumoManutencoes();alert(id?'✅ Manutenção alterada.':'✅ Manutenção registrada.');}catch(e){console.error(e);alert('❌ Erro ao salvar a manutenção. Verifique as regras do Firestore.');}}
 async function carregarItensManutencao(){try{const s=await db.collection('itensManutencao').orderBy('nomeNormalizado').get();itensManutencao=s.docs.map(d=>({id:d.id,...(d.data()||{})}));}catch(e){console.error('Itens de manutenção:',e);}}
-async function carregarResumoManutencoes(){try{await carregarItensManutencao();const s=await db.collection('manutencoes').get(),a=s.docs.map(d=>({id:d.id,...(d.data()||{})})),pend=a.filter(x=>String(x.status||'pendente')==='pendente'),concl=a.length-pend.length,casasPend=new Set(pend.map(x=>x.casa).filter(Boolean));if($('indicadorManutencoesPendentes'))$('indicadorManutencoesPendentes').textContent=pend.length;if($('indicadorManutencoesConcluidas'))$('indicadorManutencoesConcluidas').textContent=concl;if($('indicadorManutencoesCasas'))$('indicadorManutencoesCasas').textContent=casasPend.size;popularSelectPrestadoresManutencao();}catch(e){console.error('Resumo de manutenções:',e);}}
-function popularSelectPrestadoresManutencao(){const el=$('filtroManutencaoPrestador');if(!el)return;const v=el.value;el.innerHTML='<option value="todos">Todos</option>'+prestadoresCadastrados.map(x=>`<option value="${escapeHtmlReserva(x.id)}">${escapeHtmlReserva(x.nome)}</option>`).join('');if(v)el.value=v;}
-async function carregarManutencoes(){if(!manutencoesCarregadas){try{const s=await db.collection('manutencoes').get();manutencoesCadastradas=s.docs.map(d=>({id:d.id,...(d.data()||{})}));manutencoesCadastradas.sort((a,b)=>String(b.data||'').localeCompare(String(a.data||'')));manutencoesCarregadas=true;}catch(e){console.error(e);return alert('❌ Não foi possível consultar as manutenções. Verifique as regras do Firestore.');}}filtrarManutencoes();}
-function filtrarManutencoes(pagina=1){const el=$('listaManutencoes');if(!el)return;let a=[...manutencoesCadastradas],c=$('filtroManutencaoCasa')?.value||'todas',st=$('filtroManutencaoStatus')?.value||'todos',item=normalizar($('filtroManutencaoItem')?.value||''),prest=$('filtroManutencaoPrestador')?.value||'todos';if(c!=='todas')a=a.filter(x=>x.casa===c);if(st!=='todos')a=a.filter(x=>(x.status||'pendente')===st);if(item)a=a.filter(x=>normalizar(x.item).includes(item)||normalizar(x.descricao).includes(item));if(prest!=='todos')a=a.filter(x=>(x.prestadorId||'')===prest);a.sort((x,y)=>String(y.data||'').localeCompare(String(x.data||'')));const pags=Math.max(1,Math.ceil(a.length/MANUTENCOES_POR_PAGINA));paginaManutencoesAtual=Math.min(Math.max(1,pagina),pags);const vis=a.slice((paginaManutencoesAtual-1)*MANUTENCOES_POR_PAGINA,paginaManutencoesAtual*MANUTENCOES_POR_PAGINA);el.innerHTML=vis.length?`<div style="overflow-x:auto"><table class="tabela-admin-compacta"><thead><tr><th>Data</th><th>Casa</th><th>Item</th><th>Descrição</th><th>Prestador</th><th>Status</th><th>Conclusão</th><th>Ações</th></tr></thead><tbody>${vis.map(x=>`<tr><td>${dataBr(x.data)}</td><td>${escapeHtmlReserva(casas[x.casa]?.nome||x.casa)}</td><td><strong>🔧 ${escapeHtmlReserva(x.item||'—')}</strong></td><td>${escapeHtmlReserva(x.descricao||'—')}</td><td>${escapeHtmlReserva(x.prestador||'—')}</td><td><span class="${x.status==='concluida'?'badge-concluida':'badge-andamento'}">${nomeStatusManutencao(x.status)}</span></td><td>${dataBr(x.dataConclusao)||'—'}</td><td><button class="azul" onclick="editarManutencao('${x.id}')">✏️ Editar</button>${x.status!=='concluida'?`<button class="sucesso" onclick="concluirManutencao('${x.id}')">✅ Concluir</button>`:''}<button class="vermelho" onclick="excluirManutencao('${x.id}')">Excluir</button></td></tr>`).join('')}</tbody></table></div>`:'<p style="color:var(--cinza)">Nenhuma manutenção encontrada.</p>';const pg=$('paginacaoManutencoes');if(pg)pg.innerHTML=a.length<=MANUTENCOES_POR_PAGINA?'':`<button onclick="filtrarManutencoes(${paginaManutencoesAtual-1})" ${paginaManutencoesAtual===1?'disabled':''}>‹ Anterior</button> <span>Página ${paginaManutencoesAtual} de ${pags} · ${a.length} manutenções</span> <button onclick="filtrarManutencoes(${paginaManutencoesAtual+1})" ${paginaManutencoesAtual===pags?'disabled':''}>Próxima ›</button>`;}
+async function carregarResumoManutencoes(){try{await carregarItensManutencao();popularSelectItensManutencao();const s=await db.collection('manutencoes').get(),a=s.docs.map(d=>({id:d.id,...(d.data()||{})})),pend=a.filter(x=>String(x.status||'pendente')==='pendente'),concl=a.length-pend.length,casasPend=new Set(pend.map(x=>x.casa).filter(Boolean));if($('indicadorManutencoesPendentes'))$('indicadorManutencoesPendentes').textContent=pend.length;if($('indicadorManutencoesConcluidas'))$('indicadorManutencoesConcluidas').textContent=concl;if($('indicadorManutencoesCasas'))$('indicadorManutencoesCasas').textContent=casasPend.size;popularSelectPrestadoresManutencao();}catch(e){console.error('Resumo de manutenções:',e);}}
+function popularSelectPrestadoresManutencao(){const el=$('filtroManutencaoPrestador');if(el){const v=el.value;el.innerHTML='<option value="todos">Todos</option>'+prestadoresCadastrados.map(x=>`<option value="${escapeHtmlReserva(x.id)}">${escapeHtmlReserva(x.nome)}</option>`).join('');if(v)el.value=v;}popularSelectItensManutencao();}
+function popularSelectItensManutencao(){const el=$('filtroManutencaoItem');if(!el)return;const v=el.value||'todos';const itens=[...itensManutencao].sort((a,b)=>String(a.nome||'').localeCompare(String(b.nome||''),'pt-BR'));el.innerHTML='<option value="todos">Todos os itens</option>'+itens.map(x=>`<option value="${escapeHtmlReserva(x.nomeNormalizado||normalizar(x.nome||''))}">${escapeHtmlReserva(x.nome||'Item')}</option>`).join('');if(v&&[...el.options].some(o=>o.value===v))el.value=v;else el.value='todos';}
+async function carregarManutencoes(){try{if(!prestadoresCarregados)await carregarPrestadores();await carregarItensManutencao();if(!manutencoesCarregadas){const s=await db.collection('manutencoes').get();manutencoesCadastradas=s.docs.map(d=>({id:d.id,...(d.data()||{})}));manutencoesCadastradas.sort((a,b)=>String(b.data||'').localeCompare(String(a.data||'')));manutencoesCarregadas=true;}
+ // Garante que prestadores antigos gravados pelo nome também apareçam no filtro.
+ const existentes=new Set(prestadoresCadastrados.map(x=>normalizar(x.nome||x.fantasia||'')));
+ manutencoesCadastradas.forEach(x=>{const nome=String(x.prestador||'').trim(),n=normalizar(nome);if(nome&&n&&!existentes.has(n)){prestadoresCadastrados.push({id:'manutencao-prestador-'+n,nome,origemManutencao:true});existentes.add(n);}});
+ prestadoresCadastrados.sort((a,b)=>String(a.nome||'').localeCompare(String(b.nome||''),'pt-BR'));
+ popularSelectPrestadoresManutencao();popularSelectItensManutencao();
+ }catch(e){console.error(e);return alert('❌ Não foi possível consultar as manutenções. Verifique as regras do Firestore.');}filtrarManutencoes();}
+function statusManutencaoNormalizado(x){const v=normalizar(x?.status||'pendente').replace('í','i');return v==='concluida'?'concluida':'pendente';}
+function obterPrestadorSelecionadoManutencao(valor){
+ const selecionado=String(valor||'').trim();
+ if(!selecionado || selecionado==='todos')return null;
+ return prestadoresCadastrados.find(v=>String(v.id||'')===selecionado)
+   || prestadoresCadastrados.find(v=>normalizar(v.nome||v.fantasia||v.razaoSocial||'')===normalizar(selecionado))
+   || null;
+}
+function valoresPrestadorManutencao(obj){
+ const vals=[];
+ const add=v=>{
+  if(v===undefined||v===null)return;
+  if(typeof v==='object'){
+   add(v.id);add(v.uid);add(v.nome);add(v.fantasia);add(v.razaoSocial);add(v.nomePrestador);add(v.prestadorId);
+  }else{
+   const t=String(v).trim();
+   if(t)vals.push(t);
+  }
+ };
+ if(obj){
+  add(obj.prestadorId);add(obj.prestador);add(obj.prestadorNome);add(obj.nomePrestador);add(obj.prestadorNomeCompleto);add(obj.prestadorIdManutencao);add(obj.prestadorUid);add(obj.nome);
+  add(obj.prestador);
+ }
+ return vals;
+}
+function manutencaoPertenceAoPrestador(x,prest){
+ const selecionado=String(prest||'').trim();
+ if(!selecionado || selecionado==='todos')return true;
+ const p=obterPrestadorSelecionadoManutencao(selecionado);
+ const nomesSelecionados=new Set([
+  selecionado,
+  p?.id,
+  p?.uid,
+  p?.nome,
+  p?.fantasia,
+  p?.razaoSocial,
+  p?.nomePrestador
+ ].filter(Boolean).map(v=>normalizar(v)));
+ const valores=valoresPrestadorManutencao(x).map(v=>normalizar(v)).filter(Boolean);
+ if(!valores.length)return false;
+ return valores.some(v=>nomesSelecionados.has(v));
+}
+function obterPrestadorParaEnvioManutencao(valor){
+ const p=obterPrestadorSelecionadoManutencao(valor);
+ if(p && !p.origemManutencao)return p;
+ const nome=normalizar(p?.nome||p?.fantasia||valor||'');
+ if(nome){
+  const real=prestadoresCadastrados.find(v=>!v.origemManutencao && normalizar(v.nome||v.fantasia||v.razaoSocial||'')===nome);
+  if(real)return real;
+ }
+ return p||null;
+}
+function filtrarManutencoes(pagina=1){const el=$('listaManutencoes');if(!el)return;let a=[...manutencoesCadastradas],c=$('filtroManutencaoCasa')?.value||'todas',st=$('filtroManutencaoStatus')?.value||'todos',item=$('filtroManutencaoItem')?.value||'todos',prest=$('filtroManutencaoPrestador')?.value||'todos';if(c!=='todas')a=a.filter(x=>String(x.casa||'')===String(c));if(st!=='todos')a=a.filter(x=>statusManutencaoNormalizado(x)===normalizar(st));if(item!=='todos')a=a.filter(x=>normalizar(x.item||x.itemNormalizado||'')===normalizar(item));if(prest!=='todos')a=a.filter(x=>manutencaoPertenceAoPrestador(x,prest));a.sort((x,y)=>String(y.data||'').localeCompare(String(x.data||'')));const pags=Math.max(1,Math.ceil(a.length/MANUTENCOES_POR_PAGINA));paginaManutencoesAtual=Math.min(Math.max(1,pagina),pags);const vis=a.slice((paginaManutencoesAtual-1)*MANUTENCOES_POR_PAGINA,paginaManutencoesAtual*MANUTENCOES_POR_PAGINA);el.innerHTML=vis.length?`<div style="overflow-x:auto"><table class="tabela-admin-compacta"><thead><tr><th>Data</th><th>Casa</th><th>Item</th><th>Descrição</th><th>Prestador</th><th>Status</th><th>Conclusão</th><th>Ações</th></tr></thead><tbody>${vis.map(x=>`<tr><td>${dataBr(x.data)}</td><td>${escapeHtmlReserva(casas[x.casa]?.nome||x.casa)}</td><td><strong>🔧 ${escapeHtmlReserva(x.item||'—')}</strong></td><td>${escapeHtmlReserva(x.descricao||'—')}</td><td>${escapeHtmlReserva(x.prestador||x.prestadorNome||'—')}</td><td><span class="${statusManutencaoNormalizado(x)==='concluida'?'badge-concluida':'badge-andamento'}">${nomeStatusManutencao(statusManutencaoNormalizado(x))}</span></td><td>${dataBr(x.dataConclusao)||'—'}</td><td><button class="azul" onclick="editarManutencao('${x.id}')">✏️ Editar</button>${statusManutencaoNormalizado(x)!=='concluida'?`<button class="sucesso" onclick="concluirManutencao('${x.id}')">✅ Concluir</button>`:''}<button class="vermelho" onclick="excluirManutencao('${x.id}')">Excluir</button></td></tr>`).join('')}</tbody></table></div>`:'<p style="color:var(--cinza)">Nenhuma manutenção encontrada.</p>';const pg=$('paginacaoManutencoes');if(pg)pg.innerHTML=a.length<=MANUTENCOES_POR_PAGINA?'':`<button onclick="filtrarManutencoes(${paginaManutencoesAtual-1})" ${paginaManutencoesAtual===1?'disabled':''}>‹ Anterior</button> <span>Página ${paginaManutencoesAtual} de ${pags} · ${a.length} manutenções</span> <button onclick="filtrarManutencoes(${paginaManutencoesAtual+1})" ${paginaManutencoesAtual===pags?'disabled':''}>Próxima ›</button>`;}
 function editarManutencao(id){const x=manutencoesCadastradas.find(v=>v.id===id);if(!x)return;abrirNovaManutencao();setTimeout(()=>{$('manutencaoEdicaoId').value=id;$('tituloModalManutencao').textContent='✏️ Editar manutenção';$('manutencaoCasa').value=x.casa||'amarela';$('manutencaoData').value=x.data||'';$('manutencaoItem').value=x.item||'';$('manutencaoPrestadorId').value=x.prestadorId||'';$('manutencaoDescricao').value=x.descricao||'';$('manutencaoStatus').value=x.status||'pendente';$('manutencaoDataConclusao').value=x.dataConclusao||'';$('manutencaoObservacao').value=x.observacao||'';},50);}
 async function concluirManutencao(id){const x=manutencoesCadastradas.find(v=>v.id===id);if(!x)return;if(!confirm('Marcar esta manutenção como concluída?'))return;try{await db.collection('manutencoes').doc(id).update({status:'concluida',dataConclusao:dataStr(hoje()),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()});manutencoesCarregadas=false;await carregarManutencoes();await carregarResumoManutencoes();}catch(e){console.error(e);alert('❌ Não foi possível concluir a manutenção.');}}
 async function excluirManutencao(id){if(!confirm('Excluir esta manutenção?'))return;try{await db.collection('manutencoes').doc(id).delete();manutencoesCarregadas=false;await carregarManutencoes();await carregarResumoManutencoes();}catch(e){console.error(e);alert('❌ Não foi possível excluir a manutenção.');}}
-function limparFiltrosManutencoes(){if($('filtroManutencaoCasa'))$('filtroManutencaoCasa').value='todas';if($('filtroManutencaoStatus'))$('filtroManutencaoStatus').value='todos';if($('filtroManutencaoItem'))$('filtroManutencaoItem').value='';if($('filtroManutencaoPrestador'))$('filtroManutencaoPrestador').value='todos';if(manutencoesCarregadas)filtrarManutencoes();}
+function limparFiltrosManutencoes(){if($('filtroManutencaoCasa'))$('filtroManutencaoCasa').value='todas';if($('filtroManutencaoStatus'))$('filtroManutencaoStatus').value='todos';if($('filtroManutencaoItem'))$('filtroManutencaoItem').value='todos';if(manutencoesCarregadas)filtrarManutencoes();}
+let manutencoesEmissaoSelecionadas=[];
+let prestadorEmissaoSelecionado=null;
+
+function obterPrestadorCadastroEmissao(valor){
+ const alvo=String(valor||'').trim();
+ if(!alvo||alvo==='todos')return null;
+ return prestadoresCadastrados.find(p=>String(p.id||'')===alvo)
+   || prestadoresCadastrados.find(p=>normalizar(p.nome||p.fantasia||p.razaoSocial||p.nomePrestador||'')===normalizar(alvo))
+   || null;
+}
+
+function obterManutencoesParaEmissao(){
+ const casa=$('emissaoManCasa')?.value||'todas';
+ const item=$('emissaoManItem')?.value||'todos';
+ const status=$('emissaoManStatus')?.value||'pendente';
+ let a=[...manutencoesCadastradas];
+ if(casa!=='todas')a=a.filter(x=>String(x.casa||'')===String(casa));
+ if(status!=='todos')a=a.filter(x=>statusManutencaoNormalizado(x)===normalizar(status));
+ if(item!=='todos')a=a.filter(x=>normalizar(x.item||x.itemNormalizado||'')===normalizar(item));
+ a.sort((x,y)=>String(y.data||'').localeCompare(String(x.data||'')));
+ return a;
+}
+
+function atualizarListaEmissaoManutencoes(){
+ const box=$('listaEmissaoManutencoes');
+ if(!box)return;
+ const a=obterManutencoesParaEmissao();
+ const idsValidos=new Set(a.map(x=>x.id));
+ manutencoesEmissaoSelecionadas=manutencoesEmissaoSelecionadas.filter(id=>idsValidos.has(id));
+ if(!a.length){box.innerHTML='<div style="padding:18px;border:1px solid #ddd;border-radius:10px;background:#fff">Nenhuma manutenção encontrada com os critérios selecionados.</div>';atualizarResumoEmissaoManutencoes();return;}
+ box.innerHTML=`<div style="border:1px solid #ddd;border-radius:10px;overflow:hidden;background:#fff"><div style="padding:10px 12px;background:#f7f7f7;display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap"><strong>Manutenções disponíveis</strong><div><button type="button" class="cinza" onclick="selecionarTodasEmissaoManutencoes()">☑️ Selecionar todas</button><button type="button" class="cinza" onclick="limparSelecaoEmissaoManutencoes()">✖ Limpar seleção</button></div></div><div style="overflow-x:auto"><table class="tabela-admin-compacta"><thead><tr><th style="width:42px">✓</th><th>Data</th><th>Casa</th><th>Item</th><th>Descrição</th><th>Status</th></tr></thead><tbody>${a.map(x=>{const checked=manutencoesEmissaoSelecionadas.includes(x.id)?'checked':'';return `<tr><td><input type="checkbox" class="checkEmissaoManutencao" value="${escapeHtmlReserva(x.id)}" ${checked} onchange="alternarEmissaoManutencao('${escapeHtmlReserva(x.id)}',this.checked)"></td><td>${dataBr(x.data)}</td><td>${escapeHtmlReserva(casas[x.casa]?.nome||x.casa)}</td><td><strong>🔧 ${escapeHtmlReserva(x.item||'—')}</strong></td><td>${escapeHtmlReserva(x.descricao||'—')}</td><td>${nomeStatusManutencao(statusManutencaoNormalizado(x))}</td></tr>`;}).join('')}</tbody></table></div></div>`;
+ atualizarResumoEmissaoManutencoes();
+}
+
+function alternarEmissaoManutencao(id,marcado){
+ const i=manutencoesEmissaoSelecionadas.indexOf(id);
+ if(marcado&&i<0)manutencoesEmissaoSelecionadas.push(id);
+ if(!marcado&&i>=0)manutencoesEmissaoSelecionadas.splice(i,1);
+ atualizarResumoEmissaoManutencoes();
+}
+function selecionarTodasEmissaoManutencoes(){
+ manutencoesEmissaoSelecionadas=obterManutencoesParaEmissao().map(x=>x.id);
+ atualizarListaEmissaoManutencoes();
+}
+function limparSelecaoEmissaoManutencoes(){manutencoesEmissaoSelecionadas=[];atualizarListaEmissaoManutencoes();}
+function atualizarResumoEmissaoManutencoes(){const el=$('resumoEmissaoManutencoes');if(el)el.innerHTML=`<strong>${manutencoesEmissaoSelecionadas.length}</strong> manutenção(ões) selecionada(s) para emissão.`;}
+
+async function abrirEmissaoManutencoes(){
+ if(!manutencoesCarregadas)await carregarManutencoes();
+ if(!prestadoresCarregados)await carregarPrestadores();
+ await carregarItensManutencao();
+ manutencoesEmissaoSelecionadas=[];
+ const itemOpts='<option value="todos">Todos os itens</option>'+itensManutencao.map(x=>`<option value="${escapeHtmlReserva(x.nomeNormalizado||normalizar(x.nome||''))}">${escapeHtmlReserva(x.nome||'Item')}</option>`).join('');
+ const prestOpts='<option value="">— Selecione o prestador que irá realizar a manutenção —</option>'+prestadoresCadastrados.filter(x=>!x.origemManutencao).map(x=>`<option value="${escapeHtmlReserva(x.id)}">${escapeHtmlReserva(x.nome||x.fantasia||x.razaoSocial||'Prestador')}</option>`).join('');
+ const m=document.createElement('div');m.id='modalEmissaoManutencoes';m.className='modal aberto';m.onclick=e=>{if(e.target===m)m.remove()};
+ m.innerHTML=`<div class="modal-conteudo" style="max-width:1150px"><button class="fechar-modal" onclick="document.getElementById('modalEmissaoManutencoes')?.remove()">×</button><h2>📋 Emitir manutenção para prestador</h2><p style="color:var(--cinza)">Consulte as manutenções pendentes, selecione quais serão encaminhadas e depois escolha o prestador que irá realizar o serviço. A escolha do prestador nesta janela é independente do cadastro da manutenção.</p><div class="despesas-form-grid"><div class="grupo-input"><label>👷 Prestador que irá realizar a manutenção *</label><select id="emissaoManPrestador" onchange="prestadorEmissaoSelecionado=obterPrestadorCadastroEmissao(this.value)">${prestOpts}</select></div><div class="grupo-input"><label>🏠 Casa</label><select id="emissaoManCasa" onchange="atualizarListaEmissaoManutencoes()"><option value="todas">Todas as casas</option><option value="amarela">Casa Amarela</option><option value="bege">Casa Bege</option><option value="marrom">Casa Marrom</option><option value="branca">Casa Branca</option><option value="nossa">Nossa Casa</option></select></div><div class="grupo-input"><label>📌 Status</label><select id="emissaoManStatus" onchange="atualizarListaEmissaoManutencoes()"><option value="pendente">🟠 Pendentes</option><option value="concluida">🟢 Concluídas</option><option value="todos">Todas</option></select></div><div class="grupo-input"><label>🔧 Item</label><select id="emissaoManItem" onchange="atualizarListaEmissaoManutencoes()">${itemOpts}</select></div></div><div id="resumoEmissaoManutencoes" style="margin:14px 0;padding:10px 12px;border-radius:8px;background:#eef5fb">0 manutenção(ões) selecionada(s) para emissão.</div><div id="listaEmissaoManutencoes"></div><div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end;margin-top:18px"><button class="cinza" onclick="document.getElementById('modalEmissaoManutencoes')?.remove()">Cancelar</button><button class="cinza" onclick="imprimirEmissaoManutencoes()">🖨️ Imprimir / PDF</button><button class="sucesso" onclick="enviarEmissaoManutencoesWhatsApp()">📱 WhatsApp</button><button class="amarelo" onclick="enviarEmissaoManutencoesEmail()">✉️ E-mail</button></div></div>`;
+ document.body.appendChild(m);
+ atualizarListaEmissaoManutencoes();
+}
+
+function validarEmissaoManutencoes(){
+ const prestId=$('emissaoManPrestador')?.value||'';
+ if(!prestId){alert('⚠️ Selecione o prestador que irá realizar a manutenção.');return null;}
+ if(!manutencoesEmissaoSelecionadas.length){alert('⚠️ Selecione pelo menos uma manutenção pendente para emitir o documento.');return null;}
+ const prest=obterPrestadorCadastroEmissao(prestId);
+ if(!prest){alert('⚠️ Não foi possível localizar o cadastro do prestador selecionado.');return null;}
+ const itens=manutencoesCadastradas.filter(x=>manutencoesEmissaoSelecionadas.includes(x.id));
+ return {prest,itens};
+}
+
+function textoEmissaoManutencoes(){const d=validarEmissaoManutencoes();if(!d)return '';let t=`🔧 *Ordem de Manutenção* — ${d.prest.nome||d.prest.fantasia||'Prestador'}\n\n`;t+=`Solicitamos a execução das seguintes manutenções:\n\n`;d.itens.forEach((x,i)=>{t+=`${i+1}. ${dataBr(x.data)} — ${casas[x.casa]?.nome||x.casa}\n🔧 ${x.item||'—'}\n📝 ${x.descricao||'—'}\n\n`;});t+='Por favor, após a execução, informe a conclusão dos serviços.';return t;}
+
+function htmlEmissaoManutencoes(){const d=validarEmissaoManutencoes();if(!d)return '';const titulo=`Ordem de Manutenção — ${d.prest.nome||d.prest.fantasia||'Prestador'}`;return `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>${escapeHtmlReserva(titulo)}</title><style>body{font-family:Arial,sans-serif;padding:30px;color:#222}h1{font-size:22px;margin-bottom:6px}.cabecalho{margin-bottom:18px;color:#555}.assinatura{margin-top:45px}.linha{display:inline-block;border-top:1px solid #333;width:280px;margin-right:40px;padding-top:6px}table{width:100%;border-collapse:collapse;margin-top:20px}th,td{border:1px solid #ccc;padding:9px;text-align:left;font-size:13px;vertical-align:top}th{background:#f1f1f1}</style></head><body><h1>🔧 ${escapeHtmlReserva(titulo)}</h1><div class="cabecalho">Gerado em ${dataBr(dataStr(hoje()))}<br>Prestador responsável: <strong>${escapeHtmlReserva(d.prest.nome||d.prest.fantasia||d.prest.razaoSocial||'Prestador')}</strong></div><p>Solicitamos a execução dos serviços abaixo:</p><table><thead><tr><th>Data</th><th>Casa</th><th>Item</th><th>Descrição</th></tr></thead><tbody>${d.itens.map(x=>`<tr><td>${dataBr(x.data)}</td><td>${escapeHtmlReserva(casas[x.casa]?.nome||x.casa)}</td><td>${escapeHtmlReserva(x.item||'—')}</td><td>${escapeHtmlReserva(x.descricao||'—')}</td></tr>`).join('')}</tbody></table><div class="assinatura"><span class="linha">Responsável pela solicitação</span><span class="linha">Prestador</span></div></body></html>`;}
+
+function imprimirEmissaoManutencoes(){const html=htmlEmissaoManutencoes();if(!html)return;const w=window.open('','_blank');if(!w)return alert('⚠️ Permita pop-ups para gerar o relatório.');w.document.write(html);w.document.close();w.focus();setTimeout(()=>w.print(),300);}
+function enviarEmissaoManutencoesWhatsApp(){const d=validarEmissaoManutencoes();if(!d)return;const numero=String(d.prest.telefone||d.prest.celular||d.prest.whatsapp||'').replace(/\D/g,'');if(!numero)return alert('⚠️ O prestador selecionado não possui telefone/WhatsApp cadastrado.');window.open(`https://wa.me/${numero.startsWith('55')?numero:'55'+numero}?text=${encodeURIComponent(textoEmissaoManutencoes())}`,'_blank');}
+function enviarEmissaoManutencoesEmail(){const d=validarEmissaoManutencoes();if(!d)return;const email=String(d.prest.email||'').trim();if(!email)return alert('⚠️ O prestador selecionado não possui e-mail cadastrado.');window.location.href=`mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent('Ordem de Manutenção')}&body=${encodeURIComponent(textoEmissaoManutencoes())}`;}
 
 async function carregarDespesas(){
  if(despesasCarregadas){gerarRelatorioDespesas();return;}
