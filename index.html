@@ -801,7 +801,6 @@ textarea{
  color:#856404
 }
 
-.status-confirmada,
 .status-pago{
  background:#d4edda;
  color:#155724
@@ -1007,7 +1006,6 @@ textarea{
 .badge-andamento{background:#d1ecf1;color:#0c5460}
 .badge-concluida{background:#eeeeee;color:#666}
 .badge-status-pendente{background:#fff3cd;color:#856404}
-.badge-status-confirmada,
 .badge-status-pago{background:#d4edda;color:#155724}
 .badge-status-parcial{background:#d1ecf1;color:#0c5460}
 .reserva-acoes{
@@ -1804,6 +1802,93 @@ textarea{
   padding:20px;
  }
 }
+
+/* =====================================================
+   ASSISTENTE DE VOZ - MANUTENÇÕES
+===================================================== */
+.botao-voz-manutencao{
+ background:linear-gradient(135deg,#0a4b6e,#17a2b8);
+ color:#fff;
+ border:0;
+ padding:10px 15px;
+ border-radius:6px;
+ font-size:14px;
+ font-weight:600;
+ box-shadow:0 3px 10px #0002;
+}
+.botao-voz-manutencao.ouvindo{
+ background:#c62828;
+ animation:pulsarVozManutencao 1.1s infinite;
+}
+@keyframes pulsarVozManutencao{
+ 0%,100%{transform:scale(1)}
+ 50%{transform:scale(1.03)}
+}
+.voz-manutencao-conteudo{
+ max-width:620px;
+}
+.voz-manutencao-status{
+ margin:14px 0;
+ padding:12px;
+ border-radius:9px;
+ background:#eef7fb;
+ color:var(--marinho);
+ line-height:1.5;
+}
+.voz-manutencao-transcricao{
+ margin-top:10px;
+ padding:12px;
+ background:#f8f8f8;
+ border:1px solid #e1e1e1;
+ border-radius:9px;
+ min-height:48px;
+}
+.voz-manutencao-ajuda{
+ margin-top:10px;
+ color:var(--cinza);
+ font-size:13px;
+ line-height:1.5;
+}
+.voz-pendencias-lista{
+ margin-top:12px;
+ max-height:50vh;
+ overflow:auto;
+}
+.voz-pendencia-item{
+ border:1px solid #e3eaed;
+ border-radius:9px;
+ padding:11px;
+ margin-bottom:8px;
+ background:#fff;
+}
+@media(max-width:700px){
+ .botao-voz-manutencao{
+  width:100%;
+  min-height:46px;
+ }
+ .botao-voz-manutencao-mobile{
+  display:block !important;
+  width:100%;
+  min-height:48px;
+  margin:0 0 16px;
+  background:linear-gradient(135deg,#0a4b6e,#17a2b8);
+  color:#fff;
+  border:0;
+  padding:12px 15px;
+  border-radius:8px;
+  font-size:15px;
+  font-weight:600;
+  box-shadow:0 3px 10px #0002;
+ }
+ .voz-manutencao-conteudo{
+  width:95%;
+  padding:20px;
+ }
+}
+.botao-voz-manutencao-mobile{
+ display:none;
+}
+
 </style>
 
 <script>
@@ -2549,9 +2634,13 @@ if ("serviceWorker" in navigator) {
 <div id="pagina-manutencoes" class="pagina">
  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
   <h2 style="margin:0">🔧 Manutenções das Casas</h2>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end">
+  <button class="botao-voz-manutencao" type="button" onclick="abrirAssistenteVozManutencao()">🎤 Assistente de voz</button>
   <button class="sucesso" onclick="abrirNovaManutencao()">➕ Nova manutenção</button>
  </div>
+ </div>
  <p style="color:var(--cinza);margin:8px 0 16px">Registre problemas e serviços necessários. O valor financeiro não é lançado aqui; depois ele pode ser registrado normalmente em <strong>Despesas / Caixa</strong>.</p>
+ <button class="botao-voz-manutencao-mobile" type="button" onclick="abrirAssistenteVozManutencao()">🎤 Assistente de voz</button>
  <div class="reservas-indicadores">
   <div class="indicador-reserva"><small>🟠 Pendentes</small><strong id="indicadorManutencoesPendentes">0</strong></div>
   <div class="indicador-reserva"><small>🟢 Concluídas</small><strong id="indicadorManutencoesConcluidas">0</strong></div>
@@ -2615,13 +2704,12 @@ if ("serviceWorker" in navigator) {
    </div>
 
    <div class="reservas-filtro">
-    <label>💰 Pagamento</label>
+    <label>💰 Status do Pagamento</label>
     <select id="filtroPagamentoReservas">
      <option value="todos">Todos</option>
      <option value="pendente">Pendente</option>
-     <option value="parcial">Pagamento parcial</option>
-     <option value="confirmada">Confirmada</option>
-     <option value="pago">Paga</option>
+     <option value="parcial">Pagamento Parcial</option>
+     <option value="pago">Pago</option>
     </select>
    </div>
 
@@ -2766,33 +2854,44 @@ if ("serviceWorker" in navigator) {
   </div>
 
   <div>
-   <label>Período</label>
+   <label>📅 Período de recebimento</label>
 
-   <select id="filtroPeriodoRelatorio"
-    onchange="gerarRelatorio()">
-
-    <option value="todos">Todo o período</option>
-    <option value="hoje">Hoje</option>
-    <option value="mes">Este mês</option>
-    <option value="proximoMes">Próximo mês</option>
-    <option value="30dias">Últimos 30 dias</option>
-    <option value="ano">Este ano</option>
+   <select id="filtroPeriodoRelatorio" onchange="gerarRelatorio()">
     <option value="personalizado">Personalizado</option>
-
    </select>
 
   </div>
 
   <div>
-   <label>Status</label>
+   <label>💰 Ano Financeiro</label>
+   <select id="filtroAnoFinanceiroRelatorio" onchange="gerarRelatorio()">
+    <option value="todos">Todos os anos</option>
+   </select>
+  </div>
+
+  <div>
+   <label>🗓️ Recebido — de</label>
+   <select id="filtroMesRecebimentoInicioRelatorio" onchange="gerarRelatorio()">
+    <option value="todos">Todos os meses</option>
+   </select>
+  </div>
+
+  <div>
+   <label>🗓️ Recebido — até</label>
+   <select id="filtroMesRecebimentoFimRelatorio" onchange="gerarRelatorio()">
+    <option value="todos">Todos os meses</option>
+   </select>
+  </div>
+
+  <div>
+   <label>Status do Pagamento</label>
 
    <select id="filtroStatusRelatorio"
     onchange="gerarRelatorio()">
 
     <option value="todos">Todos</option>
     <option value="pendente">Pendente</option>
-    <option value="confirmada">Confirmada</option>
-    <option value="parcial">Parcial</option>
+    <option value="parcial">Pagamento Parcial</option>
     <option value="pago">Pago</option>
 
    </select>
@@ -2844,7 +2943,7 @@ if ("serviceWorker" in navigator) {
   </div>
 
   <div>
-   <label>Data inicial</label>
+   <label>📆 Recebimento a partir de</label>
 
    <input type="date"
     id="relatorioDataInicial"
@@ -2853,7 +2952,7 @@ if ("serviceWorker" in navigator) {
   </div>
 
   <div>
-   <label>Data final</label>
+   <label>📆 Recebimento até</label>
 
    <input type="date"
     id="relatorioDataFinal"
@@ -3743,7 +3842,7 @@ async function sairContaCliente(){
 }
 
 function statusReservaCliente(status){
- const mapa={pendente:'⏳ Aguardando confirmação',confirmada:'✅ Confirmada',parcial:'💰 Pagamento parcial',pago:'💚 Paga'};
+ const mapa={pendente:'⏳ Pendente',parcial:'💰 Pagamento Parcial',pago:'💚 Pago'};
  return mapa[status]||status||'Em análise';
 }
 
@@ -6547,10 +6646,24 @@ async function enviarReserva(){
 
 }
 
+function normalizarStatusPagamentoReserva(r){
+ const bruto=String(r?.statusPagamento||'').trim().toLowerCase();
+ const total=Number(r?.valorTotal||0);
+ const pago=Number(r?.valorPago||0);
+ if(bruto==='confirmada'){
+  if(total>0 && pago>=total)return 'pago';
+  if(pago>0 && total>0 && pago<total)return 'parcial';
+  return 'pendente';
+ }
+ if(bruto==='paga'||bruto==='pago')return 'pago';
+ if(bruto==='pagamento parcial'||bruto==='parcial')return 'parcial';
+ return 'pendente';
+}
+
 async function carregarReservasConfirmadas(){
  reservasConfirmadas=[];
  const s=await db.collection('reservas').orderBy('entrada').get();
- s.forEach(d=>reservasConfirmadas.push({id:d.id,...d.data()}));
+ s.forEach(d=>{const r={id:d.id,...d.data()};r.statusPagamento=normalizarStatusPagamentoReserva(r);reservasConfirmadas.push(r);});
  reservasCarregadas=true;
 }
 
@@ -6582,11 +6695,11 @@ async function carregarReservasRecentes(reset=true){
    ]);
 
    const ativas=snapAtivas.docs
-    .map(d=>({id:d.id,...d.data()}))
+    .map(d=>{const r={id:d.id,...d.data()};r.statusPagamento=normalizarStatusPagamentoReserva(r);return r;})
     .filter(r=>reservaEmAndamento(r));
 
    const futuros=snapFuturas.docs
-    .map(d=>({id:d.id,...d.data()}))
+    .map(d=>{const r={id:d.id,...d.data()};r.statusPagamento=normalizarStatusPagamentoReserva(r);return r;})
     .filter(r=>reservaProxima(r));
 
    // Primeiro todas as reservas em andamento; depois as próximas por entrada.
@@ -6614,7 +6727,7 @@ async function carregarReservasRecentes(reset=true){
     reservasConsultaCompleta=true;
    }else{
     const docs=snap.docs;
-    const novos=docs.map(d=>({id:d.id,...d.data()}));
+    const novos=docs.map(d=>{const r={id:d.id,...d.data()};r.statusPagamento=normalizarStatusPagamentoReserva(r);return r;});
     const ids=new Set(reservasConfirmadas.map(r=>r.id));
     novos.forEach(r=>{if(!ids.has(r.id))reservasConfirmadas.push(r);});
     reservasCursorFuturas=docs[docs.length-1];
@@ -7190,7 +7303,7 @@ function atualizarListaReservas(){
 
  if(busca)arr=arr.filter(r=>hospedeCorrespondeReserva(r,busca));
  if(casa!=='todas')arr=arr.filter(r=>r.casa===casa);
- if(pagamento!=='todos')arr=arr.filter(r=>(r.statusPagamento||'pendente')===pagamento);
+ if(pagamento!=='todos')arr=arr.filter(r=>normalizarStatusPagamentoReserva(r)===pagamento);
 
  if(situacao==='ativas')arr=arr.filter(r=>!reservaConcluida(r));
  if(situacao==='proximas')arr=arr.filter(reservaProxima);
@@ -7257,9 +7370,8 @@ function atualizarListaReservas(){
 
  const statusTexto={
   pendente:'Pendente',
-  parcial:'Pagamento parcial',
-  confirmada:'Confirmada',
-  pago:'Paga'
+  parcial:'Pagamento Parcial',
+  pago:'Pago'
  };
 
  c.innerHTML=`
@@ -7273,7 +7385,7 @@ function atualizarListaReservas(){
       <th>🌐 Origem</th>
       <th>👤 Hóspede</th>
       <th>👥 Pessoas</th>
-      <th>💰 Pagamento</th>
+      <th>💰 Status do Pagamento</th>
       <th>💵 Total</th>
       <th>✅ Valor Recebido</th>
       <th>📌 Valor a Receber</th>
@@ -7283,7 +7395,7 @@ function atualizarListaReservas(){
     </thead>
     <tbody>
      ${arrExibicao.map(r=>{
-      const status=r.statusPagamento||'pendente';
+      const status=normalizarStatusPagamentoReserva(r);
       const pago=Number(r.valorPago||0);
       const total=Number(r.valorTotal||0);
       const pendente=Math.max(0,total-pago);
@@ -8045,7 +8157,7 @@ body{
 
 }
 
-function abrirNovaReservaAdmin(){const c=Object.entries(casas).map(([id,x])=>`<option value="${id}">${x.nome}${x.interna?' — interno':''}</option>`).join('');$('conteudoEditar').innerHTML=`<input type="hidden" id="novaReserva"><div class="grupo-input"><label>Casa</label><select id="novaCasaReserva">${c}</select></div><div class="grupo-input"><label>Hóspede</label><input id="novoNomeReserva"></div><div class="grupo-input"><label>Telefone</label><input id="novoTelefoneReserva"></div><div class="grupo-input"><label>Origem</label><select id="novaOrigemReserva"><option>Reserva direta</option><option>Airbnb</option><option>Booking.com</option><option>WhatsApp</option><option>Telefone</option><option>Outro</option></select></div><div class="linha-form"><div class="grupo-input"><label>Entrada</label><input type="date" id="novaEntrada"></div><div class="grupo-input"><label>Saída</label><input type="date" id="novaSaida"></div></div><div class="linha-form"><div class="grupo-input"><label>Adultos</label><input type="number" id="novoAdultos" value="1"></div><div class="grupo-input"><label>Crianças</label><input type="number" id="novoCriancas" value="0"></div></div><div class="grupo-input"><label>Forma de recebimento</label><select id="novaFormaPagamento"><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Transferência Bancária</option></select></div><div class="grupo-input"><label>Caixa / conta destino</label><select id="novaContaDestino"><option>Caixa Casa Amarela</option><option>Caixa Casa Bege</option><option>Caixa Casa Marrom</option><option>Caixa Casa Branca</option><option>Caixa Nossa Casa</option><option>Caixa Geral</option><option>Conta bancária</option></select></div><div class="grupo-input"><label>Data de Recebimento</label><input type="date" id="novaDataRecebimento"><small style="color:var(--cinza)">Data prevista ou efetiva do repasse.</small></div><div class="grupo-input"><label>Status</label><select id="novoStatus"><option value="pendente">Pendente</option><option value="confirmada">Confirmada</option><option value="parcial">Pagamento Parcial</option><option value="pago">Pago</option></select></div><div class="grupo-input"><label>Valor Antecipado</label><input type="number" id="novoValorAntecipado" value="0" step="0.01"></div><div class="grupo-input"><label>Valor Total</label><input type="number" id="novoValorTotal" step="0.01"></div><div class="grupo-input"><label>Observação</label><textarea id="novaObservacao"></textarea></div><button class="sucesso" style="width:100%" onclick="salvarNovaReservaAdmin()">💾 Salvar reserva</button>`;$('modalEditarReserva').classList.add('aberto');}
+function abrirNovaReservaAdmin(){const c=Object.entries(casas).map(([id,x])=>`<option value="${id}">${x.nome}${x.interna?' — interno':''}</option>`).join('');$('conteudoEditar').innerHTML=`<input type="hidden" id="novaReserva"><div class="grupo-input"><label>Casa</label><select id="novaCasaReserva">${c}</select></div><div class="grupo-input"><label>Hóspede</label><input id="novoNomeReserva"></div><div class="grupo-input"><label>Telefone</label><input id="novoTelefoneReserva"></div><div class="grupo-input"><label>Origem</label><select id="novaOrigemReserva"><option>Reserva direta</option><option>Airbnb</option><option>Booking.com</option><option>WhatsApp</option><option>Telefone</option><option>Outro</option></select></div><div class="linha-form"><div class="grupo-input"><label>Entrada</label><input type="date" id="novaEntrada"></div><div class="grupo-input"><label>Saída</label><input type="date" id="novaSaida"></div></div><div class="linha-form"><div class="grupo-input"><label>Adultos</label><input type="number" id="novoAdultos" value="1"></div><div class="grupo-input"><label>Crianças</label><input type="number" id="novoCriancas" value="0"></div></div><div class="grupo-input"><label>Forma de recebimento</label><select id="novaFormaPagamento"><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Transferência Bancária</option></select></div><div class="grupo-input"><label>Caixa / conta destino</label><select id="novaContaDestino"><option>Caixa Casa Amarela</option><option>Caixa Casa Bege</option><option>Caixa Casa Marrom</option><option>Caixa Casa Branca</option><option>Caixa Nossa Casa</option><option>Caixa Geral</option><option>Conta bancária</option></select></div><div class="grupo-input"><label>Data de Recebimento</label><input type="date" id="novaDataRecebimento"><small style="color:var(--cinza)">Data prevista ou efetiva do repasse.</small></div><div class="grupo-input"><label>Status do Pagamento</label><select id="novoStatus"><option value="pendente">Pendente</option><option value="parcial">Pagamento Parcial</option><option value="pago">Pago</option></select></div><div class="grupo-input"><label>Valor Antecipado</label><input type="number" id="novoValorAntecipado" value="0" step="0.01"></div><div class="grupo-input"><label>Valor Total</label><input type="number" id="novoValorTotal" step="0.01"></div><div class="grupo-input"><label>Observação</label><textarea id="novaObservacao"></textarea></div><button class="sucesso" style="width:100%" onclick="salvarNovaReservaAdmin()">💾 Salvar reserva</button>`;$('modalEditarReserva').classList.add('aberto');}
 async function salvarNovaReservaAdmin(){const casa=$('novaCasaReserva').value,a=$('novaEntrada').value,b=$('novaSaida').value,nome=$('novoNomeReserva').value.trim(),adultos=Number($('novoAdultos').value||0),criancas=Number($('novoCriancas').value||0);if(!nome||!a||!b||b<=a)return alert('⚠️ Informe hóspede e datas válidas.');const hojeStr=dataStr(hoje());if(b>=hojeStr&&await verificarPeriodoBloqueado(casa,a,b))return alert('⚠️ O período está bloqueado.');const x=await calcularValorDiarias(casa,a,b),taxa=Number(casas[casa]?.taxaLimpeza||0),f=calcularValorFinalReserva(x.dias,x.valor,taxa),total=Number($('novoValorTotal').value||f.total),ante=Number($('novoValorAntecipado').value||0);if(ante>total)return alert('⚠️ O antecipado não pode ser maior que o total.');try{const ref=await db.collection('reservas').add({casa,nome,telefone:$('novoTelefoneReserva').value.trim(),entrada:a,saida:b,adultos,criancas,totalPessoas:adultos+criancas,dias:x.dias,valorDiarias:x.valor,taxaLimpeza:taxa,desconto:f.desconto,percentualDesconto:f.percentualDesconto,acrescimoValor:0,valorTotal:total,valorPago:ante,statusPagamento:$('novoStatus').value,origemReserva:$('novaOrigemReserva').value,formaPagamento:$('novaFormaPagamento').value,contaDestino:$('novaContaDestino').value,dataRecebimento:$('novaDataRecebimento')?.value||'',observacao:$('novaObservacao').value.trim(),criadoEm:firebase.firestore.FieldValue.serverTimestamp(),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()});reservasConfirmadas.unshift({id:ref.id,casa,nome,telefone:$('novoTelefoneReserva').value.trim(),entrada:a,saida:b,adultos,criancas,totalPessoas:adultos+criancas,valorTotal:total,valorPago:ante,statusPagamento:$('novoStatus').value,criadoEm:null});reservasCarregadas=true;try{await sincronizarDisponibilidadeReserva(ref.id,reservasConfirmadas[0]);}catch(e){console.error('Sincronização:',e);}fecharModalEditar();
    fecharModalPrestador();atualizarListaReservas();try{renderizarCalendarioSeguro();}catch(e){console.error(e);}try{gerarRelatorio();}catch(e){console.error(e);}alert(`✅ Reserva criada com sucesso.\nID: ${ref.id}`);}catch(e){console.error('Erro ao criar reserva administrativa:',e);alert(`❌ Erro ao criar reserva.\n\n${e?.code==='permission-denied'?'Permissão negada pelo Firestore. As regras precisam permitir gravação administrativa.':(e?.message||'Verifique os dados e tente novamente.')}`);}}
 
@@ -8162,27 +8274,12 @@ function abrirEditarReserva(id){
 
   <div class="grupo-input">
 
-   <label>Status</label>
-
-   <select id="editStatus">
-
-    <option value="pendente">
-     Pendente
-    </option>
-
-    <option value="confirmada">
-     Confirmada
-    </option>
-
-    <option value="parcial">
-     Pagamento Parcial
-    </option>
-
-    <option value="pago">
-     Pago
-    </option>
-
-   </select>
+   <label>Status do Pagamento</label>
+     <select id="editStatus">
+      <option value="pendente">Pendente</option>
+      <option value="parcial">Pagamento Parcial</option>
+      <option value="pago">Pago</option>
+     </select>
 
   </div>
 
@@ -8688,7 +8785,7 @@ async function salvarEdicao(id){
    saida,
    id
   ) &&
-  ['confirmada','pago']
+  ['confirmada','parcial','pago']
    .includes(status)
  ){
 
@@ -8843,7 +8940,11 @@ function limparFiltrosRelatorio(){
   .value='todas';
 
  $('filtroPeriodoRelatorio')
-  .value='todos';
+  .value='personalizado';
+
+ if($('filtroAnoFinanceiroRelatorio'))$('filtroAnoFinanceiroRelatorio').value=String(hoje().getFullYear());
+ if($('filtroMesRecebimentoInicioRelatorio'))$('filtroMesRecebimentoInicioRelatorio').value='todos';
+ if($('filtroMesRecebimentoFimRelatorio'))$('filtroMesRecebimentoFimRelatorio').value='todos';
 
  $('filtroStatusRelatorio')
   .value='todos';
@@ -8864,95 +8965,100 @@ function limparFiltrosRelatorio(){
 
 }
 
+function popularFiltrosRecebimentoRelatorio(){
+ const anoEl=$('filtroAnoFinanceiroRelatorio');
+ const inicioEl=$('filtroMesRecebimentoInicioRelatorio');
+ const fimEl=$('filtroMesRecebimentoFimRelatorio');
+ const anoAtual=hoje().getFullYear();
+ const anoAnterior=(anoEl?.value&&anoEl.value!=='todos')?anoEl.value:String(anoAtual);
+ const mesInicio=inicioEl?.value||'todos';
+ const mesFim=fimEl?.value||'todos';
+ const meses=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+ const anos=new Set([anoAtual]);
+ (reservasConfirmadas||[]).forEach(r=>{
+  ['dataRecebimento','entrada','saida'].forEach(campo=>{
+   const d=String(r?.[campo]||'').slice(0,10);
+   if(/^\d{4}-\d{2}-\d{2}$/.test(d))anos.add(Number(d.slice(0,4)));
+  });
+ });
+ const listaAnos=[...anos].filter(Number.isFinite).sort((a,b)=>a-b);
+ if(anoEl){
+  anoEl.innerHTML=''+listaAnos.map(ano=>`<option value="${ano}">${ano}</option>`).join('');
+  anoEl.value=listaAnos.includes(Number(anoAnterior))?anoAnterior:String(anoAtual);
+ }
+ const opcoesMes='<option value="todos">Todos os meses</option>'+meses.map((nome,i)=>`<option value="${String(i+1).padStart(2,'0')}">${nome}</option>`).join('');
+ if(inicioEl){inicioEl.innerHTML=opcoesMes;inicioEl.value=[...inicioEl.options].some(o=>o.value===mesInicio)?mesInicio:'todos';}
+ if(fimEl){fimEl.innerHTML=opcoesMes;fimEl.value=[...fimEl.options].some(o=>o.value===mesFim)?mesFim:'todos';}
+}
+
+
 function obterReservasRelatorio(){
 
- let arr=[
-  ...reservasConfirmadas
- ];
+ let arr=[...reservasConfirmadas];
 
- const casa=
-  $('filtroCasaRelatorio')
-   ?.value||'todas';
-
- const periodo=
-  $('filtroPeriodoRelatorio')
-   ?.value||'todos';
-
+ const casa=$('filtroCasaRelatorio')?.value||'todas';
+ const periodo=$('filtroPeriodoRelatorio')?.value||'todos';
+ const anoFinanceiro=$('filtroAnoFinanceiroRelatorio')?.value||String(hoje().getFullYear());
+ const mesInicio=$('filtroMesRecebimentoInicioRelatorio')?.value||'todos';
+ const mesFim=$('filtroMesRecebimentoFimRelatorio')?.value||'todos';
  const status=$('filtroStatusRelatorio')?.value||'todos';
  const formaPagamento=$('filtroFormaPagamentoRelatorio')?.value||'todos';
  const contaDestino=$('filtroContaDestinoRelatorio')?.value||'todos';
  const situacaoFinanceira=$('filtroRecebimentoRelatorio')?.value||'todos';
  const origemReserva=$('filtroOrigemRelatorio')?.value||'todos';
+ const busca=normalizar($('filtroHospedeRelatorio')?.value||'');
 
- const busca=
-  normalizar(
-   $('filtroHospedeRelatorio')
-    ?.value||''
-  );
+ if(casa!=='todas')arr=arr.filter(r=>r.casa===casa);
 
- if(casa!=='todas')
-  arr=arr.filter(
-   r=>r.casa===casa
-  );
-
- if(status!=='todos')arr=arr.filter(r=>{const st=r.statusPagamento||'pendente',p=Number(r.valorPago||0),t=Number(r.valorTotal||0);if(status==='parcial')return st==='parcial'||(p>0&&p<t);if(status==='pago')return st==='pago'||(t>0&&p>=t);return st===status;});
+ if(status!=='todos')arr=arr.filter(r=>normalizarStatusPagamentoReserva(r)===status);
 
  if(formaPagamento!=='todos')arr=arr.filter(r=>r.formaPagamento===formaPagamento);
  if(contaDestino!=='todos')arr=arr.filter(r=>r.contaDestino===contaDestino);
- if(situacaoFinanceira!=='todos')arr=arr.filter(r=>{const t=Number(r.valorTotal||0),p=Number(r.valorPago||0),saldo=Math.max(0,t-p);if(situacaoFinanceira==='recebido')return t>0&&p>=t;if(situacaoFinanceira==='aReceber')return saldo>0;if(situacaoFinanceira==='parcial')return p>0&&saldo>0;if(situacaoFinanceira==='semRecebimento')return p<=0;return true;});
+
+ if(situacaoFinanceira!=='todos'){
+  arr=arr.filter(r=>{
+   const t=Number(r.valorTotal||0),p=Number(r.valorPago||0),saldo=Math.max(0,t-p);
+   if(situacaoFinanceira==='recebido')return t>0&&p>=t;
+   if(situacaoFinanceira==='aReceber')return saldo>0;
+   if(situacaoFinanceira==='parcial')return p>0&&saldo>0;
+   if(situacaoFinanceira==='semRecebimento')return p<=0;
+   return true;
+  });
+ }
+
  if(origemReserva!=='todos')arr=arr.filter(r=>(r.origemReserva||'Não informada')===origemReserva);
 
  if(busca){
-
-  arr=arr.filter(r=>
-   normalizar(r.nome)
-    .includes(busca) ||
-   String(r.telefone||'')
-    .includes(busca)
-  );
-
+  arr=arr.filter(r=>normalizar(r.nome).includes(busca)||String(r.telefone||'').includes(busca));
  }
 
- const agora=hoje();
-
- // Os filtros de período deste relatório são financeiros:
- // usam a Data de Recebimento, e não a data de entrada da reserva.
+ // Este relatório é financeiro: o período é baseado na Data de Recebimento.
  // Para reservas antigas já pagas sem data de recebimento registrada,
- // usamos a entrada como referência histórica.
+ // usamos a entrada somente como referência histórica.
  const dataFinanceira=r=>{
   const d=String(r.dataRecebimento||'').slice(0,10);
   if(d)return d;
   return Number(r.valorPago||0)>0?String(r.entrada||'').slice(0,10):'';
  };
 
- if(periodo==='hoje'){
-  const s=dataStr(agora);
-  arr=arr.filter(r=>dataFinanceira(r)===s);
+ const agora=hoje();
+ const hojeIso=dataStr(agora);
+
+ if(anoFinanceiro!=='todos'){
+  arr=arr.filter(r=>dataFinanceira(r).slice(0,4)===String(anoFinanceiro));
  }
 
- if(periodo==='mes'){
-  const ref=`${agora.getFullYear()}-${String(agora.getMonth()+1).padStart(2,'0')}`;
-  arr=arr.filter(r=>dataFinanceira(r).slice(0,7)===ref);
- }
-
- if(periodo==='proximoMes'){
-  const d=new Date(agora.getFullYear(),agora.getMonth()+1,1);
-  const ref=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
-  arr=arr.filter(r=>dataFinanceira(r).slice(0,7)===ref);
- }
-
- if(periodo==='30dias'){
-  const inicio=new Date(agora);
-  inicio.setHours(0,0,0,0);
-  inicio.setDate(inicio.getDate()-30);
-  const fim=new Date(agora);
-  fim.setHours(23,59,59,999);
-  arr=arr.filter(r=>{const d=dataLocal(dataFinanceira(r));return d&&d>=inicio&&d<=fim;});
- }
-
- if(periodo==='ano'){
-  const ano=String(agora.getFullYear());
-  arr=arr.filter(r=>dataFinanceira(r).slice(0,4)===ano);
+ if(mesInicio!=='todos' || mesFim!=='todos'){
+  const inicio=mesInicio==='todos'?1:Number(mesInicio);
+  const fim=mesFim==='todos'?12:Number(mesFim);
+  const min=Math.min(inicio,fim);
+  const max=Math.max(inicio,fim);
+  arr=arr.filter(r=>{
+   const d=dataFinanceira(r);
+   if(!/^\d{4}-\d{2}-\d{2}$/.test(d))return false;
+   const mes=Number(d.slice(5,7));
+   return mes>=min&&mes<=max;
+  });
  }
 
  if(periodo==='personalizado'){
@@ -8962,13 +9068,7 @@ function obterReservasRelatorio(){
   if(b)arr=arr.filter(r=>{const d=dataFinanceira(r);return d&&d<=b;});
  }
 
- return arr.sort(
-  (a,b)=>
-   (a.entrada||'')
-    .localeCompare(
-     b.entrada||''
-    )
- );
+ return arr.sort((a,b)=>(dataFinanceira(a)||a.entrada||'').localeCompare(dataFinanceira(b)||b.entrada||''));
 
 }
 
@@ -9222,6 +9322,8 @@ async function carregarDadosRelatoriosSobDemanda(){
 
 function gerarRelatorio(){
 
+ popularFiltrosRecebimentoRelatorio();
+
  const el=
   $('relatorioConteudo');
 
@@ -9270,24 +9372,25 @@ function gerarRelatorio(){
 
  const pendentes=
   arr.filter(
-   r=>r.statusPagamento==='pendente'
+   r=>normalizarStatusPagamentoReserva(r)==='pendente'
   ).length;
 
- const confirmadas=
+ const parciais=
   arr.filter(
-   r=>r.statusPagamento==='confirmada'
+   r=>normalizarStatusPagamentoReserva(r)==='parcial'
   ).length;
-
- const parciais=arr.filter(r=>r.statusPagamento==='parcial'||(Number(r.valorPago||0)>0&&Number(r.valorPago||0)<Number(r.valorTotal||0))).length;
 
  const pagas=
   arr.filter(
-   r=>r.statusPagamento==='pago'
+   r=>normalizarStatusPagamentoReserva(r)==='pago'
   ).length;
 
  const semFiltroRelatorio=!$('filtroCasaRelatorio')?.value || (
   ($('filtroCasaRelatorio')?.value||'todas')==='todas' &&
-  ($('filtroPeriodoRelatorio')?.value||'todos')==='todos' &&
+  ($('filtroPeriodoRelatorio')?.value||'personalizado')==='personalizado' &&
+  (($('filtroAnoFinanceiroRelatorio')?.value||String(hoje().getFullYear()))==='todos') &&
+  (($('filtroMesRecebimentoInicioRelatorio')?.value||'todos')==='todos') &&
+  (($('filtroMesRecebimentoFimRelatorio')?.value||'todos')==='todos') &&
   ($('filtroStatusRelatorio')?.value||'todos')==='todos' &&
   ($('filtroOrigemRelatorio')?.value||'todos')==='todos' &&
   !($('filtroHospedeRelatorio')?.value||'').trim() &&
@@ -9466,15 +9569,13 @@ function gerarRelatorio(){
    </div>
 
    <div class="resumo-card">
-    <small>Confirmadas</small>
-    <strong>${confirmadas}</strong>
+    <small>Pagamento Parcial</small>
+    <strong>${parciais}</strong>
    </div>
 
    <div class="resumo-card">
-    <small>Parciais / Pagas</small>
-    <strong>
-     ${parciais} / ${pagas}
-    </strong>
+    <small>Pagas</small>
+    <strong>${pagas}</strong>
    </div>
 
   </div>
@@ -9713,6 +9814,7 @@ function atualizarCaixaDestinoDespesa(){
 
 let despesasCadastradas=[],paginaDespesasAtual=1,ultimasDespesasFiltradas=[];const DESPESAS_POR_PAGINA=15;
 let manutencoesCadastradas=[],itensManutencao=[],paginaManutencoesAtual=1,manutencoesCarregadas=false;const MANUTENCOES_POR_PAGINA=15;
+let reconhecimentoVozManutencao=null,vozManutencaoOuvindo=false;
 function tipoPrestador(){return $('prestadorPJ')?.checked?'pj':'pf';}
 function dadosFormularioPrestador(){return {tipo:tipoPrestador(),nome:$('cadPrestadorNome').value.trim(),fantasia:$('cadPrestadorFantasia').value.trim(),documento:$('cadPrestadorDocumento').value.trim(),telefone:$('cadPrestadorTelefone').value.trim(),email:$('cadPrestadorEmail').value.trim(),cep:$('cadPrestadorCep').value.trim(),endereco:$('cadPrestadorEndereco').value.trim(),numero:$('cadPrestadorNumero').value.trim(),complemento:$('cadPrestadorComplemento').value.trim(),bairro:$('cadPrestadorBairro').value.trim(),cidade:$('cadPrestadorCidade').value.trim(),estado:$('cadPrestadorEstado').value.trim().toUpperCase(),observacoes:$('cadPrestadorObservacoes').value.trim()};}
 function alternarTipoPrestador(){const pj=tipoPrestador()==='pj';$('labelNomePrestador').textContent=pj?'Razão social *':'Nome completo *';$('labelDocumentoPrestador').textContent=pj?'CNPJ':'CPF';$('grupoNomeFantasiaPrestador').style.display=pj?'block':'none';$('cadPrestadorDocumento').placeholder=pj?'CNPJ':'CPF';}
@@ -9759,6 +9861,479 @@ function popularSelectPrestadores(){const opts='<option value="">— Selecionar 
 function selecionarPrestadorDespesa(){const id=$('despesaPrestadorId')?.value||'';const x=prestadoresCadastrados.find(p=>p.id===id);$('despesaPrestador').value=x?x.nome:'';$('despesaPrestadorInfo').textContent=x?`${x.tipo==='pj'?'CNPJ':'CPF'}: ${x.documento||'—'}${x.telefone?' · '+x.telefone:''}`:'';}
 
 function nomeStatusManutencao(s){return String(s||'pendente').toLowerCase()==='concluida'?'Concluída':'Pendente';}
+
+/* =====================================================
+   ASSISTENTE DE VOZ - MANUTENÇÕES
+   Usa o reconhecimento de voz disponível no navegador.
+   Não grava nem salva áudio: converte a fala em texto e
+   alimenta o mesmo formulário/Firestore já existente.
+===================================================== */
+
+function obterReconhecimentoVozManutencao(){
+ const Ctor=window.SpeechRecognition||window.webkitSpeechRecognition;
+ return Ctor||null;
+}
+
+function normalizarTextoVozManutencao(texto){
+ return String(texto||'')
+  .toLowerCase()
+  .normalize('NFD')
+  .replace(/[\u0300-\u036f]/g,'')
+  .replace(/[.,;:!?]/g,' ')
+  .replace(/\s+/g,' ')
+  .trim();
+}
+
+function escapeRegexVozManutencao(texto){
+ return String(texto||'').replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+}
+
+function nomeCasaVozManutencao(casa){
+ const mapa={
+  amarela:'Casa Amarela',
+  bege:'Casa Bege',
+  marrom:'Casa Marrom',
+  branca:'Casa Branca',
+  nossa:'Nossa Casa'
+ };
+ return mapa[casa]||casa||'';
+}
+
+function detectarCasaVozManutencao(texto){
+ const original=String(texto||'');
+ const normal=normalizarTextoVozManutencao(original);
+ const casasVoz=[
+  {id:'amarela',nomes:['casa amarela','amarela']},
+  {id:'bege',nomes:['casa bege','bege']},
+  {id:'marrom',nomes:['casa marrom','marrom']},
+  {id:'branca',nomes:['casa branca','branca']},
+  {id:'nossa',nomes:['nossa casa']}
+ ];
+ for(const item of casasVoz){
+  for(const nome of item.nomes){
+   if(normal.includes(nome)) return {id:item.id,nome:nomeCasaVozManutencao(item.id),termo:nome};
+  }
+ }
+ return null;
+}
+
+function detectarItemVozManutencao(texto){
+ const normal=normalizarTextoVozManutencao(texto);
+ const itens=[...itensManutencao]
+  .filter(x=>x&&x.nome)
+  .sort((a,b)=>normalizarTextoVozManutencao(b.nome).length-normalizarTextoVozManutencao(a.nome).length);
+
+ for(const item of itens){
+  const termo=normalizarTextoVozManutencao(item.nome);
+  if(termo && normal.includes(termo)){
+   return {nome:item.nome,termo};
+  }
+ }
+
+ // Se ainda não houver item no cadastro, tenta extrair o trecho
+ // que aparece antes da identificação da casa.
+ const casa=detectarCasaVozManutencao(texto);
+ if(casa){
+  const antes=normal.split(casa.termo)[0]
+   .replace(/\b(na|no|da|do|de|em|para|pra)\s*$/,'')
+   .trim();
+  const limpo=antes
+   .replace(/^(registrar|registra|anotar|anota|adicionar|adiciona|criar|cria)\s+/,'')
+   .trim();
+  if(limpo) return {nome:limpo,termo:limpo,novo:true};
+ }
+ return null;
+}
+
+function localizarTrechoSemAcentoVozManutencao(texto,termoNormalizado){
+ const original=String(texto||'');
+ const alvo=normalizarTextoVozManutencao(termoNormalizado);
+ if(!original||!alvo)return null;
+
+ let normal='',mapa=[];
+ for(let i=0;i<original.length;i++){
+  const parte=original[i].normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+  for(const ch of parte){
+   normal+=ch;
+   mapa.push(i);
+  }
+ }
+ const idx=normal.indexOf(alvo);
+ if(idx<0)return null;
+ const inicio=mapa[idx];
+ const fim=mapa[idx+alvo.length-1]+1;
+ return {inicio,fim};
+}
+
+function removerTrechoSemAcentoVozManutencao(texto,termoNormalizado){
+ const pos=localizarTrechoSemAcentoVozManutencao(texto,termoNormalizado);
+ if(!pos)return String(texto||'');
+ return String(texto||'').slice(0,pos.inicio)+' '+String(texto||'').slice(pos.fim);
+}
+
+function limparDescricaoVozManutencao(texto,item,casa){
+ let descricao=String(texto||'').trim();
+
+ if(item?.termo){
+  descricao=removerTrechoSemAcentoVozManutencao(descricao,item.termo);
+ }
+ if(casa?.termo){
+  descricao=removerTrechoSemAcentoVozManutencao(descricao,casa.termo);
+ }
+
+ descricao=descricao
+  .replace(/^[\s,;:.-]*(registrar|registra|anotar|anota|adicionar|adiciona|criar|cria)\b[\s,;:.-]*/i,'')
+  .replace(/^[\s,;:.-]*(na|no|da|do|de|em|para|pra)\b[\s,;:.-]*/i,'')
+  .replace(/^[\s,;:.-]*(que|porque|pois)\b[\s,;:.-]*/i,'')
+  .replace(/\s+/g,' ')
+  .replace(/\s+([,.;:!?])/g,'$1')
+  .trim();
+
+ return descricao ? descricao.charAt(0).toUpperCase()+descricao.slice(1) : '';
+}
+
+function interpretarManutencaoPorVoz(texto){
+ const normal=normalizarTextoVozManutencao(texto);
+
+ const comandoPendencias=[
+  'quais servicos estao pendentes',
+  'quais servicos estao pendente',
+  'quais manutencoes estao pendentes',
+  'quais manutencoes estao pendente',
+  'mostrar servicos pendentes',
+  'mostrar manutencoes pendentes',
+  'ver servicos pendentes',
+  'ver manutencoes pendentes',
+  'lista de servicos pendentes',
+  'lista de manutencoes pendentes',
+  'o que esta pendente',
+  'o que esta para fazer',
+  'o que tenho para fazer'
+ ];
+ if(comandoPendencias.some(x=>normal.includes(x))){
+  return {tipo:'pendencias',texto:String(texto||'').trim()};
+ }
+
+ const casa=detectarCasaVozManutencao(texto);
+ const item=detectarItemVozManutencao(texto);
+ const descricao=limparDescricaoVozManutencao(texto,item,casa);
+
+ return {
+  tipo:'manutencao',
+  texto:String(texto||'').trim(),
+  casa,
+  item,
+  descricao
+ };
+}
+
+function fecharAssistenteVozManutencao(){
+ const m=$('modalAssistenteVozManutencao');
+ if(m)m.remove();
+ if(reconhecimentoVozManutencao){
+  try{reconhecimentoVozManutencao.abort();}catch(e){}
+ }
+ reconhecimentoVozManutencao=null;
+ vozManutencaoOuvindo=false;
+}
+
+function atualizarStatusAssistenteVozManutencao(texto){
+ const el=$('vozManutencaoStatus');
+ if(el)el.innerHTML=texto;
+}
+
+function atualizarBotaoVozManutencao(ouvindo){
+ const btn=$('btnIniciarVozManutencao');
+ if(!btn)return;
+ btn.classList.toggle('ouvindo',ouvindo);
+ btn.textContent=ouvindo?'🛑 Parar de ouvir':'🎤 Falar agora';
+}
+
+function abrirAssistenteVozManutencao(){
+ const existente=$('modalAssistenteVozManutencao');
+ if(existente)existente.remove();
+
+ const html=`
+  <div class="modal-conteudo voz-manutencao-conteudo">
+   <button class="fechar-modal" type="button" onclick="fecharAssistenteVozManutencao()">×</button>
+   <h2>🎤 Assistente de manutenção</h2>
+   <p style="color:var(--cinza);margin:7px 0 12px">
+    Fale a manutenção normalmente. O sistema vai identificar a casa, o item e a descrição.
+   </p>
+   <div id="vozManutencaoStatus" class="voz-manutencao-status">
+    Pronto para ouvir.
+   </div>
+   <div id="vozManutencaoTranscricao" class="voz-manutencao-transcricao">
+    Nenhuma fala recebida ainda.
+   </div>
+   <div style="display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-top:14px">
+    <button id="btnIniciarVozManutencao" class="botao-voz-manutencao" type="button" onclick="iniciarReconhecimentoVozManutencao()">🎤 Falar agora</button>
+    <button class="cinza" type="button" onclick="fecharAssistenteVozManutencao()">Fechar</button>
+   </div>
+   <div class="voz-manutencao-ajuda">
+    <strong>Exemplo:</strong> “Trocar chuveiro da Casa Amarela, não está aquecendo.”<br>
+    Também pode dizer: <strong>“Quais serviços estão pendentes?”</strong>
+   </div>
+  </div>`;
+
+ const m=document.createElement('div');
+ m.id='modalAssistenteVozManutencao';
+ m.className='modal aberto';
+ m.onclick=e=>{if(e.target===m)fecharAssistenteVozManutencao();};
+ m.innerHTML=html;
+ document.body.appendChild(m);
+ // O reconhecimento NÃO começa automaticamente.
+ // Em celulares, iniciar somente após o toque do usuário evita bloqueios
+ // do navegador e dá tempo para o usuário se preparar para falar.
+ atualizarStatusAssistenteVozManutencao('Toque em “Falar agora” e fale normalmente.');
+}
+
+function iniciarReconhecimentoVozManutencao(){
+ const Ctor=obterReconhecimentoVozManutencao();
+ if(!Ctor){
+  atualizarStatusAssistenteVozManutencao(
+   '⚠️ O navegador deste dispositivo não disponibiliza reconhecimento de voz para esta página. Tente pelo Google Chrome no celular.'
+  );
+  return;
+ }
+
+ if(vozManutencaoOuvindo){
+  try{reconhecimentoVozManutencao?.stop();}catch(e){}
+  return;
+ }
+
+ try{
+  const recognition=new Ctor();
+  reconhecimentoVozManutencao=recognition;
+  recognition.lang='pt-BR';
+  recognition.continuous=false;
+  recognition.interimResults=true;
+  recognition.maxAlternatives=3;
+
+  recognition.onstart=function(){
+   vozManutencaoOuvindo=true;
+   atualizarBotaoVozManutencao(true);
+   atualizarStatusAssistenteVozManutencao('🎙️ Estou ouvindo... fale a manutenção ou peça a lista de serviços pendentes.');
+  };
+
+  recognition.onaudiostart=function(){
+   atualizarStatusAssistenteVozManutencao('🎙️ Microfone ativado. Pode falar.');
+  };
+
+  recognition.onsoundstart=function(){
+   atualizarStatusAssistenteVozManutencao('🔊 Som detectado. Continue falando...');
+  };
+
+  recognition.onspeechstart=function(){
+   atualizarStatusAssistenteVozManutencao('🎙️ Estou ouvindo sua fala...');
+  };
+
+  let textoVozAcumulado='';
+  let textoVozProcessado=false;
+
+  function processarTextoVozManutencao(texto){
+   texto=String(texto||'').trim();
+   if(!texto || textoVozProcessado)return;
+   textoVozProcessado=true;
+
+   const trans=$('vozManutencaoTranscricao');
+   if(trans)trans.textContent='“'+texto+'”';
+
+   const interpretacao=interpretarManutencaoPorVoz(texto);
+   if(interpretacao.tipo==='pendencias'){
+    atualizarStatusAssistenteVozManutencao('🔎 Consultando as manutenções pendentes...');
+    consultarPendenciasPorVozManutencao();
+    return;
+   }
+
+   if(!interpretacao.casa){
+    atualizarStatusAssistenteVozManutencao('⚠️ Não identifiquei a casa. Diga, por exemplo: “Trocar chuveiro da Casa Amarela, não está aquecendo.”');
+    return;
+   }
+   if(!interpretacao.item){
+    atualizarStatusAssistenteVozManutencao('⚠️ Não identifiquei o item de manutenção. Você pode dizer, por exemplo: “Trocar chuveiro da Casa Amarela...”');
+    return;
+   }
+   if(!interpretacao.descricao){
+    atualizarStatusAssistenteVozManutencao('⚠️ Identifiquei a casa e o item, mas não encontrei a descrição do problema. Diga o que está acontecendo.');
+    return;
+   }
+
+   atualizarStatusAssistenteVozManutencao('✅ Entendi. Registrando a manutenção automaticamente...');
+   setTimeout(()=>{
+    fecharAssistenteVozManutencao();
+    preencherManutencaoPorVoz(interpretacao);
+   },450);
+  }
+
+  recognition.onresult=function(event){
+   let parcial='';
+   let finalTexto='';
+   for(let i=event.resultIndex;i<event.results.length;i++){
+    const trecho=event.results[i][0]?.transcript||'';
+    if(event.results[i].isFinal) finalTexto+=' '+trecho;
+    else parcial+=' '+trecho;
+   }
+
+   if(finalTexto.trim()) textoVozAcumulado=(textoVozAcumulado+' '+finalTexto).trim();
+   const exibicao=(textoVozAcumulado||parcial).trim();
+   if(exibicao){
+    const trans=$('vozManutencaoTranscricao');
+    if(trans)trans.textContent='“'+exibicao+'”';
+   }
+
+   if(finalTexto.trim()) processarTextoVozManutencao(textoVozAcumulado);
+  };
+
+  recognition.onspeechend=function(){
+   atualizarStatusAssistenteVozManutencao('⏳ Fala encerrada. Aguardando a transcrição final...');
+  };
+
+  recognition.onnomatch=function(){
+   atualizarStatusAssistenteVozManutencao('⚠️ Ouvi o áudio, mas não consegui entender as palavras. Tente falar um pouco mais devagar.');
+  };
+
+  recognition.onerror=function(event){
+   vozManutencaoOuvindo=false;
+   atualizarBotaoVozManutencao(false);
+   const mensagens={
+    'not-allowed':'⚠️ O acesso ao microfone foi bloqueado. Autorize o microfone para o site e tente novamente.',
+    'service-not-allowed':'⚠️ O reconhecimento de voz não foi autorizado pelo navegador.',
+    'no-speech':'⚠️ Não detectei sua fala. Toque em “Falar agora” e tente novamente.',
+    'audio-capture':'⚠️ Não consegui acessar o microfone deste dispositivo.',
+    'network':'⚠️ O serviço de reconhecimento de voz não respondeu. Verifique a conexão com a internet.'
+   };
+   atualizarStatusAssistenteVozManutencao(mensagens[event.error]||('⚠️ Não foi possível reconhecer a fala ('+event.error+').'));
+  };
+
+  recognition.onend=function(){
+   vozManutencaoOuvindo=false;
+   atualizarBotaoVozManutencao(false);
+
+   // Alguns navegadores encerram a sessão sem marcar o último resultado como isFinal.
+   // Nesse caso, usamos a transcrição acumulada para não ficar preso em “Processando”.
+   if(!textoVozProcessado && textoVozAcumulado.trim()){
+    processarTextoVozManutencao(textoVozAcumulado);
+   }else if(!textoVozProcessado){
+    atualizarStatusAssistenteVozManutencao('⚠️ Não consegui obter uma transcrição final. Toque em “Falar agora” e tente novamente.');
+   }
+
+   reconhecimentoVozManutencao=null;
+  };
+
+  recognition.start();
+ }catch(e){
+  console.error('Assistente de voz:',e);
+  vozManutencaoOuvindo=false;
+  atualizarBotaoVozManutencao(false);
+  atualizarStatusAssistenteVozManutencao('⚠️ Não foi possível iniciar o microfone. Tente novamente.');
+ }
+}
+
+async function preencherManutencaoPorVoz(dados){
+ try{
+  await abrirNovaManutencao();
+  setTimeout(()=>{
+   const casa=$('manutencaoCasa');
+   const data=$('manutencaoData');
+   const item=$('manutencaoItem');
+   const prestador=$('manutencaoPrestadorId');
+   const descricao=$('manutencaoDescricao');
+   const status=$('manutencaoStatus');
+   const conclusao=$('manutencaoDataConclusao');
+   const observacao=$('manutencaoObservacao');
+
+   if(casa)casa.value=dados.casa.id;
+   if(data)data.value=dataStr(hoje());
+   if(item)item.value=dados.item.nome;
+   if(prestador)prestador.value='';
+   if(descricao)descricao.value=dados.descricao;
+   if(status)status.value='pendente';
+   if(conclusao)conclusao.value='';
+   if(observacao)observacao.value='';
+
+   const novoItem=dados.item.novo || !itensManutencao.some(x=>normalizar(x.nome)===normalizar(dados.item.nome));
+   const aviso=novoItem
+    ? '🆕 Item novo: será acrescentado automaticamente ao cadastro.'
+    : '📌 Item localizado no cadastro de manutenção.';
+
+   const modal=document.getElementById('modalManutencao');
+   const titulo=$('tituloModalManutencao');
+   if(titulo)titulo.textContent='🎤 Registrando manutenção por voz';
+
+   if(modal){
+    const cab=modal.querySelector('.modal-conteudo');
+    if(cab){
+     const p=document.createElement('div');
+     p.style.cssText='margin:0 0 10px;padding:10px 12px;border-radius:8px;background:#eef7fb;color:var(--marinho);font-size:13px;';
+     p.textContent=aviso+' Salvando automaticamente como pendente, sem prestador e sem valor.';
+     cab.insertBefore(p,cab.children[2]||null);
+    }
+   }
+
+   descricao?.focus();
+
+   // O lançamento por voz é salvo automaticamente. Se precisar corrigir
+   // algum detalhe depois, a manutenção poderá ser editada normalmente na lista.
+   setTimeout(async()=>{
+    try{
+     await salvarManutencao(true);
+    }catch(e){
+     console.error('Salvamento automático da manutenção por voz:',e);
+    }
+   },120);
+  },80);
+ }catch(e){
+  console.error('Preenchimento por voz:',e);
+  alert('⚠️ Não foi possível abrir o lançamento de manutenção.');
+ }
+}
+
+async function consultarPendenciasPorVozManutencao(){
+ try{
+  if(!manutencoesCarregadas || !itensManutencao.length){
+   await carregarManutencoes();
+  }
+  const pendentes=manutencoesCadastradas
+   .filter(x=>statusManutencaoNormalizado(x)==='pendente')
+   .sort((a,b)=>String(a.data||'').localeCompare(String(b.data||'')));
+
+  const modal=$('modalAssistenteVozManutencao');
+  if(!modal)return;
+
+  const box=modal.querySelector('.voz-manutencao-conteudo');
+  if(!box)return;
+
+  const lista=pendentes.length
+   ? pendentes.map(x=>`
+      <div class="voz-pendencia-item">
+       <strong>🔧 ${escapeHtmlReserva(x.item||'—')}</strong><br>
+       <span>🏠 ${escapeHtmlReserva(casas[x.casa]?.nome||x.casa||'—')}</span><br>
+       <span>📝 ${escapeHtmlReserva(x.descricao||'—')}</span>
+      </div>`).join('')
+   : '<div style="padding:12px;border-radius:8px;background:#eef8ee;color:#246b24">✅ Não há manutenções pendentes.</div>';
+
+  const trans=$('vozManutencaoTranscricao');
+  if(trans)trans.textContent='Consulta: manutenções pendentes';
+
+  atualizarStatusAssistenteVozManutencao(
+   pendentes.length
+    ? '🔎 Encontrei '+pendentes.length+' manutenção(ões) pendente(s).'
+    : '✅ Não há manutenções pendentes.'
+  );
+
+  let antiga=box.querySelector('.voz-pendencias-lista');
+  if(antiga)antiga.remove();
+  const div=document.createElement('div');
+  div.className='voz-pendencias-lista';
+  div.innerHTML=lista;
+  box.appendChild(div);
+ }catch(e){
+  console.error('Consulta por voz:',e);
+  atualizarStatusAssistenteVozManutencao('❌ Não foi possível consultar as manutenções.');
+ }
+}
+
 async function abrirNovaManutencao(){if(!prestadoresCarregados)await carregarPrestadores();const hojeStr=dataStr(hoje());const prest=prestadoresCadastrados;const opPrest='<option value="">— Não informado —</option>'+prest.map(x=>`<option value="${escapeHtmlReserva(x.id)}">${escapeHtmlReserva(x.nome)}</option>`).join('');const opCasa='<option value="amarela">Casa Amarela</option><option value="bege">Casa Bege</option><option value="marrom">Casa Marrom</option><option value="branca">Casa Branca</option><option value="nossa">Nossa Casa</option>';const html=`<div class="modal-conteudo" style="max-width:760px"><button class="fechar-modal" onclick="fecharModalManutencao()">×</button><h2 id="tituloModalManutencao">🔧 Nova manutenção</h2><input type="hidden" id="manutencaoEdicaoId"><div class="despesas-form-grid"><div class="grupo-input"><label>Casa *</label><select id="manutencaoCasa">${opCasa}</select></div><div class="grupo-input"><label>Data da identificação *</label><input type="date" id="manutencaoData" value="${hojeStr}"></div><div class="grupo-input"><label>Item *</label><input id="manutencaoItem" list="listaItensManutencao" placeholder="Ex.: Lâmpada, chuveiro..." autocomplete="off"><datalist id="listaItensManutencao">${itensManutencao.map(x=>`<option value="${escapeHtmlReserva(x.nome)}">`).join('')}</datalist></div><div class="grupo-input"><label>Prestador</label><select id="manutencaoPrestadorId">${opPrest}</select></div><div class="grupo-input" style="grid-column:1/-1"><label>Descrição do problema *</label><textarea id="manutencaoDescricao" rows="3" lang="pt-BR" spellcheck="true" autocorrect="on" autocapitalize="sentences" inputmode="text" placeholder="Descreva o que precisa ser feito..."></textarea><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:7px"><button type="button" class="cinza" onclick="verificarTextoManutencao()">🔎 Verificar texto</button><span style="font-size:12px;color:var(--cinza)">O Chrome também pode mostrar sugestões de ortografia quando a verificação em Português (Brasil) estiver ativada.</span></div><div id="sugestoesTextoManutencao" style="margin-top:8px"></div></div><div class="grupo-input"><label>Status</label><select id="manutencaoStatus"><option value="pendente">🟠 Pendente</option><option value="concluida">🟢 Concluída</option></select></div><div class="grupo-input"><label>Data da conclusão</label><input type="date" id="manutencaoDataConclusao"></div><div class="grupo-input" style="grid-column:1/-1"><label>Observação</label><textarea id="manutencaoObservacao" rows="2"></textarea></div></div><div style="display:flex;justify-content:flex-end;gap:10px;margin-top:18px"><button class="cinza" onclick="fecharModalManutencao()">Cancelar</button><button class="sucesso" onclick="salvarManutencao()">💾 Salvar manutenção</button></div></div>`;const m=document.createElement('div');m.id='modalManutencao';m.className='modal aberto';m.onclick=e=>{if(e.target===m)fecharModalManutencao()};m.innerHTML=html;document.body.appendChild(m);}
 function fecharModalManutencao(){document.getElementById('modalManutencao')?.remove();}
 async function verificarTextoManutencao(){
@@ -9779,7 +10354,7 @@ async function verificarTextoManutencao(){
 }
 function aplicarSugestaoTextoManutencao(offset,length,novo){const el=$('manutencaoDescricao');if(!el)return;const t=el.value||'';el.value=t.slice(0,offset)+novo+t.slice(offset+length);el.focus();const pos=offset+String(novo).length;try{el.setSelectionRange(pos,pos);}catch(e){};verificarTextoManutencao();}
 async function salvarItemManutencao(nome){const n=String(nome||'').trim();if(!n)return;const id=normalizar(n).replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,80)||('item-'+Date.now());if(!itensManutencao.some(x=>normalizar(x.nome)===normalizar(n))){try{await db.collection('itensManutencao').doc(id).set({nome:n,nomeNormalizado:normalizar(n),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});itensManutencao.push({id,nome:n,nomeNormalizado:normalizar(n)});itensManutencao.sort((a,b)=>a.nome.localeCompare(b.nome,'pt-BR'));}catch(e){console.error('Erro ao salvar item de manutenção:',e);}}}
-async function salvarManutencao(){const id=$('manutencaoEdicaoId')?.value||'',casa=$('manutencaoCasa')?.value||'',data=$('manutencaoData')?.value||'',item=$('manutencaoItem')?.value.trim()||'',prestadorId=$('manutencaoPrestadorId')?.value||'',descricao=$('manutencaoDescricao')?.value.trim()||'',status=$('manutencaoStatus')?.value||'pendente';let dataConclusao=$('manutencaoDataConclusao')?.value||'',observacao=$('manutencaoObservacao')?.value.trim()||'';if(!casa||!data||!item||!descricao)return alert('⚠️ Informe a casa, data, item e descrição.');if(status==='concluida'&&!dataConclusao)dataConclusao=dataStr(hoje());if(status==='pendente')dataConclusao='';const p=prestadoresCadastrados.find(x=>x.id===prestadorId),dados={casa,data,item,itemNormalizado:normalizar(item),descricao,prestadorId:prestadorId||'',prestador:p?.nome||'',status,dataConclusao,observacao,atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()};try{await salvarItemManutencao(item);if(id)await db.collection('manutencoes').doc(id).update(dados);else await db.collection('manutencoes').add({...dados,criadoEm:firebase.firestore.FieldValue.serverTimestamp()});fecharModalManutencao();manutencoesCarregadas=false;await carregarManutencoes();await carregarResumoManutencoes();alert(id?'✅ Manutenção alterada.':'✅ Manutenção registrada.');}catch(e){console.error(e);alert('❌ Erro ao salvar a manutenção. Verifique as regras do Firestore.');}}
+async function salvarManutencao(silencioso=false){const id=$('manutencaoEdicaoId')?.value||'',casa=$('manutencaoCasa')?.value||'',data=$('manutencaoData')?.value||'',item=$('manutencaoItem')?.value.trim()||'',prestadorId=$('manutencaoPrestadorId')?.value||'',descricao=$('manutencaoDescricao')?.value.trim()||'',status=$('manutencaoStatus')?.value||'pendente';let dataConclusao=$('manutencaoDataConclusao')?.value||'',observacao=$('manutencaoObservacao')?.value.trim()||'';if(!casa||!data||!item||!descricao)return alert('⚠️ Informe a casa, data, item e descrição.');if(status==='concluida'&&!dataConclusao)dataConclusao=dataStr(hoje());if(status==='pendente')dataConclusao='';const p=prestadoresCadastrados.find(x=>x.id===prestadorId),dados={casa,data,item,itemNormalizado:normalizar(item),descricao,prestadorId:prestadorId||'',prestador:p?.nome||'',status,dataConclusao,observacao,atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()};try{await salvarItemManutencao(item);if(id)await db.collection('manutencoes').doc(id).update(dados);else await db.collection('manutencoes').add({...dados,criadoEm:firebase.firestore.FieldValue.serverTimestamp()});fecharModalManutencao();manutencoesCarregadas=false;await carregarManutencoes();await carregarResumoManutencoes();if(!silencioso)alert(id?'✅ Manutenção alterada.':'✅ Manutenção registrada.');}catch(e){console.error(e);alert('❌ Erro ao salvar a manutenção. Verifique as regras do Firestore.');}}
 async function carregarItensManutencao(){try{const s=await db.collection('itensManutencao').orderBy('nomeNormalizado').get();itensManutencao=s.docs.map(d=>({id:d.id,...(d.data()||{})}));}catch(e){console.error('Itens de manutenção:',e);}}
 async function carregarResumoManutencoes(){try{await carregarItensManutencao();popularSelectItensManutencao();const s=await db.collection('manutencoes').get(),a=s.docs.map(d=>({id:d.id,...(d.data()||{})})),pend=a.filter(x=>String(x.status||'pendente')==='pendente'),concl=a.length-pend.length,casasPend=new Set(pend.map(x=>x.casa).filter(Boolean));if($('indicadorManutencoesPendentes'))$('indicadorManutencoesPendentes').textContent=pend.length;if($('indicadorManutencoesConcluidas'))$('indicadorManutencoesConcluidas').textContent=concl;if($('indicadorManutencoesCasas'))$('indicadorManutencoesCasas').textContent=casasPend.size;popularSelectPrestadoresManutencao();}catch(e){console.error('Resumo de manutenções:',e);}}
 function popularSelectPrestadoresManutencao(){const el=$('filtroManutencaoPrestador');if(el){const v=el.value;el.innerHTML='<option value="todos">Todos</option>'+prestadoresCadastrados.map(x=>`<option value="${escapeHtmlReserva(x.id)}">${escapeHtmlReserva(x.nome)}</option>`).join('');if(v)el.value=v;}popularSelectItensManutencao();}
