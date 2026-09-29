@@ -93,65 +93,6 @@ footer{background:linear-gradient(135deg,#04283c,#075985);color:#fff;padding:40p
 
 @media(max-width:800px){.hero{min-height:570px;padding:30px 5% 78px}.hero-inner{grid-template-columns:1fr}.hero-card{max-width:520px}.visual-strip{grid-template-columns:1fr 1fr}.visual.large{grid-column:1/-1}.city-panels{grid-template-columns:1fr}.section-head{display:block}.section-badge{margin-top:12px}.tabs-wrap{top:7px}}
 @media(max-width:560px){.hero h1{font-size:42px}.hero p{font-size:16px}.wrap{padding-left:4%;padding-right:4%}.visual-strip{grid-template-columns:1fr}.visual.large{grid-column:auto;height:205px}.visual{height:170px}.tabs{border-radius:16px}.tabs button{flex:1 1 auto}.food-copy{padding:25px 20px}.food-copy h2{font-size:29px}footer .foot-inner{display:block}.credit{text-align:left;margin-top:12px}}
-
-/* =============================
-   RETORNO ÀS LOCAÇÕES
-============================= */
-.btn-voltar-locacoes{
-  display:none;
-  align-items:center;
-  justify-content:center;
-  width:max-content;
-  min-height:44px;
-  padding:10px 16px;
-  border-radius:999px;
-  background:rgba(7,45,67,.90);
-  color:#fff;
-  text-decoration:none;
-  font-weight:800;
-  font-size:14px;
-  border:1px solid rgba(255,255,255,.35);
-  box-shadow:0 8px 24px rgba(0,35,55,.18);
-  margin:0 0 12px 0;
-  backdrop-filter:blur(8px);
-  -webkit-backdrop-filter:blur(8px);
-}
-.btn-voltar-locacoes:hover{
-  filter:brightness(1.06);
-  transform:translateY(-1px);
-}
-@media(max-width:560px){
-  body{
-    padding-top:58px;
-  }
-  .btn-voltar-locacoes{
-    display:flex;
-    position:fixed;
-    top:0;
-    left:0;
-    right:0;
-    z-index:999999;
-    width:100%;
-    min-height:58px;
-    margin:0;
-    padding:10px 16px;
-    border-radius:0;
-    background:linear-gradient(135deg,#063b59,#0c9bd1);
-    border:0;
-    border-bottom:1px solid rgba(255,255,255,.30);
-    box-shadow:0 8px 22px rgba(0,30,48,.22);
-    font-size:15px;
-    color:#fff;
-    text-align:center;
-    box-sizing:border-box;
-  }
-  .btn-voltar-locacoes:active{
-    filter:brightness(.94);
-  }
-  .tabs-wrap{
-    top:7px;
-  }
-}
 </style>
 
 <style id="guia-image-fallbacks">
@@ -179,12 +120,6 @@ footer{background:linear-gradient(135deg,#04283c,#075985);color:#fff;padding:40p
 
 <main class="wrap">
   <div class="content-glow" aria-hidden="true"></div>
-
-  <!-- VOLTAR PARA O SITE PRINCIPAL -->
-  <a class="btn-voltar-locacoes" href="/" aria-label="Voltar para a página principal de locações">
-    🏠 Voltar para locações
-  </a>
-
   <div class="tabs-wrap"><div class="tabs">
     <button class="on" onclick="tab('arroio',this)">🌊 Arroio do Silva</button>
     <button onclick="tab('ararangua',this)">🏞️ Araranguá</button>
@@ -241,7 +176,6 @@ footer{background:linear-gradient(135deg,#04283c,#075985);color:#fff;padding:40p
         <div class="chip"><img src="https://instadelivery-public.nyc3.cdn.digitaloceanspaces.com/itens/176158167168ff9a67e1f2a_75_75.jpeg" alt="Açaí">🍧 Açaí</div>
       </div></div>
     </div>
-    <div class="note"><b>Protótipo:</b> a seleção de estabelecimentos ainda é inicial. Antes da publicação, vale revisar nomes, fotos, horários, endereços e links de cada local.</div>
     <div class="grid">
       <article class="card food-card"><div class="card-media"><img class="card-img" src="https://turismo.arroiodosilva.sc.gov.br/uploads/sites/45/2022/10/3188950-scaled.jpg?amp=1" alt="Restaurante Sabor da Serra"><span class="pin">🍽️ SABOR LOCAL</span></div><div class="body"><span class="tag">Balneário Arroio do Silva</span><h3>Restaurante Sabor da Serra</h3><p>Opção indicada para conhecer a gastronomia local e comparar pratos do dia.</p><button type="button" class="btn primary location-trigger" data-action="localizacao" data-chave="Restaurante Sabor da Serra">📍 Localização</button><button type="button" class="btn soft gallery-trigger" data-action="galeria" data-chave="Restaurante Sabor da Serra">📸 Fotos</button></div></article>
       <article class="card food-card"><div class="card-media"><img class="card-img" src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1a/4a/e6/6a/photo0jpg.jpg?h=500&s=1&w=900" alt="Boteco da Praia à beira-mar"><span class="pin">🍹 BEIRA-MAR</span></div><div class="body"><span class="tag">Balneário Arroio do Silva</span><h3>Boteco da Praia</h3><p>Ambiente à beira-mar com opções de carnes, frutos do mar, petiscos e bebidas; uma parada para curtir o clima da orla.</p><button type="button" class="btn primary location-trigger" data-action="localizacao" data-chave="Boteco da Praia">📍 Localização</button><button type="button" class="btn soft gallery-trigger" data-action="galeria" data-chave="Boteco da Praia">📸 Fotos</button></div></article>
@@ -295,7 +229,7 @@ footer{background:linear-gradient(135deg,#04283c,#075985);color:#fff;padding:40p
   </div>
 </div>
 
-<footer><div class="foot-inner"><div><div style="font-size:22px;font-weight:900">🌴 Guia Casas na Praia</div><small>Protótipo visual — pensado para manter fotos, detalhes e localização dentro do próprio guia, inclusive no celular.</small></div><div class="credit">Imagens e referências externas usadas nesta versão de demonstração.<br>Antes da publicação, substituir por fotos autorizadas ou próprias quando necessário.</div></div></footer>
+<footer><div class="foot-inner"><div><div style="font-size:22px;font-weight:900">🌴 Guia Casas na Praia</div><small>Praias, natureza, cultura, eventos e gastronomia de Balneário Arroio do Silva e Araranguá.</small></div><div class="credit">Guia turístico da região.<br>Consulte os canais oficiais dos estabelecimentos para confirmar horários e informações que possam sofrer alterações.</div></div></footer>
 
 <script>
 const detalhesGuia={
