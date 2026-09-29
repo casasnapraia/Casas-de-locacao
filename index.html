@@ -2031,6 +2031,76 @@ document.addEventListener('click',function(event){
 
 </style>
 <link rel="manifest" href="/manifest.json">
+
+<style id="guia-casas-na-praia-link">
+.botao-guia-regiao{
+ display:inline-flex;
+ align-items:center;
+ justify-content:center;
+ gap:6px;
+ padding:9px 13px;
+ border-radius:22px;
+ background:linear-gradient(135deg,#0f789a,#0b4f6b);
+ color:#fff;
+ text-decoration:none;
+ font-weight:700;
+ font-size:14px;
+ border:1px solid rgba(255,255,255,.22);
+ box-shadow:0 5px 14px rgba(0,55,80,.18);
+ transition:transform .15s ease,filter .15s ease,box-shadow .15s ease;
+ white-space:nowrap;
+}
+.botao-guia-regiao:hover{
+ transform:translateY(-1px);
+ filter:brightness(1.05);
+ box-shadow:0 7px 16px rgba(0,55,80,.22);
+}
+@media(max-width:700px){
+ .botao-guia-regiao{
+  display:flex !important;
+  align-items:center;
+  justify-content:center;
+  width:min(92vw,360px);
+  min-height:44px;
+  margin:0 auto;
+  padding:10px 14px;
+  font-size:14px;
+  border-radius:12px;
+ }
+}
+
+@media(max-width:800px){
+ .cabecalho-publico{
+  width:100%;
+  padding:12px 10px 14px;
+ }
+ .cabecalho-publico > div:last-child{
+  width:100%;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:stretch !important;
+  justify-content:center !important;
+  gap:8px !important;
+ }
+ .cabecalho-publico .botao-cliente{
+  display:block !important;
+  width:min(92vw,360px);
+  min-height:44px;
+  margin:0 auto;
+  padding:10px 14px;
+  border-radius:12px;
+ }
+ .cabecalho-publico .botao-guia-regiao{
+  order:2;
+ }
+ .cabecalho-publico .botao-login{
+  display:none !important;
+ }
+ .cabecalho-publico + .clima-publico{
+  margin-top:205px;
+ }
+}
+</style>
 </head>
 
 <body>
@@ -2107,6 +2177,9 @@ if ("serviceWorker" in navigator) {
   <button id="btnClienteHeader" class="botao-cliente" onclick="abrirAreaCliente()">
    👤 Minha conta / Minhas reservas
   </button>
+  <a class="botao-guia-regiao" href="/guia-casas-na-praia.html" target="_blank" rel="noopener noreferrer" aria-label="Abrir Guia Casas na Praia em nova aba">
+   🌴 Guia da região
+  </a>
   <button class="botao-login" onclick="abrirLogin()">
    🔐 Acesso Administrativo
   </button>
