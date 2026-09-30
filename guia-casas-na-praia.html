@@ -97,7 +97,7 @@ footer{background:linear-gradient(135deg,#04283c,#075985);color:#fff;padding:40p
    RETORNO ÀS LOCAÇÕES
 ============================= */
 .btn-voltar-locacoes{
-  display:none;
+  display:flex !important;
   align-items:center;
   justify-content:center;
   width:max-content;
@@ -156,10 +156,39 @@ footer{background:linear-gradient(135deg,#04283c,#075985);color:#fff;padding:40p
 
 <style id="guia-app-return-fix">
 /* =============================
-   RETORNO PARA LOCAÇÕES NO APP/PWA
+   RETORNO PARA LOCAÇÕES — UNIVERSAL
+   Fica sempre visível; no celular/app vira barra fixa.
 ============================= */
-html.modo-app .btn-voltar-locacoes{
+.btn-voltar-locacoes{
   display:flex !important;
+  position:relative !important;
+  z-index:2147483647 !important;
+}
+@media(max-width:560px){
+  body{padding-top:58px !important;}
+  .btn-voltar-locacoes{
+    position:fixed !important;
+    top:0 !important;
+    left:0 !important;
+    right:0 !important;
+    z-index:2147483647 !important;
+    width:100% !important;
+    min-height:58px !important;
+    margin:0 !important;
+    padding:10px 16px !important;
+    border-radius:0 !important;
+    background:linear-gradient(135deg,#063b59,#0c9bd1) !important;
+    border:0 !important;
+    border-bottom:1px solid rgba(255,255,255,.30) !important;
+    box-shadow:0 8px 22px rgba(0,30,48,.22) !important;
+    font-size:15px !important;
+    color:#fff !important;
+    text-align:center !important;
+    box-sizing:border-box !important;
+  }
+}
+html.modo-app body{padding-top:58px !important;}
+html.modo-app .btn-voltar-locacoes{
   position:fixed !important;
   top:0 !important;
   left:0 !important;
@@ -179,7 +208,6 @@ html.modo-app .btn-voltar-locacoes{
   text-align:center !important;
   box-sizing:border-box !important;
 }
-html.modo-app body{padding-top:58px !important;}
 </style>
 
 <style id="guia-image-fallbacks">
@@ -198,6 +226,23 @@ html.modo-app body{padding-top:58px !important;}
     if(standalone) document.documentElement.classList.add('modo-app');
   }catch(e){}
 })();
+
+document.addEventListener('DOMContentLoaded', function(){
+  try{
+    var btn=document.querySelector('.btn-voltar-locacoes');
+    if(!btn){
+      var wrap=document.querySelector('.wrap') || document.body;
+      btn=document.createElement('a');
+      btn.className='btn-voltar-locacoes';
+      btn.href='/';
+      btn.setAttribute('aria-label','Voltar para a página principal de locações');
+      btn.textContent='🏠 Voltar para locações';
+      wrap.insertBefore(btn, wrap.firstChild);
+    }
+    btn.style.setProperty('display','flex','important');
+    btn.style.setProperty('z-index','2147483647','important');
+  }catch(e){}
+});
 </script>
 
 <div class="page-bg" id="pageBg"></div><div class="wave"></div>
