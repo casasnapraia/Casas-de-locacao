@@ -154,12 +154,52 @@ footer{background:linear-gradient(135deg,#04283c,#075985);color:#fff;padding:40p
 
 </style>
 
+<style id="guia-app-return-fix">
+/* =============================
+   RETORNO PARA LOCAÇÕES NO APP/PWA
+============================= */
+html.modo-app .btn-voltar-locacoes{
+  display:flex !important;
+  position:fixed !important;
+  top:0 !important;
+  left:0 !important;
+  right:0 !important;
+  z-index:2147483647 !important;
+  width:100% !important;
+  min-height:58px !important;
+  margin:0 !important;
+  padding:10px 16px !important;
+  border-radius:0 !important;
+  background:linear-gradient(135deg,#063b59,#0c9bd1) !important;
+  border:0 !important;
+  border-bottom:1px solid rgba(255,255,255,.30) !important;
+  box-shadow:0 8px 22px rgba(0,30,48,.22) !important;
+  font-size:15px !important;
+  color:#fff !important;
+  text-align:center !important;
+  box-sizing:border-box !important;
+}
+html.modo-app body{padding-top:58px !important;}
+</style>
+
 <style id="guia-image-fallbacks">
 .card-img, .visual{background-color:#dcecf3;}
 .card-img{object-fit:cover;}
 </style>
 </head>
 <body>
+<script>
+(function(){
+  try{
+    var standalone = false;
+    if(window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) standalone = true;
+    if(window.matchMedia && window.matchMedia('(display-mode: fullscreen)').matches) standalone = true;
+    if(window.navigator && window.navigator.standalone === true) standalone = true;
+    if(standalone) document.documentElement.classList.add('modo-app');
+  }catch(e){}
+})();
+</script>
+
 <div class="page-bg" id="pageBg"></div><div class="wave"></div>
 <header class="hero">
   <div class="hero-inner">
@@ -575,5 +615,22 @@ function atualizarContagensGaleria(){
 aplicarCapasGaleria();
 atualizarContagensGaleria();
 </script>
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+  try{
+    var a=document.querySelector('.btn-voltar-locacoes');
+    if(!a) return;
+    var standalone=(window.matchMedia && (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia('(display-mode: fullscreen)').matches)) || (window.navigator && window.navigator.standalone===true);
+    if(standalone){
+      document.documentElement.classList.add('modo-app');
+      a.style.display='flex';
+    }
+    a.addEventListener('click',function(){
+      try{ sessionStorage.setItem('guiaVoltarLocacoes','1'); }catch(e){}
+    });
+  }catch(e){}
+});
+</script>
+
 </body>
 </html>
