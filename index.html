@@ -9851,6 +9851,48 @@ async function carregarDadosRelatoriosSobDemanda(){
  }
 }
 
+function obterDespesasResumoRelatorio(){
+
+ let arr=[...(despesasCadastradas||[])];
+
+ const casa=$('filtroCasaRelatorio')?.value||'todas';
+ const anoFinanceiro=$('filtroAnoFinanceiroRelatorio')?.value||String(hoje().getFullYear());
+ const mesInicio=$('filtroMesRecebimentoInicioRelatorio')?.value||'todos';
+ const mesFim=$('filtroMesRecebimentoFimRelatorio')?.value||'todos';
+ const periodo=$('filtroPeriodoRelatorio')?.value||'personalizado';
+ const dataInicial=$('relatorioDataInicial')?.value||'';
+ const dataFinal=$('relatorioDataFinal')?.value||'';
+
+ // Para gastos, usamos apenas os critérios do relatório que têm
+ // correspondência direta nos lançamentos de despesas: casa e período/data.
+ // Filtros específicos de reservas (hóspede, origem, status, etc.)
+ // não existem nos documentos de despesas e, portanto, não os restringem.
+ if(casa!=='todas')arr=arr.filter(x=>x.casa===casa);
+
+ if(anoFinanceiro!=='todos')
+  arr=arr.filter(x=>String(x.data||'').slice(0,4)===String(anoFinanceiro));
+
+ if(mesInicio!=='todos' || mesFim!=='todos'){
+  const inicio=mesInicio==='todos'?1:Number(mesInicio);
+  const fim=mesFim==='todos'?12:Number(mesFim);
+  const min=Math.min(inicio,fim);
+  const max=Math.max(inicio,fim);
+  arr=arr.filter(x=>{
+   const d=String(x.data||'').slice(0,10);
+   if(!/^\d{4}-\d{2}-\d{2}$/.test(d))return false;
+   const mes=Number(d.slice(5,7));
+   return mes>=min&&mes<=max;
+  });
+ }
+
+ if(periodo==='personalizado'){
+  if(dataInicial)arr=arr.filter(x=>{const d=String(x.data||'').slice(0,10);return d&&d>=dataInicial;});
+  if(dataFinal)arr=arr.filter(x=>{const d=String(x.data||'').slice(0,10);return d&&d<=dataFinal;});
+ }
+
+ return arr;
+}
+
 function gerarRelatorio(){
 
  popularFiltrosRecebimentoRelatorio();
@@ -9879,6 +9921,13 @@ function gerarRelatorio(){
     s+Number(r.valorPago||0),
    0
   );
+
+ const despesasResumo=obterDespesasResumoRelatorio();
+ const totalGasto=despesasResumo.reduce(
+  (s,x)=>s+Number(x.valor||0),
+  0
+ );
+ const recebidoLiquido=recebido-totalGasto;
 
  const receber=
   Math.max(
@@ -10090,6 +10139,16 @@ function gerarRelatorio(){
    </div>
 
    <div class="resumo-card">
+    <small>Total gasto</small>
+    <strong>${moeda(totalGasto)}</strong>
+   </div>
+
+   <div class="resumo-card">
+    <small>Recebido líquido</small>
+    <strong>${moeda(recebidoLiquido)}</strong>
+   </div>
+
+   <div class="resumo-card">
     <small>A receber</small>
     <strong>${moeda(receber)}</strong>
    </div>
@@ -10110,6 +10169,8 @@ function gerarRelatorio(){
    </div>
 
   </div>
+
+  <div class="dashboard-nota" style="margin-top:10px">💡 <strong>Total gasto</strong> e <strong>Recebido líquido</strong> consideram os filtros de <strong>Casa</strong>, <strong>Ano Financeiro</strong> e período/data que possuem correspondência nos lançamentos de despesas. Os filtros específicos das reservas, como hóspede, origem e status do pagamento, continuam atuando somente sobre os recebimentos.</div>
 
   ${tabela}
 
