@@ -795,7 +795,8 @@ textarea{
 .calendario-reserva-lock.pendente{background:#b45309}
 .calendario-reserva-lock.parcial{background:#0369a1}
 .calendario-reserva-lock.pago{background:#166534}
-.calendario-reserva-lock:hover{filter:brightness(1.08);transform:scale(1.06)}
+ .calendario-reserva-lock:hover{filter:brightness(1.08);transform:scale(1.06)}
+.calendario-estadia-minima{display:inline-block;margin-top:2px;padding:2px 5px;border-radius:999px;background:rgba(14,116,144,.12);color:#075985;font-size:10px;font-weight:800;line-height:1.1}
 
 .calendario-tooltip-reserva{
  display:none;
@@ -2610,24 +2611,41 @@ if ("serviceWorker" in navigator) {
   <h3>🌙 Estadia mínima</h3>
 
   <p style="color:var(--cinza);margin:6px 0 10px">
-   Defina o mínimo de noites/diárias para novas reservas desta casa.
-   <strong>1</strong> = sem restrição. Reservas já lançadas permanecem inalteradas.
+   Você pode manter uma <strong>regra padrão</strong> para a casa e criar regras específicas por data.
+   Exemplo: deixe o padrão em <strong>1</strong>, selecione em azul as datas de sexta/sábado e salve <strong>2</strong>.
+   Somente as datas selecionadas receberão a regra de 2 noites. Reservas já lançadas permanecem inalteradas.
   </p>
 
   <div class="linha-form">
 
    <div class="grupo-input">
-    <label>Estadia mínima (noites/diárias)</label>
+    <label>Estadia mínima padrão da casa</label>
     <input type="number" id="estadiaMinimaCalendario" min="1" max="90" step="1" value="1">
    </div>
 
    <button class="sucesso" type="button" onclick="salvarEstadiaMinimaCalendario()">
-    💾 Salvar regra
+    💾 Salvar padrão
    </button>
 
   </div>
 
+  <div class="linha-form" style="margin-top:8px">
+   <div class="grupo-input">
+    <label>Estadia mínima para os dias selecionados</label>
+    <input type="number" id="estadiaMinimaSelecionadaCalendario" min="1" max="90" step="1" value="2">
+   </div>
+
+   <button class="sucesso" type="button" onclick="salvarEstadiaMinimaDiasSelecionadosCalendario()">
+    📅 Salvar nos dias selecionados
+   </button>
+
+   <button class="cinza" type="button" onclick="removerEstadiaMinimaDiasSelecionadosCalendario()">
+    🗑️ Remover regra dos dias
+   </button>
+  </div>
+
   <p id="infoEstadiaMinimaCalendario" style="color:var(--cinza);margin:6px 0 0"></p>
+  <p id="infoEstadiaMinimaSelecionadaCalendario" style="color:var(--cinza);margin:5px 0 0"></p>
 
  </div>
 
@@ -3616,7 +3634,7 @@ let comodidadesCatalogo=[];
 
 const casas={
 
- nossa:{nome:'Nossa Casa',capacidade:12,desc:'Propriedade interna — uso administrativo.',caracteristicas:['🏠 Uso interno','🔒 Não aparece no site público'],fotos:[],taxaLimpeza:0,estadiaMinima:1,interna:true},
+ nossa:{nome:'Nossa Casa',capacidade:12,desc:'Propriedade interna — uso administrativo.',caracteristicas:['🏠 Uso interno','🔒 Não aparece no site público'],fotos:[],taxaLimpeza:0,estadiaMinima:1,estadiaMinimaPorData:{},interna:true},
 
  amarela:{
   nome:'Casa Amarela',
@@ -3632,7 +3650,8 @@ const casas={
   ],
   fotos:[],
   taxaLimpeza:0,
-  estadiaMinima:1
+  estadiaMinima:1,
+  estadiaMinimaPorData:{}
  },
 
  bege:{
@@ -3649,7 +3668,8 @@ const casas={
   ],
   fotos:[],
   taxaLimpeza:0,
-  estadiaMinima:1
+  estadiaMinima:1,
+  estadiaMinimaPorData:{}
  },
 
  marrom:{
@@ -3666,7 +3686,8 @@ const casas={
   ],
   fotos:[],
   taxaLimpeza:0,
-  estadiaMinima:1
+  estadiaMinima:1,
+  estadiaMinimaPorData:{}
  },
 
  branca:{
@@ -3683,7 +3704,8 @@ const casas={
   ],
   fotos:[],
   taxaLimpeza:0,
-  estadiaMinima:1
+  estadiaMinima:1,
+  estadiaMinimaPorData:{}
  }
 
 };
@@ -4654,11 +4676,34 @@ function mudarMes(d){
 
 }
 
-function obterEstadiaMinima(casa){
- const v=Number(casas?.[casa]?.estadiaMinima);
- return Number.isFinite(v)&&v>=1
-  ?Math.min(90,Math.max(1,Math.floor(v)))
+function limitarEstadiaMinima(v){
+ const n=Number(v);
+ return Number.isFinite(n)&&n>=1
+  ?Math.min(90,Math.max(1,Math.floor(n)))
   :1;
+}
+
+function obterEstadiaMinima(casa){
+ return limitarEstadiaMinima(casas?.[casa]?.estadiaMinima);
+}
+
+function obterMapaEstadiaMinimaPorData(casa){
+ const mapa=casas?.[casa]?.estadiaMinimaPorData;
+ return mapa&&typeof mapa==='object'&&!Array.isArray(mapa)?mapa:{};
+}
+
+function temRegraEstadiaMinimaPorData(casa,data){
+ const chave=String(data||'').slice(0,10);
+ return !!chave && Object.prototype.hasOwnProperty.call(obterMapaEstadiaMinimaPorData(casa),chave);
+}
+
+function obterEstadiaMinimaParaData(casa,data){
+ const chave=String(data||'').slice(0,10);
+ const mapa=obterMapaEstadiaMinimaPorData(casa);
+ if(chave && Object.prototype.hasOwnProperty.call(mapa,chave)){
+  return limitarEstadiaMinima(mapa[chave]);
+ }
+ return obterEstadiaMinima(casa);
 }
 
 function atualizarEstadiaMinimaCalendario(){
@@ -4670,8 +4715,37 @@ function atualizarEstadiaMinimaCalendario(){
  input.value=min;
  if(info){
   info.textContent=min===1
-   ?'✅ Sem restrição: esta casa aceita a partir de 1 diária.'
-   :`✅ Novas reservas desta casa exigirão pelo menos ${min} noites/diárias. Reservas já lançadas não são alteradas.`;
+   ?'✅ Regra padrão: 1 diária (sem restrição adicional). Datas com regra específica podem ter outro mínimo.'
+   :`✅ Regra padrão desta casa: ${min} noites. Datas com regra específica usam o valor configurado nelas.`;
+ }
+ atualizarResumoEstadiaMinimaSelecao();
+}
+
+function atualizarResumoEstadiaMinimaSelecao(){
+ const el=$('infoEstadiaMinimaSelecionadaCalendario');
+ const input=$('estadiaMinimaSelecionadaCalendario');
+ const c=$('casaCalendario')?.value;
+ if(!el || !c)return;
+ const datas=[...datasSelecionadas].sort();
+ if(!datas.length){
+  el.textContent='📅 Nenhum dia selecionado. Selecione as datas em azul para criar uma regra específica.';
+  if(input)input.value=2;
+  return;
+ }
+ const valores=datas.map(s=>temRegraEstadiaMinimaPorData(c,s)?obterEstadiaMinimaParaData(c,s):null);
+ const configuradas=valores.filter(v=>v!=null);
+ const unicos=[...new Set(configuradas)];
+ const txtDatas=datas.map(dataBr).join(', ');
+ if(unicos.length===1 && configuradas.length===datas.length){
+  if(input)input.value=unicos[0];
+  el.textContent=`🌙 ${datas.length} dia(s) selecionado(s): ${txtDatas}. Regra atual: mínimo de ${unicos[0]} noite(s).`;
+ }else if(configuradas.length){
+  const partes=unicos.map(v=>`${v} noite(s)`).join(' / ');
+  el.textContent=`🌙 ${datas.length} dia(s) selecionado(s): ${txtDatas}. Há regras específicas configuradas (${partes}); ao salvar, todas receberão o valor informado.`;
+ }else{
+  if(input)input.value=2;
+  const padrao=obterEstadiaMinima(c);
+  el.textContent=`🌙 ${datas.length} dia(s) selecionado(s): ${txtDatas}. Nenhum deles tem regra específica; o padrão atual é ${padrao} noite(s).`;
  }
 }
 
@@ -4681,7 +4755,7 @@ async function salvarEstadiaMinimaCalendario(){
  if(!c || !input)return;
  const v=Number(input.value);
  if(!Number.isInteger(v)||v<1||v>90){
-  return alert('⚠️ Informe uma estadia mínima entre 1 e 90 noites.');
+  return alert('⚠️ Informe uma estadia mínima padrão entre 1 e 90 noites.');
  }
  try{
   await db.collection('configuracoes').doc('casas').update({
@@ -4691,21 +4765,87 @@ async function salvarEstadiaMinimaCalendario(){
   casas[c].estadiaMinima=v;
   atualizarEstadiaMinimaCalendario();
   atualizarControlesEstadiaReserva();
-  alert(`✅ Estadia mínima salva: ${v} noite(s).`);
+  alert(`✅ Estadia mínima padrão salva: ${v} noite(s).`);
  }catch(e){
-  console.error('Estadia mínima:',e);
-  alert('❌ Não foi possível salvar a estadia mínima. Nenhuma reserva foi alterada.');
+  console.error('Estadia mínima padrão:',e);
+  alert('❌ Não foi possível salvar a estadia mínima padrão. Nenhuma reserva foi alterada.');
+ }
+}
+
+async function salvarEstadiaMinimaDiasSelecionadosCalendario(){
+ const c=$('casaCalendario')?.value;
+ const input=$('estadiaMinimaSelecionadaCalendario');
+ const datas=[...datasSelecionadas].sort();
+ if(!c || !input)return;
+ if(!datas.length)return alert('⚠️ Selecione em azul os dias que receberão a estadia mínima.');
+ const v=Number(input.value);
+ if(!Number.isInteger(v)||v<1||v>90){
+  return alert('⚠️ Informe uma estadia mínima entre 1 e 90 noites.');
+ }
+ try{
+  const mapa={...obterMapaEstadiaMinimaPorData(c)};
+  datas.forEach(s=>{mapa[s]=v;});
+  await db.collection('configuracoes').doc('casas').update({
+   [`casas.${c}.estadiaMinimaPorData`]:mapa,
+   atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()
+  });
+  casas[c].estadiaMinimaPorData=mapa;
+  atualizarResumoEstadiaMinimaSelecao();
+  renderizarCalendario();
+  atualizarControlesEstadiaReserva();
+  alert(`✅ Regra de ${v} noite(s) salva somente para ${datas.length} dia(s) selecionado(s).`);
+ }catch(e){
+  console.error('Estadia mínima por data:',e);
+  alert('❌ Não foi possível salvar a regra para os dias selecionados. Nenhuma reserva foi alterada.');
+ }
+}
+
+async function removerEstadiaMinimaDiasSelecionadosCalendario(){
+ const c=$('casaCalendario')?.value;
+ const datas=[...datasSelecionadas].sort();
+ if(!c)return;
+ if(!datas.length)return alert('⚠️ Selecione em azul os dias que terão a regra específica removida.');
+ const mapa={...obterMapaEstadiaMinimaPorData(c)};
+ let removidas=0;
+ datas.forEach(s=>{
+  if(Object.prototype.hasOwnProperty.call(mapa,s)){
+   delete mapa[s];
+   removidas++;
+  }
+ });
+ if(!removidas){
+  return alert('ℹ️ Nenhum dos dias selecionados possui uma regra específica para remover.');
+ }
+ try{
+  await db.collection('configuracoes').doc('casas').update({
+   [`casas.${c}.estadiaMinimaPorData`]:mapa,
+   atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()
+  });
+  casas[c].estadiaMinimaPorData=mapa;
+  atualizarResumoEstadiaMinimaSelecao();
+  renderizarCalendario();
+  atualizarControlesEstadiaReserva();
+  alert(`✅ Regra específica removida de ${removidas} dia(s). Esses dias voltarão a usar a regra padrão.`);
+ }catch(e){
+  console.error('Remover estadia mínima por data:',e);
+  alert('❌ Não foi possível remover a regra específica.');
  }
 }
 
 function atualizarAvisoEstadiaMinimaNovaReserva(){
  const c=$('novaCasaReserva')?.value;
+ const a=$('novaEntrada')?.value||'';
  const el=$('infoEstadiaMinimaNovaReserva');
  if(!el)return;
- const min=obterEstadiaMinima(c);
+ const min=obterEstadiaMinimaParaData(c,a);
+ const especifica=a && temRegraEstadiaMinimaPorData(c,a);
  el.textContent=min===1
-  ?'Estadia mínima: 1 diária (sem restrição adicional). Nos registros já existentes, nada é alterado.'
-  :`Estadia mínima desta casa: ${min} noites. Esta regra vale para novas reservas administrativas.`;
+  ?(especifica
+    ?`Estadia mínima para ${dataBr(a)}: 1 diária. (Regra específica desta data)`
+    :'Estadia mínima: 1 diária (regra padrão). Nos registros já existentes, nada é alterado.')
+  :(especifica
+    ?`Estadia mínima para ${dataBr(a)}: ${min} noites. (Regra específica desta data)`
+    :`Estadia mínima padrão desta casa: ${min} noites. Para uma data com regra específica, vale o mínimo configurado nela.`);
 }
 
 function atualizarControlesEstadiaReserva(){
@@ -4714,7 +4854,7 @@ function atualizarControlesEstadiaReserva(){
  const saida=$('dataSaida');
  const info=$('infoEstadiaMinimaReserva');
  if(!entrada || !saida || !c)return;
- const min=obterEstadiaMinima(c);
+ const min=obterEstadiaMinimaParaData(c,entrada.value);
  const hojeStr=dataStr(hoje());
  entrada.min=hojeStr;
  let minSaida=hojeStr;
@@ -4939,6 +5079,11 @@ function renderizarCalendario(){
    ];
 
   const statusReserva=reservaDia?normalizarStatusPagamentoReserva(reservaDia):'';
+  const regraEstadiaEspecifica=temRegraEstadiaMinimaPorData(casa,s);
+  const minimoDia=obterEstadiaMinimaParaData(casa,s);
+  const estadiaHtml=regraEstadiaEspecifica
+   ?`<small class="calendario-estadia-minima" title="Estadia mínima: ${minimoDia} noite(s)">🌙 ${minimoDia}</small>`
+   :'';
   const lockHtml=reservaDia
    ?`<button type="button" class="calendario-reserva-lock ${statusReserva}" title="${escapeHtmlReserva(reservaDia.nome||'Reserva')} — ${escapeHtmlReserva(reservaDia.telefone||'Contato não informado')}" onmouseenter="mostrarTooltipReservaCalendario(event,'${reservaDia.id}',false)" onmouseleave="ocultarTooltipReservaCalendario(event)" onclick="toggleTooltipReservaCalendario(event,'${reservaDia.id}')">🔒</button>`
    :bloqueioManualDia
@@ -4966,6 +5111,8 @@ function renderizarCalendario(){
       ?`<small><br>${moeda(v)}</small>`
       :''
     }
+
+    ${estadiaHtml}
 
     ${lockHtml}
 
@@ -5061,6 +5208,8 @@ function atualizarInfoSelecao(){
       .join(', ')
     }`
    :'Nenhum dia selecionado';
+
+ atualizarResumoEstadiaMinimaSelecao();
 
 }
 
@@ -5164,6 +5313,8 @@ function limparSelecao(){
  if($('infoSelecao'))
   $('infoSelecao').textContent=
    'Nenhum dia selecionado';
+
+ atualizarResumoEstadiaMinimaSelecao();
 
 }
 
@@ -6529,7 +6680,7 @@ async function verificarDisponibilidade(){
 
  atualizarControlesEstadiaReserva();
 
- const minEstadia=obterEstadiaMinima(c);
+ const minEstadia=obterEstadiaMinimaParaData(c,a);
  const noitesEscolhidas=dias(dataLocal(a),dataLocal(b));
 
  if(noitesEscolhidas<minEstadia){
@@ -6653,7 +6804,7 @@ function obterDadosReservaWhatsApp(){
  }
 
  const calc=calcularValorDiariasLocal(casaId,entrada,saida);
- const minEstadia=obterEstadiaMinima(casaId);
+ const minEstadia=obterEstadiaMinimaParaData(casaId,entrada);
  if(calc.dias<minEstadia){
   return{ok:false,mensagem:`⚠️ A estadia mínima desta casa é de ${minEstadia} noite(s). Escolha um período maior.`};
  }
@@ -6852,7 +7003,7 @@ async function enviarReserva(){
 
  }
 
- const minEstadia=obterEstadiaMinima(c);
+ const minEstadia=obterEstadiaMinimaParaData(c,a);
  const noitesEscolhidas=dias(dataLocal(a),dataLocal(b));
  if(noitesEscolhidas<minEstadia){
   return alert(`⚠️ A estadia mínima desta casa é de ${minEstadia} noite(s). Escolha uma data de saída mais distante.`);
@@ -8537,8 +8688,8 @@ body{
 
 }
 
-function abrirNovaReservaAdmin(){const c=Object.entries(casas).map(([id,x])=>`<option value="${id}">${x.nome}${x.interna?' — interno':''}</option>`).join('');$('conteudoEditar').innerHTML=`<input type="hidden" id="novaReserva"><div class="grupo-input"><label>Casa</label><select id="novaCasaReserva" onchange="atualizarAvisoEstadiaMinimaNovaReserva()">${c}</select><small id="infoEstadiaMinimaNovaReserva" style="display:block;color:var(--cinza);margin-top:5px"></small></div><div class="grupo-input"><label>Hóspede</label><input id="novoNomeReserva"></div><div class="grupo-input"><label>Telefone</label><input id="novoTelefoneReserva"></div><div class="grupo-input"><label>Origem</label><select id="novaOrigemReserva"><option>Reserva direta</option><option>Airbnb</option><option>Booking.com</option><option>WhatsApp</option><option>Telefone</option><option>Outro</option></select></div><div class="linha-form"><div class="grupo-input"><label>Entrada</label><input type="date" id="novaEntrada"></div><div class="grupo-input"><label>Saída</label><input type="date" id="novaSaida"></div></div><div class="linha-form"><div class="grupo-input"><label>Adultos</label><input type="number" id="novoAdultos" value="1"></div><div class="grupo-input"><label>Crianças</label><input type="number" id="novoCriancas" value="0"></div></div><div class="grupo-input"><label>Forma de recebimento</label><select id="novaFormaPagamento"><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Transferência Bancária</option></select></div><div class="grupo-input"><label>Caixa / conta destino</label><select id="novaContaDestino"><option>Caixa Casa Amarela</option><option>Caixa Casa Bege</option><option>Caixa Casa Marrom</option><option>Caixa Casa Branca</option><option>Caixa Nossa Casa</option><option>Caixa Geral</option><option>Conta bancária</option></select></div><div class="grupo-input"><label>Data de Recebimento</label><input type="date" id="novaDataRecebimento"><small style="color:var(--cinza)">Data prevista ou efetiva do repasse.</small></div><div class="grupo-input"><label>Status do Pagamento</label><select id="novoStatus"><option value="pendente">Pendente</option><option value="parcial">Pagamento Parcial</option><option value="pago">Pago</option></select></div><div class="grupo-input"><label>Valor Antecipado</label><input type="number" id="novoValorAntecipado" value="0" step="0.01"></div><div class="grupo-input"><label>Valor Total</label><input type="number" id="novoValorTotal" step="0.01"></div><div class="grupo-input"><label>Observação</label><textarea id="novaObservacao"></textarea></div><button class="sucesso" style="width:100%" onclick="salvarNovaReservaAdmin()">💾 Salvar reserva</button>`;$('modalEditarReserva').classList.add('aberto');atualizarAvisoEstadiaMinimaNovaReserva();}
-async function salvarNovaReservaAdmin(){const casa=$('novaCasaReserva').value,a=$('novaEntrada').value,b=$('novaSaida').value,nome=$('novoNomeReserva').value.trim(),adultos=Number($('novoAdultos').value||0),criancas=Number($('novoCriancas').value||0);if(!nome||!a||!b||b<=a)return alert('⚠️ Informe hóspede e datas válidas.');const hojeStr=dataStr(hoje());if(b>=hojeStr&&await verificarPeriodoBloqueado(casa,a,b))return alert('⚠️ O período está bloqueado.');const x=await calcularValorDiarias(casa,a,b),minEstadia=obterEstadiaMinima(casa);if(x.dias<minEstadia)return alert(`⚠️ A estadia mínima de ${casas[casa]?.nome||'esta casa'} é de ${minEstadia} noite(s). A nova reserva não foi criada.`);const taxa=Number(casas[casa]?.taxaLimpeza||0),f=calcularValorFinalReserva(x.dias,x.valor,taxa),total=Number($('novoValorTotal').value||f.total),ante=Number($('novoValorAntecipado').value||0);if(ante>total)return alert('⚠️ O antecipado não pode ser maior que o total.');try{const ref=await db.collection('reservas').add({casa,nome,telefone:$('novoTelefoneReserva').value.trim(),entrada:a,saida:b,adultos,criancas,totalPessoas:adultos+criancas,dias:x.dias,valorDiarias:x.valor,taxaLimpeza:taxa,desconto:f.desconto,percentualDesconto:f.percentualDesconto,acrescimoValor:0,valorTotal:total,valorPago:ante,statusPagamento:$('novoStatus').value,origemReserva:$('novaOrigemReserva').value,formaPagamento:$('novaFormaPagamento').value,contaDestino:$('novaContaDestino').value,dataRecebimento:$('novaDataRecebimento')?.value||'',observacao:$('novaObservacao').value.trim(),criadoEm:firebase.firestore.FieldValue.serverTimestamp(),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()});reservasConfirmadas.unshift({id:ref.id,casa,nome,telefone:$('novoTelefoneReserva').value.trim(),entrada:a,saida:b,adultos,criancas,totalPessoas:adultos+criancas,valorTotal:total,valorPago:ante,statusPagamento:$('novoStatus').value,criadoEm:null});reservasCarregadas=true;try{await sincronizarDisponibilidadeReserva(ref.id,reservasConfirmadas[0]);}catch(e){console.error('Sincronização:',e);}fecharModalEditar();
+function abrirNovaReservaAdmin(){const c=Object.entries(casas).map(([id,x])=>`<option value="${id}">${x.nome}${x.interna?' — interno':''}</option>`).join('');$('conteudoEditar').innerHTML=`<input type="hidden" id="novaReserva"><div class="grupo-input"><label>Casa</label><select id="novaCasaReserva" onchange="atualizarAvisoEstadiaMinimaNovaReserva()">${c}</select><small id="infoEstadiaMinimaNovaReserva" style="display:block;color:var(--cinza);margin-top:5px"></small></div><div class="grupo-input"><label>Hóspede</label><input id="novoNomeReserva"></div><div class="grupo-input"><label>Telefone</label><input id="novoTelefoneReserva"></div><div class="grupo-input"><label>Origem</label><select id="novaOrigemReserva"><option>Reserva direta</option><option>Airbnb</option><option>Booking.com</option><option>WhatsApp</option><option>Telefone</option><option>Outro</option></select></div><div class="linha-form"><div class="grupo-input"><label>Entrada</label><input type="date" id="novaEntrada" onchange="atualizarAvisoEstadiaMinimaNovaReserva()"></div><div class="grupo-input"><label>Saída</label><input type="date" id="novaSaida"></div></div><div class="linha-form"><div class="grupo-input"><label>Adultos</label><input type="number" id="novoAdultos" value="1"></div><div class="grupo-input"><label>Crianças</label><input type="number" id="novoCriancas" value="0"></div></div><div class="grupo-input"><label>Forma de recebimento</label><select id="novaFormaPagamento"><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Transferência Bancária</option></select></div><div class="grupo-input"><label>Caixa / conta destino</label><select id="novaContaDestino"><option>Caixa Casa Amarela</option><option>Caixa Casa Bege</option><option>Caixa Casa Marrom</option><option>Caixa Casa Branca</option><option>Caixa Nossa Casa</option><option>Caixa Geral</option><option>Conta bancária</option></select></div><div class="grupo-input"><label>Data de Recebimento</label><input type="date" id="novaDataRecebimento"><small style="color:var(--cinza)">Data prevista ou efetiva do repasse.</small></div><div class="grupo-input"><label>Status do Pagamento</label><select id="novoStatus"><option value="pendente">Pendente</option><option value="parcial">Pagamento Parcial</option><option value="pago">Pago</option></select></div><div class="grupo-input"><label>Valor Antecipado</label><input type="number" id="novoValorAntecipado" value="0" step="0.01"></div><div class="grupo-input"><label>Valor Total</label><input type="number" id="novoValorTotal" step="0.01"></div><div class="grupo-input"><label>Observação</label><textarea id="novaObservacao"></textarea></div><button class="sucesso" style="width:100%" onclick="salvarNovaReservaAdmin()">💾 Salvar reserva</button>`;$('modalEditarReserva').classList.add('aberto');atualizarAvisoEstadiaMinimaNovaReserva();}
+async function salvarNovaReservaAdmin(){const casa=$('novaCasaReserva').value,a=$('novaEntrada').value,b=$('novaSaida').value,nome=$('novoNomeReserva').value.trim(),adultos=Number($('novoAdultos').value||0),criancas=Number($('novoCriancas').value||0);if(!nome||!a||!b||b<=a)return alert('⚠️ Informe hóspede e datas válidas.');const hojeStr=dataStr(hoje());if(b>=hojeStr&&await verificarPeriodoBloqueado(casa,a,b))return alert('⚠️ O período está bloqueado.');const x=await calcularValorDiarias(casa,a,b),minEstadia=obterEstadiaMinimaParaData(casa,a);if(x.dias<minEstadia)return alert(`⚠️ A estadia mínima de ${casas[casa]?.nome||'esta casa'} é de ${minEstadia} noite(s). A nova reserva não foi criada.`);const taxa=Number(casas[casa]?.taxaLimpeza||0),f=calcularValorFinalReserva(x.dias,x.valor,taxa),total=Number($('novoValorTotal').value||f.total),ante=Number($('novoValorAntecipado').value||0);if(ante>total)return alert('⚠️ O antecipado não pode ser maior que o total.');try{const ref=await db.collection('reservas').add({casa,nome,telefone:$('novoTelefoneReserva').value.trim(),entrada:a,saida:b,adultos,criancas,totalPessoas:adultos+criancas,dias:x.dias,valorDiarias:x.valor,taxaLimpeza:taxa,desconto:f.desconto,percentualDesconto:f.percentualDesconto,acrescimoValor:0,valorTotal:total,valorPago:ante,statusPagamento:$('novoStatus').value,origemReserva:$('novaOrigemReserva').value,formaPagamento:$('novaFormaPagamento').value,contaDestino:$('novaContaDestino').value,dataRecebimento:$('novaDataRecebimento')?.value||'',observacao:$('novaObservacao').value.trim(),criadoEm:firebase.firestore.FieldValue.serverTimestamp(),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()});reservasConfirmadas.unshift({id:ref.id,casa,nome,telefone:$('novoTelefoneReserva').value.trim(),entrada:a,saida:b,adultos,criancas,totalPessoas:adultos+criancas,valorTotal:total,valorPago:ante,statusPagamento:$('novoStatus').value,criadoEm:null});reservasCarregadas=true;try{await sincronizarDisponibilidadeReserva(ref.id,reservasConfirmadas[0]);}catch(e){console.error('Sincronização:',e);}fecharModalEditar();
    fecharModalPrestador();atualizarListaReservas();try{renderizarCalendarioSeguro();}catch(e){console.error(e);}try{gerarRelatorio();}catch(e){console.error(e);}alert(`✅ Reserva criada com sucesso.\nID: ${ref.id}`);}catch(e){console.error('Erro ao criar reserva administrativa:',e);alert(`❌ Erro ao criar reserva.\n\n${e?.code==='permission-denied'?'Permissão negada pelo Firestore. As regras precisam permitir gravação administrativa.':(e?.message||'Verifique os dados e tente novamente.')}`);}}
 
 function abrirEditarReserva(id){
