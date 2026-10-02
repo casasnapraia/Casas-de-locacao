@@ -755,7 +755,7 @@ textarea{
  transform:scale(1.03)
 }
 .dia.bloqueado.selecionado{background:#dc2626!important;border-color:#991b1b!important}
-.paginacao-hospedes{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin:15px 0}.paginacao-prestadores{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin:15px 0}.prestador-tipo{display:flex;gap:18px;align-items:center;flex-wrap:wrap}.prestador-tipo label{display:flex;gap:6px;align-items:center}.cad-prestador-resumo{background:#f4f7f8;border:1px solid #ddd;border-radius:8px;padding:10px;margin:10px 0}.paginacao-hospedes button{padding:7px 12px}.banner-admin-box{background:#fff;border:1px solid #ddd;border-radius:10px;padding:16px;margin:15px 0;box-shadow:var(--sombra)}.banner-preview{width:100%;max-height:220px;object-fit:cover;border-radius:10px;margin-top:10px;display:block}.acoes-reserva-final{display:flex;gap:5px;flex-wrap:wrap}.botao-quitar{background:#15803d;color:#fff;border:0;padding:7px 9px;border-radius:6px;font-weight:bold}.botao-quitar:hover{background:#166534}
+.paginacao-hospedes{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin:15px 0}.autocomplete-hospede{position:relative}.autocomplete-filtro-hospede{position:relative}.filtro-hospede-ajuda{display:block;color:var(--cinza);font-size:11px;margin:-2px 0 5px}.autocomplete-filtro-hospede .sugestoes-hospede-reserva{top:calc(100% - 2px)}.sugestoes-hospede-reserva{position:absolute;left:0;right:0;top:100%;z-index:30;background:#fff;border:1px solid #d7e0e5;border-radius:8px;box-shadow:0 8px 20px #0002;max-height:280px;overflow-y:auto}.sugestao-hospede-item{padding:10px 12px;border-bottom:1px solid #edf1f3;cursor:pointer}.sugestao-hospede-item:last-child{border-bottom:0}.sugestao-hospede-item:hover{background:#f0f8fb}.sugestao-hospede-item strong{display:block;color:var(--azul)}.sugestao-hospede-item small{display:block;color:var(--cinza);margin-top:3px}.paginacao-prestadores{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin:15px 0}.prestador-tipo{display:flex;gap:18px;align-items:center;flex-wrap:wrap}.prestador-tipo label{display:flex;gap:6px;align-items:center}.cad-prestador-resumo{background:#f4f7f8;border:1px solid #ddd;border-radius:8px;padding:10px;margin:10px 0}.paginacao-hospedes button{padding:7px 12px}.banner-admin-box{background:#fff;border:1px solid #ddd;border-radius:10px;padding:16px;margin:15px 0;box-shadow:var(--sombra)}.banner-preview{width:100%;max-height:220px;object-fit:cover;border-radius:10px;margin-top:10px;display:block}.acoes-reserva-final{display:flex;gap:5px;flex-wrap:wrap}.botao-quitar{background:#15803d;color:#fff;border:0;padding:7px 9px;border-radius:6px;font-weight:bold}.botao-quitar:hover{background:#166534}
 
 .dia.passado{
  color:#bbb;
@@ -2768,6 +2768,7 @@ if ("serviceWorker" in navigator) {
   </button>
 
   <button class="azul" onclick="carregarHospedes()">🔎 Consultar cadastros</button>
+  <button class="azul" onclick="sincronizarHospedesDeTodasReservas()">🔄 Sincronizar reservas</button>
   <button class="azul" onclick="processarSolicitacoesEAtualizarHospedes()">🔄 Processar solicitações</button>
 
  </div>
@@ -2837,10 +2838,17 @@ if ("serviceWorker" in navigator) {
 
   <div class="reservas-filtros-grid">
 
-   <div class="reservas-filtro">
+   <div class="reservas-filtro autocomplete-filtro-hospede">
     <label>👤 Hóspede</label>
+    <small class="filtro-hospede-ajuda">Digite para filtrar ou clique no campo para ver os hóspedes cadastrados.</small>
+    <input id="filtroHospedeReservaId" type="hidden">
     <input id="filtroHospedeReservas"
-     placeholder="Nome, telefone, CPF ou e-mail...">
+     autocomplete="off"
+     placeholder="Nome, telefone, CPF ou e-mail..."
+     oninput="buscarHospedesFiltroReservas(false)"
+     onfocus="buscarHospedesFiltroReservas(true)"
+     onblur="setTimeout(fecharSugestoesFiltroHospedeReservas,250)">
+    <div id="sugestoesFiltroHospedeReservas" class="sugestoes-hospede-reserva" style="display:none"></div>
    </div>
 
    <div class="reservas-filtro">
@@ -3076,11 +3084,14 @@ if ("serviceWorker" in navigator) {
   </div>
 
   <div>
-   <label>Hóspede</label>
+   <label>👤 Hóspede</label>
 
    <input id="filtroHospedeRelatorio"
-    placeholder="Nome ou telefone"
+    list="listaHospedesRelatorio"
+    placeholder="Digite o nome do hóspede..."
     oninput="gerarRelatorio()">
+   <datalist id="listaHospedesRelatorio"></datalist>
+   <small style="color:var(--cinza)">Digite parte do nome ou selecione uma sugestão.</small>
 
   </div>
 
@@ -4588,6 +4599,7 @@ function configurarNavegacao(){
 
     if(b.dataset.pagina==='hospedes'){
      if(hospedesCarregados)filtrarHospedes();
+     else carregarHospedes();
     }
 
     if(b.dataset.pagina==='prestadores'){
@@ -4637,6 +4649,50 @@ function configurarNavegacao(){
 
   });
 
+}
+
+async function buscarHospedesFiltroReservas(mostrarTodos=false){
+ const input=$('filtroHospedeReservas');
+ const box=$('sugestoesFiltroHospedeReservas');
+ if(!input||!box)return;
+ if(!hospedesCarregados){
+  try{await carregarHospedes();}catch(e){console.error('Carregar hóspedes para filtro:',e);return;}
+ }
+ if(!mostrarTodos)$('filtroHospedeReservaId').value='';
+ const q=normalizar(input.value||'');
+ const qNum=String(input.value||'').replace(/\D/g,'');
+ let encontrados=[...(hospedesCadastrados||[])].filter(h=>!h.origemLancamento);
+ if(!mostrarTodos && q){
+  encontrados=encontrados.filter(h=>{
+   const nome=normalizar(h.nome||'');
+   const tel=String(h.telefone||'').replace(/\D/g,'');
+   const email=normalizar(h.email||'');
+   const cpf=String(h.cpf||'').replace(/\D/g,'');
+   return nome.includes(q)||(qNum&&tel.includes(qNum))||email.includes(q)||(qNum&&cpf.includes(qNum));
+  });
+ }
+ encontrados=encontrados.slice(0,40);
+ if(!encontrados.length){
+  box.innerHTML='<div class="sugestao-hospede-item"><small>Nenhum hóspede encontrado no cadastro.</small></div>';
+  box.style.display='block';
+  return;
+ }
+ box.innerHTML=encontrados.map(h=>`<div class="sugestao-hospede-item" onclick="selecionarHospedeFiltroReservas('${String(h.id).replace(/'/g,'\\\'')}')"><strong>👤 ${escapeHtmlReserva(h.nome)}</strong><small>📱 ${escapeHtmlReserva(h.telefone||'—')}${h.email?' · ✉️ '+escapeHtmlReserva(h.email):''}</small></div>`).join('');
+ box.style.display='block';
+}
+
+function selecionarHospedeFiltroReservas(id){
+ const h=(hospedesCadastrados||[]).find(x=>String(x.id)===String(id));
+ if(!h)return;
+ $('filtroHospedeReservaId').value=h.id||'';
+ $('filtroHospedeReservas').value=h.nome||'';
+ fecharSugestoesFiltroHospedeReservas();
+ aplicarFiltrosReservas();
+}
+
+function fecharSugestoesFiltroHospedeReservas(){
+ const box=$('sugestoesFiltroHospedeReservas');
+ if(box){box.style.display='none';box.innerHTML='';}
 }
 
 function configurarFiltrosReservas(){
@@ -6132,7 +6188,32 @@ async function calcularValorDiarias(
 
 }
 
-async function verificarPeriodoBloqueado(casa,a,b,ignorarId=null){if(!casa||!a||!b||b<=a)return false;try{const [rs,bs]=await Promise.all([db.collection('disponibilidade').where('casa','==',casa).get(),db.collection('bloqueios').where('casa','==',casa).get()]);if(rs.docs.some(d=>{const r=d.data();return !(ignorarId&&r.reservaId===ignorarId)&&r.entrada&&r.saida&&a<r.saida&&b>r.entrada; }))return true;return bs.docs.some(d=>{const r=d.data();return r.entrada&&r.saida&&a<r.saida&&b>r.entrada;});}catch(e){console.error(e);return true;}}
+async function verificarPeriodoBloqueado(casa,a,b,ignorarId=null){
+ if(!casa||!a||!b||b<=a)return false;
+ try{
+  const [rs,bs]=await Promise.all([
+   db.collection('disponibilidade').where('casa','==',casa).get(),
+   db.collection('bloqueios').where('casa','==',casa).get()
+  ]);
+
+  if(rs.docs.some(d=>{
+   const r=d.data()||{};
+   const mesmoReserva=!!(ignorarId && (
+    String(d.id)===String(ignorarId) ||
+    String(r.reservaId||'')===String(ignorarId)
+   ));
+   return !mesmoReserva && r.entrada&&r.saida&&a<r.saida&&b>r.entrada;
+  }))return true;
+
+  return bs.docs.some(d=>{
+   const r=d.data()||{};
+   return r.entrada&&r.saida&&a<r.saida&&b>r.entrada;
+  });
+ }catch(e){
+  console.error(e);
+  return true;
+ }
+}
 
 async function bloquearPeriodoSelecionado(){const casa=$('casaCalendario')?.value,datas=[...datasSelecionadas].sort();if(!casa||!datas.length)return alert('⚠️ Selecione um ou mais dias.');const entrada=datas[0],fim=dataLocal(datas[datas.length-1]);fim.setDate(fim.getDate()+1);const saida=dataStr(fim),motivo=$('motivoBloqueioCalendario')?.value.trim()||'Bloqueio manual';if(await verificarPeriodoBloqueado(casa,entrada,saida))return alert('⚠️ Já existe uma reserva ou bloqueio neste período.');try{await db.collection('bloqueios').add({casa,entrada,saida,motivo,criadoEm:firebase.firestore.FieldValue.serverTimestamp(),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()});datasSelecionadas.clear();$('motivoBloqueioCalendario').value='';await renderizarCalendarioSeguro();alert('🔒 Período bloqueado com sucesso.');}catch(e){console.error(e);alert('❌ Não foi possível bloquear o período.');}}
 async function excluirBloqueioCalendario(id){if(!confirm('Excluir este bloqueio e liberar o período?'))return;try{await db.collection('bloqueios').doc(id).delete();await renderizarCalendarioSeguro();alert('✅ Bloqueio removido.');}catch(e){console.error(e);alert('❌ Não foi possível remover o bloqueio.');}}
@@ -7196,6 +7277,7 @@ async function carregarReservasConfirmadas(){
  const s=await db.collection('reservas').orderBy('entrada').get();
  s.forEach(d=>{const r={id:d.id,...d.data()};r.statusPagamento=normalizarStatusPagamentoReserva(r);reservasConfirmadas.push(r);});
  reservasCarregadas=true;
+ reservasConsultaCompleta=true;
 }
 
 async function carregarReservasRecentes(reset=true){
@@ -7741,22 +7823,39 @@ function timestampCriacaoReserva(r){
  return 0;
 }
 
-function hospedeCorrespondeReserva(r,termo){
+function hospedeCorrespondeReserva(r,termo,selecionadoId=''){
  const q=normalizar(termo||'');
- if(!q)return true;
-
- const nome=normalizar(r.nome||'');
- const telefone=String(r.telefone||'').replace(/\D/g,'');
+ const nome=normalizar(obterNomeReservaParaHospede(r));
+ const telefone=obterTelefoneReservaParaHospede(r).replace(/\D/g,'');
  const termoNumerico=String(termo||'').replace(/\D/g,'');
 
+ let hospedeSelecionado=null;
+ if(selecionadoId){
+  hospedeSelecionado=(hospedesCadastrados||[]).find(h=>String(h.id)===String(selecionadoId))||null;
+  if(hospedeSelecionado){
+   if(r?.hospedeId && String(r.hospedeId)===String(selecionadoId))return true;
+   const hn=normalizar(hospedeSelecionado.nome||'');
+   const ht=String(hospedeSelecionado.telefone||'').replace(/\D/g,'');
+   if(hn && nome.includes(hn))return true;
+   if(ht && telefone && telefone.includes(ht))return true;
+  }
+ }
+
+ if(!q)return !!selecionadoId && !!hospedeSelecionado ? false : true;
  if(nome.includes(q))return true;
  if(termoNumerico && telefone.includes(termoNumerico))return true;
 
- const hospede=hospedesCadastrados.find(h=>{
-  const hn=normalizar(h.nome||'');
-  const ht=String(h.telefone||'').replace(/\D/g,'');
-  return (hn && hn===nome) || (ht && ht===telefone);
- });
+ let hospede=null;
+ if(r?.hospedeId){
+  hospede=(hospedesCadastrados||[]).find(h=>String(h.id)===String(r.hospedeId))||null;
+ }
+ if(!hospede){
+  hospede=(hospedesCadastrados||[]).find(h=>{
+   const hn=normalizar(h.nome||'');
+   const ht=String(h.telefone||'').replace(/\D/g,'');
+   return (hn && nome && hn===nome) || (ht && telefone && ht===telefone);
+  })||null;
+ }
 
  if(!hospede)return false;
 
@@ -7801,6 +7900,8 @@ async function aplicarFiltrosReservas(){
 function limparFiltrosReservas(){
  paginaReservasAtual=1;
  if($('filtroHospedeReservas'))$('filtroHospedeReservas').value='';
+ if($('filtroHospedeReservaId'))$('filtroHospedeReservaId').value='';
+ fecharSugestoesFiltroHospedeReservas();
  if($('filtroCasaReservas'))$('filtroCasaReservas').value='todas';
  if($('filtroSituacaoReservas'))$('filtroSituacaoReservas').value='ativas';
  if($('filtroPagamentoReservas'))$('filtroPagamentoReservas').value='todos';
@@ -7832,7 +7933,8 @@ function atualizarListaReservas(){
 
  let arr=[...reservasConfirmadas];
 
- if(busca)arr=arr.filter(r=>hospedeCorrespondeReserva(r,busca));
+ const hospedeSelecionadoId=$('filtroHospedeReservaId')?.value||'';
+ if(busca || hospedeSelecionadoId)arr=arr.filter(r=>hospedeCorrespondeReserva(r,busca,hospedeSelecionadoId));
  if(casa!=='todas')arr=arr.filter(r=>r.casa===casa);
  if(pagamento!=='todos')arr=arr.filter(r=>normalizarStatusPagamentoReserva(r)===pagamento);
 
@@ -7865,7 +7967,7 @@ function atualizarListaReservas(){
   });
  }
 
- const semFiltroReservas=(!busca && casa==='todas' && pagamento==='todos' && situacao==='ativas' && !entradaInicial && !entradaFinal && !saidaInicial && !saidaFinal && !periodo && !controlePagamentosAtivo);
+ const semFiltroReservas=(!busca && !hospedeSelecionadoId && casa==='todas' && pagamento==='todos' && situacao==='ativas' && !entradaInicial && !entradaFinal && !saidaInicial && !saidaFinal && !periodo && !controlePagamentosAtivo);
  reservasPagamentoFiltradas=arr.map(r=>r.id);
 
  arr.sort((a,b)=>{
@@ -8688,9 +8790,155 @@ body{
 
 }
 
-function abrirNovaReservaAdmin(){const c=Object.entries(casas).map(([id,x])=>`<option value="${id}">${x.nome}${x.interna?' — interno':''}</option>`).join('');$('conteudoEditar').innerHTML=`<input type="hidden" id="novaReserva"><div class="grupo-input"><label>Casa</label><select id="novaCasaReserva" onchange="atualizarAvisoEstadiaMinimaNovaReserva()">${c}</select><small id="infoEstadiaMinimaNovaReserva" style="display:block;color:var(--cinza);margin-top:5px"></small></div><div class="grupo-input"><label>Hóspede</label><input id="novoNomeReserva"></div><div class="grupo-input"><label>Telefone</label><input id="novoTelefoneReserva"></div><div class="grupo-input"><label>Origem</label><select id="novaOrigemReserva"><option>Reserva direta</option><option>Airbnb</option><option>Booking.com</option><option>WhatsApp</option><option>Telefone</option><option>Outro</option></select></div><div class="linha-form"><div class="grupo-input"><label>Entrada</label><input type="date" id="novaEntrada" onchange="atualizarAvisoEstadiaMinimaNovaReserva()"></div><div class="grupo-input"><label>Saída</label><input type="date" id="novaSaida"></div></div><div class="linha-form"><div class="grupo-input"><label>Adultos</label><input type="number" id="novoAdultos" value="1"></div><div class="grupo-input"><label>Crianças</label><input type="number" id="novoCriancas" value="0"></div></div><div class="grupo-input"><label>Forma de recebimento</label><select id="novaFormaPagamento"><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Transferência Bancária</option></select></div><div class="grupo-input"><label>Caixa / conta destino</label><select id="novaContaDestino"><option>Caixa Casa Amarela</option><option>Caixa Casa Bege</option><option>Caixa Casa Marrom</option><option>Caixa Casa Branca</option><option>Caixa Nossa Casa</option><option>Caixa Geral</option><option>Conta bancária</option></select></div><div class="grupo-input"><label>Data de Recebimento</label><input type="date" id="novaDataRecebimento"><small style="color:var(--cinza)">Data prevista ou efetiva do repasse.</small></div><div class="grupo-input"><label>Status do Pagamento</label><select id="novoStatus"><option value="pendente">Pendente</option><option value="parcial">Pagamento Parcial</option><option value="pago">Pago</option></select></div><div class="grupo-input"><label>Valor Antecipado</label><input type="number" id="novoValorAntecipado" value="0" step="0.01"></div><div class="grupo-input"><label>Valor Total</label><input type="number" id="novoValorTotal" step="0.01"></div><div class="grupo-input"><label>Observação</label><textarea id="novaObservacao"></textarea></div><button class="sucesso" style="width:100%" onclick="salvarNovaReservaAdmin()">💾 Salvar reserva</button>`;$('modalEditarReserva').classList.add('aberto');atualizarAvisoEstadiaMinimaNovaReserva();}
-async function salvarNovaReservaAdmin(){const casa=$('novaCasaReserva').value,a=$('novaEntrada').value,b=$('novaSaida').value,nome=$('novoNomeReserva').value.trim(),adultos=Number($('novoAdultos').value||0),criancas=Number($('novoCriancas').value||0);if(!nome||!a||!b||b<=a)return alert('⚠️ Informe hóspede e datas válidas.');const hojeStr=dataStr(hoje());if(b>=hojeStr&&await verificarPeriodoBloqueado(casa,a,b))return alert('⚠️ O período está bloqueado.');const x=await calcularValorDiarias(casa,a,b),minEstadia=obterEstadiaMinimaParaData(casa,a);if(x.dias<minEstadia)return alert(`⚠️ A estadia mínima de ${casas[casa]?.nome||'esta casa'} é de ${minEstadia} noite(s). A nova reserva não foi criada.`);const taxa=Number(casas[casa]?.taxaLimpeza||0),f=calcularValorFinalReserva(x.dias,x.valor,taxa),total=Number($('novoValorTotal').value||f.total),ante=Number($('novoValorAntecipado').value||0);if(ante>total)return alert('⚠️ O antecipado não pode ser maior que o total.');try{const ref=await db.collection('reservas').add({casa,nome,telefone:$('novoTelefoneReserva').value.trim(),entrada:a,saida:b,adultos,criancas,totalPessoas:adultos+criancas,dias:x.dias,valorDiarias:x.valor,taxaLimpeza:taxa,desconto:f.desconto,percentualDesconto:f.percentualDesconto,acrescimoValor:0,valorTotal:total,valorPago:ante,statusPagamento:$('novoStatus').value,origemReserva:$('novaOrigemReserva').value,formaPagamento:$('novaFormaPagamento').value,contaDestino:$('novaContaDestino').value,dataRecebimento:$('novaDataRecebimento')?.value||'',observacao:$('novaObservacao').value.trim(),criadoEm:firebase.firestore.FieldValue.serverTimestamp(),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()});reservasConfirmadas.unshift({id:ref.id,casa,nome,telefone:$('novoTelefoneReserva').value.trim(),entrada:a,saida:b,adultos,criancas,totalPessoas:adultos+criancas,valorTotal:total,valorPago:ante,statusPagamento:$('novoStatus').value,criadoEm:null});reservasCarregadas=true;try{await sincronizarDisponibilidadeReserva(ref.id,reservasConfirmadas[0]);}catch(e){console.error('Sincronização:',e);}fecharModalEditar();
-   fecharModalPrestador();atualizarListaReservas();try{renderizarCalendarioSeguro();}catch(e){console.error(e);}try{gerarRelatorio();}catch(e){console.error(e);}alert(`✅ Reserva criada com sucesso.\nID: ${ref.id}`);}catch(e){console.error('Erro ao criar reserva administrativa:',e);alert(`❌ Erro ao criar reserva.\n\n${e?.code==='permission-denied'?'Permissão negada pelo Firestore. As regras precisam permitir gravação administrativa.':(e?.message||'Verifique os dados e tente novamente.')}`);}}
+async function buscarHospedesReserva(mostrarTodos=false){
+ const input=$('novoNomeReserva');
+ const box=$('sugestoesHospedeReserva');
+ if(!input||!box)return;
+ if(!hospedesCarregados){
+  try{await carregarHospedes();}catch(e){return;}
+ }
+
+ if(!mostrarTodos)$('novoHospedeId').value='';
+
+ const q=normalizar(input.value||'');
+ const qNum=String(input.value||'').replace(/\D/g,'');
+ let encontrados=(hospedesCadastrados||[]).filter(h=>!h.origemLancamento);
+
+ if(!mostrarTodos && q){
+  encontrados=encontrados.filter(h=>{
+   const nome=normalizar(h.nome||'');
+   const tel=String(h.telefone||'').replace(/\D/g,'');
+   const email=normalizar(h.email||'');
+   const cpf=String(h.cpf||'').replace(/\D/g,'');
+   return nome.includes(q)||(qNum&&tel.includes(qNum))||email.includes(q)||(qNum&&cpf.includes(qNum));
+  });
+ }
+
+ if(!encontrados.length){
+  box.innerHTML='<div class="sugestao-hospede-item"><small>Nenhum hóspede encontrado no cadastro.</small></div>';
+  box.style.display='block';
+  return;
+ }
+
+ box.innerHTML=encontrados.map(h=>`<div class="sugestao-hospede-item" onclick="selecionarHospedeNaReserva('${String(h.id).replace(/'/g,'\\\'')}' )"><strong>👤 ${escapeHtmlReserva(h.nome)}</strong><small>📱 ${escapeHtmlReserva(h.telefone||'—')}${h.email?' · ✉️ '+escapeHtmlReserva(h.email):''}</small></div>`).join('');
+ box.style.display='block';
+}
+
+function selecionarHospedeNaReserva(id){
+ const h=hospedesCadastrados.find(x=>x.id===id);
+ if(!h)return;
+ $('novoHospedeId').value=h.id||'';
+ $('novoNomeReserva').value=h.nome||'';
+ $('novoTelefoneReserva').value=h.telefone||'';
+ fecharSugestoesHospedeReserva();
+}
+
+function fecharSugestoesHospedeReserva(){
+ const box=$('sugestoesHospedeReserva');
+ if(box){box.style.display='none';box.innerHTML='';}
+}
+
+async function buscarHospedesEditarReserva(mostrarTodos=false){
+ const input=$('editNome');
+ const box=$('sugestoesHospedeEditReserva');
+ if(!input||!box)return;
+ if(!hospedesCarregados){
+  try{await carregarHospedes();}catch(e){return;}
+ }
+ if(!mostrarTodos)$('editHospedeId').value='';
+
+ const q=normalizar(input.value||'');
+ const qNum=String(input.value||'').replace(/\D/g,'');
+ let encontrados=(hospedesCadastrados||[]).filter(h=>!h.origemLancamento);
+
+ if(!mostrarTodos && q){
+  encontrados=encontrados.filter(h=>{
+   const nome=normalizar(h.nome||'');
+   const tel=String(h.telefone||'').replace(/\D/g,'');
+   const email=normalizar(h.email||'');
+   const cpf=String(h.cpf||'').replace(/\D/g,'');
+   return nome.includes(q)||(qNum&&tel.includes(qNum))||email.includes(q)||(qNum&&cpf.includes(qNum));
+  });
+ }
+
+ if(!encontrados.length){
+  box.innerHTML='<div class="sugestao-hospede-item"><small>Nenhum hóspede encontrado no cadastro.</small></div>';
+  box.style.display='block';
+  return;
+ }
+
+ box.innerHTML=encontrados.map(h=>`<div class="sugestao-hospede-item" onclick="selecionarHospedeEditarReserva('${String(h.id).replace(/'/g,'\\\'')}' )"><strong>👤 ${escapeHtmlReserva(h.nome)}</strong><small>📱 ${escapeHtmlReserva(h.telefone||'—')}${h.email?' · ✉️ '+escapeHtmlReserva(h.email):''}</small></div>`).join('');
+ box.style.display='block';
+}
+
+function selecionarHospedeEditarReserva(id){
+ const h=hospedesCadastrados.find(x=>x.id===id);
+ if(!h)return;
+ $('editHospedeId').value=h.id||'';
+ $('editNome').value=h.nome||'';
+ $('editTelefone').value=h.telefone||'';
+ fecharSugestoesHospedeEditReserva();
+}
+
+function fecharSugestoesHospedeEditReserva(){
+ const box=$('sugestoesHospedeEditReserva');
+ if(box){box.style.display='none';box.innerHTML='';}
+}
+
+function abrirNovaReservaAdmin(){
+ const c=Object.entries(casas).map(([id,x])=>`<option value="${id}">${x.nome}${x.interna?' — interno':''}</option>`).join('');
+ $('conteudoEditar').innerHTML=`<input type="hidden" id="novaReserva"><div class="grupo-input"><label>Casa</label><select id="novaCasaReserva" onchange="atualizarAvisoEstadiaMinimaNovaReserva()">${c}</select><small id="infoEstadiaMinimaNovaReserva" style="display:block;color:var(--cinza);margin-top:5px"></small></div><div class="grupo-input autocomplete-hospede"><label>Hóspede</label><small style="display:block;color:var(--cinza);margin:-2px 0 6px">Digite para filtrar ou clique no campo para ver todos os hóspedes cadastrados.</small><input id="novoHospedeId" type="hidden"><input id="novoNomeReserva" autocomplete="off" oninput="buscarHospedesReserva(false)" onfocus="buscarHospedesReserva(true)" onblur="setTimeout(fecharSugestoesHospedeReserva,250)"><div id="sugestoesHospedeReserva" class="sugestoes-hospede-reserva" style="display:none"></div></div><div class="grupo-input"><label>Telefone</label><input id="novoTelefoneReserva" type="tel"></div><div class="grupo-input"><label>Origem</label><select id="novaOrigemReserva"><option>Reserva direta</option><option>Airbnb</option><option>Booking.com</option><option>WhatsApp</option><option>Telefone</option><option>Outro</option></select></div><div class="linha-form"><div class="grupo-input"><label>Entrada</label><input type="date" id="novaEntrada" onchange="atualizarAvisoEstadiaMinimaNovaReserva()"></div><div class="grupo-input"><label>Saída</label><input type="date" id="novaSaida"></div></div><div class="linha-form"><div class="grupo-input"><label>Adultos</label><input type="number" id="novoAdultos" value="1"></div><div class="grupo-input"><label>Crianças</label><input type="number" id="novoCriancas" value="0"></div></div><div class="grupo-input"><label>Forma de recebimento</label><select id="novaFormaPagamento"><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Transferência Bancária</option></select></div><div class="grupo-input"><label>Caixa / conta destino</label><select id="novaContaDestino"><option>Caixa Casa Amarela</option><option>Caixa Casa Bege</option><option>Caixa Casa Marrom</option><option>Caixa Casa Branca</option><option>Caixa Nossa Casa</option><option>Caixa Geral</option><option>Conta bancária</option></select></div><div class="grupo-input"><label>Data de Recebimento</label><input type="date" id="novaDataRecebimento"><small style="color:var(--cinza)">Data prevista ou efetiva do repasse.</small></div><div class="grupo-input"><label>Status do Pagamento</label><select id="novoStatus"><option value="pendente">Pendente</option><option value="parcial">Pagamento Parcial</option><option value="pago">Pago</option></select></div><div class="grupo-input"><label>Valor Antecipado</label><input type="number" id="novoValorAntecipado" value="0" step="0.01"></div><div class="grupo-input"><label>Valor Total</label><input type="number" id="novoValorTotal" step="0.01"></div><div class="grupo-input"><label>Observação</label><textarea id="novaObservacao"></textarea></div><button class="sucesso" style="width:100%" onclick="salvarNovaReservaAdmin()">💾 Salvar reserva</button>`;
+ $('modalEditarReserva').classList.add('aberto');
+ atualizarAvisoEstadiaMinimaNovaReserva();
+ try{carregarHospedes();}catch(e){console.error('Pré-carregamento de hóspedes:',e);}
+ setTimeout(()=>{$('novoNomeReserva')?.focus();},100);
+}
+
+async function salvarNovaReservaAdmin(){
+ const casa=$('novaCasaReserva').value;
+ const a=$('novaEntrada').value;
+ const b=$('novaSaida').value;
+ const nome=$('novoNomeReserva').value.trim();
+ const telefone=$('novoTelefoneReserva').value.trim();
+ const hospedeIdSelecionado=$('novoHospedeId')?.value||'';
+ const adultos=Number($('novoAdultos').value||0);
+ const criancas=Number($('novoCriancas').value||0);
+ if(!nome||!a||!b)return alert('⚠️ Informe hóspede e datas válidas.');
+ if(b<=a)return alert('⚠️ Informe datas válidas para a reserva.');
+ const hojeStr=dataStr(hoje());
+ if(b>=hojeStr&&await verificarPeriodoBloqueado(casa,a,b))return alert('⚠️ O período está bloqueado.');
+ const x=await calcularValorDiarias(casa,a,b);
+ const minEstadia=obterEstadiaMinimaParaData(casa,a);
+ if(x.dias<minEstadia)return alert(`⚠️ A estadia mínima de ${casas[casa]?.nome||'esta casa'} é de ${minEstadia} noite(s). A nova reserva não foi criada.`);
+ const taxa=Number(casas[casa]?.taxaLimpeza||0);
+ const f=calcularValorFinalReserva(x.dias,x.valor,taxa);
+ const total=Number($('novoValorTotal').value||f.total);
+ const ante=Number($('novoValorAntecipado').value||0);
+ if(ante>total)return alert('⚠️ O antecipado não pode ser maior que o total.');
+ try{
+  const dadosReserva={
+   casa,nome,telefone,entrada:a,saida:b,adultos,criancas,totalPessoas:adultos+criancas,dias:x.dias,valorDiarias:x.valor,taxaLimpeza:taxa,desconto:f.desconto,percentualDesconto:f.percentualDesconto,acrescimoValor:0,valorTotal:total,valorPago:ante,statusPagamento:$('novoStatus').value,origemReserva:$('novaOrigemReserva').value,formaPagamento:$('novaFormaPagamento').value,contaDestino:$('novaContaDestino').value,dataRecebimento:$('novaDataRecebimento')?.value||'',observacao:$('novaObservacao').value.trim(),criadoEm:firebase.firestore.FieldValue.serverTimestamp(),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()
+  };
+  if(hospedeIdSelecionado)dadosReserva.hospedeId=hospedeIdSelecionado;
+
+  const ref=await db.collection('reservas').add(dadosReserva);
+  const hospedeIdFinal=hospedeIdSelecionado||'';
+  if(hospedeIdFinal)await ref.update({hospedeId:hospedeIdFinal,atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()});
+
+  reservasConfirmadas.unshift({id:ref.id,...dadosReserva,hospedeId:hospedeIdFinal||undefined,criadoEm:null});
+  reservasCarregadas=true;
+  try{await sincronizarDisponibilidadeReserva(ref.id,reservasConfirmadas[0]);}catch(e){console.error('Sincronização:',e);}
+  fecharModalEditar();
+  fecharSugestoesHospedeReserva();
+  atualizarListaReservas();
+  try{renderizarCalendarioSeguro();}catch(e){console.error(e);}
+  try{gerarRelatorio();}catch(e){console.error(e);}
+  alert(`✅ Reserva criada com sucesso.\nID: ${ref.id}`);
+ }catch(e){
+  console.error('Erro ao criar reserva administrativa:',e);
+  alert(`❌ Erro ao criar reserva.\n\n${e?.code==='permission-denied'?'Permissão negada pelo Firestore. As regras precisam permitir gravação administrativa.':(e?.message||'Verifique os dados e tente novamente.')}`);
+ }
+}
 
 function abrirEditarReserva(id){
 
@@ -8729,13 +8977,23 @@ function abrirEditarReserva(id){
    <small style="color:var(--cinza)">Data prevista ou efetiva do repasse. Pode ser posterior ao check-in.</small>
   </div>
 
-  <div class="grupo-input">
+  <div class="grupo-input autocomplete-hospede">
 
    <label>Hóspede</label>
 
+   <small style="display:block;color:var(--cinza);margin:-2px 0 6px">Digite para filtrar ou clique no campo para ver todos os hóspedes cadastrados.</small>
+
+   <input type="hidden" id="editHospedeId" value="${r.hospedeId||''}">
+
    <input
     id="editNome"
-    value="${r.nome||''}">
+    autocomplete="off"
+    value="${escapeHtmlReserva(r.nome||'')}"
+    oninput="buscarHospedesEditarReserva(false)"
+    onfocus="buscarHospedesEditarReserva(true)"
+    onblur="setTimeout(fecharSugestoesHospedeEditReserva,250)">
+
+   <div id="sugestoesHospedeEditReserva" class="sugestoes-hospede-reserva" style="display:none"></div>
 
   </div>
 
@@ -9298,6 +9556,7 @@ async function salvarEdicao(id){
 
  const status=$('editStatus').value;
  const casaSelecionada=$('editCasa')?.value||r.casa;
+ const hospedeIdEditado=$('editHospedeId')?.value||'';
 
  if(
   !entrada ||
@@ -9309,7 +9568,16 @@ async function salvarEdicao(id){
   );
  }
 
- if(
+ // Ao editar somente os dados do hóspede (ou outros dados que não mudam o período),
+ // a própria reserva não deve ser considerada como conflito. Isso é especialmente
+ // importante para reservas históricas/migradas que possuem registros de disponibilidade
+ // antigos. A verificação de conflito fica ativa quando casa, entrada ou saída foram alteradas.
+ const periodoEditado=
+  String(casaSelecionada||'')!==String(r.casa||'') ||
+  String(entrada||'')!==String(r.entrada||'') ||
+  String(saida||'')!==String(r.saida||'');
+
+ if(periodoEditado &&
   await verificarPeriodoBloqueado(
    casaSelecionada,
    entrada,
@@ -9321,7 +9589,7 @@ async function salvarEdicao(id){
  ){
 
   return alert(
-   '⚠️ O período está bloqueado por outra reserva confirmada ou paga.'
+   '⚠️ O novo período está bloqueado por outra reserva confirmada ou paga.'
   );
 
  }
@@ -9425,6 +9693,9 @@ async function salvarEdicao(id){
     statusPagamento:
      status,
 
+    hospedeId:
+     hospedeIdEditado||null,
+
     observacao:
      $('editObs').value.trim(),
 
@@ -9434,7 +9705,7 @@ async function salvarEdicao(id){
 
    });
 
-  const reservaAtualizada={...r,casa:casaSelecionada,nome:$('editNome').value.trim(),telefone:$('editTelefone').value.trim(),entrada,saida,adultos:Number($('editAdultos').value||0),criancas:Number($('editCriancas').value||0),totalPessoas:Number($('editAdultos').value||0)+Number($('editCriancas').value||0),statusPagamento:status};
+  const reservaAtualizada={...r,casa:casaSelecionada,nome:$('editNome').value.trim(),telefone:$('editTelefone').value.trim(),hospedeId:hospedeIdEditado||null,entrada,saida,adultos:Number($('editAdultos').value||0),criancas:Number($('editCriancas').value||0),totalPessoas:Number($('editAdultos').value||0)+Number($('editCriancas').value||0),statusPagamento:status};
   const idxReserva=reservasConfirmadas.findIndex(x=>x.id===id);
   if(idxReserva>=0)reservasConfirmadas[idxReserva]={...reservasConfirmadas[idxReserva],...reservaAtualizada};
   await sincronizarDisponibilidadeReserva(id,reservaAtualizada);
@@ -9500,27 +9771,48 @@ function popularFiltrosRecebimentoRelatorio(){
  const anoEl=$('filtroAnoFinanceiroRelatorio');
  const inicioEl=$('filtroMesRecebimentoInicioRelatorio');
  const fimEl=$('filtroMesRecebimentoFimRelatorio');
+ const hospedeEl=$('listaHospedesRelatorio');
  const anoAtual=hoje().getFullYear();
- const anoAnterior=(anoEl?.value&&anoEl.value!=='todos')?anoEl.value:String(anoAtual);
+ const valorAnoAtual=anoEl?.value||String(anoAtual);
  const mesInicio=inicioEl?.value||'todos';
  const mesFim=fimEl?.value||'todos';
  const meses=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
- const anos=new Set([anoAtual]);
+ const anos=new Set();
  (reservasConfirmadas||[]).forEach(r=>{
   ['dataRecebimento','entrada','saida'].forEach(campo=>{
    const d=String(r?.[campo]||'').slice(0,10);
    if(/^\d{4}-\d{2}-\d{2}$/.test(d))anos.add(Number(d.slice(0,4)));
   });
  });
+ anos.add(anoAtual);
  const listaAnos=[...anos].filter(Number.isFinite).sort((a,b)=>a-b);
  if(anoEl){
-  anoEl.innerHTML=''+listaAnos.map(ano=>`<option value="${ano}">${ano}</option>`).join('');
-  anoEl.value=listaAnos.includes(Number(anoAnterior))?anoAnterior:String(anoAtual);
+  const valorPreservar=valorAnoAtual==='todos'?'todos':(listaAnos.includes(Number(valorAnoAtual))?valorAnoAtual:String(anoAtual));
+  anoEl.innerHTML='<option value="todos">Todos os anos</option>'+listaAnos.map(ano=>`<option value="${ano}">${ano}</option>`).join('');
+  anoEl.value=valorPreservar;
  }
  const opcoesMes='<option value="todos">Todos os meses</option>'+meses.map((nome,i)=>`<option value="${String(i+1).padStart(2,'0')}">${nome}</option>`).join('');
  if(inicioEl){inicioEl.innerHTML=opcoesMes;inicioEl.value=[...inicioEl.options].some(o=>o.value===mesInicio)?mesInicio:'todos';}
  if(fimEl){fimEl.innerHTML=opcoesMes;fimEl.value=[...fimEl.options].some(o=>o.value===mesFim)?mesFim:'todos';}
+
+ // Sugestões com todos os hóspedes cadastrados e também os nomes encontrados nas reservas.
+ // Não grava nem altera dados; serve apenas para facilitar a localização.
+ if(hospedeEl){
+  const mapa=new Map();
+  (hospedesCadastrados||[]).forEach(h=>{
+   const nome=String(h?.nome||'').trim();
+   const n=normalizar(nome);
+   if(nome&&n&&!mapa.has(n))mapa.set(n,nome);
+  });
+  (reservasConfirmadas||[]).forEach(r=>{
+   const nome=obterNomeReservaParaHospede(r);
+   const n=normalizar(nome);
+   if(nome&&n&&!mapa.has(n))mapa.set(n,nome);
+  });
+  hospedeEl.innerHTML=[...mapa.values()].sort((a,b)=>a.localeCompare(b,'pt-BR')).map(nome=>`<option value="${escapeHtmlReserva(nome)}"></option>`).join('');
+ }
 }
+
 
 
 function obterReservasRelatorio(){
@@ -9560,7 +9852,7 @@ function obterReservasRelatorio(){
  if(origemReserva!=='todos')arr=arr.filter(r=>(r.origemReserva||'Não informada')===origemReserva);
 
  if(busca){
-  arr=arr.filter(r=>normalizar(r.nome).includes(busca)||String(r.telefone||'').includes(busca));
+  arr=arr.filter(r=>hospedeCorrespondeReserva(r,busca));
  }
 
  // Este relatório é financeiro: o período é baseado na Data de Recebimento.
@@ -9836,7 +10128,7 @@ async function carregarDadosRelatoriosSobDemanda(){
  try{
   $('relatorioConteudo').innerHTML='<div class="dashboard-vazio">⏳ Carregando dados do relatório somente porque você solicitou esta consulta...</div>';
   await Promise.all([
-   reservasCarregadas?Promise.resolve():carregarReservasConfirmadas(),
+   reservasConsultaCompleta?Promise.resolve():carregarReservasConfirmadas(),
    despesasCarregadas?Promise.resolve():carregarDespesas(),
    prestadoresCarregados?Promise.resolve():carregarPrestadores()
   ]);
@@ -10198,8 +10490,9 @@ function obterDadosFormularioHospede(){
 
 async function cadastrarOuAtualizarHospede(nome,telefone,extras={}){
 
- const n=normalizar(nome);
- if(!n)return;
+ const nomeTexto=String(nome||'').trim();
+ const n=normalizar(nomeTexto);
+ if(!n)return '';
 
  const q=await db.collection('hospedes')
   .where('nomeNormalizado','==',n)
@@ -10207,15 +10500,16 @@ async function cadastrarOuAtualizarHospede(nome,telefone,extras={}){
   .get();
 
  const dados={
-  nome,
-  telefone,
+  nome:nomeTexto,
   nomeNormalizado:n,
   atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()
  };
 
+ const telefoneTexto=String(telefone||'').trim();
+ if(telefoneTexto)dados.telefone=telefoneTexto;
+
  // Os campos complementares só são enviados quando informados.
- // Assim, a sincronização das reservas públicas não apaga dados
- // que já foram preenchidos manualmente no cadastro do hóspede.
+ // Assim, a sincronização nunca apaga dados que já foram preenchidos manualmente.
  Object.keys(extras||{}).forEach(k=>{
   if(extras[k]!==undefined && extras[k]!==null && String(extras[k]).trim()!=='')
    dados[k]=extras[k];
@@ -10223,9 +10517,103 @@ async function cadastrarOuAtualizarHospede(nome,telefone,extras={}){
 
  if(q.empty){
   dados.cadastradoEm=firebase.firestore.FieldValue.serverTimestamp();
-  await db.collection('hospedes').add(dados);
- }else{
-  await q.docs[0].ref.update(dados);
+  const ref=await db.collection('hospedes').add(dados);
+  return ref.id;
+ }
+
+ await q.docs[0].ref.update(dados);
+ return q.docs[0].id;
+}
+
+function obterNomeReservaParaHospede(r){
+ return String(r?.nome||r?.nomeHospede||r?.hospede||r?.cliente||'').trim();
+}
+
+function obterTelefoneReservaParaHospede(r){
+ return String(r?.telefone||r?.telefoneHospede||r?.whatsapp||'').trim();
+}
+
+async function sincronizarHospedesDeTodasReservas(opcoes={}){
+ const silencioso=!!opcoes.silencioso;
+ try{
+  // Quando chamada diretamente pelo botão, garante que os cadastros atuais
+  // já estejam carregados para não criar duplicidades. Na carga inicial,
+  // carregarHospedes já populou a lista e passa silencioso=true.
+  if(!hospedesCarregados && !opcoes.carregamentoInicial){
+   const sExistentes=await db.collection('hospedes').get();
+   hospedesCadastrados=[];
+   sExistentes.forEach(d=>{
+    const x=d.data()||{};
+    const nome=x.nome||x.nomeCompleto||x.nomeHospede||x.hospede||x.cliente||'';
+    hospedesCadastrados.push({id:d.id,...x,nome:nome||'Hóspede sem nome'});
+   });
+   hospedesCarregados=true;
+  }
+
+  const snap=await db.collection('reservas').get();
+  const porNome=new Map();
+  const porTelefone=new Map();
+
+  (hospedesCadastrados||[]).forEach(h=>{
+   const n=normalizar(h.nome||'');
+   const t=String(h.telefone||'').replace(/\D/g,'');
+   if(n && !porNome.has(n))porNome.set(n,h);
+   if(t && !porTelefone.has(t))porTelefone.set(t,h);
+  });
+
+  let adicionados=0;
+
+  for(const doc of snap.docs){
+   const r=doc.data()||{};
+   const nome=obterNomeReservaParaHospede(r);
+   const telefone=obterTelefoneReservaParaHospede(r);
+   const n=normalizar(nome);
+   const t=telefone.replace(/\D/g,'');
+   if(!n)continue;
+
+   const existente=porNome.get(n)||(t?porTelefone.get(t):null);
+   if(existente)continue;
+
+   const novoDados={
+    nome,
+    telefone,
+    nomeNormalizado:n,
+    origemCadastro:'reserva',
+    origemReserva:r.origemReserva||r.origem||'Reserva',
+    primeiraReservaId:doc.id,
+    cadastradoEm:firebase.firestore.FieldValue.serverTimestamp(),
+    atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()
+   };
+
+   const ref=await db.collection('hospedes').add(novoDados);
+   const novo={
+    id:ref.id,
+    nome,
+    telefone,
+    nomeNormalizado:n,
+    origemCadastro:'reserva',
+    origemReserva:r.origemReserva||r.origem||'Reserva',
+    primeiraReservaId:doc.id
+   };
+   hospedesCadastrados.push(novo);
+   porNome.set(n,novo);
+   if(t)porTelefone.set(t,novo);
+   adicionados++;
+  }
+
+  hospedesCadastrados.sort((a,b)=>String(a.nome||'').localeCompare(String(b.nome||''),'pt-BR'));
+  hospedesCarregados=true;
+  paginaHospedesAtual=1;
+  if($('listaHospedes'))filtrarHospedes();
+
+  if(!silencioso){
+   alert(`✅ Sincronização concluída.\n\n${adicionados} hóspede(s) novo(s) foram incluído(s) a partir das reservas.`);
+  }
+  return adicionados;
+ }catch(e){
+  console.error('Sincronização de hóspedes pelas reservas:',e);
+  if(!silencioso)alert('❌ Não foi possível sincronizar os hóspedes das reservas.');
+  throw e;
  }
 }
 
@@ -10233,14 +10621,17 @@ async function carregarHospedes(){
  if(hospedesCarregados){filtrarHospedes();return;}
  hospedesCadastrados=[];
  try{
-  // Uma única leitura da coleção. Os hóspedes que também aparecem nas
-  // reservas são mesclados depois, usando reservasConfirmadas já carregadas.
+  // Uma única leitura da coleção de hóspedes e, em seguida, uma sincronização
+  // controlada das reservas para incluir registros migrados que ainda não tenham
+  // cadastro. Nenhum hóspede existente é substituído pelos dados da reserva.
   const s=await db.collection('hospedes').get();
   s.forEach(d=>{
    const x=d.data()||{};
    const nome=x.nome||x.nomeCompleto||x.nomeHospede||x.hospede||x.cliente||'';
    hospedesCadastrados.push({id:d.id,...x,nome:nome||'Hóspede sem nome'});
   });
+
+  await sincronizarHospedesDeTodasReservas({silencioso:true,carregamentoInicial:true});
  }catch(e){console.error('Hóspedes cadastrados:',e);}
  hospedesCadastrados.sort((a,b)=>String(a.nome||'').localeCompare(String(b.nome||''),'pt-BR'));
  hospedesCarregados=true;
@@ -10250,9 +10641,9 @@ async function carregarHospedes(){
 function mesclarHospedesDasReservas(){
  const existentes=new Set(hospedesCadastrados.map(h=>normalizar(h.nome)));
  (reservasConfirmadas||[]).forEach(r=>{
-  const nome=String(r.nome||'').trim(),n=normalizar(nome);
+  const nome=obterNomeReservaParaHospede(r),n=normalizar(nome);
   if(nome&&n&&!existentes.has(n)){
-   hospedesCadastrados.push({id:'reserva-hospede-'+n,nome,telefone:r.telefone||'',email:r.email||'',origemLancamento:true});
+   hospedesCadastrados.push({id:'reserva-hospede-'+n,nome,telefone:obterTelefoneReservaParaHospede(r),email:r.email||'',origemLancamento:true});
    existentes.add(n);
   }
  });
@@ -10260,7 +10651,57 @@ function mesclarHospedesDasReservas(){
  paginaHospedesAtual=1;
  filtrarHospedes();
 }
-function filtrarHospedes(pagina=1){const el=$('listaHospedes');if(!el)return;const q=normalizar($('buscarHospede')?.value||'');const arr=hospedesCadastrados.filter(h=>!q||normalizar(h.nome).includes(q)||String(h.telefone||'').includes(q)||normalizar(h.email).includes(q)||String(h.cpf||'').includes(q));const paginas=Math.max(1,Math.ceil(arr.length/HOSPEDES_POR_PAGINA));paginaHospedesAtual=Math.min(Math.max(1,pagina),paginas);const vis=arr.slice((paginaHospedesAtual-1)*HOSPEDES_POR_PAGINA,paginaHospedesAtual*HOSPEDES_POR_PAGINA);el.innerHTML=vis.length?vis.map(h=>`<div class="reserva-item"><strong>👤 ${escapeHtmlReserva(h.nome)}</strong><p>📱 ${escapeHtmlReserva(h.telefone||'—')} ${h.email?` · ✉️ ${escapeHtmlReserva(h.email)}`:''}</p>${h.cpf?`<p>🪪 CPF: ${escapeHtmlReserva(h.cpf)}</p>`:''}${h.cidade||h.estado?`<p>📍 ${escapeHtmlReserva([h.cidade,h.estado].filter(Boolean).join(' - '))}</p>`:''}${h.origemLancamento?'<span style="display:inline-block;margin-top:8px;color:var(--cinza);font-size:12px">ℹ️ Encontrado nas reservas; cadastre os dados completos para editar.</span>':`<button class="azul" onclick="editarHospede('${h.id}')">✏️ Editar Cadastro</button>`}</div>`).join(''):`<p style="color:var(--cinza)">Nenhum hóspede encontrado.</p>`;const pg=$('paginacaoHospedes');if(pg)pg.innerHTML=arr.length<=HOSPEDES_POR_PAGINA?'':`<button onclick="filtrarHospedes(${paginaHospedesAtual-1})" ${paginaHospedesAtual===1?'disabled':''}>‹ Anterior</button><span>Página ${paginaHospedesAtual} de ${paginas} · ${arr.length} hóspedes</span><button onclick="filtrarHospedes(${paginaHospedesAtual+1})" ${paginaHospedesAtual===paginas?'disabled':''}>Próxima ›</button>`;}
+
+function filtrarHospedes(pagina=1){
+ if(!hospedesCarregados){carregarHospedes();return;}
+ const el=$('listaHospedes');
+ if(!el)return;
+ const q=normalizar($('buscarHospede')?.value||'');
+ const qNum=String($('buscarHospede')?.value||'').replace(/\D/g,'');
+ const arr=hospedesCadastrados.filter(h=>{
+  const nome=normalizar(h.nome||'');
+  const telefone=String(h.telefone||'').replace(/\D/g,'');
+  const email=normalizar(h.email||'');
+  const cpf=String(h.cpf||'').replace(/\D/g,'');
+  return !q||nome.includes(q)||email.includes(q)||(qNum&&telefone.includes(qNum))||(qNum&&cpf.includes(qNum));
+ });
+ const paginas=Math.max(1,Math.ceil(arr.length/HOSPEDES_POR_PAGINA));
+ paginaHospedesAtual=Math.min(Math.max(1,pagina),paginas);
+ const vis=arr.slice((paginaHospedesAtual-1)*HOSPEDES_POR_PAGINA,paginaHospedesAtual*HOSPEDES_POR_PAGINA);
+ el.innerHTML=vis.length?vis.map(h=>`<div class="reserva-item"><strong>👤 ${escapeHtmlReserva(h.nome)}</strong><p>📱 ${escapeHtmlReserva(h.telefone||'—')} ${h.email?` · ✉️ ${escapeHtmlReserva(h.email)}`:''}</p>${h.cpf?`<p>🪪 CPF: ${escapeHtmlReserva(h.cpf)}</p>`:''}${h.cidade||h.estado?`<p>📍 ${escapeHtmlReserva([h.cidade,h.estado].filter(Boolean).join(' - '))}</p>`:''}${h.origemReserva?`<p style="margin:6px 0;color:var(--cinza);font-size:12px">🗂️ Origem: ${escapeHtmlReserva(h.origemReserva)}</p>`:''}${h.origemLancamento?'<span style="display:inline-block;margin-top:8px;color:var(--cinza);font-size:12px">ℹ️ Encontrado nas reservas; cadastre os dados completos para editar.</span>':`<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="azul" onclick="editarHospede('${h.id}')">✏️ Editar Cadastro</button>${String(h.id||'').startsWith('reserva-hospede-')?'':`<button class="cinza" onclick="excluirHospede('${h.id}')">🗑️ Excluir</button>`}</div>`}</div>`).join(''):`<p style="color:var(--cinza)">Nenhum hóspede encontrado.</p>`;
+ const pg=$('paginacaoHospedes');
+ if(pg)pg.innerHTML=arr.length<=HOSPEDES_POR_PAGINA?'':`<button onclick="filtrarHospedes(${paginaHospedesAtual-1})" ${paginaHospedesAtual===1?'disabled':''}>‹ Anterior</button><span>Página ${paginaHospedesAtual} de ${paginas} · ${arr.length} hóspedes</span><button onclick="filtrarHospedes(${paginaHospedesAtual+1})" ${paginaHospedesAtual===paginas?'disabled':''}>Próxima ›</button>`;
+}
+
+async function excluirHospede(id){
+ const h=hospedesCadastrados.find(x=>x.id===id);
+ if(!h)return;
+ if(String(id).startsWith('reserva-hospede-'))return alert('⚠️ Este registro está vinculado a uma reserva. Não é possível excluí-lo.');
+ if(!confirm(`Excluir o cadastro de "${h.nome||'Hóspede'}"?\n\nO sistema verificará primeiro se existe alguma reserva vinculada.`))return;
+ try{
+  const snap=await db.collection('reservas').get();
+  const nomeHospede=normalizar(h.nome||'');
+  const telefoneHospede=String(h.telefone||'').replace(/\D/g,'');
+  const vinculo=snap.docs.find(d=>{
+   const r=d.data()||{};
+   if(r.hospedeId && String(r.hospedeId)===String(id))return true;
+   const nr=normalizar(obterNomeReservaParaHospede(r));
+   const tr=obterTelefoneReservaParaHospede(r).replace(/\D/g,'');
+   return (nomeHospede && nr===nomeHospede) || (telefoneHospede && tr===telefoneHospede);
+  });
+  if(vinculo){
+   const r=vinculo.data()||{};
+   return alert(`⚠️ Este hóspede não pode ser excluído.\n\nExiste uma reserva vinculada ao cadastro:\n${obterNomeReservaParaHospede(r)||h.nome}\n${r.entrada||''} a ${r.saida||''}\n\nNenhum dado foi alterado.`);
+  }
+  await db.collection('hospedes').doc(id).delete();
+  hospedesCadastrados=hospedesCadastrados.filter(x=>x.id!==id);
+  filtrarHospedes(paginaHospedesAtual);
+  alert('✅ Cadastro de hóspede excluído com sucesso.');
+ }catch(e){
+  console.error('Excluir hóspede:',e);
+  alert('❌ Não foi possível excluir o cadastro do hóspede.');
+ }
+}
 
 function limparFormularioHospede(){
  ['hospedeEdicaoId','cadHospedeNome','cadHospedeTelefone','cadHospedeEmail','cadHospedeCpf','cadHospedeNascimento','cadHospedeCep','cadHospedeEndereco','cadHospedeNumero','cadHospedeComplemento','cadHospedeBairro','cadHospedeCidade','cadHospedeEstado','cadHospedeObservacoes']
