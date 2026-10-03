@@ -1938,6 +1938,180 @@ textarea{
 
 </style>
 
+<style id="interface-calendario-mobile-v14">
+@media(max-width:800px){
+ .mobile-campo-datas-pesquisar{
+  border-color:#bfdfe9;
+ }
+ .mobile-campo-datas-pesquisar .mobile-campo-icone{
+  width:42px;
+  height:42px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:12px;
+  background:#eaf7fb;
+ }
+ .mobile-compacto-modal-calendario{
+  max-height:94dvh;
+  padding-top:14px;
+ }
+ .mobile-calendario-selecao-resumo{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+  align-items:center;
+  gap:7px;
+  margin:0 0 12px;
+ }
+ .mobile-calendario-resumo-item{
+  width:100%;
+  min-width:0;
+  padding:10px 11px;
+  border:1px solid #d7e4e9;
+  border-radius:12px;
+  background:#f7fafb;
+  text-align:left;
+  cursor:pointer;
+ }
+ .mobile-calendario-resumo-item.ativo{
+  border-color:#0ea5e9;
+  box-shadow:0 0 0 2px #0ea5e922;
+  background:#f8fdff;
+ }
+ .mobile-calendario-resumo-item span{
+  display:block;
+  color:#71808a;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.04em;
+ }
+ .mobile-calendario-resumo-item strong{
+  display:block;
+  margin-top:3px;
+  color:var(--marinho);
+  font-size:13px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+ }
+ .mobile-calendario-resumo-separador{
+  color:#84939b;
+  font-weight:800;
+ }
+ .mobile-calendario-navegacao{
+  display:grid;
+  grid-template-columns:42px minmax(0,1fr) 42px;
+  align-items:center;
+  gap:8px;
+  margin:2px 0 8px;
+ }
+ .mobile-calendario-navegacao>strong{
+  text-align:center;
+  color:var(--marinho);
+  font-size:16px;
+  text-transform:capitalize;
+ }
+ .mobile-calendario-nav{
+  width:42px;
+  height:42px;
+  border:1px solid #d7e4e9;
+  border-radius:11px;
+  background:#fff;
+  color:#0a4b6e;
+  font-size:27px;
+  line-height:1;
+  cursor:pointer;
+ }
+ .mobile-calendario-nav:disabled{
+  opacity:.35;
+  cursor:default;
+ }
+ .mobile-calendario-semana,
+ .mobile-calendario-grade{
+  display:grid;
+  grid-template-columns:repeat(7,minmax(0,1fr));
+  gap:3px;
+ }
+ .mobile-calendario-semana{
+  margin-bottom:4px;
+ }
+ .mobile-calendario-semana span{
+  text-align:center;
+  color:#7a8991;
+  font-size:9px;
+  font-weight:800;
+  padding:4px 0;
+ }
+ .mobile-calendario-dia{
+  position:relative;
+  min-height:43px;
+  border:1px solid transparent;
+  border-radius:10px;
+  background:#fff;
+  color:var(--marinho);
+  font-size:13px;
+  font-weight:700;
+  cursor:pointer;
+ }
+ .mobile-calendario-dia:not(:disabled):active{
+  transform:scale(.97);
+ }
+ .mobile-calendario-dia.vazio{
+  pointer-events:none;
+  background:transparent;
+ }
+ .mobile-calendario-dia.hoje{
+  border-color:#94c9da;
+ }
+ .mobile-calendario-dia.fora-periodo{
+  color:#a7b2b8;
+  background:#f7f9fa;
+  cursor:default;
+ }
+ .mobile-calendario-dia.selecionada{
+  border-color:#0a4b6e;
+  background:#0a4b6e;
+  color:#fff;
+ }
+ .mobile-calendario-dia.inicio::after,
+ .mobile-calendario-dia.fim::after{
+  content:'';
+  position:absolute;
+  left:50%;
+  bottom:4px;
+  width:4px;
+  height:4px;
+  transform:translateX(-50%);
+  border-radius:50%;
+  background:currentColor;
+  opacity:.85;
+ }
+ .mobile-calendario-dia.no-intervalo{
+  border-radius:0;
+  background:#eaf7fb;
+  color:#0a4b6e;
+ }
+ .mobile-calendario-dia.inicio{
+  border-top-right-radius:0;
+  border-bottom-right-radius:0;
+ }
+ .mobile-calendario-dia.fim{
+  border-top-left-radius:0;
+  border-bottom-left-radius:0;
+ }
+ .mobile-calendario-legenda{
+  margin:7px 0 2px;
+  color:#73818a;
+  font-size:10px;
+  text-align:center;
+ }
+ #mobileCalendarioConfirmar:disabled{
+  opacity:.45;
+  box-shadow:none;
+ }
+}
+</style>
+
 <script>
 document.addEventListener('click',function(event){
  var alvo=event.target&&event.target.closest?event.target.closest('a,button'):null;
@@ -2148,6 +2322,519 @@ document.addEventListener('click',function(event){
  }
 }
 </style>
+
+<style id="interface-mobile-compacta-v10">
+.mobile-publico-compacto,
+.mobile-compacto-modal{
+ display:none;
+}
+
+@media(max-width:800px){
+ /* A interface compacta substitui somente a apresentação pública móvel. */
+ #mobilePublicoCompacto{
+  display:block!important;
+ }
+ .hero-praia,
+ .area-publica,
+ .faixa-praia,
+ .info-praia{
+  display:none!important;
+ }
+ .mobile-compacto-cabecalho{
+  padding:6px 2px 12px;
+ }
+ .mobile-compacto-cabecalho strong{
+  display:block;
+  color:var(--marinho);
+  font-size:21px;
+ }
+ .mobile-compacto-cabecalho span{
+  display:block;
+  color:var(--cinza);
+  font-size:12px;
+  margin-top:3px;
+ }
+ .mobile-compacto-acao-lupa,
+ .mobile-compacto-campo{
+  width:100%;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  border:1px solid #d9e6eb;
+  background:#fff;
+  border-radius:14px;
+  padding:13px 14px;
+  margin:0 0 10px;
+  box-shadow:0 4px 14px #0000000a;
+  text-align:left;
+  cursor:pointer;
+ }
+ .mobile-compacto-acao-icone{
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#eaf7fb;
+  font-size:21px;
+  flex:0 0 auto;
+ }
+ .mobile-compacto-acao-lupa > span:nth-child(2),
+ .mobile-campo-conteudo{
+  flex:1;
+  min-width:0;
+ }
+ .mobile-compacto-acao-lupa strong,
+ .mobile-campo-conteudo strong{
+  display:block;
+  color:var(--marinho);
+  font-size:14px;
+ }
+ .mobile-compacto-acao-lupa small,
+ .mobile-campo-conteudo small{
+  display:block;
+  color:var(--cinza);
+  font-size:12px;
+  margin-top:3px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+ }
+ .mobile-compacto-seta,
+ .mobile-campo-seta{
+  font-size:22px;
+  color:#71808a;
+  flex:0 0 auto;
+ }
+ .mobile-lista-propriedades{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin:-2px 0 10px;
+  padding:8px;
+  background:#f6fafc;
+  border:1px solid #d9e8ee;
+  border-radius:14px;
+ }
+ .mobile-lista-propriedades[hidden]{display:none!important}
+ .mobile-propriedade-opcao{
+  border:1px solid #d7e4e9;
+  background:#fff;
+  border-radius:12px;
+  padding:8px;
+  text-align:left;
+  cursor:pointer;
+ }
+ .mobile-propriedade-opcao.ativa{
+  border-color:#0ea5e9;
+  box-shadow:0 0 0 2px #0ea5e922;
+ }
+ .mobile-propriedade-opcao img{
+  width:100%;
+  height:76px;
+  object-fit:cover;
+  border-radius:9px;
+  display:block;
+  margin-bottom:6px;
+ }
+ .mobile-propriedade-opcao strong{
+  display:block;
+  color:var(--marinho);
+  font-size:12px;
+  line-height:1.2;
+ }
+ .mobile-propriedade-opcao small{
+  display:block;
+  margin-top:3px;
+  color:var(--cinza);
+  font-size:10px;
+ }
+ .mobile-compacto-titulo-casas{
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+  padding:8px 2px 9px;
+ }
+ .mobile-compacto-titulo-casas strong{
+  color:var(--marinho);
+  font-size:17px;
+ }
+ .mobile-compacto-titulo-casas span{
+  color:var(--cinza);
+  font-size:11px;
+ }
+ .mobile-grade-casas-compacta{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+ }
+ .mobile-casa-card-compacta{
+  overflow:hidden;
+  border:1px solid #dbe6eb;
+  background:#fff;
+  border-radius:14px;
+  box-shadow:0 4px 14px #0000000a;
+  cursor:pointer;
+ }
+ .mobile-casa-card-compacta img,
+ .mobile-casa-card-compacta .mobile-casa-sem-foto{
+  width:100%;
+  height:132px;
+  object-fit:cover;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg,#dff4fb,#edf9fc);
+  color:#58717b;
+  font-size:30px;
+ }
+ .mobile-casa-card-compacta .mobile-casa-card-nome{
+  padding:10px 10px 11px;
+  color:var(--marinho);
+  font-weight:800;
+  font-size:13px;
+ }
+ .mobile-casa-card-compacta .mobile-casa-card-info{
+  padding:0 10px 11px;
+  color:var(--cinza);
+  font-size:10px;
+ }
+ .mobile-casa-card-compacta.esta-selecionada{
+  border-color:#0ea5e9;
+  box-shadow:0 0 0 2px #0ea5e922,0 6px 18px #00000012;
+ }
+ .mobile-busca-botao{
+  width:100%;
+  min-height:50px;
+  border:0;
+  border-radius:13px;
+  margin:2px 0 13px;
+  background:linear-gradient(135deg,#0b6b8e,#0a4b6e);
+  color:#fff;
+  font-weight:800;
+  font-size:15px;
+  box-shadow:0 6px 18px #00000014;
+ }
+ .mobile-busca-botao:disabled{
+  opacity:.45;
+  box-shadow:none;
+ }
+ .mobile-resultado-busca{
+  margin:2px 0 15px;
+ }
+ .mobile-resultado-busca[hidden]{display:none!important}
+ .mobile-resultado-cabecalho{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:10px;
+  margin-bottom:10px;
+ }
+ .mobile-resultado-cabecalho strong{color:var(--marinho);font-size:16px}
+ .mobile-resultado-cabecalho small{display:block;color:var(--cinza);font-size:11px;margin-top:3px}
+ .mobile-resultado-editar{
+  border:1px solid #d7e5ea;
+  background:#fff;
+  color:#0a4b6e;
+  padding:8px 10px;
+  border-radius:9px;
+  font-weight:700;
+ }
+ .mobile-resultado-casas{display:flex;flex-direction:column;gap:9px}
+ .mobile-resultado-casa{
+  display:grid;
+  grid-template-columns:84px minmax(0,1fr);
+  gap:10px;
+  align-items:stretch;
+  border:1px solid #dce7eb;
+  border-radius:13px;
+  background:#fff;
+  padding:9px;
+  box-shadow:0 4px 12px #00000009;
+  text-align:left;
+ }
+ .mobile-resultado-casa.selecionada{
+  border-color:#0ea5e9;
+  box-shadow:0 0 0 2px #0ea5e922,0 7px 18px #00000012;
+ }
+ .mobile-resultado-casa-indisponivel{opacity:.78}
+ .mobile-resultado-casa-foto{
+  width:84px;
+  min-height:94px;
+  border-radius:10px;
+  overflow:hidden;
+  background:#eef6f8;
+ }
+ .mobile-resultado-casa-foto img{width:100%;height:100%;object-fit:cover;display:block}
+ .mobile-resultado-casa-conteudo{min-width:0}
+ .mobile-resultado-casa-topo{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+ .mobile-resultado-casa-nome{font-weight:800;color:var(--marinho);font-size:14px;line-height:1.2}
+ .mobile-resultado-casa-status{font-size:10px;font-weight:800;padding:4px 7px;border-radius:999px;white-space:nowrap}
+ .mobile-status-ok{background:#e9f8ee;color:#176b2c}
+ .mobile-status-no{background:#fff1f0;color:#a63a2d}
+ .mobile-resultado-casa-info{font-size:11px;color:var(--cinza);margin-top:4px;line-height:1.4}
+ .mobile-resultado-casa-valor{margin-top:7px;padding-top:7px;border-top:1px solid #edf1f3}
+ .mobile-resultado-casa-valor strong{display:block;color:#0a4b6e;font-size:15px}
+ .mobile-resultado-casa-valor small{color:var(--cinza);font-size:10px}
+ .mobile-resultado-casa-acoes{margin-top:8px;display:flex;gap:7px;flex-wrap:wrap}
+ .mobile-resultado-casa-acoes button{min-height:40px;border-radius:10px;padding:8px 11px;font-weight:800;border:0}
+ .mobile-resultado-escolher{background:#eef6f9;color:#0a4b6e}
+ .mobile-resultado-solicitar{background:var(--ouro);color:#222;flex:1}
+ .mobile-resultado-resumo{padding:10px 12px;border:1px solid #dce8ed;background:#f7fbfc;border-radius:11px;margin-bottom:10px;font-size:11px;color:#52616a;line-height:1.45}
+ .mobile-resultado-vazio{padding:14px;border:1px dashed #cbd9df;border-radius:11px;color:var(--cinza);font-size:12px;text-align:center}
+ .mobile-sucesso-reserva-conteudo{max-height:92dvh}
+ .mobile-sucesso-reserva-icone{text-align:center;font-size:42px;line-height:1;margin:2px 0 8px}
+ .mobile-sucesso-reserva-mensagem{padding:12px 13px;background:#edf9f1;border:1px solid #b8e1c5;border-radius:12px;color:#234a31;font-size:13px;line-height:1.5}
+ .mobile-sucesso-reserva-links{display:grid;gap:8px;margin-top:12px}
+ .mobile-sucesso-reserva-links a{display:block;padding:11px 12px;border-radius:10px;background:#f7fafb;border:1px solid #dce7eb;color:#0a4b6e;text-decoration:none;font-weight:800;font-size:13px}
+ .mobile-sucesso-reserva-anuncios{margin-top:14px;padding-top:12px;border-top:1px solid #e2eaed;display:grid;gap:6px}
+ .mobile-sucesso-reserva-anuncios strong{font-size:13px;color:var(--marinho);margin-bottom:2px}
+ .mobile-sucesso-reserva-anuncios a{color:#0a4b6e;font-size:12px;text-decoration:underline}
+ .mobile-camera-placeholder{display:none}
+
+ .mobile-compacto-modal{
+  position:fixed;
+  inset:0;
+  z-index:2600;
+  background:#0008;
+  display:none;
+  align-items:flex-end;
+  justify-content:center;
+  padding:0;
+ }
+ .mobile-compacto-modal.aberto{display:flex}
+ .mobile-compacto-modal-conteudo{
+  width:100%;
+  max-height:88dvh;
+  overflow:auto;
+  background:#fff;
+  border-radius:18px 18px 0 0;
+  padding:16px 15px calc(24px + env(safe-area-inset-bottom));
+  box-shadow:0 -10px 40px #0004;
+  -webkit-overflow-scrolling:touch;
+ }
+ .mobile-compacto-modal-pequeno{max-height:62dvh}
+ .mobile-compacto-modal-cabecalho{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:16px;
+ }
+ .mobile-compacto-modal-cabecalho h3{
+  margin:0;
+  color:var(--marinho);
+  font-size:20px;
+ }
+ .mobile-compacto-modal-cabecalho p{
+  margin:4px 0 0;
+  color:var(--cinza);
+  font-size:12px;
+ }
+ .mobile-compacto-fechar{
+  border:0;
+  width:38px;
+  height:38px;
+  border-radius:10px;
+  background:#eef4f6;
+  color:#44545e;
+  font-size:25px;
+  cursor:pointer;
+  flex:0 0 auto;
+ }
+ .mobile-datas-grade{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+ }
+ .mobile-datas-grade input{
+  width:100%;
+  min-height:48px;
+  box-sizing:border-box;
+ }
+ .mobile-compacto-aviso{
+  min-height:20px;
+  color:#b42318;
+  font-size:12px;
+  margin:9px 0;
+ }
+ .mobile-compacto-botao-principal{
+  width:100%;
+  min-height:50px;
+  margin-top:8px;
+  border-radius:12px;
+  font-weight:800;
+ }
+ .mobile-hospede-linha{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  padding:14px 0;
+  border-bottom:1px solid #edf1f3;
+ }
+ .mobile-hospede-linha:last-of-type{border-bottom:0}
+ .mobile-hospede-linha strong{display:block;color:#203d4c;font-size:15px}
+ .mobile-hospede-linha small{display:block;color:var(--cinza);font-size:11px;margin-top:2px}
+ .mobile-stepper{display:flex;align-items:center;gap:12px}
+ .mobile-stepper button{
+  width:38px;height:38px;border-radius:50%;border:1px solid #bcd0d8;background:#fff;color:#0a4b6e;font-size:22px;cursor:pointer;
+ }
+ .mobile-stepper strong{min-width:20px;text-align:center;color:var(--marinho)}
+ .mobile-modal-casa-detalhes{max-height:94dvh}
+ .mobile-casa-galeria-detalhes{
+  width:100%;
+  height:230px;
+  border-radius:14px;
+  overflow:hidden;
+  background:#eef6f8;
+ }
+ .mobile-casa-galeria-detalhes img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+ }
+ .mobile-casa-sem-foto-grande{
+  width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#54707b;font-size:48px;
+ }
+ .mobile-galeria-controles{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin:8px 0 14px;
+ }
+ .mobile-galeria-controles button{
+  border:0;background:#eef5f7;color:#0a4b6e;width:42px;height:38px;border-radius:10px;font-size:25px;cursor:pointer;
+ }
+ .mobile-galeria-controles span{font-size:12px;color:var(--cinza);font-weight:700}
+ .mobile-casa-caracteristicas-detalhes{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:7px;
+  margin-bottom:12px;
+ }
+ .mobile-casa-caracteristicas-detalhes > div{
+  padding:9px 10px;
+  background:#f7fafb;
+  border:1px solid #e1e9ed;
+  border-radius:10px;
+  color:#34505e;
+  font-size:12px;
+  line-height:1.3;
+ }
+ .mobile-casa-comodidades-detalhes{
+  margin-bottom:10px;
+ }
+ .mobile-casa-comodidades-detalhes h4{margin:4px 0 7px;color:var(--marinho);font-size:15px}
+ .mobile-casa-comodidades-detalhes ul{margin:0;padding-left:18px;color:#485e68;font-size:12px;line-height:1.5}
+
+ footer#rodapePublico .camera-publica{
+  display:block!important;
+  position:relative!important;
+  left:auto!important;
+  top:auto!important;
+  transform:none!important;
+  width:auto!important;
+  max-width:390px;
+  margin:22px auto 14px!important;
+  background:rgba(0,35,55,.94)!important;
+ }
+ .hero-praia .camera-publica{display:none!important}
+}
+
+@media(min-width:801px){
+ #mobilePublicoCompacto,
+ #modalCalendarioMobileCompacto,
+ #modalHospedesMobileCompacto,
+ #modalCasaMobileCompacto{display:none!important}
+}
+</style>
+
+<style id="ajustes-v12-fluxo-mobile">
+@media(max-width:800px){
+ .modal#aberto,
+ .modal.aberto{
+  align-items:flex-end!important;
+ }
+ #modalReserva.aberto .modal-conteudo{
+  max-height:calc(100dvh - 10px)!important;
+  padding:16px 14px calc(26px + env(safe-area-inset-bottom))!important;
+  overflow-y:auto!important;
+ }
+ #modalReserva.aberto #comodidadesReservaPublica{
+  display:none!important;
+ }
+ #modalReserva.aberto #hospedeNome,
+ #modalReserva.aberto #hospedeTelefone{
+  min-height:46px;
+  font-size:16px;
+ }
+ .mobile-detalhes-propriedade-botao{
+  display:block;
+  width:100%;
+  min-height:46px;
+  margin-top:9px;
+  padding:10px 13px;
+  border:1px solid #cfe2e8;
+  border-radius:11px;
+  background:#f7fbfc;
+  color:#0a4b6e;
+  font-weight:800;
+  font-size:14px;
+ }
+ .mobile-detalhes-propriedade-painel{
+  margin-top:9px;
+  padding:13px;
+  border:1px solid #d9e7ec;
+  border-radius:12px;
+  background:#f9fcfd;
+  color:#455660;
+  font-size:12px;
+  line-height:1.5;
+ }
+ .mobile-detalhes-propriedade-painel[hidden]{display:none!important}
+ .mobile-detalhes-propriedade-painel h4{
+  margin:0 0 8px;
+  color:var(--marinho);
+  font-size:15px;
+ }
+ .mobile-detalhes-propriedade-painel .mdp-desc{
+  margin:0 0 9px;
+ }
+ .mobile-detalhes-propriedade-painel .mdp-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:7px;
+  margin:9px 0;
+ }
+ .mobile-detalhes-propriedade-painel .mdp-item{
+  padding:8px 9px;
+  border:1px solid #e1ebee;
+  border-radius:9px;
+  background:#fff;
+ }
+ .mobile-detalhes-propriedade-painel ul{
+  margin:6px 0 0;
+  padding-left:18px;
+ }
+ .mobile-detalhes-propriedade-painel li{
+  margin:2px 0;
+ }
+ .mobile-sucesso-fechar{
+  position:absolute;
+  top:12px;
+  right:12px;
+ }
+}
+@media(min-width:801px){
+ .mobile-detalhes-propriedade-botao,
+ .mobile-detalhes-propriedade-painel{
+  display:none!important;
+ }
+}
+</style>
 </head>
 
 <body>
@@ -2245,6 +2932,171 @@ if ("serviceWorker" in navigator) {
  </button>
 </div>
 <!-- FIM ACESSO ADMINISTRATIVO MOBILE -->
+
+<!-- =====================================================
+     NOVA INTERFACE COMPACTA — SOMENTE MOBILE
+===================================================== -->
+<section id="mobilePublicoCompacto" class="mobile-publico-compacto" aria-label="Consulta rápida pelo celular">
+
+ <div class="mobile-compacto-cabecalho">
+  <div>
+   <strong>Encontre sua casa</strong>
+   <span>Escolha a propriedade e informe sua estadia.</span>
+  </div>
+ </div>
+
+ <button id="mobileBuscaPropriedade" type="button" class="mobile-compacto-acao-lupa" onclick="toggleListaCasasMobileCompacto()" aria-expanded="false">
+  <span class="mobile-compacto-acao-icone">🔎</span>
+  <span>
+   <strong>Buscar por propriedade</strong>
+   <small id="mobileCasaSelecionadaTexto">Todas as 4 casas</small>
+  </span>
+  <span class="mobile-compacto-seta">⌄</span>
+ </button>
+
+ <div id="mobileListaPropriedades" class="mobile-lista-propriedades" hidden></div>
+
+ <button id="mobileCampoDatas" type="button" class="mobile-compacto-campo mobile-campo-datas-pesquisar" onclick="abrirCalendarioMobileCompacto()">
+  <span class="mobile-campo-icone">📅</span>
+  <span class="mobile-campo-conteudo">
+   <strong>Pesquisar Datas</strong>
+   <small id="mobileResumoDatas">Escolha a entrada e a saída</small>
+  </span>
+  <span class="mobile-campo-seta">›</span>
+ </button>
+
+ <button id="mobileCampoHospedes" type="button" class="mobile-compacto-campo" onclick="abrirHospedesMobileCompacto()">
+  <span class="mobile-campo-icone">👥</span>
+  <span class="mobile-campo-conteudo">
+   <strong>Hóspedes</strong>
+   <small id="mobileResumoHospedes">1 hóspede</small>
+  </span>
+  <span class="mobile-campo-seta">›</span>
+ </button>
+
+ <button id="mobileBotaoBuscarDisponibilidade" type="button" class="mobile-busca-botao" onclick="buscarCasasMobileCompacto()" disabled>
+  🔎 Buscar disponibilidade
+ </button>
+
+ <div id="mobileResultadoBusca" class="mobile-resultado-busca" hidden></div>
+
+ <div class="mobile-compacto-titulo-casas" id="mobileTituloCasasCompacto">
+  <strong>🏠 Nossas casas</strong>
+  <span>Toque em uma casa para ver fotos e características.</span>
+ </div>
+
+ <div id="mobileListaCasasCompacta" class="mobile-grade-casas-compacta"></div>
+
+ <div id="mobileCamerasPlaceholder" class="mobile-camera-placeholder"></div>
+</section>
+
+<!-- Modal compacto de datas -->
+<div id="modalCalendarioMobileCompacto" class="mobile-compacto-modal" aria-hidden="true" onclick="if(event.target===this)fecharCalendarioMobileCompacto()">
+ <div class="mobile-compacto-modal-conteudo mobile-compacto-modal-calendario" role="dialog" aria-modal="true" aria-labelledby="tituloCalendarioMobileCompacto">
+  <div class="mobile-compacto-modal-cabecalho">
+   <div>
+    <h3 id="tituloCalendarioMobileCompacto">📅 Pesquisar Datas</h3>
+    <p>Selecione a entrada e a saída no mesmo calendário.</p>
+   </div>
+   <button type="button" class="mobile-compacto-fechar" onclick="fecharCalendarioMobileCompacto()" aria-label="Fechar calendário">×</button>
+  </div>
+
+  <div class="mobile-calendario-selecao-resumo" aria-label="Datas selecionadas">
+   <button type="button" id="mobileCalendarioEntradaResumo" class="mobile-calendario-resumo-item ativo" onclick="definirCampoCalendarioMobileCompacto('entrada')">
+    <span>ENTRADA</span>
+    <strong id="mobileCalendarioEntradaValor">Selecionar</strong>
+   </button>
+   <span class="mobile-calendario-resumo-separador">→</span>
+   <button type="button" id="mobileCalendarioSaidaResumo" class="mobile-calendario-resumo-item" onclick="definirCampoCalendarioMobileCompacto('saida')">
+    <span>SAÍDA</span>
+    <strong id="mobileCalendarioSaidaValor">Selecionar</strong>
+   </button>
+  </div>
+
+  <div class="mobile-calendario-navegacao">
+   <button type="button" id="mobileCalendarioMesAnterior" class="mobile-calendario-nav" onclick="mudarMesCalendarioMobileCompacto(-1)" aria-label="Mês anterior">‹</button>
+   <strong id="mobileCalendarioMesTitulo">Mês de 2026</strong>
+   <button type="button" class="mobile-calendario-nav" onclick="mudarMesCalendarioMobileCompacto(1)" aria-label="Próximo mês">›</button>
+  </div>
+
+  <div class="mobile-calendario-semana" aria-hidden="true">
+   <span>DOM</span><span>SEG</span><span>TER</span><span>QUA</span><span>QUI</span><span>SEX</span><span>SÁB</span>
+  </div>
+  <div id="mobileCalendarioGrade" class="mobile-calendario-grade" aria-label="Calendário para seleção do período"></div>
+
+  <div id="mobileAvisoDatas" class="mobile-compacto-aviso"></div>
+  <div class="mobile-calendario-legenda">Toque primeiro na entrada e depois na saída.</div>
+  <button type="button" class="amarelo mobile-compacto-botao-principal" id="mobileCalendarioConfirmar" onclick="salvarDatasMobileCompacto()" disabled>✅ Confirmar datas</button>
+ </div>
+</div>
+
+<!-- Modal compacto de hóspedes, inspirado no padrão de contagem do Booking -->
+<div id="modalHospedesMobileCompacto" class="mobile-compacto-modal" aria-hidden="true" onclick="if(event.target===this)fecharHospedesMobileCompacto()">
+ <div class="mobile-compacto-modal-conteudo mobile-compacto-modal-pequeno">
+  <div class="mobile-compacto-modal-cabecalho">
+   <div>
+    <h3>👥 Hóspedes</h3>
+    <p>Defina quantas pessoas irão se hospedar.</p>
+   </div>
+   <button type="button" class="mobile-compacto-fechar" onclick="fecharHospedesMobileCompacto()">×</button>
+  </div>
+  <div class="mobile-hospede-linha">
+   <div><strong>Adultos</strong><small>13 anos ou mais</small></div>
+   <div class="mobile-stepper">
+    <button type="button" onclick="alterarHospedesMobileCompacto('adultos',-1)">−</button>
+    <strong id="mobileQtdAdultos">1</strong>
+    <button type="button" onclick="alterarHospedesMobileCompacto('adultos',1)">+</button>
+   </div>
+  </div>
+  <div class="mobile-hospede-linha">
+   <div><strong>Crianças</strong><small>0 a 12 anos</small></div>
+   <div class="mobile-stepper">
+    <button type="button" onclick="alterarHospedesMobileCompacto('criancas',-1)">−</button>
+    <strong id="mobileQtdCriancas">0</strong>
+    <button type="button" onclick="alterarHospedesMobileCompacto('criancas',1)">+</button>
+   </div>
+  </div>
+  <button type="button" class="amarelo mobile-compacto-botao-principal" onclick="salvarHospedesMobileCompacto()">✅ Confirmar hóspedes</button>
+ </div>
+</div>
+
+<!-- Modal compacto de casa: galeria + características -->
+<div id="modalCasaMobileCompacto" class="mobile-compacto-modal" aria-hidden="true" onclick="if(event.target===this)fecharDetalhesCasaMobileCompacto()">
+ <div class="mobile-compacto-modal-conteudo mobile-modal-casa-detalhes">
+  <div class="mobile-compacto-modal-cabecalho">
+   <div>
+    <h3 id="mobileCasaDetalhesTitulo">Casa</h3>
+    <p id="mobileCasaDetalhesSubtitulo">Fotos e características</p>
+   </div>
+   <button type="button" class="mobile-compacto-fechar" onclick="fecharDetalhesCasaMobileCompacto()">×</button>
+  </div>
+  <div id="mobileCasaGaleriaDetalhes" class="mobile-casa-galeria-detalhes"></div>
+  <div class="mobile-galeria-controles">
+   <button type="button" onclick="mudarFotoCasaMobileCompacto(-1)">‹</button>
+   <span id="mobileCasaGaleriaContador">1 de 1</span>
+   <button type="button" onclick="mudarFotoCasaMobileCompacto(1)">›</button>
+  </div>
+  <div id="mobileCasaCaracteristicasDetalhes" class="mobile-casa-caracteristicas-detalhes"></div>
+  <div id="mobileCasaComodidadesDetalhes" class="mobile-casa-comodidades-detalhes"></div>
+  <button type="button" class="amarelo mobile-compacto-botao-principal" onclick="consultarDisponibilidadeCasaMobileCompacto()">🔎 Consultar disponibilidade</button>
+ </div>
+</div>
+
+<!-- Modal de sucesso da solicitação no fluxo mobile -->
+<div id="modalSucessoReservaMobile" class="mobile-compacto-modal" aria-hidden="true" onclick="if(event.target===this)fecharSucessoReservaMobileCompacto()">
+ <div class="mobile-compacto-modal-conteudo mobile-sucesso-reserva-conteudo">
+  <div class="mobile-sucesso-reserva-icone">✅</div>
+  <button type="button" class="mobile-compacto-fechar mobile-sucesso-fechar" onclick="fecharSucessoReservaMobileCompacto()">×</button>
+  <div class="mobile-sucesso-reserva-mensagem">
+   Solicitação enviada com sucesso! Em breve entraremos em contato. Se preferir, utilize nossos números do WhatsApp para confirmação do recebimento da reserva.
+  </div>
+  <div class="mobile-sucesso-reserva-links">
+   <a href="https://wa.me/5548988555115" target="_blank" rel="noopener noreferrer">🟢 WhatsApp — (48) 98855-5115</a>
+   <a href="https://wa.me/5548999578871" target="_blank" rel="noopener noreferrer">🟢 WhatsApp — (48) 99957-8871</a>
+  </div>
+  <button type="button" class="amarelo mobile-compacto-botao-principal" onclick="fecharSucessoReservaMobileCompacto()">Concluir</button>
+ </div>
+</div>
 
 <section class="hero-praia">
 
@@ -3420,6 +4272,18 @@ if ("serviceWorker" in navigator) {
 
  </button>
 
+ <button type="button"
+  id="btnDetalhesPropriedadeReservaMobile"
+  class="mobile-detalhes-propriedade-botao"
+  onclick="toggleDetalhesPropriedadeReservaMobile()">
+  🏠 Ver detalhes da propriedade
+ </button>
+
+ <div id="detalhesPropriedadeReservaMobile"
+  class="mobile-detalhes-propriedade-painel"
+  hidden>
+ </div>
+
  <div class="whatsapp-reserva">
   <strong>📱 Enviar os dados também pelo WhatsApp</strong>
   <p>Depois de preencher os dados da reserva, escolha um dos números abaixo.</p>
@@ -3793,6 +4657,594 @@ const normalizar=s=>
   .replace(/[\u0300-\u036f]/g,'')
   .trim();
 
+/* =====================================================
+   INTERFACE MOBILE COMPACTA V10
+   Somente para viewport <= 800px. Não altera dados Firestore.
+===================================================== */
+let mobileCasaSelecionada=null;
+let mobileDataEntrada='';
+let mobileDataSaida='';
+let mobileHospedesCompactos={adultos:1,criancas:0};
+let mobileCasaDetalhesAtual=null;
+let mobileFotoCasaAtual=0;
+let mobileCasaUltimaPosicaoDesktop=null;
+let mobileResultadosBusca=[];
+let mobileFluxoReservaAtivo=false;
+
+function obterCasasPublicasMobile(){
+ const ordem=['amarela','bege','marrom','branca'];
+ return ordem.map(id=>[id,casas?.[id]]).filter(([,x])=>x && !x.interna);
+}
+
+function formatarDataMobileCompacto(v){
+ if(!v)return '';
+ const d=dataLocal(v);
+ return d?new Intl.DateTimeFormat('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'}).format(d):'';
+}
+
+function atualizarResumoDatasMobileCompacto(){
+ const a=$('mobileDataEntrada')?.value||'';
+ const b=$('mobileDataSaida')?.value||'';
+ const aviso=$('mobileAvisoDatas');
+ if(aviso)aviso.textContent='';
+ if(a && b && b<=a){
+  if(aviso)aviso.textContent='A saída deve ser posterior à entrada.';
+  return;
+ }
+ if(a && dataLocal(a)<hoje()){
+  if(aviso)aviso.textContent='Escolha uma data de entrada a partir de hoje.';
+ }
+}
+
+function renderizarListaPropriedadesMobileCompacto(){
+ const box=$('mobileListaPropriedades');
+ if(!box)return;
+ const arr=obterCasasPublicasMobile();
+ box.innerHTML=arr.map(([id,x])=>{
+  const foto=x.fotos?.[0]||'';
+  const ativo=mobileCasaSelecionada===id?' ativa':'';
+  return `<button type="button" class="mobile-propriedade-opcao${ativo}" onclick="selecionarPropriedadeMobileCompacto('${id}')">
+   ${foto?`<img src="${escapeHtmlReserva(foto)}" alt="${escapeHtmlReserva(x.nome||'Casa')}">`:'<div class="mobile-casa-sem-foto">🏖️</div>'}
+   <strong>${escapeHtmlReserva(x.nome||id)}</strong>
+   <small>Até ${Number(x.capacidade||0)} pessoas</small>
+  </button>`;
+ }).join('');
+}
+
+function toggleListaCasasMobileCompacto(){
+ const box=$('mobileListaPropriedades');
+ const btn=$('mobileBuscaPropriedade');
+ if(!box)return;
+ const abrir=box.hidden;
+ box.hidden=!abrir;
+ btn?.setAttribute('aria-expanded',String(abrir));
+ renderizarListaPropriedadesMobileCompacto();
+}
+
+function selecionarPropriedadeMobileCompacto(id){
+ if(!casas?.[id])return;
+ mobileCasaSelecionada=id;
+ limparResultadoBuscaMobileCompacto();
+ const nome=casas[id]?.nome||id;
+ $('mobileCasaSelecionadaTexto').textContent=nome;
+ const box=$('mobileListaPropriedades');
+ if(box)box.hidden=true;
+ $('mobileBuscaPropriedade')?.setAttribute('aria-expanded','false');
+ renderizarListaPropriedadesMobileCompacto();
+ document.querySelectorAll('.mobile-casa-card-compacta').forEach(el=>el.classList.toggle('esta-selecionada',el.dataset.casa===id));
+}
+
+let mobileCalendarioMesVisual='';
+let mobileCalendarioSelecionando='entrada';
+
+function obterDataHojeISOCalendarioMobile(){
+ const d=hoje();
+ if(d instanceof Date && !isNaN(d))return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+ const agora=new Date();
+ return `${agora.getFullYear()}-${String(agora.getMonth()+1).padStart(2,'0')}-${String(agora.getDate()).padStart(2,'0')}`;
+}
+function formatarMesCalendarioMobile(ano,mes){
+ return new Intl.DateTimeFormat('pt-BR',{month:'long',year:'numeric'}).format(new Date(ano,mes,1));
+}
+function formatarDataCurtaCalendarioMobile(v){
+ if(!v)return 'Selecionar';
+ const d=dataLocal(v);
+ return d?new Intl.DateTimeFormat('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'}).format(d):'Selecionar';
+}
+function atualizarResumoCalendarioMobile(){
+ const entrada=$('mobileCalendarioEntradaValor');
+ const saida=$('mobileCalendarioSaidaValor');
+ if(entrada)entrada.textContent=formatarDataCurtaCalendarioMobile(mobileDataEntrada);
+ if(saida)saida.textContent=formatarDataCurtaCalendarioMobile(mobileDataSaida);
+ document.querySelectorAll('.mobile-calendario-resumo-item').forEach(el=>el.classList.remove('ativo'));
+ const alvo=$(mobileCalendarioSelecionando==='saida'?'mobileCalendarioSaidaResumo':'mobileCalendarioEntradaResumo');
+ if(alvo)alvo.classList.add('ativo');
+ const confirmar=$('mobileCalendarioConfirmar');
+ if(confirmar)confirmar.disabled=!(mobileDataEntrada&&mobileDataSaida&&mobileDataSaida>mobileDataEntrada);
+}
+function definirCampoCalendarioMobileCompacto(campo){
+ mobileCalendarioSelecionando=campo==='saida'?'saida':'entrada';
+ atualizarResumoCalendarioMobile();
+ renderizarCalendarioMobileCompacto();
+}
+function abrirCalendarioMobileCompacto(){
+ const modal=$('modalCalendarioMobileCompacto');
+ if(!modal)return;
+ const base=mobileDataEntrada||obterDataHojeISOCalendarioMobile();
+ mobileCalendarioMesVisual=`${base.slice(0,7)}-01`;
+ mobileCalendarioSelecionando=mobileDataEntrada&&mobileDataSaida?'entrada':(mobileDataEntrada?'saida':'entrada');
+ atualizarResumoDatasMobileCompacto();
+ atualizarResumoCalendarioMobile();
+ renderizarCalendarioMobileCompacto();
+ modal.classList.add('aberto');
+ modal.setAttribute('aria-hidden','false');
+}
+function fecharCalendarioMobileCompacto(){
+ const modal=$('modalCalendarioMobileCompacto');
+ if(modal){modal.classList.remove('aberto');modal.setAttribute('aria-hidden','true');}
+}
+function mudarMesCalendarioMobileCompacto(delta){
+ const hojeIso=obterDataHojeISOCalendarioMobile();
+ const base=new Date(Number(mobileCalendarioMesVisual.slice(0,4)),Number(mobileCalendarioMesVisual.slice(5,7))-1,1);
+ base.setMonth(base.getMonth()+Number(delta||0));
+ const min=new Date(Number(hojeIso.slice(0,4)),Number(hojeIso.slice(5,7))-1,1);
+ if(base<min)base.setTime(min.getTime());
+ mobileCalendarioMesVisual=`${base.getFullYear()}-${String(base.getMonth()+1).padStart(2,'0')}-01`;
+ renderizarCalendarioMobileCompacto();
+}
+function selecionarDiaCalendarioMobileCompacto(iso){
+ const hojeIso=obterDataHojeISOCalendarioMobile();
+ if(iso<hojeIso)return;
+ const aviso=$('mobileAvisoDatas');
+ if(aviso)aviso.textContent='';
+ if(mobileCalendarioSelecionando==='saida' && mobileDataEntrada){
+  if(iso<=mobileDataEntrada){
+   mobileDataEntrada=iso;
+   mobileDataSaida='';
+   mobileCalendarioSelecionando='saida';
+  }else{
+   mobileDataSaida=iso;
+   mobileCalendarioSelecionando='entrada';
+  }
+ }else{
+  mobileDataEntrada=iso;
+  mobileDataSaida='';
+  mobileCalendarioSelecionando='saida';
+ }
+ atualizarResumoCalendarioMobile();
+ atualizarResumoDatasMobileCompacto();
+ renderizarCalendarioMobileCompacto();
+}
+function renderizarCalendarioMobileCompacto(){
+ const grade=$('mobileCalendarioGrade');
+ const titulo=$('mobileCalendarioMesTitulo');
+ const prev=$('mobileCalendarioMesAnterior');
+ if(!grade)return;
+ const base=mobileCalendarioMesVisual?new Date(Number(mobileCalendarioMesVisual.slice(0,4)),Number(mobileCalendarioMesVisual.slice(5,7))-1,1):new Date();
+ const ano=base.getFullYear();
+ const mes=base.getMonth();
+ if(titulo)titulo.textContent=formatarMesCalendarioMobile(ano,mes);
+ const hojeIso=obterDataHojeISOCalendarioMobile();
+ const minMes=new Date(Number(hojeIso.slice(0,4)),Number(hojeIso.slice(5,7))-1,1);
+ if(prev)prev.disabled=base<=minMes;
+ const primeiroDiaSemana=new Date(ano,mes,1).getDay();
+ const ultimoDia=new Date(ano,mes+1,0).getDate();
+ const celulas=[];
+ for(let i=0;i<primeiroDiaSemana;i++)celulas.push('<div class="mobile-calendario-dia vazio" aria-hidden="true"></div>');
+ for(let dia=1;dia<=ultimoDia;dia++){
+  const iso=`${ano}-${String(mes+1).padStart(2,'0')}-${String(dia).padStart(2,'0')}`;
+  const fora=iso<hojeIso;
+  const inicio=!!mobileDataEntrada&&iso===mobileDataEntrada;
+  const fim=!!mobileDataSaida&&iso===mobileDataSaida;
+  const intervalo=!!mobileDataEntrada&&!!mobileDataSaida&&iso>mobileDataEntrada&&iso<mobileDataSaida;
+  const classes=['mobile-calendario-dia'];
+  if(fora)classes.push('fora-periodo');
+  if(iso===hojeIso)classes.push('hoje');
+  if(intervalo)classes.push('no-intervalo');
+  if(inicio){classes.push('selecionada','inicio');}
+  if(fim){classes.push('selecionada','fim');}
+  const disabled=fora?' disabled':'';
+  celulas.push(`<button type="button" class="${classes.join(' ') }"${disabled} onclick="selecionarDiaCalendarioMobileCompacto('${iso}')" aria-label="${formatarDataCurtaCalendarioMobile(iso)}">${dia}</button>`);
+ }
+ while(celulas.length%7)celulas.push('<div class="mobile-calendario-dia vazio" aria-hidden="true"></div>');
+ grade.innerHTML=celulas.join('');
+ atualizarResumoCalendarioMobile();
+}
+function salvarDatasMobileCompacto(){
+ const a=mobileDataEntrada||'';
+ const b=mobileDataSaida||'';
+ const aviso=$('mobileAvisoDatas');
+ if(!a||!b){if(aviso)aviso.textContent='Selecione a data de entrada e a data de saída.';return;}
+ if(dataLocal(a)<hoje()){if(aviso)aviso.textContent='Escolha uma data de entrada a partir de hoje.';return;}
+ if(b<=a){if(aviso)aviso.textContent='A saída deve ser posterior à entrada.';return;}
+ mobileDataEntrada=a;mobileDataSaida=b;
+ limparResultadoBuscaMobileCompacto();
+ atualizarResumoPublicoMobileCompacto();
+ fecharCalendarioMobileCompacto();
+}
+
+function abrirHospedesMobileCompacto(){
+ $('mobileQtdAdultos').textContent=String(mobileHospedesCompactos.adultos);
+ $('mobileQtdCriancas').textContent=String(mobileHospedesCompactos.criancas);
+ const modal=$('modalHospedesMobileCompacto');
+ if(modal){modal.classList.add('aberto');modal.setAttribute('aria-hidden','false');}
+}
+function fecharHospedesMobileCompacto(){
+ const modal=$('modalHospedesMobileCompacto');
+ if(modal){modal.classList.remove('aberto');modal.setAttribute('aria-hidden','true');}
+}
+function alterarHospedesMobileCompacto(tipo,delta){
+ const atual=Number(mobileHospedesCompactos[tipo]||0);
+ const minimo=tipo==='adultos'?1:0;
+ const maximo=20;
+ mobileHospedesCompactos[tipo]=Math.min(maximo,Math.max(minimo,atual+delta));
+ $('mobileQtdAdultos').textContent=String(mobileHospedesCompactos.adultos);
+ $('mobileQtdCriancas').textContent=String(mobileHospedesCompactos.criancas);
+}
+function salvarHospedesMobileCompacto(){
+ atualizarResumoPublicoMobileCompacto();
+ fecharHospedesMobileCompacto();
+}
+function atualizarResumoPublicoMobileCompacto(){
+ const total=mobileHospedesCompactos.adultos+mobileHospedesCompactos.criancas;
+ let texto=total===1?'1 hóspede':`${total} hóspedes`;
+ if(mobileHospedesCompactos.criancas)texto+=` · ${mobileHospedesCompactos.criancas} criança(s)`;
+ if($('mobileResumoHospedes'))$('mobileResumoHospedes').textContent=texto;
+ const datasA=mobileDataEntrada?formatarDataMobileCompacto(mobileDataEntrada):'';
+ const datasB=mobileDataSaida?formatarDataMobileCompacto(mobileDataSaida):'';
+ if($('mobileResumoDatas'))$('mobileResumoDatas').textContent=datasA&&datasB?`${datasA} → ${datasB}`:'Entrada e saída';
+ const btn=$('mobileBotaoBuscarDisponibilidade');
+ if(btn){
+  const pronto=!!mobileCasaSelecionada&&!!mobileDataEntrada&&!!mobileDataSaida;
+  btn.disabled=!pronto;
+ }
+}
+
+function limparResultadoBuscaMobileCompacto(){
+ mobileResultadosBusca=[];
+ const box=$('mobileResultadoBusca');
+ if(box){box.hidden=true;box.innerHTML='';}
+ const titulo=$('mobileTituloCasasCompacto');
+ const cards=$('mobileListaCasasCompacta');
+ if(titulo)titulo.style.display='';
+ if(cards)cards.style.display='';
+}
+
+function escaparAtributoMobile(v){
+ return String(v??'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+async function buscarCasasMobileCompacto(){
+ const selecionada=mobileCasaSelecionada;
+ const a=mobileDataEntrada;
+ const b=mobileDataSaida;
+ const adultos=Number(mobileHospedesCompactos.adultos||0);
+ const criancas=Number(mobileHospedesCompactos.criancas||0);
+ const totalPessoas=adultos+criancas;
+ const box=$('mobileResultadoBusca');
+ if(!box)return;
+ if(!selecionada||!a||!b){
+  box.hidden=false;
+  box.innerHTML='<div class="mobile-resultado-vazio">🔎 Escolha a propriedade e informe a entrada e a saída para buscar.</div>';
+  return;
+ }
+ if(dataLocal(a)<hoje()){
+  box.hidden=false;
+  box.innerHTML='<div class="mobile-resultado-vazio">⚠️ A data de entrada deve ser a partir de hoje.</div>';
+  return;
+ }
+ const noites=obterNoitesBusca(a,b);
+ if(noites<=0){
+  box.hidden=false;
+  box.innerHTML='<div class="mobile-resultado-vazio">⚠️ A saída deve ser posterior à entrada.</div>';
+  return;
+ }
+ const btn=$('mobileBotaoBuscarDisponibilidade');
+ if(btn){btn.disabled=true;btn.textContent='🔎 Buscando...';}
+ box.hidden=false;
+ box.innerHTML='<div class="mobile-resultado-vazio">⏳ Consultando disponibilidade e calculando as diárias...</div>';
+ try{
+  const casasPublicas=obterCasasPublicasMobile();
+  const resultados=await Promise.all(casasPublicas.map(async([id,x])=>{
+   let lista=[];let erro=false;
+   try{lista=await carregarBloqueiosPublicosCasa(id);}catch(e){console.error('Disponibilidade mobile',id,e);erro=true;}
+   const capacidade=Number(x.capacidade||0);
+   const minEstadia=obterEstadiaMinimaParaData(id,a);
+   const calc=await calcularValorDiarias(id,a,b);
+   let status='disponivel';
+   let motivo='';
+   if(totalPessoas>capacidade){status='indisponivel';motivo=`Capacidade máxima de ${capacidade} pessoa(s).`;}
+   else if(noites<minEstadia){status='indisponivel';motivo=`Estadia mínima de ${minEstadia} noite(s).`; }
+   else if(erro){status='indisponivel';motivo='Não foi possível consultar a disponibilidade.';}
+   else if(!periodoDisponivelNaLista(a,b,lista)){status='indisponivel';motivo='Período já ocupado.';}
+   return {id,nome:x.nome||id,capacidade,disponivel:status==='disponivel',motivo,foto:x.fotos?.[0]||'',dias:calc.dias,valorDiarias:calc.valor,minEstadia};
+  }));
+  mobileResultadosBusca=resultados.sort((x,y)=>{if(x.id===selecionada&&y.id!==selecionada)return -1;if(y.id===selecionada&&x.id!==selecionada)return 1;return String(x.nome).localeCompare(String(y.nome),'pt-BR');});
+  renderizarResultadoBuscaMobileCompacto({a,b,noites,totalPessoas,adultos,criancas});
+ }catch(e){
+  console.error('Busca mobile:',e);
+  box.innerHTML='<div class="mobile-resultado-vazio">⚠️ Não foi possível consultar as acomodações agora. Tente novamente em instantes.</div>';
+ }finally{
+  if(btn){btn.disabled=!(mobileCasaSelecionada&&mobileDataEntrada&&mobileDataSaida);btn.textContent='🔎 Buscar disponibilidade';}
+ }
+}
+
+function renderizarResultadoBuscaMobileCompacto(ctx){
+ const box=$('mobileResultadoBusca');
+ if(!box)return;
+ const selecionada=mobileCasaSelecionada;
+ box.hidden=false;
+ const itens=mobileResultadosBusca.map(r=>{
+  const cls=r.id===selecionada?' selecionada':'';
+  const foto=r.foto?`<img src="${escapeHtmlReserva(r.foto)}" alt="${escapeHtmlReserva(r.nome)}">`:'🏖️';
+  const status=r.disponivel?'<span class="mobile-resultado-casa-status mobile-status-ok">Disponível</span>':'<span class="mobile-resultado-casa-status mobile-status-no">Indisponível</span>';
+  const valor=r.disponivel?`<div class="mobile-resultado-casa-valor"><strong>${moeda(r.valorDiarias)}</strong><small>${r.dias} noite(s) · valor das diárias no período</small></div>`:`<div class="mobile-resultado-casa-valor"><strong>—</strong><small>${escapeHtmlReserva(r.motivo)}</small></div>`;
+  const acao=r.id===selecionada
+   ?(r.disponivel?`<button type="button" class="mobile-resultado-solicitar" onclick="solicitarReservaMobileCompacto('${escaparAtributoMobile(r.id)}')">➡️ Solicitar Reserva</button>`:'<button type="button" class="mobile-resultado-solicitar" disabled>➡️ Solicitar Reserva</button>')
+   :`<button type="button" class="mobile-resultado-escolher" onclick="escolherCasaResultadoMobileCompacto('${escaparAtributoMobile(r.id)}')">Escolher esta casa</button>`;
+  return `<div class="mobile-resultado-casa${cls}${r.disponivel?'':' mobile-resultado-casa-indisponivel'}">
+   <div class="mobile-resultado-casa-foto">${foto}</div>
+   <div class="mobile-resultado-casa-conteudo">
+    <div class="mobile-resultado-casa-topo"><div class="mobile-resultado-casa-nome">${escapeHtmlReserva(r.nome)}</div>${status}</div>
+    <div class="mobile-resultado-casa-info">👥 Até ${r.capacidade} pessoas</div>
+    ${valor}
+    <div class="mobile-resultado-casa-acoes">${acao}</div>
+   </div>
+  </div>`;
+ }).join('');
+ const resumo=`<div class="mobile-resultado-cabecalho"><div><strong>Resultado da sua busca</strong><small>📅 ${formatarDataMobileCompacto(ctx.a)} → ${formatarDataMobileCompacto(ctx.b)} · ${ctx.noites} noite(s) · 👥 ${ctx.totalPessoas} hóspede(s)</small></div><button type="button" class="mobile-resultado-editar" onclick="voltarParaBuscaMobileCompacto()">Editar</button></div>`;
+ box.innerHTML=resumo+`<div class="mobile-resultado-casas">${itens}</div>`;
+ const titulo=$('mobileTituloCasasCompacto');
+ const cards=$('mobileListaCasasCompacta');
+ if(titulo)titulo.style.display='none';
+ if(cards)cards.style.display='none';
+ setTimeout(()=>box.scrollIntoView({behavior:'smooth',block:'start'}),80);
+}
+
+function escolherCasaResultadoMobileCompacto(id){
+ if(!casas?.[id])return;
+ mobileCasaSelecionada=id;
+ $('mobileCasaSelecionadaTexto').textContent=casas[id]?.nome||id;
+ renderizarListaPropriedadesMobileCompacto();
+ const selecionado=mobileResultadosBusca.find(x=>x.id===id);
+ if(selecionado)renderizarResultadoBuscaMobileCompacto({a:mobileDataEntrada,b:mobileDataSaida,noites:obterNoitesBusca(mobileDataEntrada,mobileDataSaida),totalPessoas:mobileHospedesCompactos.adultos+mobileHospedesCompactos.criancas});
+}
+
+function voltarParaBuscaMobileCompacto(){
+ limparResultadoBuscaMobileCompacto();
+ document.getElementById('mobileCampoDatas')?.scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+function solicitarReservaMobileCompacto(id){
+ const r=mobileResultadosBusca.find(x=>x.id===id);
+ if(!r||!r.disponivel)return;
+ mobileCasaSelecionada=id;
+ mobileFluxoReservaAtivo=true;
+ try{
+  abrirModalReserva(id);
+  $('dataEntrada').value=mobileDataEntrada;
+  $('dataSaida').value=mobileDataSaida;
+  $('qtdAdultos').value=String(mobileHospedesCompactos.adultos);
+  $('qtdCriancas').value=String(mobileHospedesCompactos.criancas);
+  atualizarTotalPessoas();
+  verificarDisponibilidade();
+  const nomeMobileReserva=$('hospedeNome');
+  if(nomeMobileReserva){
+   nomeMobileReserva.scrollIntoView({behavior:'smooth',block:'center'});
+   setTimeout(()=>nomeMobileReserva.focus(),220);
+  }
+ }catch(e){
+  mobileFluxoReservaAtivo=false;
+  console.error('Abrir solicitação mobile:',e);
+ }
+}
+
+let timerRetornoTelaInicialReserva=null;
+
+function resetarBuscaPublicaAposReserva(){
+ mobileCasaSelecionada=null;
+ mobileDataEntrada='';
+ mobileDataSaida='';
+ mobileHospedesCompactos={adultos:1,criancas:0};
+ mobileCasaDetalhesAtual=null;
+ mobileFotoCasaAtual=0;
+ mobileResultadosBusca=[];
+ mobileFluxoReservaAtivo=false;
+
+ const casaTexto=$('mobileCasaSelecionadaTexto');
+ if(casaTexto)casaTexto.textContent='Todas as 4 casas';
+
+ const resultado=$('mobileResultadoBusca');
+ if(resultado){resultado.hidden=true;resultado.innerHTML='';}
+
+ const titulo=$('mobileTituloCasasCompacto');
+ const cards=$('mobileListaCasasCompacta');
+ if(titulo)titulo.style.display='';
+ if(cards)cards.style.display='';
+
+ const lista=$('mobileListaPropriedades');
+ const botaoCasa=$('mobileBuscaPropriedade');
+ if(lista)lista.hidden=true;
+ if(botaoCasa)botaoCasa.setAttribute('aria-expanded','false');
+
+ renderizarListaPropriedadesMobileCompacto();
+ atualizarResumoPublicoMobileCompacto();
+
+ window.scrollTo({top:0,behavior:'smooth'});
+ atualizarNavegacaoMobile('inicio');
+}
+
+function retornarTelaInicialAposReserva(){
+ if(timerRetornoTelaInicialReserva){
+  clearTimeout(timerRetornoTelaInicialReserva);
+  timerRetornoTelaInicialReserva=null;
+ }
+ const modal=$('modalSucessoReservaMobile');
+ if(modal){modal.classList.remove('aberto');modal.setAttribute('aria-hidden','true');}
+ try{
+  fecharModal();
+ }catch(e){}
+ resetarBuscaPublicaAposReserva();
+}
+
+function abrirSucessoReservaMobileCompacto(){
+ const modal=$('modalSucessoReservaMobile');
+ if(!modal)return;
+ modal.classList.add('aberto');
+ modal.setAttribute('aria-hidden','false');
+ if(timerRetornoTelaInicialReserva)clearTimeout(timerRetornoTelaInicialReserva);
+ timerRetornoTelaInicialReserva=setTimeout(()=>{
+  timerRetornoTelaInicialReserva=null;
+  retornarTelaInicialAposReserva();
+ },3500);
+}
+function fecharSucessoReservaMobileCompacto(){
+ retornarTelaInicialAposReserva();
+}
+
+function renderizarCasasMobileCompacto(){
+ const box=$('mobileListaCasasCompacta');
+ if(!box)return;
+ const arr=obterCasasPublicasMobile();
+ box.innerHTML=arr.map(([id,x])=>{
+  const foto=x.fotos?.[0]||'';
+  const classe=mobileCasaSelecionada===id?' esta-selecionada':'';
+  const capacidade=Number(x.capacidade||0);
+  return `<button type="button" class="mobile-casa-card-compacta${classe}" data-casa="${id}" onclick="abrirDetalhesCasaMobileCompacto('${id}')">
+   ${foto?`<img src="${escapeHtmlReserva(foto)}" alt="${escapeHtmlReserva(x.nome||'Casa')}">`:'<div class="mobile-casa-sem-foto">🏖️</div>'}
+   <div class="mobile-casa-card-nome">${escapeHtmlReserva(x.nome||id)}</div>
+   <div class="mobile-casa-card-info">Até ${capacidade} pessoas</div>
+  </button>`;
+ }).join('');
+ renderizarListaPropriedadesMobileCompacto();
+}
+
+function abrirDetalhesCasaMobileCompacto(id){
+ const x=casas?.[id];
+ if(!x)return;
+ mobileCasaDetalhesAtual=id;mobileFotoCasaAtual=0;mobileCasaSelecionada=id;
+ selecionarPropriedadeMobileCompacto(id);
+ const modal=$('modalCasaMobileCompacto');
+ $('mobileCasaDetalhesTitulo').textContent=x.nome||'Casa';
+ $('mobileCasaDetalhesSubtitulo').textContent=`Até ${Number(x.capacidade||0)} pessoas`;
+ renderizarDetalhesCasaMobileCompacto();
+ if(modal){modal.classList.add('aberto');modal.setAttribute('aria-hidden','false');}
+}
+
+function renderizarDetalhesCasaMobileCompacto(){
+ const x=casas?.[mobileCasaDetalhesAtual];
+ if(!x)return;
+ const fotos=Array.isArray(x.fotos)?x.fotos:[];
+ const gal=$('mobileCasaGaleriaDetalhes');
+ if(gal){
+  if(fotos.length){
+   const idx=((mobileFotoCasaAtual%fotos.length)+fotos.length)%fotos.length;
+   mobileFotoCasaAtual=idx;
+   gal.innerHTML=`<img src="${escapeHtmlReserva(fotos[idx])}" alt="${escapeHtmlReserva(x.nome||'Casa')}">`;
+  }else gal.innerHTML='<div class="mobile-casa-sem-foto-grande">🏖️</div>';
+ }
+ const cont=$('mobileCasaGaleriaContador');
+ if(cont)cont.textContent=fotos.length?`${mobileFotoCasaAtual+1} de ${fotos.length}`:'Sem fotos';
+ const car=$('mobileCasaCaracteristicasDetalhes');
+ if(car){
+  const itens=[...(x.caracteristicas||[])];
+  car.innerHTML=itens.length?itens.map(v=>`<div>${escapeHtmlReserva(v)}</div>`).join(''):'<div>Características não informadas.</div>';
+ }
+ const com=$('mobileCasaComodidadesDetalhes');
+ if(com){
+  const mapa=new Map((comodidadesCatalogo||[]).map(v=>[v.id,v]));
+  const inc=(x.comodidadesIncluidas||[]).map(id=>mapa.get(id)).filter(Boolean);
+  com.innerHTML=inc.length?`<h4>✅ Comodidades</h4><ul>${inc.map(v=>`<li>${escapeHtmlReserva(v.icone||'•')} ${escapeHtmlReserva(v.nome||'')}</li>`).join('')}</ul>`:'';
+ }
+}
+function mudarFotoCasaMobileCompacto(delta){
+ const x=casas?.[mobileCasaDetalhesAtual];
+ const fotos=Array.isArray(x?.fotos)?x.fotos:[];
+ if(fotos.length<2)return;
+ mobileFotoCasaAtual+=delta;
+ renderizarDetalhesCasaMobileCompacto();
+}
+function fecharDetalhesCasaMobileCompacto(){
+ const modal=$('modalCasaMobileCompacto');
+ if(modal){modal.classList.remove('aberto');modal.setAttribute('aria-hidden','true');}
+}
+
+function renderizarDetalhesPropriedadeReservaMobile(){
+ const box=$('detalhesPropriedadeReservaMobile');
+ const id=casaSelecionadaParaReserva;
+ const x=casas?.[id];
+ if(!box||!x)return;
+ const caracteristicas=Array.isArray(x.caracteristicas)?x.caracteristicas.filter(Boolean):[];
+ const mapa=new Map((comodidadesCatalogo||[]).map(v=>[v.id,v]));
+ const inclusas=(x.comodidadesIncluidas||[]).map(cid=>mapa.get(cid)).filter(Boolean);
+ const listaCaracteristicas=caracteristicas.length
+  ?`<ul>${caracteristicas.map(v=>`<li>${escapeHtmlReserva(v)}</li>`).join('')}</ul>`
+  :'<div>Características não informadas.</div>';
+ const listaComodidades=inclusas.length
+  ?`<ul>${inclusas.map(v=>`<li>${escapeHtmlReserva(v.icone||'•')} ${escapeHtmlReserva(v.nome||'')}</li>`).join('')}</ul>`
+  :'<div>Comodidades não informadas.</div>';
+ box.innerHTML=`
+  <h4>🏠 ${escapeHtmlReserva(x.nome||'Propriedade')}</h4>
+  <p class="mdp-desc">${escapeHtmlReserva(x.desc||'')}</p>
+  <div class="mdp-grid">
+   <div class="mdp-item">👥 <strong>Capacidade:</strong> até ${Number(x.capacidade||0)} pessoas</div>
+   <div class="mdp-item">🕑 <strong>Check-in:</strong> 14h</div>
+   <div class="mdp-item">🕚 <strong>Check-out:</strong> 11h</div>
+   <div class="mdp-item">🏖️ <strong>Localização:</strong> poucos passos da praia</div>
+  </div>
+  <div><strong>Características</strong>${listaCaracteristicas}</div>
+  <div style="margin-top:9px"><strong>Comodidades</strong>${listaComodidades}</div>
+ `;
+}
+
+function toggleDetalhesPropriedadeReservaMobile(){
+ const box=$('detalhesPropriedadeReservaMobile');
+ const btn=$('btnDetalhesPropriedadeReservaMobile');
+ if(!box||!btn)return;
+ const abrir=box.hidden;
+ if(abrir){
+  renderizarDetalhesPropriedadeReservaMobile();
+  box.hidden=false;
+  btn.textContent='🔽 Ocultar detalhes da propriedade';
+ }else{
+  box.hidden=true;
+  btn.textContent='🏠 Ver detalhes da propriedade';
+ }
+}
+
+function consultarDisponibilidadeCasaMobileCompacto(){
+ const id=mobileCasaDetalhesAtual||mobileCasaSelecionada;
+ if(!id)return;
+ fecharDetalhesCasaMobileCompacto();
+ try{
+  abrirBuscaDisponibilidade(id);
+  if(mobileDataEntrada)$('buscaDataEntrada').value=mobileDataEntrada;
+  if(mobileDataSaida)$('buscaDataSaida').value=mobileDataSaida;
+  $('buscaAdultos').value=String(mobileHospedesCompactos.adultos);
+  $('buscaCriancas').value=String(mobileHospedesCompactos.criancas);
+ }catch(e){console.error('Consulta mobile:',e);}
+}
+
+function reposicionarCameraPublicaMobile(){
+ const camera=document.querySelector('.camera-publica');
+ const hero=document.querySelector('.hero-praia');
+ const footer=document.querySelector('#rodapePublico');
+ if(!camera||!hero||!footer)return;
+ const mobile=window.matchMedia('(max-width: 800px)').matches;
+ if(mobile){
+  if(camera.parentElement!==footer)footer.appendChild(camera);
+ }else{
+  if(camera.parentElement!==hero)hero.insertBefore(camera,hero.firstElementChild);
+ }
+}
+
+function inicializarInterfaceMobileCompacta(){
+ reposicionarCameraPublicaMobile();
+ renderizarCasasMobileCompacto();
+ atualizarResumoPublicoMobileCompacto();
+ window.addEventListener('resize',reposicionarCameraPublicaMobile,{passive:true});
+}
+
 function hoje(){
  const d=new Date();
  d.setHours(0,0,0,0);
@@ -3814,6 +5266,7 @@ document.addEventListener('DOMContentLoaded',async()=>{
  }
 
  renderizarPaginaPublica();
+ inicializarInterfaceMobileCompacta();
  atualizarCabecalhoCliente(auth.currentUser);
 
  // Mantém a sessão administrativa controlada pelo Firebase Authentication.
@@ -4561,6 +6014,9 @@ function renderizarPaginaPublica(){
 
    })
    .join('');
+
+ renderizarCasasMobileCompacto();
+ atualizarResumoPublicoMobileCompacto();
 
 }
 
@@ -6118,6 +7574,12 @@ function abrirModalReserva(id){
  $('btnEnviarReserva')
   .disabled=false;
 
+ const painelDetalhesMobile=$('detalhesPropriedadeReservaMobile');
+ const botaoDetalhesMobile=$('btnDetalhesPropriedadeReservaMobile');
+ if(painelDetalhesMobile)painelDetalhesMobile.hidden=true;
+ if(botaoDetalhesMobile)botaoDetalhesMobile.textContent='🏠 Ver detalhes da propriedade';
+ renderizarDetalhesPropriedadeReservaMobile();
+
  ocultarSugestoesDisponibilidade();
 
  atualizarTotalPessoas();
@@ -6129,6 +7591,7 @@ function abrirModalReserva(id){
 
 function fecharModal(){
 
+ mobileFluxoReservaAtivo=false;
  $('modalReserva')
   .classList.remove('aberto');
 
@@ -7236,15 +8699,22 @@ async function enviarReserva(){
    criadoEm:firebase.firestore.FieldValue.serverTimestamp()
   });
 
+  const fluxoMobileConcluido=mobileFluxoReservaAtivo;
+  mobileFluxoReservaAtivo=false;
   fecharModal();
 
-  alert(
-   '✅ Solicitação enviada com sucesso!\n\n'+
-   'Aguarde a confirmação.'+
-   (emailEnviado
-    ?'\n\n📧 A notificação por e-mail foi enviada.'
-    :'\n\n⚠️ A reserva foi salva, mas a notificação por e-mail não pôde ser enviada.')
-  );
+  if(fluxoMobileConcluido){
+   abrirSucessoReservaMobileCompacto();
+  }else{
+   alert(
+    '✅ Solicitação enviada com sucesso!\n\n'+
+    'Aguarde a confirmação.'+
+    (emailEnviado
+     ?'\n\n📧 A notificação por e-mail foi enviada.'
+     :'\n\n⚠️ A reserva foi salva, mas a notificação por e-mail não pôde ser enviada.')
+   );
+   retornarTelaInicialAposReserva();
+  }
 
  }catch(e){
 
@@ -7431,6 +8901,8 @@ async function carregarDadosCasas(){
   }
 
   renderizarPaginaPublica();
+  renderizarCasasMobileCompacto();
+  reposicionarCameraPublicaMobile();
   renderizarCatalogoComodidades();
   aplicarBannerPrincipal();
   if($('bannerPrincipalUrl')){ $('bannerPrincipalUrl').value=bannerPrincipalUrl; $('imgurClientId').value=imgurClientId; atualizarPreviewBanner(); }
@@ -11628,13 +13100,6 @@ carregarClimaPublico();setInterval(carregarClimaPublico,30*60*1000);
 /* NAVEGAÇÃO MOBILE PÚBLICA ADICIONADA */
 function navegarPublicoMobile(acao){
 
-    const navMap = {
-        inicio: 'areaPublica',
-        disponibilidade: 'nossasCasas',
-        casas: 'nossasCasas',
-        contato: 'rodapePublico'
-    };
-
     if(acao === 'reservas'){
         try{
             if(typeof abrirAreaCliente === 'function'){
@@ -11648,23 +13113,49 @@ function navegarPublicoMobile(acao){
         return;
     }
 
-    const alvo = $(navMap[acao] || 'areaPublica');
-
-    if(alvo){
-        if(acao === 'inicio'){
-            window.scrollTo({
-                top:0,
-                behavior:'smooth'
-            });
-        }else{
-            alvo.scrollIntoView({
-                behavior:'smooth',
-                block:'start'
-            });
+    // No celular, os atalhos devem levar diretamente à interface compacta.
+    if(acao === 'disponibilidade'){
+        const campoDatas = $('mobileCampoDatas');
+        if(campoDatas){
+            campoDatas.scrollIntoView({behavior:'smooth',block:'center'});
+            atualizarNavegacaoMobile('disponibilidade');
+            return;
         }
+        const secaoMobile = $('mobilePublicoCompacto');
+        if(secaoMobile)secaoMobile.scrollIntoView({behavior:'smooth',block:'start'});
+        atualizarNavegacaoMobile('disponibilidade');
+        return;
     }
 
-    atualizarNavegacaoMobile(acao);
+    if(acao === 'casas'){
+        const alvoCasas = $('mobileTituloCasasCompacto') || $('mobileListaCasasCompacta');
+        if(alvoCasas){
+            alvoCasas.scrollIntoView({behavior:'smooth',block:'start'});
+            atualizarNavegacaoMobile('casas');
+            return;
+        }
+        const secaoMobile = $('mobilePublicoCompacto');
+        if(secaoMobile)secaoMobile.scrollIntoView({behavior:'smooth',block:'start'});
+        atualizarNavegacaoMobile('casas');
+        return;
+    }
+
+    if(acao === 'inicio'){
+        // Início deve sempre recarregar a página para limpar qualquer
+        // consulta/reserva anterior e devolver a interface ao estado inicial.
+        try{
+            const urlInicial = window.location.pathname + window.location.search;
+            window.location.replace(urlInicial);
+        }catch(e){
+            console.error('Erro ao recarregar a página inicial:',e);
+            window.location.reload();
+        }
+        return;
+    }
+
+    const alvo = $('rodapePublico');
+    if(alvo)alvo.scrollIntoView({behavior:'smooth',block:'start'});
+    atualizarNavegacaoMobile('contato');
 }
 
 function atualizarNavegacaoMobile(acao){
