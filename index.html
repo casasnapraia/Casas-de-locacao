@@ -4,6 +4,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Casas na Praia">
 
 <title>Casas na Praia - Disponibilidade e Reservas</title>
 
@@ -2835,6 +2837,29 @@ document.addEventListener('click',function(event){
  }
 }
 </style>
+<style id="instalacao-iphone-estilos">
+/* Orientação de instalação no iPhone — não altera o layout existente. */
+#modalInstalacaoIphone{
+ position:fixed;inset:0;z-index:100000;display:none;
+ align-items:flex-end;justify-content:center;
+ background:rgba(0,0,0,.58);padding:18px;
+}
+#modalInstalacaoIphone.aberto{display:flex;}
+#modalInstalacaoIphone .conteudo{
+ width:min(520px,100%);background:#fff;border-radius:20px 20px 14px 14px;
+ padding:20px;box-shadow:0 18px 50px rgba(0,0,0,.28);
+ color:#243746;max-height:85vh;overflow:auto;
+}
+#modalInstalacaoIphone h3{margin:0 0 8px;font-size:20px;color:#0a4b6e;}
+#modalInstalacaoIphone p{margin:8px 0;line-height:1.45;}
+#modalInstalacaoIphone ol{margin:12px 0 8px 22px;padding:0;}
+#modalInstalacaoIphone li{margin:9px 0;line-height:1.4;}
+#modalInstalacaoIphone .fechar{
+ display:block;width:100%;margin-top:14px;padding:12px;border:0;border-radius:10px;
+ background:#0a4b6e;color:#fff;font-size:15px;font-weight:700;
+}
+@media(min-width:801px){#modalInstalacaoIphone{align-items:center;}}
+</style>
 </head>
 
 <body>
@@ -2854,19 +2879,75 @@ if ("serviceWorker" in navigator) {
 </script>
 
 <!-- BOTAO-INSTALAR-APP -->
-<button id="btnInstalarApp" type="button" style="display:none;position:fixed;bottom:20px;right:20px;z-index:99999;padding:12px 18px;border:0;border-radius:25px;background:#0b3954;color:#fff;font-size:15px;font-weight:600;box-shadow:0 4px 12px rgba(0,0,0,.25);cursor:pointer;">
+<button id="btnInstalarApp" type="button" aria-label="Instalar aplicativo" style="display:none;position:fixed;bottom:20px;right:20px;z-index:99999;padding:12px 18px;border:0;border-radius:25px;background:#0b3954;color:#fff;font-size:15px;font-weight:600;box-shadow:0 4px 12px rgba(0,0,0,.25);cursor:pointer;">
     📱 Instalar aplicativo
 </button>
 <!-- FIM-BOTAO-INSTALAR-APP -->
+
+<!-- ORIENTACAO-INSTALAR-IPHONE -->
+<div id="modalInstalacaoIphone" aria-hidden="true" onclick="if(event.target===this)fecharInstalacaoIphone()">
+ <div class="conteudo" role="dialog" aria-modal="true" aria-labelledby="tituloInstalacaoIphone">
+  <h3 id="tituloInstalacaoIphone">📱 Instalar Casas na Praia no iPhone</h3>
+  <p>Para instalar no iPhone, abra este site no <strong>Safari</strong> e siga os passos abaixo:</p>
+  <ol>
+   <li>Toque no botão <strong>Compartilhar</strong> do Safari.</li>
+   <li>Toque em <strong>Adicionar à Tela de Início</strong>.</li>
+   <li>Deixe ativada a opção <strong>“Abrir como App da Web”</strong>.</li>
+   <li>Toque em <strong>Adicionar</strong>.</li>
+  </ol>
+  <p>Depois disso, o ícone <strong>Casas na Praia</strong> ficará na tela inicial e poderá ser aberto como aplicativo.</p>
+  <button type="button" class="fechar" onclick="fecharInstalacaoIphone()">Entendi</button>
+ </div>
+</div>
+<!-- FIM-ORIENTACAO-INSTALAR-IPHONE -->
 
 <!-- SCRIPT-INSTALAR-APP -->
 <script>
 (function () {
     let deferredPrompt = null;
     const btnInstalar = document.getElementById("btnInstalarApp");
+    const modalIphone = document.getElementById("modalInstalacaoIphone");
 
     if (!btnInstalar) return;
 
+    function ehIphoneOuIpad() {
+        const ua = navigator.userAgent || "";
+        const plataforma = navigator.platform || "";
+        return /iPhone|iPad|iPod/i.test(ua) ||
+               (plataforma === "MacIntel" && navigator.maxTouchPoints > 1);
+    }
+
+    function estaComoAppWeb() {
+        return !!(navigator.standalone ||
+            (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) ||
+            (window.matchMedia && window.matchMedia("(display-mode: fullscreen)").matches));
+    }
+
+    window.abrirInstalacaoIphone = function () {
+        if (!modalIphone) return;
+        modalIphone.classList.add("aberto");
+        modalIphone.setAttribute("aria-hidden", "false");
+    };
+
+    window.fecharInstalacaoIphone = function () {
+        if (!modalIphone) return;
+        modalIphone.classList.remove("aberto");
+        modalIphone.setAttribute("aria-hidden", "true");
+    };
+
+    // iPhone/iPad: o Safari não usa beforeinstallprompt.
+    // Mostramos a mesma opção, mas ela abre instruções específicas do Safari.
+    if (ehIphoneOuIpad()) {
+        if (!estaComoAppWeb()) {
+            btnInstalar.style.display = "block";
+            btnInstalar.addEventListener("click", window.abrirInstalacaoIphone);
+        } else {
+            btnInstalar.style.display = "none";
+        }
+    }
+
+    // Android/Chrome e outros navegadores que suportarem o prompt continuam com
+    // o mecanismo original, sem alteração no fluxo já existente.
     window.addEventListener("beforeinstallprompt", function (e) {
         e.preventDefault();
         deferredPrompt = e;
@@ -2874,7 +2955,10 @@ if ("serviceWorker" in navigator) {
     });
 
     btnInstalar.addEventListener("click", async function () {
-        if (!deferredPrompt) return;
+        if (!deferredPrompt) {
+            if (ehIphoneOuIpad()) return;
+            return;
+        }
 
         deferredPrompt.prompt();
 
