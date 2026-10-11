@@ -2304,6 +2304,12 @@ document.addEventListener('click',function(event){
 
 </style>
 <link rel="manifest" href="/manifest.json">
+<!-- ÍCONES PERSONALIZADOS CASAS NA PRAIA — V22 -->
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<meta name="theme-color" content="#00B9C8">
 
 <style id="guia-casas-na-praia-link">
 .botao-guia-regiao{
@@ -2910,6 +2916,101 @@ document.addEventListener('click',function(event){
 }
 @media(min-width:801px){#modalInstalacaoIphone{align-items:center;}}
 </style>
+
+<!-- AJUSTE V23: tabela administrativa de reservas em cartões somente no celular.
+     Em telas maiores não altera as regras/layout existentes. -->
+<style id="ajuste-reservas-administrativo-mobile-v23">
+@media screen and (max-width: 700px) {
+  .lista-reservas-tabela {
+    width: 100%; overflow: visible; border: 0; border-radius: 0; background: transparent;
+  }
+  .tabela-reservas {
+    display: block; width: 100%; min-width: 0; table-layout: auto;
+    border-collapse: separate; border-spacing: 0; font-size: 13px;
+  }
+  .tabela-reservas thead { display: none; }
+  .tabela-reservas tbody { display: block; width: 100%; }
+  .tabela-reservas tbody tr {
+    position: relative; display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    width: 100%; margin: 0 0 13px; overflow: hidden;
+    border: 1px solid #d9e3e9; border-radius: 12px; background: #fff;
+    box-shadow: 0 2px 8px rgba(10, 48, 67, .07);
+  }
+  .tabela-reservas tbody td {
+    display: block; width: auto !important; min-width: 0;
+    padding: 9px 10px !important; border-bottom: 1px solid #edf1f3;
+    text-align: left !important; vertical-align: top; white-space: normal !important;
+    overflow-wrap: anywhere; word-break: normal; font-size: 12px; line-height: 1.4;
+  }
+  .tabela-reservas tbody td:nth-child(1) {
+    position: absolute; top: 8px; left: 7px; z-index: 1;
+    display: flex; align-items: center; justify-content: center;
+    width: 28px !important; min-height: 38px; padding: 4px !important;
+    border: 0; background: transparent;
+  }
+  .tabela-reservas tbody td:nth-child(1) .checkbox-reserva {
+    width: 18px; height: 18px; margin: 0;
+  }
+  .tabela-reservas tbody td:nth-child(2) {
+    grid-column: 1 / -1; min-height: 46px;
+    padding: 10px 10px 10px 45px !important;
+    background: #f4f8fa; border-bottom: 1px solid #dfe8ed;
+  }
+  .tabela-reservas tbody td:nth-child(2)::before {
+    content: "Nº Reserva"; display: inline-block; margin-right: 8px;
+    color: #627582; font-size: 11px; font-weight: 700; vertical-align: middle;
+  }
+  .tabela-reservas tbody td:nth-child(2) .numero-reserva-sequencial {
+    min-width: 0; max-width: 100%; padding: 4px 7px; font-size: 11px; vertical-align: middle;
+  }
+  .tabela-reservas tbody td:nth-child(3) { grid-column: 1 / -1; }
+  .tabela-reservas tbody td:nth-child(4) { grid-column: 1; }
+  .tabela-reservas tbody td:nth-child(5) { grid-column: 2; }
+  .tabela-reservas tbody td:nth-child(6) { grid-column: 1 / -1; }
+  .tabela-reservas tbody td:nth-child(7) { grid-column: 1 / -1; }
+  .tabela-reservas tbody td:nth-child(8) { grid-column: 1 / -1; }
+  .tabela-reservas tbody td:nth-child(9) { grid-column: 1; }
+  .tabela-reservas tbody td:nth-child(10) { grid-column: 2; }
+  .tabela-reservas tbody td:nth-child(11) { grid-column: 1; }
+  .tabela-reservas tbody td:nth-child(12) { grid-column: 2; }
+  .tabela-reservas tbody td:nth-child(13) { grid-column: 1 / -1; }
+  .tabela-reservas tbody td:nth-child(n+3)::before {
+    display: block; margin: 0 0 4px; color: #637985;
+    font-size: 10.5px; line-height: 1.25; font-weight: 700; letter-spacing: .1px;
+  }
+  .tabela-reservas tbody td:nth-child(3)::before { content: "📅 Período"; }
+  .tabela-reservas tbody td:nth-child(4)::before { content: "🏠 Casa"; }
+  .tabela-reservas tbody td:nth-child(5)::before { content: "🌐 Origem"; }
+  .tabela-reservas tbody td:nth-child(6)::before { content: "👤 Hóspede"; }
+  .tabela-reservas tbody td:nth-child(7)::before { content: "👥 Pessoas"; }
+  .tabela-reservas tbody td:nth-child(8)::before { content: "💰 Status do pagamento"; }
+  .tabela-reservas tbody td:nth-child(9)::before { content: "💵 Total"; }
+  .tabela-reservas tbody td:nth-child(10)::before { content: "✅ Valor recebido"; }
+  .tabela-reservas tbody td:nth-child(11)::before { content: "📌 Valor a receber"; }
+  .tabela-reservas tbody td:nth-child(12)::before { content: "📍 Situação"; }
+  .tabela-reservas tbody td:nth-child(13)::before { content: "⚙️ Ações"; }
+  .tabela-reservas .reserva-datas strong,
+  .tabela-reservas .reserva-hospede strong,
+  .tabela-reservas .reserva-datas small,
+  .tabela-reservas .reserva-hospede small { display: block; overflow-wrap: anywhere; }
+  .tabela-reservas .status-badge,
+  .tabela-reservas .badge-situacao {
+    display: inline-block; max-width: 100%; white-space: normal;
+    text-align: center; overflow-wrap: anywhere;
+  }
+  .tabela-reservas tbody td:nth-child(9) strong,
+  .tabela-reservas tbody td:nth-child(10) strong,
+  .tabela-reservas tbody td:nth-child(11) strong { overflow-wrap: normal; word-break: normal; }
+  .tabela-reservas .reserva-acoes { display: flex; gap: 7px; flex-wrap: wrap; white-space: normal; }
+  .tabela-reservas .reserva-acoes button {
+    flex: 1 1 125px; width: auto; max-width: 100%; min-height: 38px;
+    margin: 0; padding: 8px 10px; font-size: 12px; line-height: 1.25;
+    white-space: normal; overflow-wrap: anywhere;
+  }
+}
+</style>
+
 </head>
 
 <body>
