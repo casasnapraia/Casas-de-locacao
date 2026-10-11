@@ -819,6 +819,13 @@ textarea{
 .calendario-tooltip-reserva .tt-titulo{font-weight:800;font-size:14px;margin-bottom:6px}
 .calendario-tooltip-reserva .tt-linha{margin:2px 0;color:#eef7fb}
 .calendario-tooltip-reserva .tt-status{display:inline-block;margin-top:6px;padding:3px 7px;border-radius:999px;background:rgba(255,255,255,.14);font-size:11px;font-weight:700}
+.calendario-tooltip-reserva .tt-pagamentos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-top:9px;padding-top:8px;border-top:1px solid rgba(255,255,255,.18)}
+.calendario-tooltip-reserva .tt-pagamento-item{min-width:0;padding:6px 8px;border-radius:7px;background:rgba(255,255,255,.09)}
+.calendario-tooltip-reserva .tt-pagamento-item.total{grid-column:1/-1}
+.calendario-tooltip-reserva .tt-pagamento-item small{display:block;color:#bed3de;font-size:10px;line-height:1.3;margin-bottom:2px}
+.calendario-tooltip-reserva .tt-pagamento-item strong{display:block;color:#fff;font-size:13px;line-height:1.35;overflow-wrap:anywhere}
+.calendario-tooltip-reserva .tt-pagamento-item.recebido strong{color:#86efac}
+.calendario-tooltip-reserva .tt-pagamento-item.saldo strong{color:#fde68a}
 .calendario-tooltip-reserva .tt-fechar{float:right;border:0;background:transparent;color:#fff;font-size:18px;line-height:1;cursor:pointer;padding:0 0 0 8px}
 
 
@@ -1007,41 +1014,84 @@ textarea{
  color:var(--cinza);
  font-weight:400;
 }
+/* Listagem de reservas compacta: mantém todas as colunas visíveis sem rolagem horizontal. */
 .lista-reservas-tabela{
  width:100%;
- overflow-x:auto;
+ overflow:visible;
  border:1px solid #e5e5e5;
  border-radius:10px;
  background:#fff;
 }
 .tabela-reservas{
  width:100%;
+ min-width:0;
+ table-layout:fixed;
  border-collapse:collapse;
- min-width:930px;
- font-size:13px;
+ font-size:11.5px;
 }
 .tabela-reservas th,
 .tabela-reservas td{
- padding:10px 9px;
+ padding:6px 4px;
  border-bottom:1px solid #edf0f1;
  text-align:left;
  vertical-align:middle;
+ overflow-wrap:anywhere;
+ word-break:normal;
 }
 .tabela-reservas th{
  background:var(--marinho);
  color:#fff;
- white-space:nowrap;
+ white-space:normal;
+ line-height:1.2;
+ font-size:11px;
 }
+.tabela-reservas th:nth-child(1),.tabela-reservas td:nth-child(1){width:2.5%;text-align:center}
+.tabela-reservas th:nth-child(2),.tabela-reservas td:nth-child(2){width:5.5%}
+.tabela-reservas th:nth-child(3),.tabela-reservas td:nth-child(3){width:10%}
+.tabela-reservas th:nth-child(4),.tabela-reservas td:nth-child(4){width:5.5%}
+.tabela-reservas th:nth-child(5),.tabela-reservas td:nth-child(5){width:6%}
+.tabela-reservas th:nth-child(6),.tabela-reservas td:nth-child(6){width:11.5%}
+.tabela-reservas th:nth-child(7),.tabela-reservas td:nth-child(7){width:7%}
+.tabela-reservas th:nth-child(8),.tabela-reservas td:nth-child(8){width:9.5%}
+.tabela-reservas th:nth-child(9),.tabela-reservas td:nth-child(9){width:6.5%}
+.tabela-reservas th:nth-child(10),.tabela-reservas td:nth-child(10){width:7.5%}
+.tabela-reservas th:nth-child(11),.tabela-reservas td:nth-child(11){width:7.5%}
+.tabela-reservas th:nth-child(12),.tabela-reservas td:nth-child(12){width:6%}
+.tabela-reservas th:nth-child(13),.tabela-reservas td:nth-child(13){width:15%}
+.tabela-reservas th.coluna-selecao,.tabela-reservas td.coluna-selecao{width:2.5%;min-width:0;padding-left:2px;padding-right:2px}
 .tabela-reservas tr:hover td{background:#f8fbfc}
 .tabela-reservas .reserva-hospede strong{
  display:block;
  color:var(--marinho);
  margin-bottom:2px;
+ overflow-wrap:anywhere;
 }
 .tabela-reservas .reserva-hospede small,
 .tabela-reservas .reserva-datas small{
+ display:block;
  color:var(--cinza);
+ overflow-wrap:anywhere;
 }
+.tabela-reservas .reserva-datas strong{display:block;white-space:normal;overflow-wrap:anywhere}
+.tabela-reservas .numero-reserva-sequencial{min-width:0;padding:4px 5px;font-size:10.5px}
+.tabela-reservas .status-badge,.tabela-reservas .badge-situacao{white-space:normal;text-align:center;padding:3px 5px;font-size:10px}
+.tabela-reservas .reserva-acoes{display:flex;gap:4px;flex-wrap:wrap;white-space:normal}
+.tabela-reservas .reserva-acoes button{padding:5px 6px;font-size:10px;line-height:1.2;white-space:normal;max-width:100%;margin:0}
+@media(max-width:1200px){
+ .tabela-reservas{font-size:10.5px}
+ .tabela-reservas th,.tabela-reservas td{padding:5px 3px}
+ .tabela-reservas .reserva-acoes button{font-size:9.5px;padding:4px 5px}
+}
+.numero-reserva-sequencial{
+ display:inline-flex;align-items:center;justify-content:center;min-width:54px;
+ padding:5px 8px;border:1px solid transparent;border-radius:8px;
+ font-weight:800;letter-spacing:.2px;white-space:nowrap;
+}
+.numero-reserva-sequencial.reserva-codigo-am{background:#fff0a8;color:#674d00;border-color:#e1c64c}
+.numero-reserva-sequencial.reserva-codigo-be{background:#f3e2c1;color:#6b4a20;border-color:#d6bd91}
+.numero-reserva-sequencial.reserva-codigo-ma{background:#795548;color:#fff;border-color:#5d4037}
+.numero-reserva-sequencial.reserva-codigo-br{background:#f7f8fa;color:#39424e;border-color:#cbd2d9}
+.numero-reserva-sequencial.reserva-codigo-nc{background:#dceeff;color:#174b7a;border-color:#a6c9eb}
 .reserva-datas strong{display:block}
 .badge-situacao{
  display:inline-block;
@@ -4675,6 +4725,10 @@ let dataAtual=new Date();
 
 let valoresDiarias={};
 let reservasConfirmadas=[];
+// Numeração sequencial calculada em memória, sem alterar reservas já salvas.
+let mapaNumeracaoReservas=new Map(), numeracaoReservasCarregada=false, numeracaoReservasTentada=false, numeracaoReservasFalha=false;
+let registrosNumeracaoReservas=[];
+let reservasAguardandoNumeracao=new Map();
 let reservasPagamentoSelecionadas=new Set();
 let reservasPagamentoFiltradas=[],paginaReservasAtual=1;let RESERVAS_POR_PAGINA=5;let reservasCursorAtual=null;let reservasCursorFuturas=null;let reservasPaginaStack=[];let reservasCarregamentoEmAndamento=false;let reservasUltimaPagina=false;let reservasConsultaCompleta=false;let paginaRelatorioAtual=1;const RELATORIO_POR_PAGINA=15;
 let controlePagamentosAtivo=false;
@@ -5776,8 +5830,12 @@ function iniciarMonitoramentoReservas(){
       reservasConfirmadas.some(
        x=>x.id===id
       )
-     )return;
+     ){
+      registrarReservaParaNumeracao({id,...r});
+      return;
+     }
 
+     registrarReservaParaNumeracao({id,...r});
      mostrarNotificacaoNovaReserva(
       r,
       id
@@ -6428,20 +6486,26 @@ async function removerEstadiaMinimaDiasSelecionadosCalendario(){
  }
 }
 
+function atualizarContaDestinoNovaReserva(){
+ const casa=$('novaCasaReserva')?.value||'';
+ const conta=$('novaContaDestino');
+ if(!conta)return;
+ const destinoPorCasa={
+  nossa:'Caixa Nossa Casa',
+  amarela:'Caixa Casa Amarela',
+  bege:'Caixa Casa Bege',
+  marrom:'Caixa Casa Marrom',
+  branca:'Caixa Casa Branca'
+ };
+ const destino=destinoPorCasa[casa]||'Caixa Geral';
+ const opcao=[...conta.options].find(o=>String(o.value||o.textContent).trim()===destino);
+ if(opcao)conta.value=opcao.value||opcao.textContent.trim();
+}
+
 function atualizarAvisoEstadiaMinimaNovaReserva(){
- const c=$('novaCasaReserva')?.value;
- const a=$('novaEntrada')?.value||'';
  const el=$('infoEstadiaMinimaNovaReserva');
  if(!el)return;
- const min=obterEstadiaMinimaParaData(c,a);
- const especifica=a && temRegraEstadiaMinimaPorData(c,a);
- el.textContent=min===1
-  ?(especifica
-    ?`Estadia mínima para ${dataBr(a)}: 1 diária. (Regra específica desta data)`
-    :'Estadia mínima: 1 diária (regra padrão). Nos registros já existentes, nada é alterado.')
-  :(especifica
-    ?`Estadia mínima para ${dataBr(a)}: ${min} noites. (Regra específica desta data)`
-    :`Estadia mínima padrão desta casa: ${min} noites. Para uma data com regra específica, vale o mínimo configurado nela.`);
+ el.textContent='ℹ️ Nesta janela administrativa, o mínimo de diárias configurado no calendário não é aplicado. Bloqueios de período continuam sendo respeitados.';
 }
 
 function atualizarControlesEstadiaReserva(){
@@ -6562,7 +6626,14 @@ function mostrarTooltipReservaCalendario(event,reservaId,foco=false){
  const entrada=escapeHtmlReserva(r.entrada?dataBr(r.entrada):'—');
  const saida=escapeHtmlReserva(r.saida?dataBr(r.saida):'—');
  const status=escapeHtmlReserva(statusReservaCalendarioTexto(r));
- el.innerHTML=`<button class="tt-fechar" onclick="fecharTooltipReservaCalendario(event)" aria-label="Fechar">×</button><div class="tt-titulo">👤 ${nome}</div><div class="tt-linha">📱 ${tel}</div><div class="tt-linha">📅 ${entrada} → ${saida}</div><span class="tt-status">💳 ${status}</span>`;
+ // Exibição somente leitura: os valores vêm da reserva, sem gravar alterações no Firestore.
+ const valorTotal=Math.max(0,Number(r.valorTotal||0));
+ const valorPago=Math.max(0,Number(r.valorPago||0));
+ const valorReceber=Math.max(0,valorTotal-valorPago);
+ const totalFmt=escapeHtmlReserva(moeda(valorTotal));
+ const pagoFmt=escapeHtmlReserva(moeda(valorPago));
+ const receberFmt=escapeHtmlReserva(moeda(valorReceber));
+ el.innerHTML=`<button class="tt-fechar" onclick="fecharTooltipReservaCalendario(event)" aria-label="Fechar">×</button><div class="tt-titulo">👤 ${nome}</div><div class="tt-linha">📱 ${tel}</div><div class="tt-linha">📅 ${entrada} → ${saida}</div><span class="tt-status">💳 ${status}</span><div class="tt-pagamentos"><div class="tt-pagamento-item total"><small>Valor total da reserva</small><strong>${totalFmt}</strong></div><div class="tt-pagamento-item recebido"><small>Valor pago</small><strong>${pagoFmt}</strong></div><div class="tt-pagamento-item saldo"><small>Valor a receber</small><strong>${receberFmt}</strong></div></div>`;
  el.classList.add('aberto');
  el.dataset.fixado=foco?'1':'0';
  el.dataset.reservaId=reservaId;
@@ -8705,8 +8776,9 @@ async function enviarReserva(){
   },{merge:true});
   }
 
+  const codigoReserva=await obterProximoCodigoReserva(c);
   const reservaRef=await db.collection('reservas').add({
-
+   ...(codigoReserva?{codigoReserva}:{}),
    casa:c,
    ...(usuarioCliente?{
     clienteUid:clienteUid,
@@ -8750,6 +8822,8 @@ async function enviarReserva(){
      .serverTimestamp()
 
   });
+
+  registrarReservaParaNumeracao({id:reservaRef.id,casa:c,codigoReserva:codigoReserva||'',nome,entrada:a,saida:b,criadoEm:null});
 
   const emailEnviado=await enviarNotificacaoEmailReserva({
    nome,
@@ -9374,9 +9448,157 @@ function reservaProxima(r){
 }
 
 function timestampCriacaoReserva(r){
- if(r.criadoEm?.seconds)return Number(r.criadoEm.seconds);
+ if(r.criadoEm?.seconds)return Number(r.criadoEm.seconds)*1000+Number(r.criadoEm.nanoseconds||0)/1000000;
  if(r.criadoEm?.toMillis)return Number(r.criadoEm.toMillis());
+ if(r.criadoEm instanceof Date)return r.criadoEm.getTime();
+ if(typeof r.criadoEm==='number')return r.criadoEm>1000000000000?r.criadoEm:r.criadoEm*1000;
+ if(typeof r.criadoEm==='string'){
+  const t=Date.parse(r.criadoEm);
+  if(Number.isFinite(t))return t;
+ }
  return 0;
+}
+
+function chaveDataEntradaReserva(r){
+ const valor=String(r?.entrada??'').trim();
+ if(/^\d{4}-\d{2}-\d{2}/.test(valor))return valor.slice(0,10);
+ const compacto=valor.match(/^(\d{4})(\d{2})(\d{2})/);
+ if(compacto)return `${compacto[1]}-${compacto[2]}-${compacto[3]}`;
+ const instante=Date.parse(valor);
+ if(Number.isFinite(instante))return new Date(instante).toISOString().slice(0,10);
+ return '';
+}
+
+function compararReservasPorAntiguidade(a,b){
+ // A sequência histórica é definida pela data de entrada, não pela data em que
+ // o registro foi criado/importado no sistema.
+ const ea=chaveDataEntradaReserva(a),eb=chaveDataEntradaReserva(b);
+ if(ea&&eb&&ea!==eb)return ea.localeCompare(eb);
+ if(ea&&!eb)return -1;
+ if(!ea&&eb)return 1;
+ const ta=timestampCriacaoReserva(a),tb=timestampCriacaoReserva(b);
+ if(ta>0&&tb>0&&ta!==tb)return ta-tb;
+ if(ta>0&&tb<=0)return -1;
+ if(ta<=0&&tb>0)return 1;
+ return String(a.id||'').localeCompare(String(b.id||''));
+}
+
+function obterSiglaPropriedadeReserva(casa){
+ const bruto=String(casa??'').trim().toLowerCase();
+ const chave=bruto.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'');
+ if(chave==='amarela'||chave.includes('casaamarela')||chave==='am')return 'AM';
+ if(chave==='bege'||chave.includes('casabege')||chave==='be')return 'BE';
+ if(chave==='marrom'||chave.includes('casamarrom')||chave==='ma')return 'MA';
+ if(chave==='branca'||chave.includes('casabranca')||chave==='br')return 'BR';
+ if(chave==='nossa'||chave.includes('nossacasa')||chave==='nc')return 'NC';
+ return '';
+}
+
+function numeroDoCodigoReserva(codigo,sigla){
+ const m=String(codigo||'').trim().match(new RegExp('^'+String(sigla||'').toUpperCase()+'-(\\d+)$','i'));
+ return m?Number(m[1]):0;
+}
+
+function obterClasseCodigoReserva(codigo){
+ const sigla=String(codigo||'').split('-')[0].toUpperCase();
+ const classes={AM:'reserva-codigo-am',BE:'reserva-codigo-be',MA:'reserva-codigo-ma',BR:'reserva-codigo-br',NC:'reserva-codigo-nc'};
+ return classes[sigla]||'';
+}
+
+function montarMapaNumeracaoReservas(registros){
+ // A numeração de exibição é sempre calculada pela data de entrada, dentro de cada
+ // propriedade. Nenhum documento histórico é atualizado ou regravado.
+ const porId=new Map();
+ for(const r of (registros||[])){
+  if(!r||!r.id)continue;
+  const id=String(r.id);
+  porId.set(id,{...(porId.get(id)||{}),...r,id});
+ }
+ for(const [id,r] of reservasAguardandoNumeracao.entries()){
+  porId.set(String(id),{...(porId.get(String(id))||{}),...r,id:String(id)});
+ }
+ const todos=[...porId.values()].filter(r=>r&&r.id).sort(compararReservasPorAntiguidade);
+ registrosNumeracaoReservas=todos.map(r=>({...r}));
+ const grupos={AM:[],BE:[],MA:[],BR:[],NC:[]};
+ mapaNumeracaoReservas=new Map();
+ for(const r of todos){
+  const sigla=obterSiglaPropriedadeReserva(r.casa);
+  if(sigla&&grupos[sigla])grupos[sigla].push(r);
+ }
+ for(const [sigla,lista] of Object.entries(grupos)){
+  // Para o histórico, o número exibido deriva apenas da ordem cronológica das entradas.
+  // Códigos antigos eventualmente gravados não alteram essa ordem nem os documentos.
+  lista.sort(compararReservasPorAntiguidade);
+  lista.forEach((r,indice)=>mapaNumeracaoReservas.set(String(r.id),`${sigla}-${indice+1}`));
+ }
+ numeracaoReservasCarregada=true;
+ numeracaoReservasFalha=false;
+}
+
+function maiorCodigoReservaDaPropriedade(sigla){
+ let maior=0;
+ for(const codigo of mapaNumeracaoReservas.values()){
+  const n=numeroDoCodigoReserva(codigo,sigla);
+  if(n>maior)maior=n;
+ }
+ return maior;
+}
+
+async function obterProximoCodigoReserva(casa){
+ const sigla=obterSiglaPropriedadeReserva(casa);
+ if(!sigla)return null;
+ try{
+  const snap=await db.collection('reservas').get();
+  const todas=[];
+  snap.forEach(d=>todas.push({id:d.id,...d.data()}));
+  montarMapaNumeracaoReservas(todas);
+ }catch(e){
+  console.warn('Não foi possível consultar todas as reservas para gerar o código da propriedade:',e);
+  if(!numeracaoReservasCarregada)return null;
+ }
+ return `${sigla}-${maiorCodigoReservaDaPropriedade(sigla)+1}`;
+}
+
+function iniciarCarregamentoNumeracaoReservas(){
+ if(numeracaoReservasTentada)return;
+ numeracaoReservasTentada=true;
+ if(typeof db==='undefined'||!db||typeof db.collection!=='function'){
+  numeracaoReservasFalha=true;
+  return;
+ }
+ db.collection('reservas').get().then(snap=>{
+  const todas=[];
+  snap.forEach(d=>todas.push({id:d.id,...d.data()}));
+  montarMapaNumeracaoReservas(todas);
+  atualizarListaReservas();
+ }).catch(e=>{
+  numeracaoReservasFalha=true;
+  console.error('Não foi possível calcular a numeração das reservas:',e);
+  atualizarListaReservas();
+ });
+}
+
+function registrarReservaParaNumeracao(reserva){
+ const id=String(reserva?.id||'');
+ if(!id)return;
+ const registro={...(reservasAguardandoNumeracao.get(id)||{}),...reserva,id};
+ reservasAguardandoNumeracao.set(id,registro);
+ if(numeracaoReservasCarregada){
+  // Atualiza a numeração em memória para refletir a posição cronológica do novo registro.
+  const base=registrosNumeracaoReservas.filter(r=>String(r.id)!==id);
+  montarMapaNumeracaoReservas([...base,registro]);
+ }else{
+  const sigla=obterSiglaPropriedadeReserva(registro.casa);
+  const codigo=String(registro.codigoReserva||'').trim().toUpperCase();
+  if(sigla&&numeroDoCodigoReserva(codigo,sigla)>0)mapaNumeracaoReservas.set(id,codigo);
+ }
+}
+
+function obterCodigoReservaExibicao(id){
+ const codigo=mapaNumeracaoReservas.get(String(id||''));
+ if(typeof codigo==='string'&&/^(AM|BE|MA|BR|NC)-\d+$/.test(codigo))return codigo;
+ if(numeracaoReservasFalha)return '—';
+ return '…';
 }
 
 function hospedeCorrespondeReserva(r,termo,selecionadoId=''){
@@ -9474,6 +9696,8 @@ function atualizarListaReservas(){
  const c=$('listaReservas');
  if(!c)return;
 
+ if(!numeracaoReservasTentada)iniciarCarregamentoNumeracaoReservas();
+
  atualizarIndicadoresReservas();
 
  const busca=$('filtroHospedeReservas')?.value||'';
@@ -9569,6 +9793,7 @@ function atualizarListaReservas(){
     <thead>
      <tr>
       <th class="coluna-selecao"><input class="checkbox-reserva" type="checkbox" title="Selecionar todas as reservas exibidas" onclick="toggleTodasReservasExibidas(this)"></th>
+      <th>🔢 Nº Reserva</th>
       <th>📅 Período</th>
       <th>🏠 Casa</th>
       <th>🌐 Origem</th>
@@ -9601,6 +9826,7 @@ function atualizarListaReservas(){
       return `
        <tr>
         <td class="coluna-selecao"><input class="checkbox-reserva" type="checkbox" data-reserva-pagamento-id="${escapeHtmlReserva(r.id)}" ${reservasPagamentoSelecionadas.has(r.id)?'checked':''} onchange="alternarSelecaoReservaPagamento('${r.id}',this.checked)"></td>
+        <td style="text-align:center;white-space:nowrap"><strong class="numero-reserva-sequencial ${obterClasseCodigoReserva(obterCodigoReservaExibicao(r.id))}">${escapeHtmlReserva(obterCodigoReservaExibicao(r.id))}</strong></td>
         <td class="reserva-datas">
          <strong>${dataBr(r.entrada)} → ${dataBr(r.saida)}</strong>
          <small>${Number(r.dias||0)} diária(s)</small>
@@ -10443,8 +10669,9 @@ function fecharSugestoesHospedeEditReserva(){
 
 function abrirNovaReservaAdmin(){
  const c=Object.entries(casas).map(([id,x])=>`<option value="${id}">${x.nome}${x.interna?' — interno':''}</option>`).join('');
- $('conteudoEditar').innerHTML=`<input type="hidden" id="novaReserva"><div class="grupo-input"><label>Casa</label><select id="novaCasaReserva" onchange="atualizarAvisoEstadiaMinimaNovaReserva()">${c}</select><small id="infoEstadiaMinimaNovaReserva" style="display:block;color:var(--cinza);margin-top:5px"></small></div><div class="grupo-input autocomplete-hospede"><label>Hóspede</label><small style="display:block;color:var(--cinza);margin:-2px 0 6px">Digite para filtrar ou clique no campo para ver todos os hóspedes cadastrados.</small><input id="novoHospedeId" type="hidden"><input id="novoNomeReserva" autocomplete="off" oninput="buscarHospedesReserva(false)" onfocus="buscarHospedesReserva(true)" onblur="setTimeout(fecharSugestoesHospedeReserva,250)"><div id="sugestoesHospedeReserva" class="sugestoes-hospede-reserva" style="display:none"></div></div><div class="grupo-input"><label>Telefone</label><input id="novoTelefoneReserva" type="tel"></div><div class="grupo-input"><label>Origem</label><select id="novaOrigemReserva"><option>Reserva direta</option><option>Airbnb</option><option>Booking.com</option><option>WhatsApp</option><option>Telefone</option><option>Outro</option></select></div><div class="linha-form"><div class="grupo-input"><label>Entrada</label><input type="date" id="novaEntrada" onchange="atualizarAvisoEstadiaMinimaNovaReserva()"></div><div class="grupo-input"><label>Saída</label><input type="date" id="novaSaida"></div></div><div class="linha-form"><div class="grupo-input"><label>Adultos</label><input type="number" id="novoAdultos" value="1"></div><div class="grupo-input"><label>Crianças</label><input type="number" id="novoCriancas" value="0"></div></div><div class="grupo-input"><label>Forma de recebimento</label><select id="novaFormaPagamento"><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Transferência Bancária</option></select></div><div class="grupo-input"><label>Caixa / conta destino</label><select id="novaContaDestino"><option>Caixa Casa Amarela</option><option>Caixa Casa Bege</option><option>Caixa Casa Marrom</option><option>Caixa Casa Branca</option><option>Caixa Nossa Casa</option><option>Caixa Geral</option><option>Conta bancária</option></select></div><div class="grupo-input"><label>Data de Recebimento</label><input type="date" id="novaDataRecebimento"><small style="color:var(--cinza)">Data prevista ou efetiva do repasse.</small></div><div class="grupo-input"><label>Status do Pagamento</label><select id="novoStatus"><option value="pendente">Pendente</option><option value="parcial">Pagamento Parcial</option><option value="pago">Pago</option></select></div><div class="grupo-input"><label>Valor Antecipado</label><input type="number" id="novoValorAntecipado" value="0" step="0.01"></div><div class="grupo-input"><label>Valor Total</label><input type="number" id="novoValorTotal" step="0.01"></div><div class="grupo-input"><label>Observação</label><textarea id="novaObservacao"></textarea></div><button class="sucesso" style="width:100%" onclick="salvarNovaReservaAdmin()">💾 Salvar reserva</button>`;
+ $('conteudoEditar').innerHTML=`<input type="hidden" id="novaReserva"><div class="grupo-input"><label>Casa</label><select id="novaCasaReserva" onchange="atualizarContaDestinoNovaReserva();atualizarAvisoEstadiaMinimaNovaReserva()">${c}</select><small id="infoEstadiaMinimaNovaReserva" style="display:block;color:var(--cinza);margin-top:5px"></small></div><div class="grupo-input autocomplete-hospede"><label>Hóspede</label><small style="display:block;color:var(--cinza);margin:-2px 0 6px">Digite para filtrar ou clique no campo para ver todos os hóspedes cadastrados.</small><input id="novoHospedeId" type="hidden"><input id="novoNomeReserva" autocomplete="off" oninput="buscarHospedesReserva(false)" onfocus="buscarHospedesReserva(true)" onblur="setTimeout(fecharSugestoesHospedeReserva,250)"><div id="sugestoesHospedeReserva" class="sugestoes-hospede-reserva" style="display:none"></div></div><div class="grupo-input"><label>Telefone</label><input id="novoTelefoneReserva" type="tel"></div><div class="grupo-input"><label>Origem</label><select id="novaOrigemReserva"><option>Reserva direta</option><option>Airbnb</option><option>Booking.com</option><option>WhatsApp</option><option>Telefone</option><option>Outro</option></select></div><div class="linha-form"><div class="grupo-input"><label>Entrada</label><input type="date" id="novaEntrada" onchange="atualizarAvisoEstadiaMinimaNovaReserva()"></div><div class="grupo-input"><label>Saída</label><input type="date" id="novaSaida"></div></div><div class="linha-form"><div class="grupo-input"><label>Adultos</label><input type="number" id="novoAdultos" value="1"></div><div class="grupo-input"><label>Crianças</label><input type="number" id="novoCriancas" value="0"></div></div><div class="grupo-input"><label>Forma de recebimento</label><select id="novaFormaPagamento"><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Transferência Bancária</option></select></div><div class="grupo-input"><label>Caixa / conta destino</label><select id="novaContaDestino"><option>Caixa Casa Amarela</option><option>Caixa Casa Bege</option><option>Caixa Casa Marrom</option><option>Caixa Casa Branca</option><option>Caixa Nossa Casa</option><option>Caixa Geral</option><option>Conta bancária</option></select></div><div class="grupo-input"><label>Data de Recebimento</label><input type="date" id="novaDataRecebimento"><small style="color:var(--cinza)">Data prevista ou efetiva do repasse.</small></div><div class="grupo-input"><label>Status do Pagamento</label><select id="novoStatus"><option value="pendente">Pendente</option><option value="parcial">Pagamento Parcial</option><option value="pago">Pago</option></select></div><div class="grupo-input"><label>Valor Antecipado</label><input type="number" id="novoValorAntecipado" value="0" step="0.01"></div><div class="grupo-input"><label>Valor Total</label><input type="number" id="novoValorTotal" step="0.01"></div><div class="grupo-input"><label>Observação</label><textarea id="novaObservacao"></textarea></div><button class="sucesso" style="width:100%" onclick="salvarNovaReservaAdmin()">💾 Salvar reserva</button>`;
  $('modalEditarReserva').classList.add('aberto');
+ atualizarContaDestinoNovaReserva();
  atualizarAvisoEstadiaMinimaNovaReserva();
  try{carregarHospedes();}catch(e){console.error('Pré-carregamento de hóspedes:',e);}
  setTimeout(()=>{$('novoNomeReserva')?.focus();},100);
@@ -10464,15 +10691,15 @@ async function salvarNovaReservaAdmin(){
  const hojeStr=dataStr(hoje());
  if(b>=hojeStr&&await verificarPeriodoBloqueado(casa,a,b))return alert('⚠️ O período está bloqueado.');
  const x=await calcularValorDiarias(casa,a,b);
- const minEstadia=obterEstadiaMinimaParaData(casa,a);
- if(x.dias<minEstadia)return alert(`⚠️ A estadia mínima de ${casas[casa]?.nome||'esta casa'} é de ${minEstadia} noite(s). A nova reserva não foi criada.`);
+ // A janela administrativa permite reservas abaixo do mínimo configurado no calendário.
  const taxa=Number(casas[casa]?.taxaLimpeza||0);
  const f=calcularValorFinalReserva(x.dias,x.valor,taxa);
  const total=Number($('novoValorTotal').value||f.total);
  const ante=Number($('novoValorAntecipado').value||0);
  if(ante>total)return alert('⚠️ O antecipado não pode ser maior que o total.');
  try{
-  const dadosReserva={
+  const codigoReserva=await obterProximoCodigoReserva(casa);
+  const dadosReserva={...(codigoReserva?{codigoReserva}:{}),
    casa,nome,telefone,entrada:a,saida:b,adultos,criancas,totalPessoas:adultos+criancas,dias:x.dias,valorDiarias:x.valor,taxaLimpeza:taxa,desconto:f.desconto,percentualDesconto:f.percentualDesconto,acrescimoValor:0,valorTotal:total,valorPago:ante,statusPagamento:$('novoStatus').value,origemReserva:$('novaOrigemReserva').value,formaPagamento:$('novaFormaPagamento').value,contaDestino:$('novaContaDestino').value,dataRecebimento:$('novaDataRecebimento')?.value||'',observacao:$('novaObservacao').value.trim(),criadoEm:firebase.firestore.FieldValue.serverTimestamp(),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()
   };
   if(hospedeIdSelecionado)dadosReserva.hospedeId=hospedeIdSelecionado;
@@ -10481,7 +10708,9 @@ async function salvarNovaReservaAdmin(){
   const hospedeIdFinal=hospedeIdSelecionado||'';
   if(hospedeIdFinal)await ref.update({hospedeId:hospedeIdFinal,atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()});
 
-  reservasConfirmadas.unshift({id:ref.id,...dadosReserva,hospedeId:hospedeIdFinal||undefined,criadoEm:null});
+  const reservaCriadaLocal={id:ref.id,...dadosReserva,hospedeId:hospedeIdFinal||undefined,criadoEm:null};
+  reservasConfirmadas.unshift(reservaCriadaLocal);
+  registrarReservaParaNumeracao(reservaCriadaLocal);
   reservasCarregadas=true;
   try{await sincronizarDisponibilidadeReserva(ref.id,reservasConfirmadas[0]);}catch(e){console.error('Sincronização:',e);}
   fecharModalEditar();
