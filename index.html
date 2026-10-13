@@ -4085,7 +4085,7 @@ if ("serviceWorker" in navigator) {
   <div class="grupo-input"><label>Prestador / empresa</label><select id="despesaPrestadorId" onchange="selecionarPrestadorDespesa()"><option value="">— Selecionar prestador —</option></select><input type="hidden" id="despesaPrestador"><small id="despesaPrestadorInfo" style="color:var(--cinza)"></small></div><div class="grupo-input"><label>Descrição</label><input id="despesaDescricao"></div>
   <div class="grupo-input" style="grid-column:1/-1"><label>Observação</label><textarea id="despesaObservacao" rows="2"></textarea></div>
  </div><div class="despesas-acoes"><button class="sucesso" id="btnSalvarDespesa" onclick="salvarDespesa()">💾 Lançar despesa</button><button class="cinza" onclick="limparFormularioDespesa()">✖ Limpar</button></div></div>
- <div class="painel-despesas"><h3>🔎 Filtros e relatório</h3><div class="despesas-acoes"><button class="azul" onclick="carregarDespesas();carregarPrestadores()">🔎 Consultar lançamentos</button></div><div class="despesas-form-grid"><div class="grupo-input"><label>Casa</label><select id="filtroDespesaCasa" onchange="gerarRelatorioDespesas()"><option value="todas">Todas</option><option value="amarela">Casa Amarela</option><option value="bege">Casa Bege</option><option value="marrom">Casa Marrom</option><option value="branca">Casa Branca</option><option value="nossa">Nossa Casa</option></select></div><div class="grupo-input"><label>Prestador / empresa</label><select id="filtroDespesaPrestador" onchange="gerarRelatorioDespesas()"><option value="todos">Todos</option></select></div><div class="grupo-input"><label>Categoria</label><select id="filtroDespesaCategoria" onchange="gerarRelatorioDespesas()"><option value="todas">Todas</option><option value="agua">Água</option><option value="energia">Energia</option><option value="internet">Internet</option><option value="limpeza">Limpeza</option><option value="manutencao">Manutenção</option><option value="gas">Gás</option><option value="impostos">Impostos / taxas</option><option value="materiais">Materiais / compras</option><option value="outros">Outros</option></select></div><div class="grupo-input"><label>Pagamento</label><select id="filtroDespesaPagamento" onchange="gerarRelatorioDespesas()"><option value="todas">Todas</option><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Boleto</option><option>Transferência bancária</option></select></div><div class="grupo-input"><label>Conta / caixa</label><select id="filtroDespesaConta" onchange="gerarRelatorioDespesas()"><option value="todas">Todas</option><option>Caixa Casa Amarela</option><option>Caixa Casa Bege</option><option>Caixa Casa Marrom</option><option>Caixa Casa Branca</option><option>Caixa Nossa Casa</option><option>Caixa Geral</option><option>Conta bancária</option></select></div><div class="grupo-input"><label>Data inicial</label><input type="date" id="filtroDespesaDataInicial" onchange="gerarRelatorioDespesas()"></div><div class="grupo-input"><label>Data final</label><input type="date" id="filtroDespesaDataFinal" onchange="gerarRelatorioDespesas()"></div></div><div class="despesas-acoes"><button class="btn-verde" onclick="exportarDespesasCSV()">📊 Exportar CSV</button><button class="cinza" onclick="imprimirRelatorioDespesas()">🖨️ Imprimir / PDF</button><button class="vermelho" onclick="limparFiltrosDespesas()">✖ Limpar filtros</button></div></div><div id="despesasResumo" class="despesas-resumo"><div class="dashboard-vazio">Os lançamentos não são carregados automaticamente. Clique em “Consultar lançamentos” para ver quantidade e total.</div></div><div id="listaDespesas"></div><div id="paginacaoDespesas" class="paginacao-admin"></div>
+ <div class="painel-despesas"><h3>🔎 Filtros e relatório</h3><div class="despesas-acoes"><button class="azul" id="btnConsultarLancamentosDespesas" onclick="consultarLancamentosDespesas()">🔎 Consultar lançamentos</button></div><div class="despesas-form-grid"><div class="grupo-input"><label>Casa</label><select id="filtroDespesaCasa" onchange="gerarRelatorioDespesas()"><option value="todas">Todas</option><option value="amarela">Casa Amarela</option><option value="bege">Casa Bege</option><option value="marrom">Casa Marrom</option><option value="branca">Casa Branca</option><option value="nossa">Nossa Casa</option></select></div><div class="grupo-input"><label>Prestador / empresa</label><select id="filtroDespesaPrestador" onchange="gerarRelatorioDespesas()"><option value="todos">Todos</option></select></div><div class="grupo-input"><label>Categoria</label><select id="filtroDespesaCategoria" onchange="gerarRelatorioDespesas()"><option value="todas">Todas</option><option value="agua">Água</option><option value="energia">Energia</option><option value="internet">Internet</option><option value="limpeza">Limpeza</option><option value="manutencao">Manutenção</option><option value="gas">Gás</option><option value="impostos">Impostos / taxas</option><option value="materiais">Materiais / compras</option><option value="outros">Outros</option></select></div><div class="grupo-input"><label>Pagamento</label><select id="filtroDespesaPagamento" onchange="gerarRelatorioDespesas()"><option value="todas">Todas</option><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Boleto</option><option>Transferência bancária</option></select></div><div class="grupo-input"><label>Conta / caixa</label><select id="filtroDespesaConta" onchange="gerarRelatorioDespesas()"><option value="todas">Todas</option><option>Caixa Casa Amarela</option><option>Caixa Casa Bege</option><option>Caixa Casa Marrom</option><option>Caixa Casa Branca</option><option>Caixa Nossa Casa</option><option>Caixa Geral</option><option>Conta bancária</option></select></div><div class="grupo-input"><label>Data inicial</label><input type="date" id="filtroDespesaDataInicial" onchange="gerarRelatorioDespesas()"></div><div class="grupo-input"><label>Data final</label><input type="date" id="filtroDespesaDataFinal" onchange="gerarRelatorioDespesas()"></div></div><div class="despesas-acoes"><button class="btn-verde" onclick="exportarDespesasCSV()">📊 Exportar CSV</button><button class="cinza" onclick="imprimirRelatorioDespesas()">🖨️ Imprimir / PDF</button><button class="vermelho" onclick="limparFiltrosDespesas()">✖ Limpar filtros</button></div></div><div id="despesasResumo" class="despesas-resumo"><div class="dashboard-vazio">Os lançamentos não são carregados automaticamente. Clique em “Consultar lançamentos” para ver quantidade e total.</div></div><div id="listaDespesas"></div><div id="paginacaoDespesas" class="paginacao-admin"></div>
 </div>
 
 <div id="pagina-relatorios" class="pagina">
@@ -6311,7 +6311,7 @@ function configurarNavegacao(){
     }
 
     if(b.dataset.pagina==='despesas'){
-     if(despesasCarregadas)gerarRelatorioDespesas();
+     prepararPaginaDespesas(false, false);
     }
 
     if(b.dataset.pagina==='casas')
@@ -12742,23 +12742,37 @@ function preencherFormularioPrestador(x={}){$('prestadorEdicaoId').value=x.id||'
 function abrirCadastroPrestador(){limparFormularioPrestador();$('tituloModalPrestador').textContent='Novo Cadastro de Prestador';$('modalPrestador').classList.add('aberto');setTimeout(()=>$('cadPrestadorNome')?.focus(),100);}
 function editarPrestador(id){const x=prestadoresCadastrados.find(p=>p.id===id);if(!x)return;preencherFormularioPrestador(x);$('tituloModalPrestador').textContent='Editar Cadastro de Prestador';$('modalPrestador').classList.add('aberto');}
 function fecharModalPrestador(){$('modalPrestador')?.classList.remove('aberto');}
-async function salvarPrestadorFormulario(){const d=dadosFormularioPrestador(),id=$('prestadorEdicaoId').value;if(!d.nome)return alert('⚠️ Informe o nome/razão social.');if(!d.documento)return alert(`⚠️ Informe o ${d.tipo==='pj'?'CNPJ':'CPF'}.`);try{const ref=id?db.collection('prestadores').doc(id):db.collection('prestadores').doc();await ref.set({...d,nomeNormalizado:normalizar(d.nome),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp(),...(id?{}:{criadoEm:firebase.firestore.FieldValue.serverTimestamp()})},{merge:true});fecharModalPrestador();await carregarPrestadores();popularSelectPrestadores();alert(id?'✅ Prestador alterado.':'✅ Prestador cadastrado.');}catch(e){console.error(e);alert('❌ Erro ao salvar o prestador.');}}
-async function carregarPrestadores(){
- if(prestadoresCarregados){popularSelectPrestadores();filtrarPrestadores();return;}
+async function salvarPrestadorFormulario(){const d=dadosFormularioPrestador(),id=$('prestadorEdicaoId').value;if(!d.nome)return alert('⚠️ Informe o nome/razão social.');if(!d.documento)return alert(`⚠️ Informe o ${d.tipo==='pj'?'CNPJ':'CPF'}.`);try{const ref=id?db.collection('prestadores').doc(id):db.collection('prestadores').doc();await ref.set({...d,nomeNormalizado:normalizar(d.nome),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp(),...(id?{}:{criadoEm:firebase.firestore.FieldValue.serverTimestamp()})},{merge:true});fecharModalPrestador();await carregarPrestadores(true);popularSelectPrestadores();alert(id?'✅ Prestador alterado.':'✅ Prestador cadastrado.');}catch(e){console.error(e);alert('❌ Erro ao salvar o prestador.');}}
+async function carregarPrestadores(forcar=false){
+ if(prestadoresCarregados&&!forcar){
+  if(despesasCarregadas)mesclarPrestadoresDasDespesas();
+  else{popularSelectPrestadores();filtrarPrestadores();}
+  return true;
+ }
+ const listaAnterior=[...prestadoresCadastrados];
  prestadoresCadastrados=[];
  try{
-  // Uma única leitura da coleção. Os prestadores usados nas despesas são
-  // mesclados depois, usando despesasCadastradas já carregadas.
+  // Busca o cadastro atualizado na nuvem. Registros antigos das despesas
+  // são associados depois, sem alterar documentos no Firestore.
   const s=await db.collection('prestadores').get();
   s.forEach(d=>{
    const x=d.data()||{};
    const nome=x.nome||x.razaoSocial||x.nomePrestador||x.prestador||x.fantasia||'';
    prestadoresCadastrados.push({id:d.id,...x,nome:nome||'Prestador sem nome'});
   });
- }catch(e){console.error('Prestadores cadastrados:',e);}
+ }catch(e){
+  console.error('Prestadores cadastrados:',e);
+  prestadoresCadastrados=listaAnterior;
+  prestadoresCarregados=false;
+  popularSelectPrestadores();
+  return false;
+ }
  prestadoresCadastrados.sort((a,b)=>String(a.nome||'').localeCompare(String(b.nome||''),'pt-BR'));
  prestadoresCarregados=true;
- paginaPrestadoresAtual=1;popularSelectPrestadores();filtrarPrestadores();
+ paginaPrestadoresAtual=1;
+ if(despesasCarregadas)mesclarPrestadoresDasDespesas();
+ else{popularSelectPrestadores();filtrarPrestadores();}
+ return true;
 }
 
 function mesclarPrestadoresDasDespesas(){
@@ -13420,8 +13434,9 @@ function imprimirEmissaoManutencoes(){const html=htmlEmissaoManutencoes();if(!ht
 function enviarEmissaoManutencoesWhatsApp(){const d=validarEmissaoManutencoes();if(!d)return;const numero=String(d.prest.telefone||d.prest.celular||d.prest.whatsapp||'').replace(/\D/g,'');if(!numero)return alert('⚠️ O prestador selecionado não possui telefone/WhatsApp cadastrado.');window.open(`https://wa.me/${numero.startsWith('55')?numero:'55'+numero}?text=${encodeURIComponent(textoEmissaoManutencoes())}`,'_blank');}
 function enviarEmissaoManutencoesEmail(){const d=validarEmissaoManutencoes();if(!d)return;const email=String(d.prest.email||'').trim();if(!email)return alert('⚠️ O prestador selecionado não possui e-mail cadastrado.');window.location.href=`mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent('Ordem de Manutenção')}&body=${encodeURIComponent(textoEmissaoManutencoes())}`;}
 
-async function carregarDespesas(){
- if(despesasCarregadas){gerarRelatorioDespesas();return;}
+async function carregarDespesas(forcar=false){
+ if(despesasCarregadas&&!forcar){gerarRelatorioDespesas();return true;}
+ const listaAnterior=[...despesasCadastradas];
  despesasCadastradas=[];
  try{
   // Não depende de orderBy/índice. Ordenamos no navegador para garantir
@@ -13432,16 +13447,64 @@ async function carregarDespesas(){
   despesasCadastradas.sort((a,b)=>String(b.data||'').localeCompare(String(a.data||'')));
  }catch(e){
   console.error('Despesas cadastradas:',e);
+  despesasCadastradas=listaAnterior;
+  despesasCarregadas=false;
+  gerarRelatorioDespesas();
+  return false;
  }
  despesasCarregadas=true;
  paginaDespesasAtual=1;
  gerarRelatorioDespesas();
  if($('dashboardAnualRelatorios'))atualizarDashboardAnual();
+ return true;
+}
+
+async function prepararPaginaDespesas(consultar=false, atualizarNuvem=false){
+ const selNovo=$('despesaPrestadorId');
+ const selFiltro=$('filtroDespesaPrestador');
+ if(selNovo&&!prestadoresCarregados&&selNovo.options.length<=1){
+  selNovo.innerHTML='<option value="">⏳ Carregando prestadores...</option>';
+  selNovo.disabled=true;
+ }
+ if(selFiltro&&!prestadoresCarregados&&selFiltro.options.length<=1){
+  selFiltro.innerHTML='<option value="todos">⏳ Carregando prestadores...</option>';
+  selFiltro.disabled=true;
+ }
+ try{
+  const [okDespesas,okPrestadores]=await Promise.all([
+   carregarDespesas(atualizarNuvem),
+   carregarPrestadores(atualizarNuvem)
+  ]);
+  if(!okDespesas||!okPrestadores){
+   if(selNovo)selNovo.innerHTML='<option value="">Não foi possível carregar os prestadores</option>';
+   if(selFiltro)selFiltro.innerHTML='<option value="todos">Todos</option>';
+   alert('Não foi possível carregar a lista de despesas ou prestadores. Confira a conexão e tente novamente.');
+   return false;
+  }
+  mesclarPrestadoresDasDespesas();
+  popularSelectPrestadores();
+  if(consultar){paginaDespesasAtual=1;gerarRelatorioDespesas();}
+  return true;
+ }catch(e){
+  console.error('Preparação da área Despesas / Caixa:',e);
+  alert('Não foi possível preparar a área de despesas. Tente consultar novamente.');
+  return false;
+ }finally{
+  if(selNovo)selNovo.disabled=false;
+  if(selFiltro)selFiltro.disabled=false;
+ }
+}
+
+async function consultarLancamentosDespesas(){
+ const btn=$('btnConsultarLancamentosDespesas');
+ if(btn){btn.disabled=true;btn.textContent='⏳ Carregando lançamentos e prestadores...';}
+ try{await prepararPaginaDespesas(true,false);}
+ finally{if(btn){btn.disabled=false;btn.textContent='🔎 Consultar lançamentos';}}
 }
 function limparFormularioDespesa(){if(!$('despesaData'))return;$('despesaEditId').value='';$('despesaData').value=dataStr(hoje());$('despesaCasa').value='amarela';$('despesaCategoria').value='agua';$('despesaValor').value='';$('despesaFormaPagamento').value='Pix';$('despesaContaOrigem').value='Caixa Casa Amarela';atualizarCaixaDestinoDespesa();$('despesaPrestadorId').value='';$('despesaPrestador').value='';$('despesaPrestadorInfo').textContent='';$('despesaDescricao').value='';$('despesaObservacao').value='';$('tituloFormularioDespesa').textContent='➕ Novo lançamento de despesa';$('btnSalvarDespesa').textContent='💾 Lançar despesa';}
 async function salvarDespesa(){const id=$('despesaEditId').value,data=$('despesaData').value,casa=$('despesaCasa').value,categoria=$('despesaCategoria').value,valor=valorNumericoDespesa($('despesaValor').value),formaPagamento=$('despesaFormaPagamento').value,contaOrigem=$('despesaContaOrigem').value;if(!data||!casa||!categoria||valor<=0||!formaPagamento||!contaOrigem)return alert('⚠️ Preencha os campos obrigatórios da despesa.');const dados={data,casa,categoria,valor,formaPagamento,contaOrigem,prestadorId:$('despesaPrestadorId').value||'',prestador:$('despesaPrestador').value.trim(),descricao:$('despesaDescricao').value.trim(),observacao:$('despesaObservacao').value.trim(),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()};try{if(id)await db.collection('despesas').doc(id).update(dados);else await db.collection('despesas').add({...dados,criadoEm:firebase.firestore.FieldValue.serverTimestamp()});await carregarDespesas();limparFormularioDespesa();if($('dashboardAnualRelatorios'))atualizarDashboardAnual();alert(id?'✅ Despesa alterada.':'✅ Despesa lançada.');}catch(e){console.error(e);alert('❌ Erro ao salvar a despesa.');}}
 function editarDespesa(id){const x=despesasCadastradas.find(d=>d.id===id);if(!x)return;$('despesaEditId').value=id;$('despesaData').value=x.data||'';$('despesaCasa').value=x.casa||'amarela';$('despesaCategoria').value=x.categoria||'outros';$('despesaValor').value=Number(x.valor||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});$('despesaFormaPagamento').value=x.formaPagamento||'Pix';$('despesaContaOrigem').value=x.contaOrigem||contaDestinoCasa(x.casa);$('despesaPrestadorId').value=x.prestadorId||'';$('despesaPrestador').value=x.prestador||'';selecionarPrestadorDespesa();$('despesaDescricao').value=x.descricao||'';$('despesaObservacao').value=x.observacao||'';$('tituloFormularioDespesa').textContent='✏️ Editar lançamento de despesa';$('btnSalvarDespesa').textContent='💾 Salvar alteração';$('pagina-despesas').scrollIntoView({behavior:'smooth',block:'start'});}
-function obterDespesasFiltradas(){let a=[...despesasCadastradas],c=$('filtroDespesaCasa')?.value||'todas',cat=$('filtroDespesaCategoria')?.value||'todas',pag=$('filtroDespesaPagamento')?.value||'todas',cont=$('filtroDespesaConta')?.value||'todas',prest=$('filtroDespesaPrestador')?.value||'todos',ini=$('filtroDespesaDataInicial')?.value||'',fim=$('filtroDespesaDataFinal')?.value||'';if(prest!=='todos')a=a.filter(x=>(x.prestadorId||'')===prest);if(c!=='todas')a=a.filter(x=>x.casa===c);if(cat!=='todas')a=a.filter(x=>x.categoria===cat);if(pag!=='todas')a=a.filter(x=>x.formaPagamento===pag);if(cont!=='todas')a=a.filter(x=>x.contaOrigem===cont);if(ini)a=a.filter(x=>x.data>=ini);if(fim)a=a.filter(x=>x.data<=fim);return a.sort((x,y)=>(y.data||'').localeCompare(x.data||''));}
+function obterDespesasFiltradas(){let a=[...despesasCadastradas],c=$('filtroDespesaCasa')?.value||'todas',cat=$('filtroDespesaCategoria')?.value||'todas',pag=$('filtroDespesaPagamento')?.value||'todas',cont=$('filtroDespesaConta')?.value||'todas',prest=$('filtroDespesaPrestador')?.value||'todos',ini=$('filtroDespesaDataInicial')?.value||'',fim=$('filtroDespesaDataFinal')?.value||'';if(prest!=='todos'){const selecionado=prestadoresCadastrados.find(p=>String(p.id)===String(prest));const nomeSelecionado=normalizar(selecionado?.nome||selecionado?.fantasia||'');a=a.filter(x=>String(x.prestadorId||'')===String(prest)||(nomeSelecionado&&normalizar(x.prestador||'')===nomeSelecionado));}if(c!=='todas')a=a.filter(x=>x.casa===c);if(cat!=='todas')a=a.filter(x=>x.categoria===cat);if(pag!=='todas')a=a.filter(x=>x.formaPagamento===pag);if(cont!=='todas')a=a.filter(x=>x.contaOrigem===cont);if(ini)a=a.filter(x=>x.data>=ini);if(fim)a=a.filter(x=>x.data<=fim);return a.sort((x,y)=>(y.data||'').localeCompare(x.data||''));}
 function gerarRelatorioDespesas(){const a=obterDespesasFiltradas();ultimasDespesasFiltradas=[...a];const total=a.reduce((s,x)=>s+Number(x.valor||0),0),el=$('listaDespesas'),res=$('despesasResumo');if(res)res.innerHTML=`<div class="resumo-card"><small>Lançamentos</small><strong>${a.length}</strong></div><div class="resumo-card"><small>Total</small><strong>${moeda(total)}</strong></div>`;const pags=Math.max(1,Math.ceil(a.length/DESPESAS_POR_PAGINA));paginaDespesasAtual=Math.min(Math.max(1,paginaDespesasAtual),pags);const vis=a.slice((paginaDespesasAtual-1)*DESPESAS_POR_PAGINA,paginaDespesasAtual*DESPESAS_POR_PAGINA);if(el)el.innerHTML=vis.length?`<div style="overflow-x:auto"><table class="tabela-admin-compacta"><thead><tr><th>Data</th><th>Casa</th><th>Categoria</th><th>Prestador</th><th>Descrição</th><th>Forma</th><th>Conta</th><th>Valor</th><th>Ações</th></tr></thead><tbody>${vis.map(x=>`<tr><td>${dataBr(x.data)}</td><td>${escapeHtmlReserva(casas[x.casa]?.nome||x.casa)}</td><td>${nomeCategoriaDespesa(x.categoria)}</td><td>${escapeHtmlReserva(x.prestador||'—')}</td><td>${escapeHtmlReserva(x.descricao||'—')}</td><td>${escapeHtmlReserva(x.formaPagamento||'—')}</td><td>${escapeHtmlReserva(x.contaOrigem||'—')}</td><td><strong>${moeda(x.valor)}</strong></td><td><button class="azul" onclick="editarDespesa('${x.id}')">✏️ Editar</button><button class="vermelho" onclick="excluirDespesa('${x.id}')">Excluir</button></td></tr>`).join('')}</tbody></table></div>`:'<p style="color:var(--cinza)">Nenhuma despesa encontrada.</p>';const pe=$('paginacaoDespesas');if(pe)pe.innerHTML=a.length<=DESPESAS_POR_PAGINA?'':`<button onclick="mudarPaginaDespesas(${paginaDespesasAtual-1})" ${paginaDespesasAtual===1?'disabled':''}>‹ Anterior</button> <span>${paginaDespesasAtual}/${pags}</span> <button onclick="mudarPaginaDespesas(${paginaDespesasAtual+1})" ${paginaDespesasAtual===pags?'disabled':''}>Próxima ›</button>`;}
 function mudarPaginaDespesas(p){paginaDespesasAtual=p;gerarRelatorioDespesas();}
 async function excluirDespesa(id){if(!confirm('Excluir esta despesa?'))return;try{await db.collection('despesas').doc(id).delete();await carregarDespesas();if($('dashboardAnualRelatorios'))atualizarDashboardAnual();}catch(e){console.error(e);alert('❌ Não foi possível excluir.');}}
