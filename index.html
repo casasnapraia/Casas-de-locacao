@@ -10698,13 +10698,27 @@ async function buscarHospedesReserva(mostrarTodos=false){
  }
 
  if(!encontrados.length){
-  box.innerHTML='<div class="sugestao-hospede-item"><small>Nenhum hóspede encontrado no cadastro.</small></div>';
+  box.innerHTML='<div class="sugestao-hospede-item"><small>Nenhum hóspede encontrado no cadastro.</small><div style="margin-top:9px"><button type="button" class="sucesso" style="width:100%" onclick="abrirCadastroHospedeDaReservaAdmin()">➕ Adicionar hóspede</button></div></div>';
   box.style.display='block';
   return;
  }
 
  box.innerHTML=encontrados.map(h=>`<div class="sugestao-hospede-item" onclick="selecionarHospedeNaReserva('${String(h.id).replace(/'/g,'\\\'')}' )"><strong>👤 ${escapeHtmlReserva(h.nome)}</strong><small>📱 ${escapeHtmlReserva(h.telefone||'—')}${h.email?' · ✉️ '+escapeHtmlReserva(h.email):''}</small></div>`).join('');
  box.style.display='block';
+}
+
+// Abre o cadastro existente por cima da reserva administrativa; a janela e os campos da reserva permanecem intactos.
+function abrirCadastroHospedeDaReservaAdmin(){
+ const termo=String($('novoNomeReserva')?.value||'').trim();
+ window.__cadastroHospedeRetornoReserva={ativo:true,termo};
+ fecharSugestoesHospedeReserva();
+ abrirCadastroHospede();
+ if(termo){
+  const somenteNumeros=termo.replace(/\D/g,'');
+  const pareceTelefone=/^[+()\d\s.-]+$/.test(termo)&&somenteNumeros.length>=8;
+  if(pareceTelefone){$('cadHospedeTelefone').value=termo;$('cadHospedeNome').value='';}
+  else{$('cadHospedeNome').value=termo;}
+ }
 }
 
 function selecionarHospedeNaReserva(id){
@@ -12629,6 +12643,8 @@ async function editarHospede(id){
 
 function fecharModalHospede(){
  $('modalHospede')?.classList.remove('aberto');
+ // Se o usuário cancelar, descarta somente o contexto de retorno; os campos da reserva continuam abertos.
+ if(window.__cadastroHospedeRetornoReserva?.ativo)window.__cadastroHospedeRetornoReserva={ativo:false,termo:''};
 }
 
 async function salvarHospedeFormulario(){
@@ -12660,6 +12676,7 @@ async function salvarHospedeFormulario(){
    atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()
   };
 
+  let hospedeIdSalvo=id||'';
   if(id){
    await db.collection('hospedes').doc(id).update(payload);
   }else{
@@ -12669,15 +12686,29 @@ async function salvarHospedeFormulario(){
     .limit(1).get();
    if(q.empty){
     payload.cadastradoEm=firebase.firestore.FieldValue.serverTimestamp();
-    await db.collection('hospedes').add(payload);
+    const novoDoc=await db.collection('hospedes').add(payload);
+    hospedeIdSalvo=novoDoc.id;
    }else{
     await q.docs[0].ref.update(payload);
+    hospedeIdSalvo=q.docs[0].id;
    }
   }
 
   await carregarHospedes();
+  const retornoReserva=!!window.__cadastroHospedeRetornoReserva?.ativo;
+  if(retornoReserva && hospedeIdSalvo && $('novoNomeReserva') && $('novoHospedeId')){
+   $('novoHospedeId').value=hospedeIdSalvo;
+   $('novoNomeReserva').value=dados.nome;
+   $('novoTelefoneReserva').value=dados.telefone;
+   fecharSugestoesHospedeReserva();
+  }
   fecharModalHospede();
-  alert('✅ Cadastro de hóspede salvo com sucesso!');
+  if(retornoReserva){
+   window.__cadastroHospedeRetornoReserva={ativo:false,termo:''};
+   alert('✅ Hóspede salvo e selecionado na reserva administrativa. Confira os dados da reserva e clique em “Salvar reserva” quando estiver pronto.');
+  }else{
+   alert('✅ Cadastro de hóspede salvo com sucesso!');
+  }
 
  }catch(e){
   console.error(e);
