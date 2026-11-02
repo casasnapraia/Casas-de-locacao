@@ -4011,6 +4011,7 @@ if ("serviceWorker" in navigator) {
   <div class="reservas-filtros-acoes">
    <button class="azul" onclick="aplicarFiltrosReservas()">🔎 Buscar reservas</button>
    <button class="cinza" onclick="limparFiltrosReservas()">✖ Limpar filtros</button>
+   <button class="botao-marcar-pagas" onclick="mostrarConcluidasNaoQuitadas()">💰 Concluídas não quitadas</button>
   </div>
 
   <div class="reservas-ajuda">
@@ -4833,6 +4834,7 @@ let reservasAguardandoNumeracao=new Map();
 let reservasPagamentoSelecionadas=new Set();
 let reservasPagamentoFiltradas=[],paginaReservasAtual=1;let RESERVAS_POR_PAGINA=5;let reservasCursorAtual=null;let reservasCursorFuturas=null;let reservasPaginaStack=[];let reservasCarregamentoEmAndamento=false;let reservasUltimaPagina=false;let reservasConsultaCompleta=false;let paginaRelatorioAtual=1;const RELATORIO_POR_PAGINA=15;
 let controlePagamentosAtivo=false;
+let filtroConcluidasNaoQuitadasAtivo=false;
 let controlePagamentoSaidaInicial="";
 let controlePagamentoSaidaFinal="";
 let hospedesCadastrados=[];
@@ -9768,6 +9770,31 @@ function atualizarIndicadoresReservas(){
  if($('indicadorReservasConcluidas'))$('indicadorReservasConcluidas').textContent=concluidas.length;
 }
 
+async function mostrarConcluidasNaoQuitadas(){
+ paginaReservasAtual=1;
+ filtroConcluidasNaoQuitadasAtivo=true;
+ controlePagamentosAtivo=false;
+ reservasPagamentoSelecionadas.clear();
+
+ if($('filtroHospedeReservas'))$('filtroHospedeReservas').value='';
+ if($('filtroHospedeReservaId'))$('filtroHospedeReservaId').value='';
+ if($('filtroCasaReservas'))$('filtroCasaReservas').value='todas';
+ if($('filtroSituacaoReservas'))$('filtroSituacaoReservas').value='concluidas';
+ if($('filtroPagamentoReservas'))$('filtroPagamentoReservas').value='todos';
+
+ ['filtroEntradaInicialReservas','filtroEntradaFinalReservas','filtroSaidaInicialReservas','filtroSaidaFinalReservas','filtroPeriodoReservas','filtroPagamentoSaidaInicial','filtroPagamentoSaidaFinal'].forEach(id=>{
+  if($(id))$(id).value='';
+ });
+
+ fecharSugestoesFiltroHospedeReservas();
+
+ if(!reservasConsultaCompleta){
+  await consultarTodasReservas();
+ }
+
+ atualizarListaReservas();
+}
+
 async function aplicarFiltrosReservas(){
  paginaReservasAtual=1;
  if(!reservasConsultaCompleta){
@@ -9823,6 +9850,7 @@ function atualizarListaReservas(){
  if(situacao==='proximas')arr=arr.filter(reservaProxima);
  if(situacao==='andamento')arr=arr.filter(reservaEmAndamento);
  if(situacao==='concluidas')arr=arr.filter(reservaConcluida);
+ if(filtroConcluidasNaoQuitadasAtivo)arr=arr.filter(r=>reservaConcluida(r)&&['pendente','parcial'].includes(normalizarStatusPagamentoReserva(r)));
 
  if(entradaInicial)arr=arr.filter(r=>!!r.entrada && r.entrada>=entradaInicial);
  if(entradaFinal)arr=arr.filter(r=>!!r.entrada && r.entrada<=entradaFinal);
@@ -9848,7 +9876,7 @@ function atualizarListaReservas(){
   });
  }
 
- const semFiltroReservas=(!busca && !hospedeSelecionadoId && casa==='todas' && pagamento==='todos' && situacao==='ativas' && !entradaInicial && !entradaFinal && !saidaInicial && !saidaFinal && !periodo && !controlePagamentosAtivo);
+ const semFiltroReservas=(!busca && !hospedeSelecionadoId && casa==='todas' && pagamento==='todos' && situacao==='ativas' && !entradaInicial && !entradaFinal && !saidaInicial && !saidaFinal && !periodo && !controlePagamentosAtivo && !filtroConcluidasNaoQuitadasAtivo);
  reservasPagamentoFiltradas=arr.map(r=>r.id);
 
  arr.sort((a,b)=>{
