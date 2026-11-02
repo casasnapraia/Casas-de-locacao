@@ -4,6 +4,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Casas na Praia">
 
 <title>Casas na Praia - Disponibilidade e Reservas</title>
 
@@ -755,7 +757,7 @@ textarea{
  transform:scale(1.03)
 }
 .dia.bloqueado.selecionado{background:#dc2626!important;border-color:#991b1b!important}
-.paginacao-hospedes{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin:15px 0}.paginacao-prestadores{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin:15px 0}.prestador-tipo{display:flex;gap:18px;align-items:center;flex-wrap:wrap}.prestador-tipo label{display:flex;gap:6px;align-items:center}.cad-prestador-resumo{background:#f4f7f8;border:1px solid #ddd;border-radius:8px;padding:10px;margin:10px 0}.paginacao-hospedes button{padding:7px 12px}.banner-admin-box{background:#fff;border:1px solid #ddd;border-radius:10px;padding:16px;margin:15px 0;box-shadow:var(--sombra)}.banner-preview{width:100%;max-height:220px;object-fit:cover;border-radius:10px;margin-top:10px;display:block}.acoes-reserva-final{display:flex;gap:5px;flex-wrap:wrap}.botao-quitar{background:#15803d;color:#fff;border:0;padding:7px 9px;border-radius:6px;font-weight:bold}.botao-quitar:hover{background:#166534}
+.paginacao-hospedes{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin:15px 0}.autocomplete-hospede{position:relative}.autocomplete-filtro-hospede{position:relative}.filtro-hospede-ajuda{display:block;color:var(--cinza);font-size:11px;margin:-2px 0 5px}.autocomplete-filtro-hospede .sugestoes-hospede-reserva{top:calc(100% - 2px)}.sugestoes-hospede-reserva{position:absolute;left:0;right:0;top:100%;z-index:30;background:#fff;border:1px solid #d7e0e5;border-radius:8px;box-shadow:0 8px 20px #0002;max-height:280px;overflow-y:auto}.sugestao-hospede-item{padding:10px 12px;border-bottom:1px solid #edf1f3;cursor:pointer}.sugestao-hospede-item:last-child{border-bottom:0}.sugestao-hospede-item:hover{background:#f0f8fb}.sugestao-hospede-item strong{display:block;color:var(--azul)}.sugestao-hospede-item small{display:block;color:var(--cinza);margin-top:3px}.paginacao-prestadores{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin:15px 0}.prestador-tipo{display:flex;gap:18px;align-items:center;flex-wrap:wrap}.prestador-tipo label{display:flex;gap:6px;align-items:center}.cad-prestador-resumo{background:#f4f7f8;border:1px solid #ddd;border-radius:8px;padding:10px;margin:10px 0}.paginacao-hospedes button{padding:7px 12px}.banner-admin-box{background:#fff;border:1px solid #ddd;border-radius:10px;padding:16px;margin:15px 0;box-shadow:var(--sombra)}.banner-preview{width:100%;max-height:220px;object-fit:cover;border-radius:10px;margin-top:10px;display:block}.acoes-reserva-final{display:flex;gap:5px;flex-wrap:wrap}.botao-quitar{background:#15803d;color:#fff;border:0;padding:7px 9px;border-radius:6px;font-weight:bold}.botao-quitar:hover{background:#166534}
 
 .dia.passado{
  color:#bbb;
@@ -770,8 +772,62 @@ textarea{
 .dia.bloqueado{
  background:#f8d7da;
  color:#721c24;
- border-color:#f5c6cb
+ border-color:#f5c6cb;
+ position:relative;
+ cursor:not-allowed
 }
+
+.calendario-reserva-lock{
+ display:inline-flex;
+ align-items:center;
+ justify-content:center;
+ width:23px;
+ height:23px;
+ margin-top:3px;
+ border:0;
+ border-radius:999px;
+ background:#9f1239;
+ color:#fff;
+ font-size:13px;
+ line-height:1;
+ cursor:pointer;
+ box-shadow:0 2px 6px #0003;
+ padding:0;
+}
+.calendario-reserva-lock.pendente{background:#b45309}
+.calendario-reserva-lock.parcial{background:#0369a1}
+.calendario-reserva-lock.pago{background:#166534}
+ .calendario-reserva-lock:hover{filter:brightness(1.08);transform:scale(1.06)}
+.calendario-estadia-minima{display:inline-block;margin-top:2px;padding:2px 5px;border-radius:999px;background:rgba(14,116,144,.12);color:#075985;font-size:10px;font-weight:800;line-height:1.1}
+
+.calendario-tooltip-reserva{
+ display:none;
+ position:fixed;
+ z-index:2147483000;
+ width:min(320px,calc(100vw - 24px));
+ padding:12px 14px;
+ border-radius:12px;
+ background:#072f45;
+ color:#fff;
+ box-shadow:0 14px 38px #0007;
+ font-size:13px;
+ line-height:1.45;
+ border:1px solid rgba(255,255,255,.18);
+ pointer-events:auto;
+}
+.calendario-tooltip-reserva.aberto{display:block}
+.calendario-tooltip-reserva .tt-titulo{font-weight:800;font-size:14px;margin-bottom:6px}
+.calendario-tooltip-reserva .tt-linha{margin:2px 0;color:#eef7fb}
+.calendario-tooltip-reserva .tt-status{display:inline-block;margin-top:6px;padding:3px 7px;border-radius:999px;background:rgba(255,255,255,.14);font-size:11px;font-weight:700}
+.calendario-tooltip-reserva .tt-pagamentos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-top:9px;padding-top:8px;border-top:1px solid rgba(255,255,255,.18)}
+.calendario-tooltip-reserva .tt-pagamento-item{min-width:0;padding:6px 8px;border-radius:7px;background:rgba(255,255,255,.09)}
+.calendario-tooltip-reserva .tt-pagamento-item.total{grid-column:1/-1}
+.calendario-tooltip-reserva .tt-pagamento-item small{display:block;color:#bed3de;font-size:10px;line-height:1.3;margin-bottom:2px}
+.calendario-tooltip-reserva .tt-pagamento-item strong{display:block;color:#fff;font-size:13px;line-height:1.35;overflow-wrap:anywhere}
+.calendario-tooltip-reserva .tt-pagamento-item.recebido strong{color:#86efac}
+.calendario-tooltip-reserva .tt-pagamento-item.saldo strong{color:#fde68a}
+.calendario-tooltip-reserva .tt-fechar{float:right;border:0;background:transparent;color:#fff;font-size:18px;line-height:1;cursor:pointer;padding:0 0 0 8px}
+
 
 .rotulo-dia-semana{
  text-align:center;
@@ -958,41 +1014,84 @@ textarea{
  color:var(--cinza);
  font-weight:400;
 }
+/* Listagem de reservas compacta: mantém todas as colunas visíveis sem rolagem horizontal. */
 .lista-reservas-tabela{
  width:100%;
- overflow-x:auto;
+ overflow:visible;
  border:1px solid #e5e5e5;
  border-radius:10px;
  background:#fff;
 }
 .tabela-reservas{
  width:100%;
+ min-width:0;
+ table-layout:fixed;
  border-collapse:collapse;
- min-width:930px;
- font-size:13px;
+ font-size:11.5px;
 }
 .tabela-reservas th,
 .tabela-reservas td{
- padding:10px 9px;
+ padding:6px 4px;
  border-bottom:1px solid #edf0f1;
  text-align:left;
  vertical-align:middle;
+ overflow-wrap:anywhere;
+ word-break:normal;
 }
 .tabela-reservas th{
  background:var(--marinho);
  color:#fff;
- white-space:nowrap;
+ white-space:normal;
+ line-height:1.2;
+ font-size:11px;
 }
+.tabela-reservas th:nth-child(1),.tabela-reservas td:nth-child(1){width:2.5%;text-align:center}
+.tabela-reservas th:nth-child(2),.tabela-reservas td:nth-child(2){width:5.5%}
+.tabela-reservas th:nth-child(3),.tabela-reservas td:nth-child(3){width:10%}
+.tabela-reservas th:nth-child(4),.tabela-reservas td:nth-child(4){width:5.5%}
+.tabela-reservas th:nth-child(5),.tabela-reservas td:nth-child(5){width:6%}
+.tabela-reservas th:nth-child(6),.tabela-reservas td:nth-child(6){width:11.5%}
+.tabela-reservas th:nth-child(7),.tabela-reservas td:nth-child(7){width:7%}
+.tabela-reservas th:nth-child(8),.tabela-reservas td:nth-child(8){width:9.5%}
+.tabela-reservas th:nth-child(9),.tabela-reservas td:nth-child(9){width:6.5%}
+.tabela-reservas th:nth-child(10),.tabela-reservas td:nth-child(10){width:7.5%}
+.tabela-reservas th:nth-child(11),.tabela-reservas td:nth-child(11){width:7.5%}
+.tabela-reservas th:nth-child(12),.tabela-reservas td:nth-child(12){width:6%}
+.tabela-reservas th:nth-child(13),.tabela-reservas td:nth-child(13){width:15%}
+.tabela-reservas th.coluna-selecao,.tabela-reservas td.coluna-selecao{width:2.5%;min-width:0;padding-left:2px;padding-right:2px}
 .tabela-reservas tr:hover td{background:#f8fbfc}
 .tabela-reservas .reserva-hospede strong{
  display:block;
  color:var(--marinho);
  margin-bottom:2px;
+ overflow-wrap:anywhere;
 }
 .tabela-reservas .reserva-hospede small,
 .tabela-reservas .reserva-datas small{
+ display:block;
  color:var(--cinza);
+ overflow-wrap:anywhere;
 }
+.tabela-reservas .reserva-datas strong{display:block;white-space:normal;overflow-wrap:anywhere}
+.tabela-reservas .numero-reserva-sequencial{min-width:0;padding:4px 5px;font-size:10.5px}
+.tabela-reservas .status-badge,.tabela-reservas .badge-situacao{white-space:normal;text-align:center;padding:3px 5px;font-size:10px}
+.tabela-reservas .reserva-acoes{display:flex;gap:4px;flex-wrap:wrap;white-space:normal}
+.tabela-reservas .reserva-acoes button{padding:5px 6px;font-size:10px;line-height:1.2;white-space:normal;max-width:100%;margin:0}
+@media(max-width:1200px){
+ .tabela-reservas{font-size:10.5px}
+ .tabela-reservas th,.tabela-reservas td{padding:5px 3px}
+ .tabela-reservas .reserva-acoes button{font-size:9.5px;padding:4px 5px}
+}
+.numero-reserva-sequencial{
+ display:inline-flex;align-items:center;justify-content:center;min-width:54px;
+ padding:5px 8px;border:1px solid transparent;border-radius:8px;
+ font-weight:800;letter-spacing:.2px;white-space:nowrap;
+}
+.numero-reserva-sequencial.reserva-codigo-am{background:#fff0a8;color:#674d00;border-color:#e1c64c}
+.numero-reserva-sequencial.reserva-codigo-be{background:#f3e2c1;color:#6b4a20;border-color:#d6bd91}
+.numero-reserva-sequencial.reserva-codigo-ma{background:#795548;color:#fff;border-color:#5d4037}
+.numero-reserva-sequencial.reserva-codigo-br{background:#f7f8fa;color:#39424e;border-color:#cbd2d9}
+.numero-reserva-sequencial.reserva-codigo-nc{background:#dceeff;color:#174b7a;border-color:#a6c9eb}
 .reserva-datas strong{display:block}
 .badge-situacao{
  display:inline-block;
@@ -1891,6 +1990,180 @@ textarea{
 
 </style>
 
+<style id="interface-calendario-mobile-v14">
+@media(max-width:800px){
+ .mobile-campo-datas-pesquisar{
+  border-color:#bfdfe9;
+ }
+ .mobile-campo-datas-pesquisar .mobile-campo-icone{
+  width:42px;
+  height:42px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:12px;
+  background:#eaf7fb;
+ }
+ .mobile-compacto-modal-calendario{
+  max-height:94dvh;
+  padding-top:14px;
+ }
+ .mobile-calendario-selecao-resumo{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+  align-items:center;
+  gap:7px;
+  margin:0 0 12px;
+ }
+ .mobile-calendario-resumo-item{
+  width:100%;
+  min-width:0;
+  padding:10px 11px;
+  border:1px solid #d7e4e9;
+  border-radius:12px;
+  background:#f7fafb;
+  text-align:left;
+  cursor:pointer;
+ }
+ .mobile-calendario-resumo-item.ativo{
+  border-color:#0ea5e9;
+  box-shadow:0 0 0 2px #0ea5e922;
+  background:#f8fdff;
+ }
+ .mobile-calendario-resumo-item span{
+  display:block;
+  color:#71808a;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.04em;
+ }
+ .mobile-calendario-resumo-item strong{
+  display:block;
+  margin-top:3px;
+  color:var(--marinho);
+  font-size:13px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+ }
+ .mobile-calendario-resumo-separador{
+  color:#84939b;
+  font-weight:800;
+ }
+ .mobile-calendario-navegacao{
+  display:grid;
+  grid-template-columns:42px minmax(0,1fr) 42px;
+  align-items:center;
+  gap:8px;
+  margin:2px 0 8px;
+ }
+ .mobile-calendario-navegacao>strong{
+  text-align:center;
+  color:var(--marinho);
+  font-size:16px;
+  text-transform:capitalize;
+ }
+ .mobile-calendario-nav{
+  width:42px;
+  height:42px;
+  border:1px solid #d7e4e9;
+  border-radius:11px;
+  background:#fff;
+  color:#0a4b6e;
+  font-size:27px;
+  line-height:1;
+  cursor:pointer;
+ }
+ .mobile-calendario-nav:disabled{
+  opacity:.35;
+  cursor:default;
+ }
+ .mobile-calendario-semana,
+ .mobile-calendario-grade{
+  display:grid;
+  grid-template-columns:repeat(7,minmax(0,1fr));
+  gap:3px;
+ }
+ .mobile-calendario-semana{
+  margin-bottom:4px;
+ }
+ .mobile-calendario-semana span{
+  text-align:center;
+  color:#7a8991;
+  font-size:9px;
+  font-weight:800;
+  padding:4px 0;
+ }
+ .mobile-calendario-dia{
+  position:relative;
+  min-height:43px;
+  border:1px solid transparent;
+  border-radius:10px;
+  background:#fff;
+  color:var(--marinho);
+  font-size:13px;
+  font-weight:700;
+  cursor:pointer;
+ }
+ .mobile-calendario-dia:not(:disabled):active{
+  transform:scale(.97);
+ }
+ .mobile-calendario-dia.vazio{
+  pointer-events:none;
+  background:transparent;
+ }
+ .mobile-calendario-dia.hoje{
+  border-color:#94c9da;
+ }
+ .mobile-calendario-dia.fora-periodo{
+  color:#a7b2b8;
+  background:#f7f9fa;
+  cursor:default;
+ }
+ .mobile-calendario-dia.selecionada{
+  border-color:#0a4b6e;
+  background:#0a4b6e;
+  color:#fff;
+ }
+ .mobile-calendario-dia.inicio::after,
+ .mobile-calendario-dia.fim::after{
+  content:'';
+  position:absolute;
+  left:50%;
+  bottom:4px;
+  width:4px;
+  height:4px;
+  transform:translateX(-50%);
+  border-radius:50%;
+  background:currentColor;
+  opacity:.85;
+ }
+ .mobile-calendario-dia.no-intervalo{
+  border-radius:0;
+  background:#eaf7fb;
+  color:#0a4b6e;
+ }
+ .mobile-calendario-dia.inicio{
+  border-top-right-radius:0;
+  border-bottom-right-radius:0;
+ }
+ .mobile-calendario-dia.fim{
+  border-top-left-radius:0;
+  border-bottom-left-radius:0;
+ }
+ .mobile-calendario-legenda{
+  margin:7px 0 2px;
+  color:#73818a;
+  font-size:10px;
+  text-align:center;
+ }
+ #mobileCalendarioConfirmar:disabled{
+  opacity:.45;
+  box-shadow:none;
+ }
+}
+</style>
+
 <script>
 document.addEventListener('click',function(event){
  var alvo=event.target&&event.target.closest?event.target.closest('a,button'):null;
@@ -2031,6 +2304,713 @@ document.addEventListener('click',function(event){
 
 </style>
 <link rel="manifest" href="/manifest.json">
+<!-- ÍCONES PERSONALIZADOS CASAS NA PRAIA — V22 -->
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<meta name="theme-color" content="#00B9C8">
+
+<style id="guia-casas-na-praia-link">
+.botao-guia-regiao{
+ display:inline-flex;
+ align-items:center;
+ justify-content:center;
+ gap:6px;
+ padding:9px 13px;
+ border-radius:22px;
+ background:linear-gradient(135deg,#0f789a,#0b4f6b);
+ color:#fff;
+ text-decoration:none;
+ font-weight:700;
+ font-size:14px;
+ border:1px solid rgba(255,255,255,.22);
+ box-shadow:0 5px 14px rgba(0,55,80,.18);
+ transition:transform .15s ease,filter .15s ease,box-shadow .15s ease;
+ white-space:nowrap;
+}
+.botao-guia-regiao:hover{
+ transform:translateY(-1px);
+ filter:brightness(1.05);
+ box-shadow:0 7px 16px rgba(0,55,80,.22);
+}
+@media(max-width:700px){
+ .botao-guia-regiao{
+  display:flex !important;
+  align-items:center;
+  justify-content:center;
+  width:min(92vw,360px);
+  min-height:44px;
+  margin:0 auto;
+  padding:10px 14px;
+  font-size:14px;
+  border-radius:12px;
+ }
+}
+
+@media(max-width:800px){
+ .cabecalho-publico{
+  width:100%;
+  padding:12px 10px 14px;
+ }
+ .cabecalho-publico > div:last-child{
+  width:100%;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:stretch !important;
+  justify-content:center !important;
+  gap:8px !important;
+ }
+ .cabecalho-publico .botao-cliente{
+  display:block !important;
+  width:min(92vw,360px);
+  min-height:44px;
+  margin:0 auto;
+  padding:10px 14px;
+  border-radius:12px;
+ }
+ .cabecalho-publico .botao-guia-regiao{
+  order:2;
+ }
+ .cabecalho-publico .botao-login{
+  display:none !important;
+ }
+ .cabecalho-publico + .clima-publico{
+  margin-top:205px;
+ }
+}
+</style>
+
+<style id="interface-mobile-compacta-v10">
+.mobile-publico-compacto,
+.mobile-compacto-modal{
+ display:none;
+}
+
+@media(max-width:800px){
+ /* A interface compacta substitui somente a apresentação pública móvel. */
+ #mobilePublicoCompacto{
+  display:block!important;
+ }
+ .hero-praia,
+ .area-publica,
+ .faixa-praia,
+ .info-praia{
+  display:none!important;
+ }
+ .mobile-compacto-cabecalho{
+  padding:6px 2px 12px;
+ }
+ .mobile-compacto-cabecalho strong{
+  display:block;
+  color:var(--marinho);
+  font-size:21px;
+ }
+ .mobile-compacto-cabecalho span{
+  display:block;
+  color:var(--cinza);
+  font-size:12px;
+  margin-top:3px;
+ }
+ .mobile-compacto-acao-lupa,
+ .mobile-compacto-campo{
+  width:100%;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  border:1px solid #d9e6eb;
+  background:#fff;
+  border-radius:14px;
+  padding:13px 14px;
+  margin:0 0 10px;
+  box-shadow:0 4px 14px #0000000a;
+  text-align:left;
+  cursor:pointer;
+ }
+ .mobile-compacto-acao-icone{
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#eaf7fb;
+  font-size:21px;
+  flex:0 0 auto;
+ }
+ .mobile-compacto-acao-lupa > span:nth-child(2),
+ .mobile-campo-conteudo{
+  flex:1;
+  min-width:0;
+ }
+ .mobile-compacto-acao-lupa strong,
+ .mobile-campo-conteudo strong{
+  display:block;
+  color:var(--marinho);
+  font-size:14px;
+ }
+ .mobile-compacto-acao-lupa small,
+ .mobile-campo-conteudo small{
+  display:block;
+  color:var(--cinza);
+  font-size:12px;
+  margin-top:3px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+ }
+ .mobile-compacto-seta,
+ .mobile-campo-seta{
+  font-size:22px;
+  color:#71808a;
+  flex:0 0 auto;
+ }
+ .mobile-lista-propriedades{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin:-2px 0 10px;
+  padding:8px;
+  background:#f6fafc;
+  border:1px solid #d9e8ee;
+  border-radius:14px;
+ }
+ .mobile-lista-propriedades[hidden]{display:none!important}
+ .mobile-propriedade-opcao{
+  border:1px solid #d7e4e9;
+  background:#fff;
+  border-radius:12px;
+  padding:8px;
+  text-align:left;
+  cursor:pointer;
+ }
+ .mobile-propriedade-opcao.ativa{
+  border-color:#0ea5e9;
+  box-shadow:0 0 0 2px #0ea5e922;
+ }
+ .mobile-propriedade-opcao img{
+  width:100%;
+  height:76px;
+  object-fit:cover;
+  border-radius:9px;
+  display:block;
+  margin-bottom:6px;
+ }
+ .mobile-propriedade-opcao strong{
+  display:block;
+  color:var(--marinho);
+  font-size:12px;
+  line-height:1.2;
+ }
+ .mobile-propriedade-opcao small{
+  display:block;
+  margin-top:3px;
+  color:var(--cinza);
+  font-size:10px;
+ }
+ .mobile-compacto-titulo-casas{
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+  padding:8px 2px 9px;
+ }
+ .mobile-compacto-titulo-casas strong{
+  color:var(--marinho);
+  font-size:17px;
+ }
+ .mobile-compacto-titulo-casas span{
+  color:var(--cinza);
+  font-size:11px;
+ }
+ .mobile-grade-casas-compacta{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+ }
+ .mobile-casa-card-compacta{
+  overflow:hidden;
+  border:1px solid #dbe6eb;
+  background:#fff;
+  border-radius:14px;
+  box-shadow:0 4px 14px #0000000a;
+  cursor:pointer;
+ }
+ .mobile-casa-card-compacta img,
+ .mobile-casa-card-compacta .mobile-casa-sem-foto{
+  width:100%;
+  height:132px;
+  object-fit:cover;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg,#dff4fb,#edf9fc);
+  color:#58717b;
+  font-size:30px;
+ }
+ .mobile-casa-card-compacta .mobile-casa-card-nome{
+  padding:10px 10px 11px;
+  color:var(--marinho);
+  font-weight:800;
+  font-size:13px;
+ }
+ .mobile-casa-card-compacta .mobile-casa-card-info{
+  padding:0 10px 11px;
+  color:var(--cinza);
+  font-size:10px;
+ }
+ .mobile-casa-card-compacta.esta-selecionada{
+  border-color:#0ea5e9;
+  box-shadow:0 0 0 2px #0ea5e922,0 6px 18px #00000012;
+ }
+ .mobile-busca-botao{
+  width:100%;
+  min-height:50px;
+  border:0;
+  border-radius:13px;
+  margin:2px 0 13px;
+  background:linear-gradient(135deg,#0b6b8e,#0a4b6e);
+  color:#fff;
+  font-weight:800;
+  font-size:15px;
+  box-shadow:0 6px 18px #00000014;
+ }
+ .mobile-busca-botao:disabled{
+  opacity:.45;
+  box-shadow:none;
+ }
+ .mobile-resultado-busca{
+  margin:2px 0 15px;
+ }
+ .mobile-resultado-busca[hidden]{display:none!important}
+ .mobile-resultado-cabecalho{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:10px;
+  margin-bottom:10px;
+ }
+ .mobile-resultado-cabecalho strong{color:var(--marinho);font-size:16px}
+ .mobile-resultado-cabecalho small{display:block;color:var(--cinza);font-size:11px;margin-top:3px}
+ .mobile-resultado-editar{
+  border:1px solid #d7e5ea;
+  background:#fff;
+  color:#0a4b6e;
+  padding:8px 10px;
+  border-radius:9px;
+  font-weight:700;
+ }
+ .mobile-resultado-casas{display:flex;flex-direction:column;gap:9px}
+ .mobile-resultado-casa{
+  display:grid;
+  grid-template-columns:84px minmax(0,1fr);
+  gap:10px;
+  align-items:stretch;
+  border:1px solid #dce7eb;
+  border-radius:13px;
+  background:#fff;
+  padding:9px;
+  box-shadow:0 4px 12px #00000009;
+  text-align:left;
+ }
+ .mobile-resultado-casa.selecionada{
+  border-color:#0ea5e9;
+  box-shadow:0 0 0 2px #0ea5e922,0 7px 18px #00000012;
+ }
+ .mobile-resultado-casa-indisponivel{opacity:.78}
+ .mobile-resultado-casa-foto{
+  width:84px;
+  min-height:94px;
+  border-radius:10px;
+  overflow:hidden;
+  background:#eef6f8;
+ }
+ .mobile-resultado-casa-foto img{width:100%;height:100%;object-fit:cover;display:block}
+ .mobile-resultado-casa-conteudo{min-width:0}
+ .mobile-resultado-casa-topo{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+ .mobile-resultado-casa-nome{font-weight:800;color:var(--marinho);font-size:14px;line-height:1.2}
+ .mobile-resultado-casa-status{font-size:10px;font-weight:800;padding:4px 7px;border-radius:999px;white-space:nowrap}
+ .mobile-status-ok{background:#e9f8ee;color:#176b2c}
+ .mobile-status-no{background:#fff1f0;color:#a63a2d}
+ .mobile-resultado-casa-info{font-size:11px;color:var(--cinza);margin-top:4px;line-height:1.4}
+ .mobile-resultado-casa-valor{margin-top:7px;padding-top:7px;border-top:1px solid #edf1f3}
+ .mobile-resultado-casa-valor strong{display:block;color:#0a4b6e;font-size:15px}
+ .mobile-resultado-casa-valor small{color:var(--cinza);font-size:10px}
+ .mobile-resultado-casa-acoes{margin-top:8px;display:flex;gap:7px;flex-wrap:wrap}
+ .mobile-resultado-casa-acoes button{min-height:40px;border-radius:10px;padding:8px 11px;font-weight:800;border:0}
+ .mobile-resultado-escolher{background:#eef6f9;color:#0a4b6e}
+ .mobile-resultado-solicitar{background:var(--ouro);color:#222;flex:1}
+ .mobile-resultado-resumo{padding:10px 12px;border:1px solid #dce8ed;background:#f7fbfc;border-radius:11px;margin-bottom:10px;font-size:11px;color:#52616a;line-height:1.45}
+ .mobile-resultado-vazio{padding:14px;border:1px dashed #cbd9df;border-radius:11px;color:var(--cinza);font-size:12px;text-align:center}
+ .mobile-sucesso-reserva-conteudo{max-height:92dvh}
+ .mobile-sucesso-reserva-icone{text-align:center;font-size:42px;line-height:1;margin:2px 0 8px}
+ .mobile-sucesso-reserva-mensagem{padding:12px 13px;background:#edf9f1;border:1px solid #b8e1c5;border-radius:12px;color:#234a31;font-size:13px;line-height:1.5}
+ .mobile-sucesso-reserva-links{display:grid;gap:8px;margin-top:12px}
+ .mobile-sucesso-reserva-links a{display:block;padding:11px 12px;border-radius:10px;background:#f7fafb;border:1px solid #dce7eb;color:#0a4b6e;text-decoration:none;font-weight:800;font-size:13px}
+ .mobile-sucesso-reserva-anuncios{margin-top:14px;padding-top:12px;border-top:1px solid #e2eaed;display:grid;gap:6px}
+ .mobile-sucesso-reserva-anuncios strong{font-size:13px;color:var(--marinho);margin-bottom:2px}
+ .mobile-sucesso-reserva-anuncios a{color:#0a4b6e;font-size:12px;text-decoration:underline}
+ .mobile-camera-placeholder{display:none}
+
+ .mobile-compacto-modal{
+  position:fixed;
+  inset:0;
+  z-index:2600;
+  background:#0008;
+  display:none;
+  align-items:flex-end;
+  justify-content:center;
+  padding:0;
+ }
+ .mobile-compacto-modal.aberto{display:flex}
+ .mobile-compacto-modal-conteudo{
+  width:100%;
+  max-height:88dvh;
+  overflow:auto;
+  background:#fff;
+  border-radius:18px 18px 0 0;
+  padding:16px 15px calc(24px + env(safe-area-inset-bottom));
+  box-shadow:0 -10px 40px #0004;
+  -webkit-overflow-scrolling:touch;
+ }
+ .mobile-compacto-modal-pequeno{max-height:62dvh}
+ .mobile-compacto-modal-cabecalho{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:16px;
+ }
+ .mobile-compacto-modal-cabecalho h3{
+  margin:0;
+  color:var(--marinho);
+  font-size:20px;
+ }
+ .mobile-compacto-modal-cabecalho p{
+  margin:4px 0 0;
+  color:var(--cinza);
+  font-size:12px;
+ }
+ .mobile-compacto-fechar{
+  border:0;
+  width:38px;
+  height:38px;
+  border-radius:10px;
+  background:#eef4f6;
+  color:#44545e;
+  font-size:25px;
+  cursor:pointer;
+  flex:0 0 auto;
+ }
+ .mobile-datas-grade{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+ }
+ .mobile-datas-grade input{
+  width:100%;
+  min-height:48px;
+  box-sizing:border-box;
+ }
+ .mobile-compacto-aviso{
+  min-height:20px;
+  color:#b42318;
+  font-size:12px;
+  margin:9px 0;
+ }
+ .mobile-compacto-botao-principal{
+  width:100%;
+  min-height:50px;
+  margin-top:8px;
+  border-radius:12px;
+  font-weight:800;
+ }
+ .mobile-hospede-linha{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  padding:14px 0;
+  border-bottom:1px solid #edf1f3;
+ }
+ .mobile-hospede-linha:last-of-type{border-bottom:0}
+ .mobile-hospede-linha strong{display:block;color:#203d4c;font-size:15px}
+ .mobile-hospede-linha small{display:block;color:var(--cinza);font-size:11px;margin-top:2px}
+ .mobile-stepper{display:flex;align-items:center;gap:12px}
+ .mobile-stepper button{
+  width:38px;height:38px;border-radius:50%;border:1px solid #bcd0d8;background:#fff;color:#0a4b6e;font-size:22px;cursor:pointer;
+ }
+ .mobile-stepper strong{min-width:20px;text-align:center;color:var(--marinho)}
+ .mobile-modal-casa-detalhes{max-height:94dvh}
+ .mobile-casa-galeria-detalhes{
+  width:100%;
+  height:230px;
+  border-radius:14px;
+  overflow:hidden;
+  background:#eef6f8;
+ }
+ .mobile-casa-galeria-detalhes img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+ }
+ .mobile-casa-sem-foto-grande{
+  width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#54707b;font-size:48px;
+ }
+ .mobile-galeria-controles{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin:8px 0 14px;
+ }
+ .mobile-galeria-controles button{
+  border:0;background:#eef5f7;color:#0a4b6e;width:42px;height:38px;border-radius:10px;font-size:25px;cursor:pointer;
+ }
+ .mobile-galeria-controles span{font-size:12px;color:var(--cinza);font-weight:700}
+ .mobile-casa-caracteristicas-detalhes{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:7px;
+  margin-bottom:12px;
+ }
+ .mobile-casa-caracteristicas-detalhes > div{
+  padding:9px 10px;
+  background:#f7fafb;
+  border:1px solid #e1e9ed;
+  border-radius:10px;
+  color:#34505e;
+  font-size:12px;
+  line-height:1.3;
+ }
+ .mobile-casa-comodidades-detalhes{
+  margin-bottom:10px;
+ }
+ .mobile-casa-comodidades-detalhes h4{margin:4px 0 7px;color:var(--marinho);font-size:15px}
+ .mobile-casa-comodidades-detalhes ul{margin:0;padding-left:18px;color:#485e68;font-size:12px;line-height:1.5}
+
+ footer#rodapePublico .camera-publica{
+  display:block!important;
+  position:relative!important;
+  left:auto!important;
+  top:auto!important;
+  transform:none!important;
+  width:auto!important;
+  max-width:390px;
+  margin:22px auto 14px!important;
+  background:rgba(0,35,55,.94)!important;
+ }
+ .hero-praia .camera-publica{display:none!important}
+}
+
+@media(min-width:801px){
+ #mobilePublicoCompacto,
+ #modalCalendarioMobileCompacto,
+ #modalHospedesMobileCompacto,
+ #modalCasaMobileCompacto{display:none!important}
+}
+</style>
+
+<style id="ajustes-v12-fluxo-mobile">
+@media(max-width:800px){
+ .modal#aberto,
+ .modal.aberto{
+  align-items:flex-end!important;
+ }
+ #modalReserva.aberto .modal-conteudo{
+  max-height:calc(100dvh - 10px)!important;
+  padding:16px 14px calc(26px + env(safe-area-inset-bottom))!important;
+  overflow-y:auto!important;
+ }
+ #modalReserva.aberto #comodidadesReservaPublica{
+  display:none!important;
+ }
+ #modalReserva.aberto #hospedeNome,
+ #modalReserva.aberto #hospedeTelefone{
+  min-height:46px;
+  font-size:16px;
+ }
+ .mobile-detalhes-propriedade-botao{
+  display:block;
+  width:100%;
+  min-height:46px;
+  margin-top:9px;
+  padding:10px 13px;
+  border:1px solid #cfe2e8;
+  border-radius:11px;
+  background:#f7fbfc;
+  color:#0a4b6e;
+  font-weight:800;
+  font-size:14px;
+ }
+ .mobile-detalhes-propriedade-painel{
+  margin-top:9px;
+  padding:13px;
+  border:1px solid #d9e7ec;
+  border-radius:12px;
+  background:#f9fcfd;
+  color:#455660;
+  font-size:12px;
+  line-height:1.5;
+ }
+ .mobile-detalhes-propriedade-painel[hidden]{display:none!important}
+ .mobile-detalhes-propriedade-painel h4{
+  margin:0 0 8px;
+  color:var(--marinho);
+  font-size:15px;
+ }
+ .mobile-detalhes-propriedade-painel .mdp-desc{
+  margin:0 0 9px;
+ }
+ .mobile-detalhes-propriedade-painel .mdp-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:7px;
+  margin:9px 0;
+ }
+ .mobile-detalhes-propriedade-painel .mdp-item{
+  padding:8px 9px;
+  border:1px solid #e1ebee;
+  border-radius:9px;
+  background:#fff;
+ }
+ .mobile-detalhes-propriedade-painel ul{
+  margin:6px 0 0;
+  padding-left:18px;
+ }
+ .mobile-detalhes-propriedade-painel li{
+  margin:2px 0;
+ }
+ .mobile-sucesso-fechar{
+  position:absolute;
+  top:12px;
+  right:12px;
+ }
+}
+@media(min-width:801px){
+ .mobile-detalhes-propriedade-botao,
+ .mobile-detalhes-propriedade-painel{
+  display:none!important;
+ }
+}
+</style>
+<style id="instalacao-iphone-estilos">
+/* Orientação de instalação no iPhone — não altera o layout existente. */
+#modalInstalacaoIphone{
+ position:fixed;inset:0;z-index:100000;display:none;
+ align-items:flex-end;justify-content:center;
+ background:rgba(0,0,0,.58);padding:18px;
+}
+#modalInstalacaoIphone.aberto{display:flex;}
+#modalInstalacaoIphone .conteudo{
+ width:min(520px,100%);background:#fff;border-radius:20px 20px 14px 14px;
+ padding:20px;box-shadow:0 18px 50px rgba(0,0,0,.28);
+ color:#243746;max-height:85vh;overflow:auto;
+}
+#modalInstalacaoIphone h3{margin:0 0 8px;font-size:20px;color:#0a4b6e;}
+#modalInstalacaoIphone p{margin:8px 0;line-height:1.45;}
+#modalInstalacaoIphone ol{margin:12px 0 8px 22px;padding:0;}
+#modalInstalacaoIphone li{margin:9px 0;line-height:1.4;}
+#modalInstalacaoIphone .fechar{
+ display:block;width:100%;margin-top:14px;padding:12px;border:0;border-radius:10px;
+ background:#0a4b6e;color:#fff;font-size:15px;font-weight:700;
+}
+@media(min-width:801px){#modalInstalacaoIphone{align-items:center;}}
+</style>
+
+<!-- AJUSTE V23: tabela administrativa de reservas em cartões somente no celular.
+     Em telas maiores não altera as regras/layout existentes. -->
+<style id="ajuste-reservas-administrativo-mobile-v23">
+@media screen and (max-width: 700px) {
+  .lista-reservas-tabela {
+    width: 100%; overflow: visible; border: 0; border-radius: 0; background: transparent;
+  }
+  .tabela-reservas {
+    display: block; width: 100%; min-width: 0; table-layout: auto;
+    border-collapse: separate; border-spacing: 0; font-size: 13px;
+  }
+  .tabela-reservas thead { display: none; }
+  .tabela-reservas tbody { display: block; width: 100%; }
+  .tabela-reservas tbody tr {
+    position: relative; display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    width: 100%; margin: 0 0 13px; overflow: hidden;
+    border: 1px solid #d9e3e9; border-radius: 12px; background: #fff;
+    box-shadow: 0 2px 8px rgba(10, 48, 67, .07);
+  }
+  .tabela-reservas tbody td {
+    display: block; width: auto !important; min-width: 0;
+    padding: 9px 10px !important; border-bottom: 1px solid #edf1f3;
+    text-align: left !important; vertical-align: top; white-space: normal !important;
+    overflow-wrap: anywhere; word-break: normal; font-size: 12px; line-height: 1.4;
+  }
+  .tabela-reservas tbody td:nth-child(1) {
+    position: absolute; top: 8px; left: 7px; z-index: 1;
+    display: flex; align-items: center; justify-content: center;
+    width: 28px !important; min-height: 38px; padding: 4px !important;
+    border: 0; background: transparent;
+  }
+  .tabela-reservas tbody td:nth-child(1) .checkbox-reserva {
+    width: 18px; height: 18px; margin: 0;
+  }
+  .tabela-reservas tbody td:nth-child(2) {
+    grid-column: 1 / -1; min-height: 46px;
+    padding: 10px 10px 10px 45px !important;
+    background: #f4f8fa; border-bottom: 1px solid #dfe8ed;
+  }
+  .tabela-reservas tbody td:nth-child(2)::before {
+    content: "Nº Reserva"; display: inline-block; margin-right: 8px;
+    color: #627582; font-size: 11px; font-weight: 700; vertical-align: middle;
+  }
+  .tabela-reservas tbody td:nth-child(2) .numero-reserva-sequencial {
+    min-width: 0; max-width: 100%; padding: 4px 7px; font-size: 11px; vertical-align: middle;
+  }
+  .tabela-reservas tbody td:nth-child(3) { grid-column: 1 / -1; }
+  .tabela-reservas tbody td:nth-child(4) { grid-column: 1; }
+  .tabela-reservas tbody td:nth-child(5) { grid-column: 2; }
+  .tabela-reservas tbody td:nth-child(6) { grid-column: 1 / -1; }
+  .tabela-reservas tbody td:nth-child(7) { grid-column: 1 / -1; }
+  .tabela-reservas tbody td:nth-child(8) { grid-column: 1 / -1; }
+  .tabela-reservas tbody td:nth-child(9) { grid-column: 1; }
+  .tabela-reservas tbody td:nth-child(10) { grid-column: 2; }
+  .tabela-reservas tbody td:nth-child(11) { grid-column: 1; }
+  .tabela-reservas tbody td:nth-child(12) { grid-column: 2; }
+  .tabela-reservas tbody td:nth-child(13) { grid-column: 1 / -1; }
+  .tabela-reservas tbody td:nth-child(n+3)::before {
+    display: block; margin: 0 0 4px; color: #637985;
+    font-size: 10.5px; line-height: 1.25; font-weight: 700; letter-spacing: .1px;
+  }
+  .tabela-reservas tbody td:nth-child(3)::before { content: "📅 Período"; }
+  .tabela-reservas tbody td:nth-child(4)::before { content: "🏠 Casa"; }
+  .tabela-reservas tbody td:nth-child(5)::before { content: "🌐 Origem"; }
+  .tabela-reservas tbody td:nth-child(6)::before { content: "👤 Hóspede"; }
+  .tabela-reservas tbody td:nth-child(7)::before { content: "👥 Pessoas"; }
+  .tabela-reservas tbody td:nth-child(8)::before { content: "💰 Status do pagamento"; }
+  .tabela-reservas tbody td:nth-child(9)::before { content: "💵 Total"; }
+  .tabela-reservas tbody td:nth-child(10)::before { content: "✅ Valor recebido"; }
+  .tabela-reservas tbody td:nth-child(11)::before { content: "📌 Valor a receber"; }
+  .tabela-reservas tbody td:nth-child(12)::before { content: "📍 Situação"; }
+  .tabela-reservas tbody td:nth-child(13)::before { content: "⚙️ Ações"; }
+  .tabela-reservas .reserva-datas strong,
+  .tabela-reservas .reserva-hospede strong,
+  .tabela-reservas .reserva-datas small,
+  .tabela-reservas .reserva-hospede small { display: block; overflow-wrap: anywhere; }
+  .tabela-reservas .status-badge,
+  .tabela-reservas .badge-situacao {
+    display: inline-block; max-width: 100%; white-space: normal;
+    text-align: center; overflow-wrap: anywhere;
+  }
+  .tabela-reservas tbody td:nth-child(9) strong,
+  .tabela-reservas tbody td:nth-child(10) strong,
+  .tabela-reservas tbody td:nth-child(11) strong { overflow-wrap: normal; word-break: normal; }
+  .tabela-reservas .reserva-acoes { display: flex; gap: 7px; flex-wrap: wrap; white-space: normal; }
+  .tabela-reservas .reserva-acoes button {
+    flex: 1 1 125px; width: auto; max-width: 100%; min-height: 38px;
+    margin: 0; padding: 8px 10px; font-size: 12px; line-height: 1.25;
+    white-space: normal; overflow-wrap: anywhere;
+  }
+}
+</style>
+
 </head>
 
 <body>
@@ -2050,19 +3030,75 @@ if ("serviceWorker" in navigator) {
 </script>
 
 <!-- BOTAO-INSTALAR-APP -->
-<button id="btnInstalarApp" type="button" style="display:none;position:fixed;bottom:20px;right:20px;z-index:99999;padding:12px 18px;border:0;border-radius:25px;background:#0b3954;color:#fff;font-size:15px;font-weight:600;box-shadow:0 4px 12px rgba(0,0,0,.25);cursor:pointer;">
+<button id="btnInstalarApp" type="button" aria-label="Instalar aplicativo" style="display:none;position:fixed;bottom:20px;right:20px;z-index:99999;padding:12px 18px;border:0;border-radius:25px;background:#0b3954;color:#fff;font-size:15px;font-weight:600;box-shadow:0 4px 12px rgba(0,0,0,.25);cursor:pointer;">
     📱 Instalar aplicativo
 </button>
 <!-- FIM-BOTAO-INSTALAR-APP -->
+
+<!-- ORIENTACAO-INSTALAR-IPHONE -->
+<div id="modalInstalacaoIphone" aria-hidden="true" onclick="if(event.target===this)fecharInstalacaoIphone()">
+ <div class="conteudo" role="dialog" aria-modal="true" aria-labelledby="tituloInstalacaoIphone">
+  <h3 id="tituloInstalacaoIphone">📱 Instalar Casas na Praia no iPhone</h3>
+  <p>Para instalar no iPhone, abra este site no <strong>Safari</strong> e siga os passos abaixo:</p>
+  <ol>
+   <li>Toque no botão <strong>Compartilhar</strong> do Safari.</li>
+   <li>Toque em <strong>Adicionar à Tela de Início</strong>.</li>
+   <li>Deixe ativada a opção <strong>“Abrir como App da Web”</strong>.</li>
+   <li>Toque em <strong>Adicionar</strong>.</li>
+  </ol>
+  <p>Depois disso, o ícone <strong>Casas na Praia</strong> ficará na tela inicial e poderá ser aberto como aplicativo.</p>
+  <button type="button" class="fechar" onclick="fecharInstalacaoIphone()">Entendi</button>
+ </div>
+</div>
+<!-- FIM-ORIENTACAO-INSTALAR-IPHONE -->
 
 <!-- SCRIPT-INSTALAR-APP -->
 <script>
 (function () {
     let deferredPrompt = null;
     const btnInstalar = document.getElementById("btnInstalarApp");
+    const modalIphone = document.getElementById("modalInstalacaoIphone");
 
     if (!btnInstalar) return;
 
+    function ehIphoneOuIpad() {
+        const ua = navigator.userAgent || "";
+        const plataforma = navigator.platform || "";
+        return /iPhone|iPad|iPod/i.test(ua) ||
+               (plataforma === "MacIntel" && navigator.maxTouchPoints > 1);
+    }
+
+    function estaComoAppWeb() {
+        return !!(navigator.standalone ||
+            (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) ||
+            (window.matchMedia && window.matchMedia("(display-mode: fullscreen)").matches));
+    }
+
+    window.abrirInstalacaoIphone = function () {
+        if (!modalIphone) return;
+        modalIphone.classList.add("aberto");
+        modalIphone.setAttribute("aria-hidden", "false");
+    };
+
+    window.fecharInstalacaoIphone = function () {
+        if (!modalIphone) return;
+        modalIphone.classList.remove("aberto");
+        modalIphone.setAttribute("aria-hidden", "true");
+    };
+
+    // iPhone/iPad: o Safari não usa beforeinstallprompt.
+    // Mostramos a mesma opção, mas ela abre instruções específicas do Safari.
+    if (ehIphoneOuIpad()) {
+        if (!estaComoAppWeb()) {
+            btnInstalar.style.display = "block";
+            btnInstalar.addEventListener("click", window.abrirInstalacaoIphone);
+        } else {
+            btnInstalar.style.display = "none";
+        }
+    }
+
+    // Android/Chrome e outros navegadores que suportarem o prompt continuam com
+    // o mecanismo original, sem alteração no fluxo já existente.
     window.addEventListener("beforeinstallprompt", function (e) {
         e.preventDefault();
         deferredPrompt = e;
@@ -2070,7 +3106,10 @@ if ("serviceWorker" in navigator) {
     });
 
     btnInstalar.addEventListener("click", async function () {
-        if (!deferredPrompt) return;
+        if (!deferredPrompt) {
+            if (ehIphoneOuIpad()) return;
+            return;
+        }
 
         deferredPrompt.prompt();
 
@@ -2107,6 +3146,9 @@ if ("serviceWorker" in navigator) {
   <button id="btnClienteHeader" class="botao-cliente" onclick="abrirAreaCliente()">
    👤 Minha conta / Minhas reservas
   </button>
+  <a class="botao-guia-regiao" href="/guia-casas-na-praia.html" target="_blank" rel="noopener noreferrer" aria-label="Abrir Guia Casas na Praia em nova aba">
+   🌴 Guia da região
+  </a>
   <button class="botao-login" onclick="abrirLogin()">
    🔐 Acesso Administrativo
   </button>
@@ -2125,6 +3167,171 @@ if ("serviceWorker" in navigator) {
  </button>
 </div>
 <!-- FIM ACESSO ADMINISTRATIVO MOBILE -->
+
+<!-- =====================================================
+     NOVA INTERFACE COMPACTA — SOMENTE MOBILE
+===================================================== -->
+<section id="mobilePublicoCompacto" class="mobile-publico-compacto" aria-label="Consulta rápida pelo celular">
+
+ <div class="mobile-compacto-cabecalho">
+  <div>
+   <strong>Encontre sua casa</strong>
+   <span>Escolha a propriedade e informe sua estadia.</span>
+  </div>
+ </div>
+
+ <button id="mobileBuscaPropriedade" type="button" class="mobile-compacto-acao-lupa" onclick="toggleListaCasasMobileCompacto()" aria-expanded="false">
+  <span class="mobile-compacto-acao-icone">🔎</span>
+  <span>
+   <strong>Buscar por propriedade</strong>
+   <small id="mobileCasaSelecionadaTexto">Todas as 4 casas</small>
+  </span>
+  <span class="mobile-compacto-seta">⌄</span>
+ </button>
+
+ <div id="mobileListaPropriedades" class="mobile-lista-propriedades" hidden></div>
+
+ <button id="mobileCampoDatas" type="button" class="mobile-compacto-campo mobile-campo-datas-pesquisar" onclick="abrirCalendarioMobileCompacto()">
+  <span class="mobile-campo-icone">📅</span>
+  <span class="mobile-campo-conteudo">
+   <strong>Pesquisar Datas</strong>
+   <small id="mobileResumoDatas">Escolha a entrada e a saída</small>
+  </span>
+  <span class="mobile-campo-seta">›</span>
+ </button>
+
+ <button id="mobileCampoHospedes" type="button" class="mobile-compacto-campo" onclick="abrirHospedesMobileCompacto()">
+  <span class="mobile-campo-icone">👥</span>
+  <span class="mobile-campo-conteudo">
+   <strong>Hóspedes</strong>
+   <small id="mobileResumoHospedes">1 hóspede</small>
+  </span>
+  <span class="mobile-campo-seta">›</span>
+ </button>
+
+ <button id="mobileBotaoBuscarDisponibilidade" type="button" class="mobile-busca-botao" onclick="buscarCasasMobileCompacto()" disabled>
+  🔎 Buscar disponibilidade
+ </button>
+
+ <div id="mobileResultadoBusca" class="mobile-resultado-busca" hidden></div>
+
+ <div class="mobile-compacto-titulo-casas" id="mobileTituloCasasCompacto">
+  <strong>🏠 Nossas casas</strong>
+  <span>Toque em uma casa para ver fotos e características.</span>
+ </div>
+
+ <div id="mobileListaCasasCompacta" class="mobile-grade-casas-compacta"></div>
+
+ <div id="mobileCamerasPlaceholder" class="mobile-camera-placeholder"></div>
+</section>
+
+<!-- Modal compacto de datas -->
+<div id="modalCalendarioMobileCompacto" class="mobile-compacto-modal" aria-hidden="true" onclick="if(event.target===this)fecharCalendarioMobileCompacto()">
+ <div class="mobile-compacto-modal-conteudo mobile-compacto-modal-calendario" role="dialog" aria-modal="true" aria-labelledby="tituloCalendarioMobileCompacto">
+  <div class="mobile-compacto-modal-cabecalho">
+   <div>
+    <h3 id="tituloCalendarioMobileCompacto">📅 Pesquisar Datas</h3>
+    <p>Selecione a entrada e a saída no mesmo calendário.</p>
+   </div>
+   <button type="button" class="mobile-compacto-fechar" onclick="fecharCalendarioMobileCompacto()" aria-label="Fechar calendário">×</button>
+  </div>
+
+  <div class="mobile-calendario-selecao-resumo" aria-label="Datas selecionadas">
+   <button type="button" id="mobileCalendarioEntradaResumo" class="mobile-calendario-resumo-item ativo" onclick="definirCampoCalendarioMobileCompacto('entrada')">
+    <span>ENTRADA</span>
+    <strong id="mobileCalendarioEntradaValor">Selecionar</strong>
+   </button>
+   <span class="mobile-calendario-resumo-separador">→</span>
+   <button type="button" id="mobileCalendarioSaidaResumo" class="mobile-calendario-resumo-item" onclick="definirCampoCalendarioMobileCompacto('saida')">
+    <span>SAÍDA</span>
+    <strong id="mobileCalendarioSaidaValor">Selecionar</strong>
+   </button>
+  </div>
+
+  <div class="mobile-calendario-navegacao">
+   <button type="button" id="mobileCalendarioMesAnterior" class="mobile-calendario-nav" onclick="mudarMesCalendarioMobileCompacto(-1)" aria-label="Mês anterior">‹</button>
+   <strong id="mobileCalendarioMesTitulo">Mês de 2026</strong>
+   <button type="button" class="mobile-calendario-nav" onclick="mudarMesCalendarioMobileCompacto(1)" aria-label="Próximo mês">›</button>
+  </div>
+
+  <div class="mobile-calendario-semana" aria-hidden="true">
+   <span>DOM</span><span>SEG</span><span>TER</span><span>QUA</span><span>QUI</span><span>SEX</span><span>SÁB</span>
+  </div>
+  <div id="mobileCalendarioGrade" class="mobile-calendario-grade" aria-label="Calendário para seleção do período"></div>
+
+  <div id="mobileAvisoDatas" class="mobile-compacto-aviso"></div>
+  <div class="mobile-calendario-legenda">Toque primeiro na entrada e depois na saída.</div>
+  <button type="button" class="amarelo mobile-compacto-botao-principal" id="mobileCalendarioConfirmar" onclick="salvarDatasMobileCompacto()" disabled>✅ Confirmar datas</button>
+ </div>
+</div>
+
+<!-- Modal compacto de hóspedes, inspirado no padrão de contagem do Booking -->
+<div id="modalHospedesMobileCompacto" class="mobile-compacto-modal" aria-hidden="true" onclick="if(event.target===this)fecharHospedesMobileCompacto()">
+ <div class="mobile-compacto-modal-conteudo mobile-compacto-modal-pequeno">
+  <div class="mobile-compacto-modal-cabecalho">
+   <div>
+    <h3>👥 Hóspedes</h3>
+    <p>Defina quantas pessoas irão se hospedar.</p>
+   </div>
+   <button type="button" class="mobile-compacto-fechar" onclick="fecharHospedesMobileCompacto()">×</button>
+  </div>
+  <div class="mobile-hospede-linha">
+   <div><strong>Adultos</strong><small>13 anos ou mais</small></div>
+   <div class="mobile-stepper">
+    <button type="button" onclick="alterarHospedesMobileCompacto('adultos',-1)">−</button>
+    <strong id="mobileQtdAdultos">1</strong>
+    <button type="button" onclick="alterarHospedesMobileCompacto('adultos',1)">+</button>
+   </div>
+  </div>
+  <div class="mobile-hospede-linha">
+   <div><strong>Crianças</strong><small>0 a 12 anos</small></div>
+   <div class="mobile-stepper">
+    <button type="button" onclick="alterarHospedesMobileCompacto('criancas',-1)">−</button>
+    <strong id="mobileQtdCriancas">0</strong>
+    <button type="button" onclick="alterarHospedesMobileCompacto('criancas',1)">+</button>
+   </div>
+  </div>
+  <button type="button" class="amarelo mobile-compacto-botao-principal" onclick="salvarHospedesMobileCompacto()">✅ Confirmar hóspedes</button>
+ </div>
+</div>
+
+<!-- Modal compacto de casa: galeria + características -->
+<div id="modalCasaMobileCompacto" class="mobile-compacto-modal" aria-hidden="true" onclick="if(event.target===this)fecharDetalhesCasaMobileCompacto()">
+ <div class="mobile-compacto-modal-conteudo mobile-modal-casa-detalhes">
+  <div class="mobile-compacto-modal-cabecalho">
+   <div>
+    <h3 id="mobileCasaDetalhesTitulo">Casa</h3>
+    <p id="mobileCasaDetalhesSubtitulo">Fotos e características</p>
+   </div>
+   <button type="button" class="mobile-compacto-fechar" onclick="fecharDetalhesCasaMobileCompacto()">×</button>
+  </div>
+  <div id="mobileCasaGaleriaDetalhes" class="mobile-casa-galeria-detalhes"></div>
+  <div class="mobile-galeria-controles">
+   <button type="button" onclick="mudarFotoCasaMobileCompacto(-1)">‹</button>
+   <span id="mobileCasaGaleriaContador">1 de 1</span>
+   <button type="button" onclick="mudarFotoCasaMobileCompacto(1)">›</button>
+  </div>
+  <div id="mobileCasaCaracteristicasDetalhes" class="mobile-casa-caracteristicas-detalhes"></div>
+  <div id="mobileCasaComodidadesDetalhes" class="mobile-casa-comodidades-detalhes"></div>
+  <button type="button" class="amarelo mobile-compacto-botao-principal" onclick="consultarDisponibilidadeCasaMobileCompacto()">🔎 Consultar disponibilidade</button>
+ </div>
+</div>
+
+<!-- Modal de sucesso da solicitação no fluxo mobile -->
+<div id="modalSucessoReservaMobile" class="mobile-compacto-modal" aria-hidden="true" onclick="if(event.target===this)fecharSucessoReservaMobileCompacto()">
+ <div class="mobile-compacto-modal-conteudo mobile-sucesso-reserva-conteudo">
+  <div class="mobile-sucesso-reserva-icone">✅</div>
+  <button type="button" class="mobile-compacto-fechar mobile-sucesso-fechar" onclick="fecharSucessoReservaMobileCompacto()">×</button>
+  <div class="mobile-sucesso-reserva-mensagem">
+   Solicitação enviada com sucesso! Em breve entraremos em contato. Se preferir, utilize nossos números do WhatsApp para confirmação do recebimento da reserva.
+  </div>
+  <div class="mobile-sucesso-reserva-links">
+   <a href="https://wa.me/5548988555115" target="_blank" rel="noopener noreferrer">🟢 WhatsApp — (48) 98855-5115</a>
+   <a href="https://wa.me/5548999578871" target="_blank" rel="noopener noreferrer">🟢 WhatsApp — (48) 99957-8871</a>
+  </div>
+  <button type="button" class="amarelo mobile-compacto-botao-principal" onclick="fecharSucessoReservaMobileCompacto()">Concluir</button>
+ </div>
+</div>
 
 <section class="hero-praia">
 
@@ -2453,7 +3660,7 @@ if ("serviceWorker" in navigator) {
 
  <p style="color:var(--cinza);margin:10px 0">
   💡 Vermelho = reserva confirmada/paga.
-  Arraste para selecionar dias.
+  Arraste para selecionar dias. Abaixo você pode definir a estadia mínima para novas reservas.
  </p>
 
  <div class="linha-form">
@@ -2483,6 +3690,49 @@ if ("serviceWorker" in navigator) {
    </option>
 
   </select>
+
+ </div>
+
+ <div class="painel-despesas" style="margin-top:14px">
+
+  <h3>🌙 Estadia mínima</h3>
+
+  <p style="color:var(--cinza);margin:6px 0 10px">
+   Você pode manter uma <strong>regra padrão</strong> para a casa e criar regras específicas por data.
+   Exemplo: deixe o padrão em <strong>1</strong>, selecione em azul as datas de sexta/sábado e salve <strong>2</strong>.
+   Somente as datas selecionadas receberão a regra de 2 noites. Reservas já lançadas permanecem inalteradas.
+  </p>
+
+  <div class="linha-form">
+
+   <div class="grupo-input">
+    <label>Estadia mínima padrão da casa</label>
+    <input type="number" id="estadiaMinimaCalendario" min="1" max="90" step="1" value="1">
+   </div>
+
+   <button class="sucesso" type="button" onclick="salvarEstadiaMinimaCalendario()">
+    💾 Salvar padrão
+   </button>
+
+  </div>
+
+  <div class="linha-form" style="margin-top:8px">
+   <div class="grupo-input">
+    <label>Estadia mínima para os dias selecionados</label>
+    <input type="number" id="estadiaMinimaSelecionadaCalendario" min="1" max="90" step="1" value="2">
+   </div>
+
+   <button class="sucesso" type="button" onclick="salvarEstadiaMinimaDiasSelecionadosCalendario()">
+    📅 Salvar nos dias selecionados
+   </button>
+
+   <button class="cinza" type="button" onclick="removerEstadiaMinimaDiasSelecionadosCalendario()">
+    🗑️ Remover regra dos dias
+   </button>
+  </div>
+
+  <p id="infoEstadiaMinimaCalendario" style="color:var(--cinza);margin:6px 0 0"></p>
+  <p id="infoEstadiaMinimaSelecionadaCalendario" style="color:var(--cinza);margin:5px 0 0"></p>
 
  </div>
 
@@ -2605,6 +3855,7 @@ if ("serviceWorker" in navigator) {
   </button>
 
   <button class="azul" onclick="carregarHospedes()">🔎 Consultar cadastros</button>
+  <button class="azul" onclick="sincronizarHospedesDeTodasReservas()">🔄 Sincronizar reservas</button>
   <button class="azul" onclick="processarSolicitacoesEAtualizarHospedes()">🔄 Processar solicitações</button>
 
  </div>
@@ -2674,10 +3925,17 @@ if ("serviceWorker" in navigator) {
 
   <div class="reservas-filtros-grid">
 
-   <div class="reservas-filtro">
+   <div class="reservas-filtro autocomplete-filtro-hospede">
     <label>👤 Hóspede</label>
+    <small class="filtro-hospede-ajuda">Digite para filtrar ou clique no campo para ver os hóspedes cadastrados.</small>
+    <input id="filtroHospedeReservaId" type="hidden">
     <input id="filtroHospedeReservas"
-     placeholder="Nome, telefone, CPF ou e-mail...">
+     autocomplete="off"
+     placeholder="Nome, telefone, CPF ou e-mail..."
+     oninput="buscarHospedesFiltroReservas(false)"
+     onfocus="buscarHospedesFiltroReservas(true)"
+     onblur="setTimeout(fecharSugestoesFiltroHospedeReservas,250)">
+    <div id="sugestoesFiltroHospedeReservas" class="sugestoes-hospede-reserva" style="display:none"></div>
    </div>
 
    <div class="reservas-filtro">
@@ -2827,7 +4085,7 @@ if ("serviceWorker" in navigator) {
   <div class="grupo-input"><label>Prestador / empresa</label><select id="despesaPrestadorId" onchange="selecionarPrestadorDespesa()"><option value="">— Selecionar prestador —</option></select><input type="hidden" id="despesaPrestador"><small id="despesaPrestadorInfo" style="color:var(--cinza)"></small></div><div class="grupo-input"><label>Descrição</label><input id="despesaDescricao"></div>
   <div class="grupo-input" style="grid-column:1/-1"><label>Observação</label><textarea id="despesaObservacao" rows="2"></textarea></div>
  </div><div class="despesas-acoes"><button class="sucesso" id="btnSalvarDespesa" onclick="salvarDespesa()">💾 Lançar despesa</button><button class="cinza" onclick="limparFormularioDespesa()">✖ Limpar</button></div></div>
- <div class="painel-despesas"><h3>🔎 Filtros e relatório</h3><div class="despesas-acoes"><button class="azul" onclick="carregarDespesas();carregarPrestadores()">🔎 Consultar lançamentos</button></div><div class="despesas-form-grid"><div class="grupo-input"><label>Casa</label><select id="filtroDespesaCasa" onchange="gerarRelatorioDespesas()"><option value="todas">Todas</option><option value="amarela">Casa Amarela</option><option value="bege">Casa Bege</option><option value="marrom">Casa Marrom</option><option value="branca">Casa Branca</option><option value="nossa">Nossa Casa</option></select></div><div class="grupo-input"><label>Prestador / empresa</label><select id="filtroDespesaPrestador" onchange="gerarRelatorioDespesas()"><option value="todos">Todos</option></select></div><div class="grupo-input"><label>Categoria</label><select id="filtroDespesaCategoria" onchange="gerarRelatorioDespesas()"><option value="todas">Todas</option><option value="agua">Água</option><option value="energia">Energia</option><option value="internet">Internet</option><option value="limpeza">Limpeza</option><option value="manutencao">Manutenção</option><option value="gas">Gás</option><option value="impostos">Impostos / taxas</option><option value="materiais">Materiais / compras</option><option value="outros">Outros</option></select></div><div class="grupo-input"><label>Pagamento</label><select id="filtroDespesaPagamento" onchange="gerarRelatorioDespesas()"><option value="todas">Todas</option><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Boleto</option><option>Transferência bancária</option></select></div><div class="grupo-input"><label>Conta / caixa</label><select id="filtroDespesaConta" onchange="gerarRelatorioDespesas()"><option value="todas">Todas</option><option>Caixa Casa Amarela</option><option>Caixa Casa Bege</option><option>Caixa Casa Marrom</option><option>Caixa Casa Branca</option><option>Caixa Nossa Casa</option><option>Caixa Geral</option><option>Conta bancária</option></select></div><div class="grupo-input"><label>Data inicial</label><input type="date" id="filtroDespesaDataInicial" onchange="gerarRelatorioDespesas()"></div><div class="grupo-input"><label>Data final</label><input type="date" id="filtroDespesaDataFinal" onchange="gerarRelatorioDespesas()"></div></div><div class="despesas-acoes"><button class="btn-verde" onclick="exportarDespesasCSV()">📊 Exportar CSV</button><button class="cinza" onclick="imprimirRelatorioDespesas()">🖨️ Imprimir / PDF</button><button class="vermelho" onclick="limparFiltrosDespesas()">✖ Limpar filtros</button></div></div><div id="despesasResumo" class="despesas-resumo"><div class="dashboard-vazio">Os lançamentos não são carregados automaticamente. Clique em “Consultar lançamentos” para ver quantidade e total.</div></div><div id="listaDespesas"></div><div id="paginacaoDespesas" class="paginacao-admin"></div>
+ <div class="painel-despesas"><h3>🔎 Filtros e relatório</h3><div class="despesas-acoes"><button class="azul" id="btnConsultarLancamentosDespesas" onclick="consultarLancamentosDespesas()">🔎 Consultar lançamentos</button></div><div class="despesas-form-grid"><div class="grupo-input"><label>Casa</label><select id="filtroDespesaCasa" onchange="gerarRelatorioDespesas()"><option value="todas">Todas</option><option value="amarela">Casa Amarela</option><option value="bege">Casa Bege</option><option value="marrom">Casa Marrom</option><option value="branca">Casa Branca</option><option value="nossa">Nossa Casa</option></select></div><div class="grupo-input"><label>Prestador / empresa</label><select id="filtroDespesaPrestador" onchange="gerarRelatorioDespesas()"><option value="todos">Todos</option></select></div><div class="grupo-input"><label>Categoria</label><select id="filtroDespesaCategoria" onchange="gerarRelatorioDespesas()"><option value="todas">Todas</option><option value="agua">Água</option><option value="energia">Energia</option><option value="internet">Internet</option><option value="limpeza">Limpeza</option><option value="manutencao">Manutenção</option><option value="gas">Gás</option><option value="impostos">Impostos / taxas</option><option value="materiais">Materiais / compras</option><option value="outros">Outros</option></select></div><div class="grupo-input"><label>Pagamento</label><select id="filtroDespesaPagamento" onchange="gerarRelatorioDespesas()"><option value="todas">Todas</option><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Boleto</option><option>Transferência bancária</option></select></div><div class="grupo-input"><label>Conta / caixa</label><select id="filtroDespesaConta" onchange="gerarRelatorioDespesas()"><option value="todas">Todas</option><option>Caixa Casa Amarela</option><option>Caixa Casa Bege</option><option>Caixa Casa Marrom</option><option>Caixa Casa Branca</option><option>Caixa Nossa Casa</option><option>Caixa Geral</option><option>Conta bancária</option></select></div><div class="grupo-input"><label>Data inicial</label><input type="date" id="filtroDespesaDataInicial" onchange="gerarRelatorioDespesas()"></div><div class="grupo-input"><label>Data final</label><input type="date" id="filtroDespesaDataFinal" onchange="gerarRelatorioDespesas()"></div></div><div class="despesas-acoes"><button class="btn-verde" onclick="exportarDespesasCSV()">📊 Exportar CSV</button><button class="cinza" onclick="imprimirRelatorioDespesas()">🖨️ Imprimir / PDF</button><button class="vermelho" onclick="limparFiltrosDespesas()">✖ Limpar filtros</button></div></div><div id="despesasResumo" class="despesas-resumo"><div class="dashboard-vazio">Os lançamentos não são carregados automaticamente. Clique em “Consultar lançamentos” para ver quantidade e total.</div></div><div id="listaDespesas"></div><div id="paginacaoDespesas" class="paginacao-admin"></div>
 </div>
 
 <div id="pagina-relatorios" class="pagina">
@@ -2913,11 +4171,14 @@ if ("serviceWorker" in navigator) {
   </div>
 
   <div>
-   <label>Hóspede</label>
+   <label>👤 Hóspede</label>
 
    <input id="filtroHospedeRelatorio"
-    placeholder="Nome ou telefone"
+    list="listaHospedesRelatorio"
+    placeholder="Digite o nome do hóspede..."
     oninput="gerarRelatorio()">
+   <datalist id="listaHospedesRelatorio"></datalist>
+   <small style="color:var(--cinza)">Digite parte do nome ou selecione uma sugestão.</small>
 
   </div>
 
@@ -3147,6 +4408,8 @@ if ("serviceWorker" in navigator) {
 
  </div>
 
+ <div id="infoEstadiaMinimaReserva" class="dashboard-nota" style="margin:8px 0 0"></div>
+
  <div id="sugestoesDisponibilidade"
   class="sugestoes-disponibilidade">
  </div>
@@ -3243,6 +4506,18 @@ if ("serviceWorker" in navigator) {
   ➡️ Continuar sem conta e solicitar reserva
 
  </button>
+
+ <button type="button"
+  id="btnDetalhesPropriedadeReservaMobile"
+  class="mobile-detalhes-propriedade-botao"
+  onclick="toggleDetalhesPropriedadeReservaMobile()">
+  🏠 Ver detalhes da propriedade
+ </button>
+
+ <div id="detalhesPropriedadeReservaMobile"
+  class="mobile-detalhes-propriedade-painel"
+  hidden>
+ </div>
 
  <div class="whatsapp-reserva">
   <strong>📱 Enviar os dados também pelo WhatsApp</strong>
@@ -3469,7 +4744,7 @@ let comodidadesCatalogo=[];
 
 const casas={
 
- nossa:{nome:'Nossa Casa',capacidade:12,desc:'Propriedade interna — uso administrativo.',caracteristicas:['🏠 Uso interno','🔒 Não aparece no site público'],fotos:[],taxaLimpeza:0,interna:true},
+ nossa:{nome:'Nossa Casa',capacidade:12,desc:'Propriedade interna — uso administrativo.',caracteristicas:['🏠 Uso interno','🔒 Não aparece no site público'],fotos:[],taxaLimpeza:0,estadiaMinima:1,estadiaMinimaPorData:{},interna:true},
 
  amarela:{
   nome:'Casa Amarela',
@@ -3484,7 +4759,9 @@ const casas={
    '🏖️ A poucos passos da praia'
   ],
   fotos:[],
-  taxaLimpeza:0
+  taxaLimpeza:0,
+  estadiaMinima:1,
+  estadiaMinimaPorData:{}
  },
 
  bege:{
@@ -3500,7 +4777,9 @@ const casas={
    '🏖️ A poucos passos da praia'
   ],
   fotos:[],
-  taxaLimpeza:0
+  taxaLimpeza:0,
+  estadiaMinima:1,
+  estadiaMinimaPorData:{}
  },
 
  marrom:{
@@ -3516,7 +4795,9 @@ const casas={
    '🏖️ A poucos passos da praia'
   ],
   fotos:[],
-  taxaLimpeza:0
+  taxaLimpeza:0,
+  estadiaMinima:1,
+  estadiaMinimaPorData:{}
  },
 
  branca:{
@@ -3532,7 +4813,9 @@ const casas={
    '🏖️ A poucos passos da praia'
   ],
   fotos:[],
-  taxaLimpeza:0
+  taxaLimpeza:0,
+  estadiaMinima:1,
+  estadiaMinimaPorData:{}
  }
 
 };
@@ -3543,6 +4826,10 @@ let dataAtual=new Date();
 
 let valoresDiarias={};
 let reservasConfirmadas=[];
+// Numeração sequencial calculada em memória, sem alterar reservas já salvas.
+let mapaNumeracaoReservas=new Map(), numeracaoReservasCarregada=false, numeracaoReservasTentada=false, numeracaoReservasFalha=false;
+let registrosNumeracaoReservas=[];
+let reservasAguardandoNumeracao=new Map();
 let reservasPagamentoSelecionadas=new Set();
 let reservasPagamentoFiltradas=[],paginaReservasAtual=1;let RESERVAS_POR_PAGINA=5;let reservasCursorAtual=null;let reservasCursorFuturas=null;let reservasPaginaStack=[];let reservasCarregamentoEmAndamento=false;let reservasUltimaPagina=false;let reservasConsultaCompleta=false;let paginaRelatorioAtual=1;const RELATORIO_POR_PAGINA=15;
 let controlePagamentosAtivo=false;
@@ -3609,6 +4896,594 @@ const normalizar=s=>
   .replace(/[\u0300-\u036f]/g,'')
   .trim();
 
+/* =====================================================
+   INTERFACE MOBILE COMPACTA V10
+   Somente para viewport <= 800px. Não altera dados Firestore.
+===================================================== */
+let mobileCasaSelecionada=null;
+let mobileDataEntrada='';
+let mobileDataSaida='';
+let mobileHospedesCompactos={adultos:1,criancas:0};
+let mobileCasaDetalhesAtual=null;
+let mobileFotoCasaAtual=0;
+let mobileCasaUltimaPosicaoDesktop=null;
+let mobileResultadosBusca=[];
+let mobileFluxoReservaAtivo=false;
+
+function obterCasasPublicasMobile(){
+ const ordem=['amarela','bege','marrom','branca'];
+ return ordem.map(id=>[id,casas?.[id]]).filter(([,x])=>x && !x.interna);
+}
+
+function formatarDataMobileCompacto(v){
+ if(!v)return '';
+ const d=dataLocal(v);
+ return d?new Intl.DateTimeFormat('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'}).format(d):'';
+}
+
+function atualizarResumoDatasMobileCompacto(){
+ const a=$('mobileDataEntrada')?.value||'';
+ const b=$('mobileDataSaida')?.value||'';
+ const aviso=$('mobileAvisoDatas');
+ if(aviso)aviso.textContent='';
+ if(a && b && b<=a){
+  if(aviso)aviso.textContent='A saída deve ser posterior à entrada.';
+  return;
+ }
+ if(a && dataLocal(a)<hoje()){
+  if(aviso)aviso.textContent='Escolha uma data de entrada a partir de hoje.';
+ }
+}
+
+function renderizarListaPropriedadesMobileCompacto(){
+ const box=$('mobileListaPropriedades');
+ if(!box)return;
+ const arr=obterCasasPublicasMobile();
+ box.innerHTML=arr.map(([id,x])=>{
+  const foto=x.fotos?.[0]||'';
+  const ativo=mobileCasaSelecionada===id?' ativa':'';
+  return `<button type="button" class="mobile-propriedade-opcao${ativo}" onclick="selecionarPropriedadeMobileCompacto('${id}')">
+   ${foto?`<img src="${escapeHtmlReserva(foto)}" alt="${escapeHtmlReserva(x.nome||'Casa')}">`:'<div class="mobile-casa-sem-foto">🏖️</div>'}
+   <strong>${escapeHtmlReserva(x.nome||id)}</strong>
+   <small>Até ${Number(x.capacidade||0)} pessoas</small>
+  </button>`;
+ }).join('');
+}
+
+function toggleListaCasasMobileCompacto(){
+ const box=$('mobileListaPropriedades');
+ const btn=$('mobileBuscaPropriedade');
+ if(!box)return;
+ const abrir=box.hidden;
+ box.hidden=!abrir;
+ btn?.setAttribute('aria-expanded',String(abrir));
+ renderizarListaPropriedadesMobileCompacto();
+}
+
+function selecionarPropriedadeMobileCompacto(id){
+ if(!casas?.[id])return;
+ mobileCasaSelecionada=id;
+ limparResultadoBuscaMobileCompacto();
+ const nome=casas[id]?.nome||id;
+ $('mobileCasaSelecionadaTexto').textContent=nome;
+ const box=$('mobileListaPropriedades');
+ if(box)box.hidden=true;
+ $('mobileBuscaPropriedade')?.setAttribute('aria-expanded','false');
+ renderizarListaPropriedadesMobileCompacto();
+ document.querySelectorAll('.mobile-casa-card-compacta').forEach(el=>el.classList.toggle('esta-selecionada',el.dataset.casa===id));
+}
+
+let mobileCalendarioMesVisual='';
+let mobileCalendarioSelecionando='entrada';
+
+function obterDataHojeISOCalendarioMobile(){
+ const d=hoje();
+ if(d instanceof Date && !isNaN(d))return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+ const agora=new Date();
+ return `${agora.getFullYear()}-${String(agora.getMonth()+1).padStart(2,'0')}-${String(agora.getDate()).padStart(2,'0')}`;
+}
+function formatarMesCalendarioMobile(ano,mes){
+ return new Intl.DateTimeFormat('pt-BR',{month:'long',year:'numeric'}).format(new Date(ano,mes,1));
+}
+function formatarDataCurtaCalendarioMobile(v){
+ if(!v)return 'Selecionar';
+ const d=dataLocal(v);
+ return d?new Intl.DateTimeFormat('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'}).format(d):'Selecionar';
+}
+function atualizarResumoCalendarioMobile(){
+ const entrada=$('mobileCalendarioEntradaValor');
+ const saida=$('mobileCalendarioSaidaValor');
+ if(entrada)entrada.textContent=formatarDataCurtaCalendarioMobile(mobileDataEntrada);
+ if(saida)saida.textContent=formatarDataCurtaCalendarioMobile(mobileDataSaida);
+ document.querySelectorAll('.mobile-calendario-resumo-item').forEach(el=>el.classList.remove('ativo'));
+ const alvo=$(mobileCalendarioSelecionando==='saida'?'mobileCalendarioSaidaResumo':'mobileCalendarioEntradaResumo');
+ if(alvo)alvo.classList.add('ativo');
+ const confirmar=$('mobileCalendarioConfirmar');
+ if(confirmar)confirmar.disabled=!(mobileDataEntrada&&mobileDataSaida&&mobileDataSaida>mobileDataEntrada);
+}
+function definirCampoCalendarioMobileCompacto(campo){
+ mobileCalendarioSelecionando=campo==='saida'?'saida':'entrada';
+ atualizarResumoCalendarioMobile();
+ renderizarCalendarioMobileCompacto();
+}
+function abrirCalendarioMobileCompacto(){
+ const modal=$('modalCalendarioMobileCompacto');
+ if(!modal)return;
+ const base=mobileDataEntrada||obterDataHojeISOCalendarioMobile();
+ mobileCalendarioMesVisual=`${base.slice(0,7)}-01`;
+ mobileCalendarioSelecionando=mobileDataEntrada&&mobileDataSaida?'entrada':(mobileDataEntrada?'saida':'entrada');
+ atualizarResumoDatasMobileCompacto();
+ atualizarResumoCalendarioMobile();
+ renderizarCalendarioMobileCompacto();
+ modal.classList.add('aberto');
+ modal.setAttribute('aria-hidden','false');
+}
+function fecharCalendarioMobileCompacto(){
+ const modal=$('modalCalendarioMobileCompacto');
+ if(modal){modal.classList.remove('aberto');modal.setAttribute('aria-hidden','true');}
+}
+function mudarMesCalendarioMobileCompacto(delta){
+ const hojeIso=obterDataHojeISOCalendarioMobile();
+ const base=new Date(Number(mobileCalendarioMesVisual.slice(0,4)),Number(mobileCalendarioMesVisual.slice(5,7))-1,1);
+ base.setMonth(base.getMonth()+Number(delta||0));
+ const min=new Date(Number(hojeIso.slice(0,4)),Number(hojeIso.slice(5,7))-1,1);
+ if(base<min)base.setTime(min.getTime());
+ mobileCalendarioMesVisual=`${base.getFullYear()}-${String(base.getMonth()+1).padStart(2,'0')}-01`;
+ renderizarCalendarioMobileCompacto();
+}
+function selecionarDiaCalendarioMobileCompacto(iso){
+ const hojeIso=obterDataHojeISOCalendarioMobile();
+ if(iso<hojeIso)return;
+ const aviso=$('mobileAvisoDatas');
+ if(aviso)aviso.textContent='';
+ if(mobileCalendarioSelecionando==='saida' && mobileDataEntrada){
+  if(iso<=mobileDataEntrada){
+   mobileDataEntrada=iso;
+   mobileDataSaida='';
+   mobileCalendarioSelecionando='saida';
+  }else{
+   mobileDataSaida=iso;
+   mobileCalendarioSelecionando='entrada';
+  }
+ }else{
+  mobileDataEntrada=iso;
+  mobileDataSaida='';
+  mobileCalendarioSelecionando='saida';
+ }
+ atualizarResumoCalendarioMobile();
+ atualizarResumoDatasMobileCompacto();
+ renderizarCalendarioMobileCompacto();
+}
+function renderizarCalendarioMobileCompacto(){
+ const grade=$('mobileCalendarioGrade');
+ const titulo=$('mobileCalendarioMesTitulo');
+ const prev=$('mobileCalendarioMesAnterior');
+ if(!grade)return;
+ const base=mobileCalendarioMesVisual?new Date(Number(mobileCalendarioMesVisual.slice(0,4)),Number(mobileCalendarioMesVisual.slice(5,7))-1,1):new Date();
+ const ano=base.getFullYear();
+ const mes=base.getMonth();
+ if(titulo)titulo.textContent=formatarMesCalendarioMobile(ano,mes);
+ const hojeIso=obterDataHojeISOCalendarioMobile();
+ const minMes=new Date(Number(hojeIso.slice(0,4)),Number(hojeIso.slice(5,7))-1,1);
+ if(prev)prev.disabled=base<=minMes;
+ const primeiroDiaSemana=new Date(ano,mes,1).getDay();
+ const ultimoDia=new Date(ano,mes+1,0).getDate();
+ const celulas=[];
+ for(let i=0;i<primeiroDiaSemana;i++)celulas.push('<div class="mobile-calendario-dia vazio" aria-hidden="true"></div>');
+ for(let dia=1;dia<=ultimoDia;dia++){
+  const iso=`${ano}-${String(mes+1).padStart(2,'0')}-${String(dia).padStart(2,'0')}`;
+  const fora=iso<hojeIso;
+  const inicio=!!mobileDataEntrada&&iso===mobileDataEntrada;
+  const fim=!!mobileDataSaida&&iso===mobileDataSaida;
+  const intervalo=!!mobileDataEntrada&&!!mobileDataSaida&&iso>mobileDataEntrada&&iso<mobileDataSaida;
+  const classes=['mobile-calendario-dia'];
+  if(fora)classes.push('fora-periodo');
+  if(iso===hojeIso)classes.push('hoje');
+  if(intervalo)classes.push('no-intervalo');
+  if(inicio){classes.push('selecionada','inicio');}
+  if(fim){classes.push('selecionada','fim');}
+  const disabled=fora?' disabled':'';
+  celulas.push(`<button type="button" class="${classes.join(' ') }"${disabled} onclick="selecionarDiaCalendarioMobileCompacto('${iso}')" aria-label="${formatarDataCurtaCalendarioMobile(iso)}">${dia}</button>`);
+ }
+ while(celulas.length%7)celulas.push('<div class="mobile-calendario-dia vazio" aria-hidden="true"></div>');
+ grade.innerHTML=celulas.join('');
+ atualizarResumoCalendarioMobile();
+}
+function salvarDatasMobileCompacto(){
+ const a=mobileDataEntrada||'';
+ const b=mobileDataSaida||'';
+ const aviso=$('mobileAvisoDatas');
+ if(!a||!b){if(aviso)aviso.textContent='Selecione a data de entrada e a data de saída.';return;}
+ if(dataLocal(a)<hoje()){if(aviso)aviso.textContent='Escolha uma data de entrada a partir de hoje.';return;}
+ if(b<=a){if(aviso)aviso.textContent='A saída deve ser posterior à entrada.';return;}
+ mobileDataEntrada=a;mobileDataSaida=b;
+ limparResultadoBuscaMobileCompacto();
+ atualizarResumoPublicoMobileCompacto();
+ fecharCalendarioMobileCompacto();
+}
+
+function abrirHospedesMobileCompacto(){
+ $('mobileQtdAdultos').textContent=String(mobileHospedesCompactos.adultos);
+ $('mobileQtdCriancas').textContent=String(mobileHospedesCompactos.criancas);
+ const modal=$('modalHospedesMobileCompacto');
+ if(modal){modal.classList.add('aberto');modal.setAttribute('aria-hidden','false');}
+}
+function fecharHospedesMobileCompacto(){
+ const modal=$('modalHospedesMobileCompacto');
+ if(modal){modal.classList.remove('aberto');modal.setAttribute('aria-hidden','true');}
+}
+function alterarHospedesMobileCompacto(tipo,delta){
+ const atual=Number(mobileHospedesCompactos[tipo]||0);
+ const minimo=tipo==='adultos'?1:0;
+ const maximo=20;
+ mobileHospedesCompactos[tipo]=Math.min(maximo,Math.max(minimo,atual+delta));
+ $('mobileQtdAdultos').textContent=String(mobileHospedesCompactos.adultos);
+ $('mobileQtdCriancas').textContent=String(mobileHospedesCompactos.criancas);
+}
+function salvarHospedesMobileCompacto(){
+ atualizarResumoPublicoMobileCompacto();
+ fecharHospedesMobileCompacto();
+}
+function atualizarResumoPublicoMobileCompacto(){
+ const total=mobileHospedesCompactos.adultos+mobileHospedesCompactos.criancas;
+ let texto=total===1?'1 hóspede':`${total} hóspedes`;
+ if(mobileHospedesCompactos.criancas)texto+=` · ${mobileHospedesCompactos.criancas} criança(s)`;
+ if($('mobileResumoHospedes'))$('mobileResumoHospedes').textContent=texto;
+ const datasA=mobileDataEntrada?formatarDataMobileCompacto(mobileDataEntrada):'';
+ const datasB=mobileDataSaida?formatarDataMobileCompacto(mobileDataSaida):'';
+ if($('mobileResumoDatas'))$('mobileResumoDatas').textContent=datasA&&datasB?`${datasA} → ${datasB}`:'Entrada e saída';
+ const btn=$('mobileBotaoBuscarDisponibilidade');
+ if(btn){
+  const pronto=!!mobileCasaSelecionada&&!!mobileDataEntrada&&!!mobileDataSaida;
+  btn.disabled=!pronto;
+ }
+}
+
+function limparResultadoBuscaMobileCompacto(){
+ mobileResultadosBusca=[];
+ const box=$('mobileResultadoBusca');
+ if(box){box.hidden=true;box.innerHTML='';}
+ const titulo=$('mobileTituloCasasCompacto');
+ const cards=$('mobileListaCasasCompacta');
+ if(titulo)titulo.style.display='';
+ if(cards)cards.style.display='';
+}
+
+function escaparAtributoMobile(v){
+ return String(v??'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+async function buscarCasasMobileCompacto(){
+ const selecionada=mobileCasaSelecionada;
+ const a=mobileDataEntrada;
+ const b=mobileDataSaida;
+ const adultos=Number(mobileHospedesCompactos.adultos||0);
+ const criancas=Number(mobileHospedesCompactos.criancas||0);
+ const totalPessoas=adultos+criancas;
+ const box=$('mobileResultadoBusca');
+ if(!box)return;
+ if(!selecionada||!a||!b){
+  box.hidden=false;
+  box.innerHTML='<div class="mobile-resultado-vazio">🔎 Escolha a propriedade e informe a entrada e a saída para buscar.</div>';
+  return;
+ }
+ if(dataLocal(a)<hoje()){
+  box.hidden=false;
+  box.innerHTML='<div class="mobile-resultado-vazio">⚠️ A data de entrada deve ser a partir de hoje.</div>';
+  return;
+ }
+ const noites=obterNoitesBusca(a,b);
+ if(noites<=0){
+  box.hidden=false;
+  box.innerHTML='<div class="mobile-resultado-vazio">⚠️ A saída deve ser posterior à entrada.</div>';
+  return;
+ }
+ const btn=$('mobileBotaoBuscarDisponibilidade');
+ if(btn){btn.disabled=true;btn.textContent='🔎 Buscando...';}
+ box.hidden=false;
+ box.innerHTML='<div class="mobile-resultado-vazio">⏳ Consultando disponibilidade e calculando as diárias...</div>';
+ try{
+  const casasPublicas=obterCasasPublicasMobile();
+  const resultados=await Promise.all(casasPublicas.map(async([id,x])=>{
+   let lista=[];let erro=false;
+   try{lista=await carregarBloqueiosPublicosCasa(id);}catch(e){console.error('Disponibilidade mobile',id,e);erro=true;}
+   const capacidade=Number(x.capacidade||0);
+   const minEstadia=obterEstadiaMinimaParaData(id,a);
+   const calc=await calcularValorDiarias(id,a,b);
+   let status='disponivel';
+   let motivo='';
+   if(totalPessoas>capacidade){status='indisponivel';motivo=`Capacidade máxima de ${capacidade} pessoa(s).`;}
+   else if(noites<minEstadia){status='indisponivel';motivo=`Estadia mínima de ${minEstadia} noite(s).`; }
+   else if(erro){status='indisponivel';motivo='Não foi possível consultar a disponibilidade.';}
+   else if(!periodoDisponivelNaLista(a,b,lista)){status='indisponivel';motivo='Período já ocupado.';}
+   return {id,nome:x.nome||id,capacidade,disponivel:status==='disponivel',motivo,foto:x.fotos?.[0]||'',dias:calc.dias,valorDiarias:calc.valor,minEstadia};
+  }));
+  mobileResultadosBusca=resultados.sort((x,y)=>{if(x.id===selecionada&&y.id!==selecionada)return -1;if(y.id===selecionada&&x.id!==selecionada)return 1;return String(x.nome).localeCompare(String(y.nome),'pt-BR');});
+  renderizarResultadoBuscaMobileCompacto({a,b,noites,totalPessoas,adultos,criancas});
+ }catch(e){
+  console.error('Busca mobile:',e);
+  box.innerHTML='<div class="mobile-resultado-vazio">⚠️ Não foi possível consultar as acomodações agora. Tente novamente em instantes.</div>';
+ }finally{
+  if(btn){btn.disabled=!(mobileCasaSelecionada&&mobileDataEntrada&&mobileDataSaida);btn.textContent='🔎 Buscar disponibilidade';}
+ }
+}
+
+function renderizarResultadoBuscaMobileCompacto(ctx){
+ const box=$('mobileResultadoBusca');
+ if(!box)return;
+ const selecionada=mobileCasaSelecionada;
+ box.hidden=false;
+ const itens=mobileResultadosBusca.map(r=>{
+  const cls=r.id===selecionada?' selecionada':'';
+  const foto=r.foto?`<img src="${escapeHtmlReserva(r.foto)}" alt="${escapeHtmlReserva(r.nome)}">`:'🏖️';
+  const status=r.disponivel?'<span class="mobile-resultado-casa-status mobile-status-ok">Disponível</span>':'<span class="mobile-resultado-casa-status mobile-status-no">Indisponível</span>';
+  const valor=r.disponivel?`<div class="mobile-resultado-casa-valor"><strong>${moeda(r.valorDiarias)}</strong><small>${r.dias} noite(s) · valor das diárias no período</small></div>`:`<div class="mobile-resultado-casa-valor"><strong>—</strong><small>${escapeHtmlReserva(r.motivo)}</small></div>`;
+  const acao=r.id===selecionada
+   ?(r.disponivel?`<button type="button" class="mobile-resultado-solicitar" onclick="solicitarReservaMobileCompacto('${escaparAtributoMobile(r.id)}')">➡️ Solicitar Reserva</button>`:'<button type="button" class="mobile-resultado-solicitar" disabled>➡️ Solicitar Reserva</button>')
+   :`<button type="button" class="mobile-resultado-escolher" onclick="escolherCasaResultadoMobileCompacto('${escaparAtributoMobile(r.id)}')">Escolher esta casa</button>`;
+  return `<div class="mobile-resultado-casa${cls}${r.disponivel?'':' mobile-resultado-casa-indisponivel'}">
+   <div class="mobile-resultado-casa-foto">${foto}</div>
+   <div class="mobile-resultado-casa-conteudo">
+    <div class="mobile-resultado-casa-topo"><div class="mobile-resultado-casa-nome">${escapeHtmlReserva(r.nome)}</div>${status}</div>
+    <div class="mobile-resultado-casa-info">👥 Até ${r.capacidade} pessoas</div>
+    ${valor}
+    <div class="mobile-resultado-casa-acoes">${acao}</div>
+   </div>
+  </div>`;
+ }).join('');
+ const resumo=`<div class="mobile-resultado-cabecalho"><div><strong>Resultado da sua busca</strong><small>📅 ${formatarDataMobileCompacto(ctx.a)} → ${formatarDataMobileCompacto(ctx.b)} · ${ctx.noites} noite(s) · 👥 ${ctx.totalPessoas} hóspede(s)</small></div><button type="button" class="mobile-resultado-editar" onclick="voltarParaBuscaMobileCompacto()">Editar</button></div>`;
+ box.innerHTML=resumo+`<div class="mobile-resultado-casas">${itens}</div>`;
+ const titulo=$('mobileTituloCasasCompacto');
+ const cards=$('mobileListaCasasCompacta');
+ if(titulo)titulo.style.display='none';
+ if(cards)cards.style.display='none';
+ setTimeout(()=>box.scrollIntoView({behavior:'smooth',block:'start'}),80);
+}
+
+function escolherCasaResultadoMobileCompacto(id){
+ if(!casas?.[id])return;
+ mobileCasaSelecionada=id;
+ $('mobileCasaSelecionadaTexto').textContent=casas[id]?.nome||id;
+ renderizarListaPropriedadesMobileCompacto();
+ const selecionado=mobileResultadosBusca.find(x=>x.id===id);
+ if(selecionado)renderizarResultadoBuscaMobileCompacto({a:mobileDataEntrada,b:mobileDataSaida,noites:obterNoitesBusca(mobileDataEntrada,mobileDataSaida),totalPessoas:mobileHospedesCompactos.adultos+mobileHospedesCompactos.criancas});
+}
+
+function voltarParaBuscaMobileCompacto(){
+ limparResultadoBuscaMobileCompacto();
+ document.getElementById('mobileCampoDatas')?.scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+function solicitarReservaMobileCompacto(id){
+ const r=mobileResultadosBusca.find(x=>x.id===id);
+ if(!r||!r.disponivel)return;
+ mobileCasaSelecionada=id;
+ mobileFluxoReservaAtivo=true;
+ try{
+  abrirModalReserva(id);
+  $('dataEntrada').value=mobileDataEntrada;
+  $('dataSaida').value=mobileDataSaida;
+  $('qtdAdultos').value=String(mobileHospedesCompactos.adultos);
+  $('qtdCriancas').value=String(mobileHospedesCompactos.criancas);
+  atualizarTotalPessoas();
+  verificarDisponibilidade();
+  const nomeMobileReserva=$('hospedeNome');
+  if(nomeMobileReserva){
+   nomeMobileReserva.scrollIntoView({behavior:'smooth',block:'center'});
+   setTimeout(()=>nomeMobileReserva.focus(),220);
+  }
+ }catch(e){
+  mobileFluxoReservaAtivo=false;
+  console.error('Abrir solicitação mobile:',e);
+ }
+}
+
+let timerRetornoTelaInicialReserva=null;
+
+function resetarBuscaPublicaAposReserva(){
+ mobileCasaSelecionada=null;
+ mobileDataEntrada='';
+ mobileDataSaida='';
+ mobileHospedesCompactos={adultos:1,criancas:0};
+ mobileCasaDetalhesAtual=null;
+ mobileFotoCasaAtual=0;
+ mobileResultadosBusca=[];
+ mobileFluxoReservaAtivo=false;
+
+ const casaTexto=$('mobileCasaSelecionadaTexto');
+ if(casaTexto)casaTexto.textContent='Todas as 4 casas';
+
+ const resultado=$('mobileResultadoBusca');
+ if(resultado){resultado.hidden=true;resultado.innerHTML='';}
+
+ const titulo=$('mobileTituloCasasCompacto');
+ const cards=$('mobileListaCasasCompacta');
+ if(titulo)titulo.style.display='';
+ if(cards)cards.style.display='';
+
+ const lista=$('mobileListaPropriedades');
+ const botaoCasa=$('mobileBuscaPropriedade');
+ if(lista)lista.hidden=true;
+ if(botaoCasa)botaoCasa.setAttribute('aria-expanded','false');
+
+ renderizarListaPropriedadesMobileCompacto();
+ atualizarResumoPublicoMobileCompacto();
+
+ window.scrollTo({top:0,behavior:'smooth'});
+ atualizarNavegacaoMobile('inicio');
+}
+
+function retornarTelaInicialAposReserva(){
+ if(timerRetornoTelaInicialReserva){
+  clearTimeout(timerRetornoTelaInicialReserva);
+  timerRetornoTelaInicialReserva=null;
+ }
+ const modal=$('modalSucessoReservaMobile');
+ if(modal){modal.classList.remove('aberto');modal.setAttribute('aria-hidden','true');}
+ try{
+  fecharModal();
+ }catch(e){}
+ resetarBuscaPublicaAposReserva();
+}
+
+function abrirSucessoReservaMobileCompacto(){
+ const modal=$('modalSucessoReservaMobile');
+ if(!modal)return;
+ modal.classList.add('aberto');
+ modal.setAttribute('aria-hidden','false');
+ if(timerRetornoTelaInicialReserva)clearTimeout(timerRetornoTelaInicialReserva);
+ timerRetornoTelaInicialReserva=setTimeout(()=>{
+  timerRetornoTelaInicialReserva=null;
+  retornarTelaInicialAposReserva();
+ },3500);
+}
+function fecharSucessoReservaMobileCompacto(){
+ retornarTelaInicialAposReserva();
+}
+
+function renderizarCasasMobileCompacto(){
+ const box=$('mobileListaCasasCompacta');
+ if(!box)return;
+ const arr=obterCasasPublicasMobile();
+ box.innerHTML=arr.map(([id,x])=>{
+  const foto=x.fotos?.[0]||'';
+  const classe=mobileCasaSelecionada===id?' esta-selecionada':'';
+  const capacidade=Number(x.capacidade||0);
+  return `<button type="button" class="mobile-casa-card-compacta${classe}" data-casa="${id}" onclick="abrirDetalhesCasaMobileCompacto('${id}')">
+   ${foto?`<img src="${escapeHtmlReserva(foto)}" alt="${escapeHtmlReserva(x.nome||'Casa')}">`:'<div class="mobile-casa-sem-foto">🏖️</div>'}
+   <div class="mobile-casa-card-nome">${escapeHtmlReserva(x.nome||id)}</div>
+   <div class="mobile-casa-card-info">Até ${capacidade} pessoas</div>
+  </button>`;
+ }).join('');
+ renderizarListaPropriedadesMobileCompacto();
+}
+
+function abrirDetalhesCasaMobileCompacto(id){
+ const x=casas?.[id];
+ if(!x)return;
+ mobileCasaDetalhesAtual=id;mobileFotoCasaAtual=0;mobileCasaSelecionada=id;
+ selecionarPropriedadeMobileCompacto(id);
+ const modal=$('modalCasaMobileCompacto');
+ $('mobileCasaDetalhesTitulo').textContent=x.nome||'Casa';
+ $('mobileCasaDetalhesSubtitulo').textContent=`Até ${Number(x.capacidade||0)} pessoas`;
+ renderizarDetalhesCasaMobileCompacto();
+ if(modal){modal.classList.add('aberto');modal.setAttribute('aria-hidden','false');}
+}
+
+function renderizarDetalhesCasaMobileCompacto(){
+ const x=casas?.[mobileCasaDetalhesAtual];
+ if(!x)return;
+ const fotos=Array.isArray(x.fotos)?x.fotos:[];
+ const gal=$('mobileCasaGaleriaDetalhes');
+ if(gal){
+  if(fotos.length){
+   const idx=((mobileFotoCasaAtual%fotos.length)+fotos.length)%fotos.length;
+   mobileFotoCasaAtual=idx;
+   gal.innerHTML=`<img src="${escapeHtmlReserva(fotos[idx])}" alt="${escapeHtmlReserva(x.nome||'Casa')}">`;
+  }else gal.innerHTML='<div class="mobile-casa-sem-foto-grande">🏖️</div>';
+ }
+ const cont=$('mobileCasaGaleriaContador');
+ if(cont)cont.textContent=fotos.length?`${mobileFotoCasaAtual+1} de ${fotos.length}`:'Sem fotos';
+ const car=$('mobileCasaCaracteristicasDetalhes');
+ if(car){
+  const itens=[...(x.caracteristicas||[])];
+  car.innerHTML=itens.length?itens.map(v=>`<div>${escapeHtmlReserva(v)}</div>`).join(''):'<div>Características não informadas.</div>';
+ }
+ const com=$('mobileCasaComodidadesDetalhes');
+ if(com){
+  const mapa=new Map((comodidadesCatalogo||[]).map(v=>[v.id,v]));
+  const inc=(x.comodidadesIncluidas||[]).map(id=>mapa.get(id)).filter(Boolean);
+  com.innerHTML=inc.length?`<h4>✅ Comodidades</h4><ul>${inc.map(v=>`<li>${escapeHtmlReserva(v.icone||'•')} ${escapeHtmlReserva(v.nome||'')}</li>`).join('')}</ul>`:'';
+ }
+}
+function mudarFotoCasaMobileCompacto(delta){
+ const x=casas?.[mobileCasaDetalhesAtual];
+ const fotos=Array.isArray(x?.fotos)?x.fotos:[];
+ if(fotos.length<2)return;
+ mobileFotoCasaAtual+=delta;
+ renderizarDetalhesCasaMobileCompacto();
+}
+function fecharDetalhesCasaMobileCompacto(){
+ const modal=$('modalCasaMobileCompacto');
+ if(modal){modal.classList.remove('aberto');modal.setAttribute('aria-hidden','true');}
+}
+
+function renderizarDetalhesPropriedadeReservaMobile(){
+ const box=$('detalhesPropriedadeReservaMobile');
+ const id=casaSelecionadaParaReserva;
+ const x=casas?.[id];
+ if(!box||!x)return;
+ const caracteristicas=Array.isArray(x.caracteristicas)?x.caracteristicas.filter(Boolean):[];
+ const mapa=new Map((comodidadesCatalogo||[]).map(v=>[v.id,v]));
+ const inclusas=(x.comodidadesIncluidas||[]).map(cid=>mapa.get(cid)).filter(Boolean);
+ const listaCaracteristicas=caracteristicas.length
+  ?`<ul>${caracteristicas.map(v=>`<li>${escapeHtmlReserva(v)}</li>`).join('')}</ul>`
+  :'<div>Características não informadas.</div>';
+ const listaComodidades=inclusas.length
+  ?`<ul>${inclusas.map(v=>`<li>${escapeHtmlReserva(v.icone||'•')} ${escapeHtmlReserva(v.nome||'')}</li>`).join('')}</ul>`
+  :'<div>Comodidades não informadas.</div>';
+ box.innerHTML=`
+  <h4>🏠 ${escapeHtmlReserva(x.nome||'Propriedade')}</h4>
+  <p class="mdp-desc">${escapeHtmlReserva(x.desc||'')}</p>
+  <div class="mdp-grid">
+   <div class="mdp-item">👥 <strong>Capacidade:</strong> até ${Number(x.capacidade||0)} pessoas</div>
+   <div class="mdp-item">🕑 <strong>Check-in:</strong> 14h</div>
+   <div class="mdp-item">🕚 <strong>Check-out:</strong> 11h</div>
+   <div class="mdp-item">🏖️ <strong>Localização:</strong> poucos passos da praia</div>
+  </div>
+  <div><strong>Características</strong>${listaCaracteristicas}</div>
+  <div style="margin-top:9px"><strong>Comodidades</strong>${listaComodidades}</div>
+ `;
+}
+
+function toggleDetalhesPropriedadeReservaMobile(){
+ const box=$('detalhesPropriedadeReservaMobile');
+ const btn=$('btnDetalhesPropriedadeReservaMobile');
+ if(!box||!btn)return;
+ const abrir=box.hidden;
+ if(abrir){
+  renderizarDetalhesPropriedadeReservaMobile();
+  box.hidden=false;
+  btn.textContent='🔽 Ocultar detalhes da propriedade';
+ }else{
+  box.hidden=true;
+  btn.textContent='🏠 Ver detalhes da propriedade';
+ }
+}
+
+function consultarDisponibilidadeCasaMobileCompacto(){
+ const id=mobileCasaDetalhesAtual||mobileCasaSelecionada;
+ if(!id)return;
+ fecharDetalhesCasaMobileCompacto();
+ try{
+  abrirBuscaDisponibilidade(id);
+  if(mobileDataEntrada)$('buscaDataEntrada').value=mobileDataEntrada;
+  if(mobileDataSaida)$('buscaDataSaida').value=mobileDataSaida;
+  $('buscaAdultos').value=String(mobileHospedesCompactos.adultos);
+  $('buscaCriancas').value=String(mobileHospedesCompactos.criancas);
+ }catch(e){console.error('Consulta mobile:',e);}
+}
+
+function reposicionarCameraPublicaMobile(){
+ const camera=document.querySelector('.camera-publica');
+ const hero=document.querySelector('.hero-praia');
+ const footer=document.querySelector('#rodapePublico');
+ if(!camera||!hero||!footer)return;
+ const mobile=window.matchMedia('(max-width: 800px)').matches;
+ if(mobile){
+  if(camera.parentElement!==footer)footer.appendChild(camera);
+ }else{
+  if(camera.parentElement!==hero)hero.insertBefore(camera,hero.firstElementChild);
+ }
+}
+
+function inicializarInterfaceMobileCompacta(){
+ reposicionarCameraPublicaMobile();
+ renderizarCasasMobileCompacto();
+ atualizarResumoPublicoMobileCompacto();
+ window.addEventListener('resize',reposicionarCameraPublicaMobile,{passive:true});
+}
+
 function hoje(){
  const d=new Date();
  d.setHours(0,0,0,0);
@@ -3630,6 +5505,7 @@ document.addEventListener('DOMContentLoaded',async()=>{
  }
 
  renderizarPaginaPublica();
+ inicializarInterfaceMobileCompacta();
  atualizarCabecalhoCliente(auth.currentUser);
 
  // Mantém a sessão administrativa controlada pelo Firebase Authentication.
@@ -4055,8 +5931,12 @@ function iniciarMonitoramentoReservas(){
       reservasConfirmadas.some(
        x=>x.id===id
       )
-     )return;
+     ){
+      registrarReservaParaNumeracao({id,...r});
+      return;
+     }
 
+     registrarReservaParaNumeracao({id,...r});
      mostrarNotificacaoNovaReserva(
       r,
       id
@@ -4156,7 +6036,7 @@ async function sincronizarDisponibilidadeReserva(id,reservaDados=null){
    r=d.exists?d.data():null;
   }
   const ref=db.collection('disponibilidade').doc(id);
-  if(r && ['confirmada','pago'].includes(String(r.statusPagamento||'').toLowerCase()) && r.entrada && r.saida && r.casa){
+  if(r && r.entrada && r.saida && r.casa && ['pendente','parcial','pago'].includes(normalizarStatusPagamentoReserva(r))){
    await ref.set({reservaId:id,casa:r.casa,entrada:r.entrada,saida:r.saida,atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
   }else{
    await ref.delete();
@@ -4210,6 +6090,7 @@ async function inicializarPainel(){
   reservasCarregadas=false;
 
   renderizarCalendarioSeguro();
+  atualizarEstadiaMinimaCalendario();
   renderizarCasasAdmin();
   atualizarListaReservas();
   gerarRelatorio();
@@ -4377,6 +6258,9 @@ function renderizarPaginaPublica(){
    })
    .join('');
 
+ renderizarCasasMobileCompacto();
+ atualizarResumoPublicoMobileCompacto();
+
 }
 
 function configurarNavegacao(){
@@ -4414,6 +6298,7 @@ function configurarNavegacao(){
 
     if(b.dataset.pagina==='hospedes'){
      if(hospedesCarregados)filtrarHospedes();
+     else carregarHospedes();
     }
 
     if(b.dataset.pagina==='prestadores'){
@@ -4426,7 +6311,7 @@ function configurarNavegacao(){
     }
 
     if(b.dataset.pagina==='despesas'){
-     if(despesasCarregadas)gerarRelatorioDespesas();
+     prepararPaginaDespesas(false, false);
     }
 
     if(b.dataset.pagina==='casas')
@@ -4465,6 +6350,50 @@ function configurarNavegacao(){
 
 }
 
+async function buscarHospedesFiltroReservas(mostrarTodos=false){
+ const input=$('filtroHospedeReservas');
+ const box=$('sugestoesFiltroHospedeReservas');
+ if(!input||!box)return;
+ if(!hospedesCarregados){
+  try{await carregarHospedes();}catch(e){console.error('Carregar hóspedes para filtro:',e);return;}
+ }
+ if(!mostrarTodos)$('filtroHospedeReservaId').value='';
+ const q=normalizar(input.value||'');
+ const qNum=String(input.value||'').replace(/\D/g,'');
+ let encontrados=[...(hospedesCadastrados||[])].filter(h=>!h.origemLancamento);
+ if(!mostrarTodos && q){
+  encontrados=encontrados.filter(h=>{
+   const nome=normalizar(h.nome||'');
+   const tel=String(h.telefone||'').replace(/\D/g,'');
+   const email=normalizar(h.email||'');
+   const cpf=String(h.cpf||'').replace(/\D/g,'');
+   return nome.includes(q)||(qNum&&tel.includes(qNum))||email.includes(q)||(qNum&&cpf.includes(qNum));
+  });
+ }
+ encontrados=encontrados.slice(0,40);
+ if(!encontrados.length){
+  box.innerHTML='<div class="sugestao-hospede-item"><small>Nenhum hóspede encontrado no cadastro.</small></div>';
+  box.style.display='block';
+  return;
+ }
+ box.innerHTML=encontrados.map(h=>`<div class="sugestao-hospede-item" onclick="selecionarHospedeFiltroReservas('${String(h.id).replace(/'/g,'\\\'')}')"><strong>👤 ${escapeHtmlReserva(h.nome)}</strong><small>📱 ${escapeHtmlReserva(h.telefone||'—')}${h.email?' · ✉️ '+escapeHtmlReserva(h.email):''}</small></div>`).join('');
+ box.style.display='block';
+}
+
+function selecionarHospedeFiltroReservas(id){
+ const h=(hospedesCadastrados||[]).find(x=>String(x.id)===String(id));
+ if(!h)return;
+ $('filtroHospedeReservaId').value=h.id||'';
+ $('filtroHospedeReservas').value=h.nome||'';
+ fecharSugestoesFiltroHospedeReservas();
+ aplicarFiltrosReservas();
+}
+
+function fecharSugestoesFiltroHospedeReservas(){
+ const box=$('sugestoesFiltroHospedeReservas');
+ if(box){box.style.display='none';box.innerHTML='';}
+}
+
 function configurarFiltrosReservas(){
  const ids=[
   'filtroHospedeReservas',
@@ -4493,6 +6422,7 @@ function configurarFiltrosReservas(){
 
 function mudarMes(d){
 
+ fecharTooltipReservaCalendario();
  dataAtual.setMonth(
   dataAtual.getMonth()+d
  );
@@ -4501,20 +6431,348 @@ function mudarMes(d){
 
 }
 
+function limitarEstadiaMinima(v){
+ const n=Number(v);
+ return Number.isFinite(n)&&n>=1
+  ?Math.min(90,Math.max(1,Math.floor(n)))
+  :1;
+}
+
+function obterEstadiaMinima(casa){
+ return limitarEstadiaMinima(casas?.[casa]?.estadiaMinima);
+}
+
+function obterMapaEstadiaMinimaPorData(casa){
+ const mapa=casas?.[casa]?.estadiaMinimaPorData;
+ return mapa&&typeof mapa==='object'&&!Array.isArray(mapa)?mapa:{};
+}
+
+function temRegraEstadiaMinimaPorData(casa,data){
+ const chave=String(data||'').slice(0,10);
+ return !!chave && Object.prototype.hasOwnProperty.call(obterMapaEstadiaMinimaPorData(casa),chave);
+}
+
+function obterEstadiaMinimaParaData(casa,data){
+ const chave=String(data||'').slice(0,10);
+ const mapa=obterMapaEstadiaMinimaPorData(casa);
+ if(chave && Object.prototype.hasOwnProperty.call(mapa,chave)){
+  return limitarEstadiaMinima(mapa[chave]);
+ }
+ return obterEstadiaMinima(casa);
+}
+
+function atualizarEstadiaMinimaCalendario(){
+ const c=$('casaCalendario')?.value;
+ const input=$('estadiaMinimaCalendario');
+ const info=$('infoEstadiaMinimaCalendario');
+ if(!c || !input)return;
+ const min=obterEstadiaMinima(c);
+ input.value=min;
+ if(info){
+  info.textContent=min===1
+   ?'✅ Regra padrão: 1 diária (sem restrição adicional). Datas com regra específica podem ter outro mínimo.'
+   :`✅ Regra padrão desta casa: ${min} noites. Datas com regra específica usam o valor configurado nelas.`;
+ }
+ atualizarResumoEstadiaMinimaSelecao();
+}
+
+function atualizarResumoEstadiaMinimaSelecao(){
+ const el=$('infoEstadiaMinimaSelecionadaCalendario');
+ const input=$('estadiaMinimaSelecionadaCalendario');
+ const c=$('casaCalendario')?.value;
+ if(!el || !c)return;
+ const datas=[...datasSelecionadas].sort();
+ if(!datas.length){
+  el.textContent='📅 Nenhum dia selecionado. Selecione as datas em azul para criar uma regra específica.';
+  if(input)input.value=2;
+  return;
+ }
+ const valores=datas.map(s=>temRegraEstadiaMinimaPorData(c,s)?obterEstadiaMinimaParaData(c,s):null);
+ const configuradas=valores.filter(v=>v!=null);
+ const unicos=[...new Set(configuradas)];
+ const txtDatas=datas.map(dataBr).join(', ');
+ if(unicos.length===1 && configuradas.length===datas.length){
+  if(input)input.value=unicos[0];
+  el.textContent=`🌙 ${datas.length} dia(s) selecionado(s): ${txtDatas}. Regra atual: mínimo de ${unicos[0]} noite(s).`;
+ }else if(configuradas.length){
+  const partes=unicos.map(v=>`${v} noite(s)`).join(' / ');
+  el.textContent=`🌙 ${datas.length} dia(s) selecionado(s): ${txtDatas}. Há regras específicas configuradas (${partes}); ao salvar, todas receberão o valor informado.`;
+ }else{
+  if(input)input.value=2;
+  const padrao=obterEstadiaMinima(c);
+  el.textContent=`🌙 ${datas.length} dia(s) selecionado(s): ${txtDatas}. Nenhum deles tem regra específica; o padrão atual é ${padrao} noite(s).`;
+ }
+}
+
+async function salvarEstadiaMinimaCalendario(){
+ const c=$('casaCalendario')?.value;
+ const input=$('estadiaMinimaCalendario');
+ if(!c || !input)return;
+ const v=Number(input.value);
+ if(!Number.isInteger(v)||v<1||v>90){
+  return alert('⚠️ Informe uma estadia mínima padrão entre 1 e 90 noites.');
+ }
+ try{
+  await db.collection('configuracoes').doc('casas').update({
+   [`casas.${c}.estadiaMinima`]:v,
+   atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()
+  });
+  casas[c].estadiaMinima=v;
+  atualizarEstadiaMinimaCalendario();
+  atualizarControlesEstadiaReserva();
+  alert(`✅ Estadia mínima padrão salva: ${v} noite(s).`);
+ }catch(e){
+  console.error('Estadia mínima padrão:',e);
+  alert('❌ Não foi possível salvar a estadia mínima padrão. Nenhuma reserva foi alterada.');
+ }
+}
+
+async function salvarEstadiaMinimaDiasSelecionadosCalendario(){
+ const c=$('casaCalendario')?.value;
+ const input=$('estadiaMinimaSelecionadaCalendario');
+ const datas=[...datasSelecionadas].sort();
+ if(!c || !input)return;
+ if(!datas.length)return alert('⚠️ Selecione em azul os dias que receberão a estadia mínima.');
+ const v=Number(input.value);
+ if(!Number.isInteger(v)||v<1||v>90){
+  return alert('⚠️ Informe uma estadia mínima entre 1 e 90 noites.');
+ }
+ try{
+  const mapa={...obterMapaEstadiaMinimaPorData(c)};
+  datas.forEach(s=>{mapa[s]=v;});
+  await db.collection('configuracoes').doc('casas').update({
+   [`casas.${c}.estadiaMinimaPorData`]:mapa,
+   atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()
+  });
+  casas[c].estadiaMinimaPorData=mapa;
+  atualizarResumoEstadiaMinimaSelecao();
+  renderizarCalendario();
+  atualizarControlesEstadiaReserva();
+  alert(`✅ Regra de ${v} noite(s) salva somente para ${datas.length} dia(s) selecionado(s).`);
+ }catch(e){
+  console.error('Estadia mínima por data:',e);
+  alert('❌ Não foi possível salvar a regra para os dias selecionados. Nenhuma reserva foi alterada.');
+ }
+}
+
+async function removerEstadiaMinimaDiasSelecionadosCalendario(){
+ const c=$('casaCalendario')?.value;
+ const datas=[...datasSelecionadas].sort();
+ if(!c)return;
+ if(!datas.length)return alert('⚠️ Selecione em azul os dias que terão a regra específica removida.');
+ const mapa={...obterMapaEstadiaMinimaPorData(c)};
+ let removidas=0;
+ datas.forEach(s=>{
+  if(Object.prototype.hasOwnProperty.call(mapa,s)){
+   delete mapa[s];
+   removidas++;
+  }
+ });
+ if(!removidas){
+  return alert('ℹ️ Nenhum dos dias selecionados possui uma regra específica para remover.');
+ }
+ try{
+  await db.collection('configuracoes').doc('casas').update({
+   [`casas.${c}.estadiaMinimaPorData`]:mapa,
+   atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()
+  });
+  casas[c].estadiaMinimaPorData=mapa;
+  atualizarResumoEstadiaMinimaSelecao();
+  renderizarCalendario();
+  atualizarControlesEstadiaReserva();
+  alert(`✅ Regra específica removida de ${removidas} dia(s). Esses dias voltarão a usar a regra padrão.`);
+ }catch(e){
+  console.error('Remover estadia mínima por data:',e);
+  alert('❌ Não foi possível remover a regra específica.');
+ }
+}
+
+function atualizarContaDestinoNovaReserva(){
+ const casa=$('novaCasaReserva')?.value||'';
+ const conta=$('novaContaDestino');
+ if(!conta)return;
+ const destinoPorCasa={
+  nossa:'Caixa Nossa Casa',
+  amarela:'Caixa Casa Amarela',
+  bege:'Caixa Casa Bege',
+  marrom:'Caixa Casa Marrom',
+  branca:'Caixa Casa Branca'
+ };
+ const destino=destinoPorCasa[casa]||'Caixa Geral';
+ const opcao=[...conta.options].find(o=>String(o.value||o.textContent).trim()===destino);
+ if(opcao)conta.value=opcao.value||opcao.textContent.trim();
+}
+
+function atualizarAvisoEstadiaMinimaNovaReserva(){
+ const el=$('infoEstadiaMinimaNovaReserva');
+ if(!el)return;
+ el.textContent='ℹ️ Nesta janela administrativa, o mínimo de diárias configurado no calendário não é aplicado. Bloqueios de período continuam sendo respeitados.';
+}
+
+function atualizarControlesEstadiaReserva(){
+ const c=casaSelecionadaParaReserva;
+ const entrada=$('dataEntrada');
+ const saida=$('dataSaida');
+ const info=$('infoEstadiaMinimaReserva');
+ if(!entrada || !saida || !c)return;
+ const min=obterEstadiaMinimaParaData(c,entrada.value);
+ const hojeStr=dataStr(hoje());
+ entrada.min=hojeStr;
+ let minSaida=hojeStr;
+ const da=dataLocal(entrada.value);
+ if(da){
+  const d=new Date(da);
+  d.setDate(d.getDate()+min);
+  minSaida=dataStr(d);
+ }else if(min>1){
+  const d=hoje();
+  d.setDate(d.getDate()+min);
+  minSaida=dataStr(d);
+ }
+ saida.min=minSaida;
+ if(info){
+  info.textContent=min===1
+   ?'🌙 Estadia mínima: 1 diária.'
+   :`🌙 Estadia mínima desta casa: ${min} noites. A saída precisa respeitar esse mínimo.`;
+ }
+}
+
 function trocarCasaCalendario(){
 
+ fecharTooltipReservaCalendario();
  limparSelecao();
 
+ atualizarEstadiaMinimaCalendario();
  renderizarCalendarioSeguro();
 
 }
 
-function verificarDiaBloqueado(casa,s){const reservado=reservasCalendario.some(r=>['confirmada','pago'].includes(String(r.statusPagamento||'').toLowerCase())&&r.casa===casa&&s>=r.entrada&&s<r.saida);const manual=bloqueiosCalendario.some(r=>r.casa===casa&&s>=r.entrada&&s<r.saida);return reservado||manual;}
-async function carregarReservasCalendario(){const casa=$('casaCalendario')?.value;if(!casa){reservasCalendario=[];return;}try{const snap=await db.collection('disponibilidade').where('casa','==',casa).get();reservasCalendario=snap.docs.map(d=>({id:d.id,...d.data(),statusPagamento:'confirmada'}));}catch(e){console.error('Reservas do calendário:',e);reservasCalendario=[];}}
+function obterReservaCalendarioPorDia(casa,s){
+ return reservasCalendario.find(r=>{
+  const status=normalizarStatusPagamentoReserva(r);
+  return r.casa===casa &&
+   ['pendente','parcial','pago'].includes(status) &&
+   r.entrada &&
+   r.saida &&
+   s>=r.entrada &&
+   s<r.saida;
+ })||null;
+}
+
+function obterBloqueioManualCalendarioPorDia(casa,s){
+ return bloqueiosCalendario.find(r=>
+  r.casa===casa &&
+  r.entrada &&
+  r.saida &&
+  s>=r.entrada &&
+  s<r.saida
+ )||null;
+}
+
+function verificarDiaBloqueado(casa,s){
+ return !!obterReservaCalendarioPorDia(casa,s) || !!obterBloqueioManualCalendarioPorDia(casa,s);
+}
+
+async function carregarReservasCalendario(){
+ const casa=$('casaCalendario')?.value;
+ if(!casa){reservasCalendario=[];return;}
+ try{
+  const snap=await db.collection('reservas').where('casa','==',casa).get();
+  reservasCalendario=snap.docs.map(d=>{
+   const r={id:d.id,...d.data()};
+   r.statusPagamento=normalizarStatusPagamentoReserva(r);
+   return r;
+  });
+ }catch(e){
+  console.error('Reservas do calendário:',e);
+  reservasCalendario=[];
+ }
+}
 
 async function carregarBloqueiosCalendario(){const casa=$('casaCalendario')?.value;if(!casa){bloqueiosCalendario=[];return;}try{const snap=await db.collection('bloqueios').where('casa','==',casa).get();bloqueiosCalendario=snap.docs.map(d=>({id:d.id,...d.data()}));}catch(e){console.error(e);bloqueiosCalendario=[];}}
 
 async function renderizarCalendarioSeguro(){await Promise.all([carregarBloqueiosCalendario(),carregarReservasCalendario()]);renderizarCalendario();renderizarListaBloqueiosCalendario();}
+
+function statusReservaCalendarioTexto(r){
+ const status=normalizarStatusPagamentoReserva(r);
+ return status==='pago'?'Pago':status==='parcial'?'Pagamento Parcial':'Pendente';
+}
+
+function garantirTooltipReservaCalendario(){
+ let el=$('tooltipReservaCalendario');
+ if(el)return el;
+ el=document.createElement('div');
+ el.id='tooltipReservaCalendario';
+ el.className='calendario-tooltip-reserva';
+ document.body.appendChild(el);
+ return el;
+}
+
+function posicionarTooltipReservaCalendario(el,event){
+ const margem=12;
+ const x=Math.min(Math.max(margem,event.clientX+12),window.innerWidth-el.offsetWidth-margem);
+ const yBase=event.clientY+14;
+ const y=yBase+el.offsetHeight+margem<window.innerHeight?yBase:Math.max(margem,event.clientY-el.offsetHeight-14);
+ el.style.left=`${Math.round(x)}px`;
+ el.style.top=`${Math.round(y)}px`;
+}
+
+function mostrarTooltipReservaCalendario(event,reservaId,foco=false){
+ event?.stopPropagation?.();
+ const r=reservasCalendario.find(x=>x.id===reservaId);
+ if(!r)return;
+ const el=garantirTooltipReservaCalendario();
+ const nome=escapeHtmlReserva(r.nome||'Hóspede sem nome');
+ const tel=escapeHtmlReserva(r.telefone||'Contato não informado');
+ const entrada=escapeHtmlReserva(r.entrada?dataBr(r.entrada):'—');
+ const saida=escapeHtmlReserva(r.saida?dataBr(r.saida):'—');
+ const status=escapeHtmlReserva(statusReservaCalendarioTexto(r));
+ // Exibição somente leitura: os valores vêm da reserva, sem gravar alterações no Firestore.
+ const valorTotal=Math.max(0,Number(r.valorTotal||0));
+ const valorPago=Math.max(0,Number(r.valorPago||0));
+ const valorReceber=Math.max(0,valorTotal-valorPago);
+ const totalFmt=escapeHtmlReserva(moeda(valorTotal));
+ const pagoFmt=escapeHtmlReserva(moeda(valorPago));
+ const receberFmt=escapeHtmlReserva(moeda(valorReceber));
+ el.innerHTML=`<button class="tt-fechar" onclick="fecharTooltipReservaCalendario(event)" aria-label="Fechar">×</button><div class="tt-titulo">👤 ${nome}</div><div class="tt-linha">📱 ${tel}</div><div class="tt-linha">📅 ${entrada} → ${saida}</div><span class="tt-status">💳 ${status}</span><div class="tt-pagamentos"><div class="tt-pagamento-item total"><small>Valor total da reserva</small><strong>${totalFmt}</strong></div><div class="tt-pagamento-item recebido"><small>Valor pago</small><strong>${pagoFmt}</strong></div><div class="tt-pagamento-item saldo"><small>Valor a receber</small><strong>${receberFmt}</strong></div></div>`;
+ el.classList.add('aberto');
+ el.dataset.fixado=foco?'1':'0';
+ el.dataset.reservaId=reservaId;
+ posicionarTooltipReservaCalendario(el,event);
+}
+
+function fecharTooltipReservaCalendario(event){
+ event?.stopPropagation?.();
+ const el=$('tooltipReservaCalendario');
+ if(el){el.classList.remove('aberto');el.dataset.fixado='0';}
+}
+
+function toggleTooltipReservaCalendario(event,reservaId){
+ event?.stopPropagation?.();
+ const el=$('tooltipReservaCalendario');
+ if(el?.classList.contains('aberto') && el.dataset.reservaId===reservaId && el.dataset.fixado==='1'){
+  fecharTooltipReservaCalendario(event);
+  return;
+ }
+ mostrarTooltipReservaCalendario(event,reservaId,true);
+}
+
+function ocultarTooltipReservaCalendario(event){
+ event?.stopPropagation?.();
+ const el=$('tooltipReservaCalendario');
+ if(el && el.dataset.fixado!=='1')el.classList.remove('aberto');
+}
+
+if(!window.__tooltipReservaCalendarioGlobal){
+ window.__tooltipReservaCalendarioGlobal=true;
+ document.addEventListener('click',e=>{
+  const el=$('tooltipReservaCalendario');
+  if(el && el.classList.contains('aberto') && !el.contains(e.target) && !e.target.closest('.calendario-reserva-lock')){
+   el.classList.remove('aberto');
+   el.dataset.fixado='0';
+  }
+ });
+}
 
 function renderizarCalendario(){
 
@@ -4573,11 +6831,9 @@ function renderizarCalendario(){
   const dt=new Date(y,m,d);
   const s=dataStr(dt);
 
-  const bloq=
-   verificarDiaBloqueado(
-    casa,
-    s
-   );
+  const reservaDia=obterReservaCalendarioPorDia(casa,s);
+  const bloqueioManualDia=obterBloqueioManualCalendarioPorDia(casa,s);
+  const bloq=!!reservaDia || !!bloqueioManualDia;
 
   const pass=
    dt<hoje();
@@ -4589,6 +6845,18 @@ function renderizarCalendario(){
    valoresDiarias[
     `${casa}_${s}`
    ];
+
+  const statusReserva=reservaDia?normalizarStatusPagamentoReserva(reservaDia):'';
+  const regraEstadiaEspecifica=temRegraEstadiaMinimaPorData(casa,s);
+  const minimoDia=obterEstadiaMinimaParaData(casa,s);
+  const estadiaHtml=regraEstadiaEspecifica
+   ?`<small class="calendario-estadia-minima" title="Estadia mínima: ${minimoDia} noite(s)">🌙 ${minimoDia}</small>`
+   :'';
+  const lockHtml=reservaDia
+   ?`<button type="button" class="calendario-reserva-lock ${statusReserva}" title="${escapeHtmlReserva(reservaDia.nome||'Reserva')} — ${escapeHtmlReserva(reservaDia.telefone||'Contato não informado')}" onmouseenter="mostrarTooltipReservaCalendario(event,'${reservaDia.id}',false)" onmouseleave="ocultarTooltipReservaCalendario(event)" onclick="toggleTooltipReservaCalendario(event,'${reservaDia.id}')">🔒</button>`
+   :bloqueioManualDia
+    ?`<span class="calendario-reserva-lock" title="Bloqueio manual">🔒</span>`
+    :'';
 
   h+=`
    <div
@@ -4612,11 +6880,9 @@ function renderizarCalendario(){
       :''
     }
 
-    ${
-     bloq
-      ?'<small><br>🔒</small>'
-      :''
-    }
+    ${estadiaHtml}
+
+    ${lockHtml}
 
    </div>
   `;
@@ -4710,6 +6976,8 @@ function atualizarInfoSelecao(){
       .join(', ')
     }`
    :'Nenhum dia selecionado';
+
+ atualizarResumoEstadiaMinimaSelecao();
 
 }
 
@@ -4813,6 +7081,8 @@ function limparSelecao(){
  if($('infoSelecao'))
   $('infoSelecao').textContent=
    'Nenhum dia selecionado';
+
+ atualizarResumoEstadiaMinimaSelecao();
 
 }
 
@@ -5552,11 +7822,19 @@ function abrirModalReserva(id){
  $('qtdAdultos').value=1;
  $('qtdCriancas').value=0;
 
+ atualizarControlesEstadiaReserva();
+
  $('avisoBloqueio')
   .style.display='none';
 
  $('btnEnviarReserva')
   .disabled=false;
+
+ const painelDetalhesMobile=$('detalhesPropriedadeReservaMobile');
+ const botaoDetalhesMobile=$('btnDetalhesPropriedadeReservaMobile');
+ if(painelDetalhesMobile)painelDetalhesMobile.hidden=true;
+ if(botaoDetalhesMobile)botaoDetalhesMobile.textContent='🏠 Ver detalhes da propriedade';
+ renderizarDetalhesPropriedadeReservaMobile();
 
  ocultarSugestoesDisponibilidade();
 
@@ -5569,6 +7847,7 @@ function abrirModalReserva(id){
 
 function fecharModal(){
 
+ mobileFluxoReservaAtivo=false;
  $('modalReserva')
   .classList.remove('aberto');
 
@@ -5628,7 +7907,32 @@ async function calcularValorDiarias(
 
 }
 
-async function verificarPeriodoBloqueado(casa,a,b,ignorarId=null){if(!casa||!a||!b||b<=a)return false;try{const [rs,bs]=await Promise.all([db.collection('disponibilidade').where('casa','==',casa).get(),db.collection('bloqueios').where('casa','==',casa).get()]);if(rs.docs.some(d=>{const r=d.data();return !(ignorarId&&r.reservaId===ignorarId)&&r.entrada&&r.saida&&a<r.saida&&b>r.entrada; }))return true;return bs.docs.some(d=>{const r=d.data();return r.entrada&&r.saida&&a<r.saida&&b>r.entrada;});}catch(e){console.error(e);return true;}}
+async function verificarPeriodoBloqueado(casa,a,b,ignorarId=null){
+ if(!casa||!a||!b||b<=a)return false;
+ try{
+  const [rs,bs]=await Promise.all([
+   db.collection('disponibilidade').where('casa','==',casa).get(),
+   db.collection('bloqueios').where('casa','==',casa).get()
+  ]);
+
+  if(rs.docs.some(d=>{
+   const r=d.data()||{};
+   const mesmoReserva=!!(ignorarId && (
+    String(d.id)===String(ignorarId) ||
+    String(r.reservaId||'')===String(ignorarId)
+   ));
+   return !mesmoReserva && r.entrada&&r.saida&&a<r.saida&&b>r.entrada;
+  }))return true;
+
+  return bs.docs.some(d=>{
+   const r=d.data()||{};
+   return r.entrada&&r.saida&&a<r.saida&&b>r.entrada;
+  });
+ }catch(e){
+  console.error(e);
+  return true;
+ }
+}
 
 async function bloquearPeriodoSelecionado(){const casa=$('casaCalendario')?.value,datas=[...datasSelecionadas].sort();if(!casa||!datas.length)return alert('⚠️ Selecione um ou mais dias.');const entrada=datas[0],fim=dataLocal(datas[datas.length-1]);fim.setDate(fim.getDate()+1);const saida=dataStr(fim),motivo=$('motivoBloqueioCalendario')?.value.trim()||'Bloqueio manual';if(await verificarPeriodoBloqueado(casa,entrada,saida))return alert('⚠️ Já existe uma reserva ou bloqueio neste período.');try{await db.collection('bloqueios').add({casa,entrada,saida,motivo,criadoEm:firebase.firestore.FieldValue.serverTimestamp(),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()});datasSelecionadas.clear();$('motivoBloqueioCalendario').value='';await renderizarCalendarioSeguro();alert('🔒 Período bloqueado com sucesso.');}catch(e){console.error(e);alert('❌ Não foi possível bloquear o período.');}}
 async function excluirBloqueioCalendario(id){if(!confirm('Excluir este bloqueio e liberar o período?'))return;try{await db.collection('bloqueios').doc(id).delete();await renderizarCalendarioSeguro();alert('✅ Bloqueio removido.');}catch(e){console.error(e);alert('❌ Não foi possível remover o bloqueio.');}}
@@ -6174,6 +8478,23 @@ async function verificarDisponibilidade(){
 
  }
 
+ atualizarControlesEstadiaReserva();
+
+ const minEstadia=obterEstadiaMinimaParaData(c,a);
+ const noitesEscolhidas=dias(dataLocal(a),dataLocal(b));
+
+ if(noitesEscolhidas<minEstadia){
+  $('avisoBloqueio').style.display='block';
+  $('avisoBloqueio').textContent=`⚠️ A estadia mínima desta casa é de ${minEstadia} noite(s). Escolha uma data de saída mais distante.`;
+  $('btnEnviarReserva').disabled=true;
+  ocultarSugestoesDisponibilidade();
+  $('valorDiarias').value='';
+  $('valorEstimado').value='';
+  const campoDescontoMin=$('valorDescontoReserva');
+  if(campoDescontoMin)campoDescontoMin.textContent='Sem desconto';
+  return;
+ }
+
  const bloqueado=
   await verificarPeriodoBloqueado(
    c,
@@ -6283,6 +8604,10 @@ function obterDadosReservaWhatsApp(){
  }
 
  const calc=calcularValorDiariasLocal(casaId,entrada,saida);
+ const minEstadia=obterEstadiaMinimaParaData(casaId,entrada);
+ if(calc.dias<minEstadia){
+  return{ok:false,mensagem:`⚠️ A estadia mínima desta casa é de ${minEstadia} noite(s). Escolha um período maior.`};
+ }
  const taxa=Number(casas[casaId].taxaLimpeza||0);
  const calculoFinal=calcularValorFinalReserva(calc.dias,calc.valor,taxa);
 
@@ -6478,6 +8803,12 @@ async function enviarReserva(){
 
  }
 
+ const minEstadia=obterEstadiaMinimaParaData(c,a);
+ const noitesEscolhidas=dias(dataLocal(a),dataLocal(b));
+ if(noitesEscolhidas<minEstadia){
+  return alert(`⚠️ A estadia mínima desta casa é de ${minEstadia} noite(s). Escolha uma data de saída mais distante.`);
+ }
+
  const bloqueado=
   await verificarPeriodoBloqueado(
    c,
@@ -6546,8 +8877,9 @@ async function enviarReserva(){
   },{merge:true});
   }
 
+  const codigoReserva=await obterProximoCodigoReserva(c);
   const reservaRef=await db.collection('reservas').add({
-
+   ...(codigoReserva?{codigoReserva}:{}),
    casa:c,
    ...(usuarioCliente?{
     clienteUid:clienteUid,
@@ -6592,6 +8924,8 @@ async function enviarReserva(){
 
   });
 
+  registrarReservaParaNumeracao({id:reservaRef.id,casa:c,codigoReserva:codigoReserva||'',nome,entrada:a,saida:b,criadoEm:null});
+
   const emailEnviado=await enviarNotificacaoEmailReserva({
    nome,
    telefone:tel,
@@ -6624,15 +8958,22 @@ async function enviarReserva(){
    criadoEm:firebase.firestore.FieldValue.serverTimestamp()
   });
 
+  const fluxoMobileConcluido=mobileFluxoReservaAtivo;
+  mobileFluxoReservaAtivo=false;
   fecharModal();
 
-  alert(
-   '✅ Solicitação enviada com sucesso!\n\n'+
-   'Aguarde a confirmação.'+
-   (emailEnviado
-    ?'\n\n📧 A notificação por e-mail foi enviada.'
-    :'\n\n⚠️ A reserva foi salva, mas a notificação por e-mail não pôde ser enviada.')
-  );
+  if(fluxoMobileConcluido){
+   abrirSucessoReservaMobileCompacto();
+  }else{
+   alert(
+    '✅ Solicitação enviada com sucesso!\n\n'+
+    'Aguarde a confirmação.'+
+    (emailEnviado
+     ?'\n\n📧 A notificação por e-mail foi enviada.'
+     :'\n\n⚠️ A reserva foi salva, mas a notificação por e-mail não pôde ser enviada.')
+   );
+   retornarTelaInicialAposReserva();
+  }
 
  }catch(e){
 
@@ -6665,6 +9006,7 @@ async function carregarReservasConfirmadas(){
  const s=await db.collection('reservas').orderBy('entrada').get();
  s.forEach(d=>{const r={id:d.id,...d.data()};r.statusPagamento=normalizarStatusPagamentoReserva(r);reservasConfirmadas.push(r);});
  reservasCarregadas=true;
+ reservasConsultaCompleta=true;
 }
 
 async function carregarReservasRecentes(reset=true){
@@ -6818,6 +9160,8 @@ async function carregarDadosCasas(){
   }
 
   renderizarPaginaPublica();
+  renderizarCasasMobileCompacto();
+  reposicionarCameraPublicaMobile();
   renderizarCatalogoComodidades();
   aplicarBannerPrincipal();
   if($('bannerPrincipalUrl')){ $('bannerPrincipalUrl').value=bannerPrincipalUrl; $('imgurClientId').value=imgurClientId; atualizarPreviewBanner(); }
@@ -7205,27 +9549,192 @@ function reservaProxima(r){
 }
 
 function timestampCriacaoReserva(r){
- if(r.criadoEm?.seconds)return Number(r.criadoEm.seconds);
+ if(r.criadoEm?.seconds)return Number(r.criadoEm.seconds)*1000+Number(r.criadoEm.nanoseconds||0)/1000000;
  if(r.criadoEm?.toMillis)return Number(r.criadoEm.toMillis());
+ if(r.criadoEm instanceof Date)return r.criadoEm.getTime();
+ if(typeof r.criadoEm==='number')return r.criadoEm>1000000000000?r.criadoEm:r.criadoEm*1000;
+ if(typeof r.criadoEm==='string'){
+  const t=Date.parse(r.criadoEm);
+  if(Number.isFinite(t))return t;
+ }
  return 0;
 }
 
-function hospedeCorrespondeReserva(r,termo){
- const q=normalizar(termo||'');
- if(!q)return true;
+function chaveDataEntradaReserva(r){
+ const valor=String(r?.entrada??'').trim();
+ if(/^\d{4}-\d{2}-\d{2}/.test(valor))return valor.slice(0,10);
+ const compacto=valor.match(/^(\d{4})(\d{2})(\d{2})/);
+ if(compacto)return `${compacto[1]}-${compacto[2]}-${compacto[3]}`;
+ const instante=Date.parse(valor);
+ if(Number.isFinite(instante))return new Date(instante).toISOString().slice(0,10);
+ return '';
+}
 
- const nome=normalizar(r.nome||'');
- const telefone=String(r.telefone||'').replace(/\D/g,'');
+function compararReservasPorAntiguidade(a,b){
+ // A sequência histórica é definida pela data de entrada, não pela data em que
+ // o registro foi criado/importado no sistema.
+ const ea=chaveDataEntradaReserva(a),eb=chaveDataEntradaReserva(b);
+ if(ea&&eb&&ea!==eb)return ea.localeCompare(eb);
+ if(ea&&!eb)return -1;
+ if(!ea&&eb)return 1;
+ const ta=timestampCriacaoReserva(a),tb=timestampCriacaoReserva(b);
+ if(ta>0&&tb>0&&ta!==tb)return ta-tb;
+ if(ta>0&&tb<=0)return -1;
+ if(ta<=0&&tb>0)return 1;
+ return String(a.id||'').localeCompare(String(b.id||''));
+}
+
+function obterSiglaPropriedadeReserva(casa){
+ const bruto=String(casa??'').trim().toLowerCase();
+ const chave=bruto.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'');
+ if(chave==='amarela'||chave.includes('casaamarela')||chave==='am')return 'AM';
+ if(chave==='bege'||chave.includes('casabege')||chave==='be')return 'BE';
+ if(chave==='marrom'||chave.includes('casamarrom')||chave==='ma')return 'MA';
+ if(chave==='branca'||chave.includes('casabranca')||chave==='br')return 'BR';
+ if(chave==='nossa'||chave.includes('nossacasa')||chave==='nc')return 'NC';
+ return '';
+}
+
+function numeroDoCodigoReserva(codigo,sigla){
+ const m=String(codigo||'').trim().match(new RegExp('^'+String(sigla||'').toUpperCase()+'-(\\d+)$','i'));
+ return m?Number(m[1]):0;
+}
+
+function obterClasseCodigoReserva(codigo){
+ const sigla=String(codigo||'').split('-')[0].toUpperCase();
+ const classes={AM:'reserva-codigo-am',BE:'reserva-codigo-be',MA:'reserva-codigo-ma',BR:'reserva-codigo-br',NC:'reserva-codigo-nc'};
+ return classes[sigla]||'';
+}
+
+function montarMapaNumeracaoReservas(registros){
+ // A numeração de exibição é sempre calculada pela data de entrada, dentro de cada
+ // propriedade. Nenhum documento histórico é atualizado ou regravado.
+ const porId=new Map();
+ for(const r of (registros||[])){
+  if(!r||!r.id)continue;
+  const id=String(r.id);
+  porId.set(id,{...(porId.get(id)||{}),...r,id});
+ }
+ for(const [id,r] of reservasAguardandoNumeracao.entries()){
+  porId.set(String(id),{...(porId.get(String(id))||{}),...r,id:String(id)});
+ }
+ const todos=[...porId.values()].filter(r=>r&&r.id).sort(compararReservasPorAntiguidade);
+ registrosNumeracaoReservas=todos.map(r=>({...r}));
+ const grupos={AM:[],BE:[],MA:[],BR:[],NC:[]};
+ mapaNumeracaoReservas=new Map();
+ for(const r of todos){
+  const sigla=obterSiglaPropriedadeReserva(r.casa);
+  if(sigla&&grupos[sigla])grupos[sigla].push(r);
+ }
+ for(const [sigla,lista] of Object.entries(grupos)){
+  // Para o histórico, o número exibido deriva apenas da ordem cronológica das entradas.
+  // Códigos antigos eventualmente gravados não alteram essa ordem nem os documentos.
+  lista.sort(compararReservasPorAntiguidade);
+  lista.forEach((r,indice)=>mapaNumeracaoReservas.set(String(r.id),`${sigla}-${indice+1}`));
+ }
+ numeracaoReservasCarregada=true;
+ numeracaoReservasFalha=false;
+}
+
+function maiorCodigoReservaDaPropriedade(sigla){
+ let maior=0;
+ for(const codigo of mapaNumeracaoReservas.values()){
+  const n=numeroDoCodigoReserva(codigo,sigla);
+  if(n>maior)maior=n;
+ }
+ return maior;
+}
+
+async function obterProximoCodigoReserva(casa){
+ const sigla=obterSiglaPropriedadeReserva(casa);
+ if(!sigla)return null;
+ try{
+  const snap=await db.collection('reservas').get();
+  const todas=[];
+  snap.forEach(d=>todas.push({id:d.id,...d.data()}));
+  montarMapaNumeracaoReservas(todas);
+ }catch(e){
+  console.warn('Não foi possível consultar todas as reservas para gerar o código da propriedade:',e);
+  if(!numeracaoReservasCarregada)return null;
+ }
+ return `${sigla}-${maiorCodigoReservaDaPropriedade(sigla)+1}`;
+}
+
+function iniciarCarregamentoNumeracaoReservas(){
+ if(numeracaoReservasTentada)return;
+ numeracaoReservasTentada=true;
+ if(typeof db==='undefined'||!db||typeof db.collection!=='function'){
+  numeracaoReservasFalha=true;
+  return;
+ }
+ db.collection('reservas').get().then(snap=>{
+  const todas=[];
+  snap.forEach(d=>todas.push({id:d.id,...d.data()}));
+  montarMapaNumeracaoReservas(todas);
+  atualizarListaReservas();
+ }).catch(e=>{
+  numeracaoReservasFalha=true;
+  console.error('Não foi possível calcular a numeração das reservas:',e);
+  atualizarListaReservas();
+ });
+}
+
+function registrarReservaParaNumeracao(reserva){
+ const id=String(reserva?.id||'');
+ if(!id)return;
+ const registro={...(reservasAguardandoNumeracao.get(id)||{}),...reserva,id};
+ reservasAguardandoNumeracao.set(id,registro);
+ if(numeracaoReservasCarregada){
+  // Atualiza a numeração em memória para refletir a posição cronológica do novo registro.
+  const base=registrosNumeracaoReservas.filter(r=>String(r.id)!==id);
+  montarMapaNumeracaoReservas([...base,registro]);
+ }else{
+  const sigla=obterSiglaPropriedadeReserva(registro.casa);
+  const codigo=String(registro.codigoReserva||'').trim().toUpperCase();
+  if(sigla&&numeroDoCodigoReserva(codigo,sigla)>0)mapaNumeracaoReservas.set(id,codigo);
+ }
+}
+
+function obterCodigoReservaExibicao(id){
+ const codigo=mapaNumeracaoReservas.get(String(id||''));
+ if(typeof codigo==='string'&&/^(AM|BE|MA|BR|NC)-\d+$/.test(codigo))return codigo;
+ if(numeracaoReservasFalha)return '—';
+ return '…';
+}
+
+function hospedeCorrespondeReserva(r,termo,selecionadoId=''){
+ const q=normalizar(termo||'');
+ const nome=normalizar(obterNomeReservaParaHospede(r));
+ const telefone=obterTelefoneReservaParaHospede(r).replace(/\D/g,'');
  const termoNumerico=String(termo||'').replace(/\D/g,'');
 
+ let hospedeSelecionado=null;
+ if(selecionadoId){
+  hospedeSelecionado=(hospedesCadastrados||[]).find(h=>String(h.id)===String(selecionadoId))||null;
+  if(hospedeSelecionado){
+   if(r?.hospedeId && String(r.hospedeId)===String(selecionadoId))return true;
+   const hn=normalizar(hospedeSelecionado.nome||'');
+   const ht=String(hospedeSelecionado.telefone||'').replace(/\D/g,'');
+   if(hn && nome.includes(hn))return true;
+   if(ht && telefone && telefone.includes(ht))return true;
+  }
+ }
+
+ if(!q)return !!selecionadoId && !!hospedeSelecionado ? false : true;
  if(nome.includes(q))return true;
  if(termoNumerico && telefone.includes(termoNumerico))return true;
 
- const hospede=hospedesCadastrados.find(h=>{
-  const hn=normalizar(h.nome||'');
-  const ht=String(h.telefone||'').replace(/\D/g,'');
-  return (hn && hn===nome) || (ht && ht===telefone);
- });
+ let hospede=null;
+ if(r?.hospedeId){
+  hospede=(hospedesCadastrados||[]).find(h=>String(h.id)===String(r.hospedeId))||null;
+ }
+ if(!hospede){
+  hospede=(hospedesCadastrados||[]).find(h=>{
+   const hn=normalizar(h.nome||'');
+   const ht=String(h.telefone||'').replace(/\D/g,'');
+   return (hn && nome && hn===nome) || (ht && telefone && ht===telefone);
+  })||null;
+ }
 
  if(!hospede)return false;
 
@@ -7270,6 +9779,8 @@ async function aplicarFiltrosReservas(){
 function limparFiltrosReservas(){
  paginaReservasAtual=1;
  if($('filtroHospedeReservas'))$('filtroHospedeReservas').value='';
+ if($('filtroHospedeReservaId'))$('filtroHospedeReservaId').value='';
+ fecharSugestoesFiltroHospedeReservas();
  if($('filtroCasaReservas'))$('filtroCasaReservas').value='todas';
  if($('filtroSituacaoReservas'))$('filtroSituacaoReservas').value='ativas';
  if($('filtroPagamentoReservas'))$('filtroPagamentoReservas').value='todos';
@@ -7286,6 +9797,8 @@ function atualizarListaReservas(){
  const c=$('listaReservas');
  if(!c)return;
 
+ if(!numeracaoReservasTentada)iniciarCarregamentoNumeracaoReservas();
+
  atualizarIndicadoresReservas();
 
  const busca=$('filtroHospedeReservas')?.value||'';
@@ -7301,7 +9814,8 @@ function atualizarListaReservas(){
 
  let arr=[...reservasConfirmadas];
 
- if(busca)arr=arr.filter(r=>hospedeCorrespondeReserva(r,busca));
+ const hospedeSelecionadoId=$('filtroHospedeReservaId')?.value||'';
+ if(busca || hospedeSelecionadoId)arr=arr.filter(r=>hospedeCorrespondeReserva(r,busca,hospedeSelecionadoId));
  if(casa!=='todas')arr=arr.filter(r=>r.casa===casa);
  if(pagamento!=='todos')arr=arr.filter(r=>normalizarStatusPagamentoReserva(r)===pagamento);
 
@@ -7334,7 +9848,7 @@ function atualizarListaReservas(){
   });
  }
 
- const semFiltroReservas=(!busca && casa==='todas' && pagamento==='todos' && situacao==='ativas' && !entradaInicial && !entradaFinal && !saidaInicial && !saidaFinal && !periodo && !controlePagamentosAtivo);
+ const semFiltroReservas=(!busca && !hospedeSelecionadoId && casa==='todas' && pagamento==='todos' && situacao==='ativas' && !entradaInicial && !entradaFinal && !saidaInicial && !saidaFinal && !periodo && !controlePagamentosAtivo);
  reservasPagamentoFiltradas=arr.map(r=>r.id);
 
  arr.sort((a,b)=>{
@@ -7380,6 +9894,7 @@ function atualizarListaReservas(){
     <thead>
      <tr>
       <th class="coluna-selecao"><input class="checkbox-reserva" type="checkbox" title="Selecionar todas as reservas exibidas" onclick="toggleTodasReservasExibidas(this)"></th>
+      <th>🔢 Nº Reserva</th>
       <th>📅 Período</th>
       <th>🏠 Casa</th>
       <th>🌐 Origem</th>
@@ -7412,6 +9927,7 @@ function atualizarListaReservas(){
       return `
        <tr>
         <td class="coluna-selecao"><input class="checkbox-reserva" type="checkbox" data-reserva-pagamento-id="${escapeHtmlReserva(r.id)}" ${reservasPagamentoSelecionadas.has(r.id)?'checked':''} onchange="alternarSelecaoReservaPagamento('${r.id}',this.checked)"></td>
+        <td style="text-align:center;white-space:nowrap"><strong class="numero-reserva-sequencial ${obterClasseCodigoReserva(obterCodigoReservaExibicao(r.id))}">${escapeHtmlReserva(obterCodigoReservaExibicao(r.id))}</strong></td>
         <td class="reserva-datas">
          <strong>${dataBr(r.entrada)} → ${dataBr(r.saida)}</strong>
          <small>${Number(r.dias||0)} diária(s)</small>
@@ -8157,9 +10673,173 @@ body{
 
 }
 
-function abrirNovaReservaAdmin(){const c=Object.entries(casas).map(([id,x])=>`<option value="${id}">${x.nome}${x.interna?' — interno':''}</option>`).join('');$('conteudoEditar').innerHTML=`<input type="hidden" id="novaReserva"><div class="grupo-input"><label>Casa</label><select id="novaCasaReserva">${c}</select></div><div class="grupo-input"><label>Hóspede</label><input id="novoNomeReserva"></div><div class="grupo-input"><label>Telefone</label><input id="novoTelefoneReserva"></div><div class="grupo-input"><label>Origem</label><select id="novaOrigemReserva"><option>Reserva direta</option><option>Airbnb</option><option>Booking.com</option><option>WhatsApp</option><option>Telefone</option><option>Outro</option></select></div><div class="linha-form"><div class="grupo-input"><label>Entrada</label><input type="date" id="novaEntrada"></div><div class="grupo-input"><label>Saída</label><input type="date" id="novaSaida"></div></div><div class="linha-form"><div class="grupo-input"><label>Adultos</label><input type="number" id="novoAdultos" value="1"></div><div class="grupo-input"><label>Crianças</label><input type="number" id="novoCriancas" value="0"></div></div><div class="grupo-input"><label>Forma de recebimento</label><select id="novaFormaPagamento"><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Transferência Bancária</option></select></div><div class="grupo-input"><label>Caixa / conta destino</label><select id="novaContaDestino"><option>Caixa Casa Amarela</option><option>Caixa Casa Bege</option><option>Caixa Casa Marrom</option><option>Caixa Casa Branca</option><option>Caixa Nossa Casa</option><option>Caixa Geral</option><option>Conta bancária</option></select></div><div class="grupo-input"><label>Data de Recebimento</label><input type="date" id="novaDataRecebimento"><small style="color:var(--cinza)">Data prevista ou efetiva do repasse.</small></div><div class="grupo-input"><label>Status do Pagamento</label><select id="novoStatus"><option value="pendente">Pendente</option><option value="parcial">Pagamento Parcial</option><option value="pago">Pago</option></select></div><div class="grupo-input"><label>Valor Antecipado</label><input type="number" id="novoValorAntecipado" value="0" step="0.01"></div><div class="grupo-input"><label>Valor Total</label><input type="number" id="novoValorTotal" step="0.01"></div><div class="grupo-input"><label>Observação</label><textarea id="novaObservacao"></textarea></div><button class="sucesso" style="width:100%" onclick="salvarNovaReservaAdmin()">💾 Salvar reserva</button>`;$('modalEditarReserva').classList.add('aberto');}
-async function salvarNovaReservaAdmin(){const casa=$('novaCasaReserva').value,a=$('novaEntrada').value,b=$('novaSaida').value,nome=$('novoNomeReserva').value.trim(),adultos=Number($('novoAdultos').value||0),criancas=Number($('novoCriancas').value||0);if(!nome||!a||!b||b<=a)return alert('⚠️ Informe hóspede e datas válidas.');const hojeStr=dataStr(hoje());if(b>=hojeStr&&await verificarPeriodoBloqueado(casa,a,b))return alert('⚠️ O período está bloqueado.');const x=await calcularValorDiarias(casa,a,b),taxa=Number(casas[casa]?.taxaLimpeza||0),f=calcularValorFinalReserva(x.dias,x.valor,taxa),total=Number($('novoValorTotal').value||f.total),ante=Number($('novoValorAntecipado').value||0);if(ante>total)return alert('⚠️ O antecipado não pode ser maior que o total.');try{const ref=await db.collection('reservas').add({casa,nome,telefone:$('novoTelefoneReserva').value.trim(),entrada:a,saida:b,adultos,criancas,totalPessoas:adultos+criancas,dias:x.dias,valorDiarias:x.valor,taxaLimpeza:taxa,desconto:f.desconto,percentualDesconto:f.percentualDesconto,acrescimoValor:0,valorTotal:total,valorPago:ante,statusPagamento:$('novoStatus').value,origemReserva:$('novaOrigemReserva').value,formaPagamento:$('novaFormaPagamento').value,contaDestino:$('novaContaDestino').value,dataRecebimento:$('novaDataRecebimento')?.value||'',observacao:$('novaObservacao').value.trim(),criadoEm:firebase.firestore.FieldValue.serverTimestamp(),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()});reservasConfirmadas.unshift({id:ref.id,casa,nome,telefone:$('novoTelefoneReserva').value.trim(),entrada:a,saida:b,adultos,criancas,totalPessoas:adultos+criancas,valorTotal:total,valorPago:ante,statusPagamento:$('novoStatus').value,criadoEm:null});reservasCarregadas=true;try{await sincronizarDisponibilidadeReserva(ref.id,reservasConfirmadas[0]);}catch(e){console.error('Sincronização:',e);}fecharModalEditar();
-   fecharModalPrestador();atualizarListaReservas();try{renderizarCalendarioSeguro();}catch(e){console.error(e);}try{gerarRelatorio();}catch(e){console.error(e);}alert(`✅ Reserva criada com sucesso.\nID: ${ref.id}`);}catch(e){console.error('Erro ao criar reserva administrativa:',e);alert(`❌ Erro ao criar reserva.\n\n${e?.code==='permission-denied'?'Permissão negada pelo Firestore. As regras precisam permitir gravação administrativa.':(e?.message||'Verifique os dados e tente novamente.')}`);}}
+async function buscarHospedesReserva(mostrarTodos=false){
+ const input=$('novoNomeReserva');
+ const box=$('sugestoesHospedeReserva');
+ if(!input||!box)return;
+ if(!hospedesCarregados){
+  try{await carregarHospedes();}catch(e){return;}
+ }
+
+ if(!mostrarTodos)$('novoHospedeId').value='';
+
+ const q=normalizar(input.value||'');
+ const qNum=String(input.value||'').replace(/\D/g,'');
+ let encontrados=(hospedesCadastrados||[]).filter(h=>!h.origemLancamento);
+
+ if(!mostrarTodos && q){
+  encontrados=encontrados.filter(h=>{
+   const nome=normalizar(h.nome||'');
+   const tel=String(h.telefone||'').replace(/\D/g,'');
+   const email=normalizar(h.email||'');
+   const cpf=String(h.cpf||'').replace(/\D/g,'');
+   return nome.includes(q)||(qNum&&tel.includes(qNum))||email.includes(q)||(qNum&&cpf.includes(qNum));
+  });
+ }
+
+ if(!encontrados.length){
+  box.innerHTML='<div class="sugestao-hospede-item"><small>Nenhum hóspede encontrado no cadastro.</small><div style="margin-top:9px"><button type="button" class="sucesso" style="width:100%" onclick="abrirCadastroHospedeDaReservaAdmin()">➕ Adicionar hóspede</button></div></div>';
+  box.style.display='block';
+  return;
+ }
+
+ box.innerHTML=encontrados.map(h=>`<div class="sugestao-hospede-item" onclick="selecionarHospedeNaReserva('${String(h.id).replace(/'/g,'\\\'')}' )"><strong>👤 ${escapeHtmlReserva(h.nome)}</strong><small>📱 ${escapeHtmlReserva(h.telefone||'—')}${h.email?' · ✉️ '+escapeHtmlReserva(h.email):''}</small></div>`).join('');
+ box.style.display='block';
+}
+
+
+// Abre o cadastro existente por cima da reserva administrativa; a janela e os campos da reserva permanecem intactos.
+function abrirCadastroHospedeDaReservaAdmin(){
+ const termo=String($('novoNomeReserva')?.value||'').trim();
+ window.__cadastroHospedeRetornoReserva={ativo:true,termo};
+ fecharSugestoesHospedeReserva();
+ abrirCadastroHospede();
+ if(termo){
+  const somenteNumeros=termo.replace(/\D/g,'');
+  const pareceTelefone=/^[+()\d\s.-]+$/.test(termo)&&somenteNumeros.length>=8;
+  if(pareceTelefone){$('cadHospedeTelefone').value=termo;$('cadHospedeNome').value='';}
+  else{$('cadHospedeNome').value=termo;}
+ }
+}
+
+function selecionarHospedeNaReserva(id){
+ const h=hospedesCadastrados.find(x=>x.id===id);
+ if(!h)return;
+ $('novoHospedeId').value=h.id||'';
+ $('novoNomeReserva').value=h.nome||'';
+ $('novoTelefoneReserva').value=h.telefone||'';
+ fecharSugestoesHospedeReserva();
+}
+
+function fecharSugestoesHospedeReserva(){
+ const box=$('sugestoesHospedeReserva');
+ if(box){box.style.display='none';box.innerHTML='';}
+}
+
+async function buscarHospedesEditarReserva(mostrarTodos=false){
+ const input=$('editNome');
+ const box=$('sugestoesHospedeEditReserva');
+ if(!input||!box)return;
+ if(!hospedesCarregados){
+  try{await carregarHospedes();}catch(e){return;}
+ }
+ if(!mostrarTodos)$('editHospedeId').value='';
+
+ const q=normalizar(input.value||'');
+ const qNum=String(input.value||'').replace(/\D/g,'');
+ let encontrados=(hospedesCadastrados||[]).filter(h=>!h.origemLancamento);
+
+ if(!mostrarTodos && q){
+  encontrados=encontrados.filter(h=>{
+   const nome=normalizar(h.nome||'');
+   const tel=String(h.telefone||'').replace(/\D/g,'');
+   const email=normalizar(h.email||'');
+   const cpf=String(h.cpf||'').replace(/\D/g,'');
+   return nome.includes(q)||(qNum&&tel.includes(qNum))||email.includes(q)||(qNum&&cpf.includes(qNum));
+  });
+ }
+
+ if(!encontrados.length){
+  box.innerHTML='<div class="sugestao-hospede-item"><small>Nenhum hóspede encontrado no cadastro.</small></div>';
+  box.style.display='block';
+  return;
+ }
+
+ box.innerHTML=encontrados.map(h=>`<div class="sugestao-hospede-item" onclick="selecionarHospedeEditarReserva('${String(h.id).replace(/'/g,'\\\'')}' )"><strong>👤 ${escapeHtmlReserva(h.nome)}</strong><small>📱 ${escapeHtmlReserva(h.telefone||'—')}${h.email?' · ✉️ '+escapeHtmlReserva(h.email):''}</small></div>`).join('');
+ box.style.display='block';
+}
+
+function selecionarHospedeEditarReserva(id){
+ const h=hospedesCadastrados.find(x=>x.id===id);
+ if(!h)return;
+ $('editHospedeId').value=h.id||'';
+ $('editNome').value=h.nome||'';
+ $('editTelefone').value=h.telefone||'';
+ fecharSugestoesHospedeEditReserva();
+}
+
+function fecharSugestoesHospedeEditReserva(){
+ const box=$('sugestoesHospedeEditReserva');
+ if(box){box.style.display='none';box.innerHTML='';}
+}
+
+function abrirNovaReservaAdmin(){
+ const c=Object.entries(casas).map(([id,x])=>`<option value="${id}">${x.nome}${x.interna?' — interno':''}</option>`).join('');
+ $('conteudoEditar').innerHTML=`<input type="hidden" id="novaReserva"><div class="grupo-input"><label>Casa</label><select id="novaCasaReserva" onchange="atualizarContaDestinoNovaReserva();atualizarAvisoEstadiaMinimaNovaReserva()">${c}</select><small id="infoEstadiaMinimaNovaReserva" style="display:block;color:var(--cinza);margin-top:5px"></small></div><div class="grupo-input autocomplete-hospede"><label>Hóspede</label><small style="display:block;color:var(--cinza);margin:-2px 0 6px">Digite para filtrar ou clique no campo para ver todos os hóspedes cadastrados.</small><input id="novoHospedeId" type="hidden"><input id="novoNomeReserva" autocomplete="off" oninput="buscarHospedesReserva(false)" onfocus="buscarHospedesReserva(true)" onblur="setTimeout(fecharSugestoesHospedeReserva,250)"><div id="sugestoesHospedeReserva" class="sugestoes-hospede-reserva" style="display:none"></div></div><div class="grupo-input"><label>Telefone</label><input id="novoTelefoneReserva" type="tel"></div><div class="grupo-input"><label>Origem</label><select id="novaOrigemReserva"><option>Reserva direta</option><option>Airbnb</option><option>Booking.com</option><option>WhatsApp</option><option>Telefone</option><option>Outro</option></select></div><div class="linha-form"><div class="grupo-input"><label>Entrada</label><input type="date" id="novaEntrada" onchange="atualizarAvisoEstadiaMinimaNovaReserva()"></div><div class="grupo-input"><label>Saída</label><input type="date" id="novaSaida"></div></div><div class="linha-form"><div class="grupo-input"><label>Adultos</label><input type="number" id="novoAdultos" value="1"></div><div class="grupo-input"><label>Crianças</label><input type="number" id="novoCriancas" value="0"></div></div><div class="grupo-input"><label>Forma de recebimento</label><select id="novaFormaPagamento"><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Transferência Bancária</option></select></div><div class="grupo-input"><label>Caixa / conta destino</label><select id="novaContaDestino"><option>Caixa Casa Amarela</option><option>Caixa Casa Bege</option><option>Caixa Casa Marrom</option><option>Caixa Casa Branca</option><option>Caixa Nossa Casa</option><option>Caixa Geral</option><option>Conta bancária</option></select></div><div class="grupo-input"><label>Data de Recebimento</label><input type="date" id="novaDataRecebimento"><small style="color:var(--cinza)">Data prevista ou efetiva do repasse.</small></div><div class="grupo-input"><label>Status do Pagamento</label><select id="novoStatus"><option value="pendente">Pendente</option><option value="parcial">Pagamento Parcial</option><option value="pago">Pago</option></select></div><div class="grupo-input"><label>Valor Antecipado</label><input type="number" id="novoValorAntecipado" value="0" step="0.01"></div><div class="grupo-input"><label>Valor Total</label><input type="number" id="novoValorTotal" step="0.01"></div><div class="grupo-input"><label>Observação</label><textarea id="novaObservacao"></textarea></div><button class="sucesso" style="width:100%" onclick="salvarNovaReservaAdmin()">💾 Salvar reserva</button>`;
+ $('modalEditarReserva').classList.add('aberto');
+ atualizarContaDestinoNovaReserva();
+ atualizarAvisoEstadiaMinimaNovaReserva();
+ try{carregarHospedes();}catch(e){console.error('Pré-carregamento de hóspedes:',e);}
+ setTimeout(()=>{$('novoNomeReserva')?.focus();},100);
+}
+
+async function salvarNovaReservaAdmin(){
+ const casa=$('novaCasaReserva').value;
+ const a=$('novaEntrada').value;
+ const b=$('novaSaida').value;
+ const nome=$('novoNomeReserva').value.trim();
+ const telefone=$('novoTelefoneReserva').value.trim();
+ const hospedeIdSelecionado=$('novoHospedeId')?.value||'';
+ const adultos=Number($('novoAdultos').value||0);
+ const criancas=Number($('novoCriancas').value||0);
+ if(!nome||!a||!b)return alert('⚠️ Informe hóspede e datas válidas.');
+ if(b<=a)return alert('⚠️ Informe datas válidas para a reserva.');
+ const hojeStr=dataStr(hoje());
+ if(b>=hojeStr&&await verificarPeriodoBloqueado(casa,a,b))return alert('⚠️ O período está bloqueado.');
+ const x=await calcularValorDiarias(casa,a,b);
+ // A janela administrativa permite reservas abaixo do mínimo configurado no calendário.
+ const taxa=Number(casas[casa]?.taxaLimpeza||0);
+ const f=calcularValorFinalReserva(x.dias,x.valor,taxa);
+ const total=Number($('novoValorTotal').value||f.total);
+ const ante=Number($('novoValorAntecipado').value||0);
+ if(ante>total)return alert('⚠️ O antecipado não pode ser maior que o total.');
+ try{
+  const codigoReserva=await obterProximoCodigoReserva(casa);
+  const dadosReserva={...(codigoReserva?{codigoReserva}:{}),
+   casa,nome,telefone,entrada:a,saida:b,adultos,criancas,totalPessoas:adultos+criancas,dias:x.dias,valorDiarias:x.valor,taxaLimpeza:taxa,desconto:f.desconto,percentualDesconto:f.percentualDesconto,acrescimoValor:0,valorTotal:total,valorPago:ante,statusPagamento:$('novoStatus').value,origemReserva:$('novaOrigemReserva').value,formaPagamento:$('novaFormaPagamento').value,contaDestino:$('novaContaDestino').value,dataRecebimento:$('novaDataRecebimento')?.value||'',observacao:$('novaObservacao').value.trim(),criadoEm:firebase.firestore.FieldValue.serverTimestamp(),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()
+  };
+  if(hospedeIdSelecionado)dadosReserva.hospedeId=hospedeIdSelecionado;
+
+  const ref=await db.collection('reservas').add(dadosReserva);
+  const hospedeIdFinal=hospedeIdSelecionado||'';
+  if(hospedeIdFinal)await ref.update({hospedeId:hospedeIdFinal,atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()});
+
+  const reservaCriadaLocal={id:ref.id,...dadosReserva,hospedeId:hospedeIdFinal||undefined,criadoEm:null};
+  reservasConfirmadas.unshift(reservaCriadaLocal);
+  registrarReservaParaNumeracao(reservaCriadaLocal);
+  reservasCarregadas=true;
+  try{await sincronizarDisponibilidadeReserva(ref.id,reservasConfirmadas[0]);}catch(e){console.error('Sincronização:',e);}
+  fecharModalEditar();
+  fecharSugestoesHospedeReserva();
+  atualizarListaReservas();
+  try{renderizarCalendarioSeguro();}catch(e){console.error(e);}
+  try{gerarRelatorio();}catch(e){console.error(e);}
+  alert(`✅ Reserva criada com sucesso.\nID: ${ref.id}`);
+ }catch(e){
+  console.error('Erro ao criar reserva administrativa:',e);
+  alert(`❌ Erro ao criar reserva.\n\n${e?.code==='permission-denied'?'Permissão negada pelo Firestore. As regras precisam permitir gravação administrativa.':(e?.message||'Verifique os dados e tente novamente.')}`);
+ }
+}
 
 function abrirEditarReserva(id){
 
@@ -8198,13 +10878,23 @@ function abrirEditarReserva(id){
    <small style="color:var(--cinza)">Data prevista ou efetiva do repasse. Pode ser posterior ao check-in.</small>
   </div>
 
-  <div class="grupo-input">
+  <div class="grupo-input autocomplete-hospede">
 
    <label>Hóspede</label>
 
+   <small style="display:block;color:var(--cinza);margin:-2px 0 6px">Digite para filtrar ou clique no campo para ver todos os hóspedes cadastrados.</small>
+
+   <input type="hidden" id="editHospedeId" value="${r.hospedeId||''}">
+
    <input
     id="editNome"
-    value="${r.nome||''}">
+    autocomplete="off"
+    value="${escapeHtmlReserva(r.nome||'')}"
+    oninput="buscarHospedesEditarReserva(false)"
+    onfocus="buscarHospedesEditarReserva(true)"
+    onblur="setTimeout(fecharSugestoesHospedeEditReserva,250)">
+
+   <div id="sugestoesHospedeEditReserva" class="sugestoes-hospede-reserva" style="display:none"></div>
 
   </div>
 
@@ -8767,6 +11457,7 @@ async function salvarEdicao(id){
 
  const status=$('editStatus').value;
  const casaSelecionada=$('editCasa')?.value||r.casa;
+ const hospedeIdEditado=$('editHospedeId')?.value||'';
 
  if(
   !entrada ||
@@ -8778,7 +11469,16 @@ async function salvarEdicao(id){
   );
  }
 
- if(
+ // Ao editar somente os dados do hóspede (ou outros dados que não mudam o período),
+ // a própria reserva não deve ser considerada como conflito. Isso é especialmente
+ // importante para reservas históricas/migradas que possuem registros de disponibilidade
+ // antigos. A verificação de conflito fica ativa quando casa, entrada ou saída foram alteradas.
+ const periodoEditado=
+  String(casaSelecionada||'')!==String(r.casa||'') ||
+  String(entrada||'')!==String(r.entrada||'') ||
+  String(saida||'')!==String(r.saida||'');
+
+ if(periodoEditado &&
   await verificarPeriodoBloqueado(
    casaSelecionada,
    entrada,
@@ -8790,7 +11490,7 @@ async function salvarEdicao(id){
  ){
 
   return alert(
-   '⚠️ O período está bloqueado por outra reserva confirmada ou paga.'
+   '⚠️ O novo período está bloqueado por outra reserva confirmada ou paga.'
   );
 
  }
@@ -8894,6 +11594,9 @@ async function salvarEdicao(id){
     statusPagamento:
      status,
 
+    hospedeId:
+     hospedeIdEditado||null,
+
     observacao:
      $('editObs').value.trim(),
 
@@ -8903,7 +11606,7 @@ async function salvarEdicao(id){
 
    });
 
-  const reservaAtualizada={...r,casa:casaSelecionada,nome:$('editNome').value.trim(),telefone:$('editTelefone').value.trim(),entrada,saida,adultos:Number($('editAdultos').value||0),criancas:Number($('editCriancas').value||0),totalPessoas:Number($('editAdultos').value||0)+Number($('editCriancas').value||0),statusPagamento:status};
+  const reservaAtualizada={...r,casa:casaSelecionada,nome:$('editNome').value.trim(),telefone:$('editTelefone').value.trim(),hospedeId:hospedeIdEditado||null,entrada,saida,adultos:Number($('editAdultos').value||0),criancas:Number($('editCriancas').value||0),totalPessoas:Number($('editAdultos').value||0)+Number($('editCriancas').value||0),statusPagamento:status};
   const idxReserva=reservasConfirmadas.findIndex(x=>x.id===id);
   if(idxReserva>=0)reservasConfirmadas[idxReserva]={...reservasConfirmadas[idxReserva],...reservaAtualizada};
   await sincronizarDisponibilidadeReserva(id,reservaAtualizada);
@@ -8969,27 +11672,48 @@ function popularFiltrosRecebimentoRelatorio(){
  const anoEl=$('filtroAnoFinanceiroRelatorio');
  const inicioEl=$('filtroMesRecebimentoInicioRelatorio');
  const fimEl=$('filtroMesRecebimentoFimRelatorio');
+ const hospedeEl=$('listaHospedesRelatorio');
  const anoAtual=hoje().getFullYear();
- const anoAnterior=(anoEl?.value&&anoEl.value!=='todos')?anoEl.value:String(anoAtual);
+ const valorAnoAtual=anoEl?.value||String(anoAtual);
  const mesInicio=inicioEl?.value||'todos';
  const mesFim=fimEl?.value||'todos';
  const meses=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
- const anos=new Set([anoAtual]);
+ const anos=new Set();
  (reservasConfirmadas||[]).forEach(r=>{
   ['dataRecebimento','entrada','saida'].forEach(campo=>{
    const d=String(r?.[campo]||'').slice(0,10);
    if(/^\d{4}-\d{2}-\d{2}$/.test(d))anos.add(Number(d.slice(0,4)));
   });
  });
+ anos.add(anoAtual);
  const listaAnos=[...anos].filter(Number.isFinite).sort((a,b)=>a-b);
  if(anoEl){
-  anoEl.innerHTML=''+listaAnos.map(ano=>`<option value="${ano}">${ano}</option>`).join('');
-  anoEl.value=listaAnos.includes(Number(anoAnterior))?anoAnterior:String(anoAtual);
+  const valorPreservar=valorAnoAtual==='todos'?'todos':(listaAnos.includes(Number(valorAnoAtual))?valorAnoAtual:String(anoAtual));
+  anoEl.innerHTML='<option value="todos">Todos os anos</option>'+listaAnos.map(ano=>`<option value="${ano}">${ano}</option>`).join('');
+  anoEl.value=valorPreservar;
  }
  const opcoesMes='<option value="todos">Todos os meses</option>'+meses.map((nome,i)=>`<option value="${String(i+1).padStart(2,'0')}">${nome}</option>`).join('');
  if(inicioEl){inicioEl.innerHTML=opcoesMes;inicioEl.value=[...inicioEl.options].some(o=>o.value===mesInicio)?mesInicio:'todos';}
  if(fimEl){fimEl.innerHTML=opcoesMes;fimEl.value=[...fimEl.options].some(o=>o.value===mesFim)?mesFim:'todos';}
+
+ // Sugestões com todos os hóspedes cadastrados e também os nomes encontrados nas reservas.
+ // Não grava nem altera dados; serve apenas para facilitar a localização.
+ if(hospedeEl){
+  const mapa=new Map();
+  (hospedesCadastrados||[]).forEach(h=>{
+   const nome=String(h?.nome||'').trim();
+   const n=normalizar(nome);
+   if(nome&&n&&!mapa.has(n))mapa.set(n,nome);
+  });
+  (reservasConfirmadas||[]).forEach(r=>{
+   const nome=obterNomeReservaParaHospede(r);
+   const n=normalizar(nome);
+   if(nome&&n&&!mapa.has(n))mapa.set(n,nome);
+  });
+  hospedeEl.innerHTML=[...mapa.values()].sort((a,b)=>a.localeCompare(b,'pt-BR')).map(nome=>`<option value="${escapeHtmlReserva(nome)}"></option>`).join('');
+ }
 }
+
 
 
 function obterReservasRelatorio(){
@@ -9029,7 +11753,7 @@ function obterReservasRelatorio(){
  if(origemReserva!=='todos')arr=arr.filter(r=>(r.origemReserva||'Não informada')===origemReserva);
 
  if(busca){
-  arr=arr.filter(r=>normalizar(r.nome).includes(busca)||String(r.telefone||'').includes(busca));
+  arr=arr.filter(r=>hospedeCorrespondeReserva(r,busca));
  }
 
  // Este relatório é financeiro: o período é baseado na Data de Recebimento.
@@ -9305,7 +12029,7 @@ async function carregarDadosRelatoriosSobDemanda(){
  try{
   $('relatorioConteudo').innerHTML='<div class="dashboard-vazio">⏳ Carregando dados do relatório somente porque você solicitou esta consulta...</div>';
   await Promise.all([
-   reservasCarregadas?Promise.resolve():carregarReservasConfirmadas(),
+   reservasConsultaCompleta?Promise.resolve():carregarReservasConfirmadas(),
    despesasCarregadas?Promise.resolve():carregarDespesas(),
    prestadoresCarregados?Promise.resolve():carregarPrestadores()
   ]);
@@ -9318,6 +12042,48 @@ async function carregarDadosRelatoriosSobDemanda(){
   console.error('Relatórios sob demanda:',e);
   $('relatorioConteudo').innerHTML='<div class="dashboard-vazio">❌ Não foi possível carregar os dados dos relatórios.</div>';
  }
+}
+
+function obterDespesasResumoRelatorio(){
+
+ let arr=[...(despesasCadastradas||[])];
+
+ const casa=$('filtroCasaRelatorio')?.value||'todas';
+ const anoFinanceiro=$('filtroAnoFinanceiroRelatorio')?.value||String(hoje().getFullYear());
+ const mesInicio=$('filtroMesRecebimentoInicioRelatorio')?.value||'todos';
+ const mesFim=$('filtroMesRecebimentoFimRelatorio')?.value||'todos';
+ const periodo=$('filtroPeriodoRelatorio')?.value||'personalizado';
+ const dataInicial=$('relatorioDataInicial')?.value||'';
+ const dataFinal=$('relatorioDataFinal')?.value||'';
+
+ // Para gastos, usamos apenas os critérios do relatório que têm
+ // correspondência direta nos lançamentos de despesas: casa e período/data.
+ // Filtros específicos de reservas (hóspede, origem, status, etc.)
+ // não existem nos documentos de despesas e, portanto, não os restringem.
+ if(casa!=='todas')arr=arr.filter(x=>x.casa===casa);
+
+ if(anoFinanceiro!=='todos')
+  arr=arr.filter(x=>String(x.data||'').slice(0,4)===String(anoFinanceiro));
+
+ if(mesInicio!=='todos' || mesFim!=='todos'){
+  const inicio=mesInicio==='todos'?1:Number(mesInicio);
+  const fim=mesFim==='todos'?12:Number(mesFim);
+  const min=Math.min(inicio,fim);
+  const max=Math.max(inicio,fim);
+  arr=arr.filter(x=>{
+   const d=String(x.data||'').slice(0,10);
+   if(!/^\d{4}-\d{2}-\d{2}$/.test(d))return false;
+   const mes=Number(d.slice(5,7));
+   return mes>=min&&mes<=max;
+  });
+ }
+
+ if(periodo==='personalizado'){
+  if(dataInicial)arr=arr.filter(x=>{const d=String(x.data||'').slice(0,10);return d&&d>=dataInicial;});
+  if(dataFinal)arr=arr.filter(x=>{const d=String(x.data||'').slice(0,10);return d&&d<=dataFinal;});
+ }
+
+ return arr;
 }
 
 function gerarRelatorio(){
@@ -9348,6 +12114,13 @@ function gerarRelatorio(){
     s+Number(r.valorPago||0),
    0
   );
+
+ const despesasResumo=obterDespesasResumoRelatorio();
+ const totalGasto=despesasResumo.reduce(
+  (s,x)=>s+Number(x.valor||0),
+  0
+ );
+ const recebidoLiquido=recebido-totalGasto;
 
  const receber=
   Math.max(
@@ -9559,6 +12332,16 @@ function gerarRelatorio(){
    </div>
 
    <div class="resumo-card">
+    <small>Total gasto</small>
+    <strong>${moeda(totalGasto)}</strong>
+   </div>
+
+   <div class="resumo-card">
+    <small>Recebido líquido</small>
+    <strong>${moeda(recebidoLiquido)}</strong>
+   </div>
+
+   <div class="resumo-card">
     <small>A receber</small>
     <strong>${moeda(receber)}</strong>
    </div>
@@ -9579,6 +12362,8 @@ function gerarRelatorio(){
    </div>
 
   </div>
+
+  <div class="dashboard-nota" style="margin-top:10px">💡 <strong>Total gasto</strong> e <strong>Recebido líquido</strong> consideram os filtros de <strong>Casa</strong>, <strong>Ano Financeiro</strong> e período/data que possuem correspondência nos lançamentos de despesas. Os filtros específicos das reservas, como hóspede, origem e status do pagamento, continuam atuando somente sobre os recebimentos.</div>
 
   ${tabela}
 
@@ -9606,8 +12391,9 @@ function obterDadosFormularioHospede(){
 
 async function cadastrarOuAtualizarHospede(nome,telefone,extras={}){
 
- const n=normalizar(nome);
- if(!n)return;
+ const nomeTexto=String(nome||'').trim();
+ const n=normalizar(nomeTexto);
+ if(!n)return '';
 
  const q=await db.collection('hospedes')
   .where('nomeNormalizado','==',n)
@@ -9615,15 +12401,16 @@ async function cadastrarOuAtualizarHospede(nome,telefone,extras={}){
   .get();
 
  const dados={
-  nome,
-  telefone,
+  nome:nomeTexto,
   nomeNormalizado:n,
   atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()
  };
 
+ const telefoneTexto=String(telefone||'').trim();
+ if(telefoneTexto)dados.telefone=telefoneTexto;
+
  // Os campos complementares só são enviados quando informados.
- // Assim, a sincronização das reservas públicas não apaga dados
- // que já foram preenchidos manualmente no cadastro do hóspede.
+ // Assim, a sincronização nunca apaga dados que já foram preenchidos manualmente.
  Object.keys(extras||{}).forEach(k=>{
   if(extras[k]!==undefined && extras[k]!==null && String(extras[k]).trim()!=='')
    dados[k]=extras[k];
@@ -9631,9 +12418,103 @@ async function cadastrarOuAtualizarHospede(nome,telefone,extras={}){
 
  if(q.empty){
   dados.cadastradoEm=firebase.firestore.FieldValue.serverTimestamp();
-  await db.collection('hospedes').add(dados);
- }else{
-  await q.docs[0].ref.update(dados);
+  const ref=await db.collection('hospedes').add(dados);
+  return ref.id;
+ }
+
+ await q.docs[0].ref.update(dados);
+ return q.docs[0].id;
+}
+
+function obterNomeReservaParaHospede(r){
+ return String(r?.nome||r?.nomeHospede||r?.hospede||r?.cliente||'').trim();
+}
+
+function obterTelefoneReservaParaHospede(r){
+ return String(r?.telefone||r?.telefoneHospede||r?.whatsapp||'').trim();
+}
+
+async function sincronizarHospedesDeTodasReservas(opcoes={}){
+ const silencioso=!!opcoes.silencioso;
+ try{
+  // Quando chamada diretamente pelo botão, garante que os cadastros atuais
+  // já estejam carregados para não criar duplicidades. Na carga inicial,
+  // carregarHospedes já populou a lista e passa silencioso=true.
+  if(!hospedesCarregados && !opcoes.carregamentoInicial){
+   const sExistentes=await db.collection('hospedes').get();
+   hospedesCadastrados=[];
+   sExistentes.forEach(d=>{
+    const x=d.data()||{};
+    const nome=x.nome||x.nomeCompleto||x.nomeHospede||x.hospede||x.cliente||'';
+    hospedesCadastrados.push({id:d.id,...x,nome:nome||'Hóspede sem nome'});
+   });
+   hospedesCarregados=true;
+  }
+
+  const snap=await db.collection('reservas').get();
+  const porNome=new Map();
+  const porTelefone=new Map();
+
+  (hospedesCadastrados||[]).forEach(h=>{
+   const n=normalizar(h.nome||'');
+   const t=String(h.telefone||'').replace(/\D/g,'');
+   if(n && !porNome.has(n))porNome.set(n,h);
+   if(t && !porTelefone.has(t))porTelefone.set(t,h);
+  });
+
+  let adicionados=0;
+
+  for(const doc of snap.docs){
+   const r=doc.data()||{};
+   const nome=obterNomeReservaParaHospede(r);
+   const telefone=obterTelefoneReservaParaHospede(r);
+   const n=normalizar(nome);
+   const t=telefone.replace(/\D/g,'');
+   if(!n)continue;
+
+   const existente=porNome.get(n)||(t?porTelefone.get(t):null);
+   if(existente)continue;
+
+   const novoDados={
+    nome,
+    telefone,
+    nomeNormalizado:n,
+    origemCadastro:'reserva',
+    origemReserva:r.origemReserva||r.origem||'Reserva',
+    primeiraReservaId:doc.id,
+    cadastradoEm:firebase.firestore.FieldValue.serverTimestamp(),
+    atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()
+   };
+
+   const ref=await db.collection('hospedes').add(novoDados);
+   const novo={
+    id:ref.id,
+    nome,
+    telefone,
+    nomeNormalizado:n,
+    origemCadastro:'reserva',
+    origemReserva:r.origemReserva||r.origem||'Reserva',
+    primeiraReservaId:doc.id
+   };
+   hospedesCadastrados.push(novo);
+   porNome.set(n,novo);
+   if(t)porTelefone.set(t,novo);
+   adicionados++;
+  }
+
+  hospedesCadastrados.sort((a,b)=>String(a.nome||'').localeCompare(String(b.nome||''),'pt-BR'));
+  hospedesCarregados=true;
+  paginaHospedesAtual=1;
+  if($('listaHospedes'))filtrarHospedes();
+
+  if(!silencioso){
+   alert(`✅ Sincronização concluída.\n\n${adicionados} hóspede(s) novo(s) foram incluído(s) a partir das reservas.`);
+  }
+  return adicionados;
+ }catch(e){
+  console.error('Sincronização de hóspedes pelas reservas:',e);
+  if(!silencioso)alert('❌ Não foi possível sincronizar os hóspedes das reservas.');
+  throw e;
  }
 }
 
@@ -9641,14 +12522,17 @@ async function carregarHospedes(){
  if(hospedesCarregados){filtrarHospedes();return;}
  hospedesCadastrados=[];
  try{
-  // Uma única leitura da coleção. Os hóspedes que também aparecem nas
-  // reservas são mesclados depois, usando reservasConfirmadas já carregadas.
+  // Uma única leitura da coleção de hóspedes e, em seguida, uma sincronização
+  // controlada das reservas para incluir registros migrados que ainda não tenham
+  // cadastro. Nenhum hóspede existente é substituído pelos dados da reserva.
   const s=await db.collection('hospedes').get();
   s.forEach(d=>{
    const x=d.data()||{};
    const nome=x.nome||x.nomeCompleto||x.nomeHospede||x.hospede||x.cliente||'';
    hospedesCadastrados.push({id:d.id,...x,nome:nome||'Hóspede sem nome'});
   });
+
+  await sincronizarHospedesDeTodasReservas({silencioso:true,carregamentoInicial:true});
  }catch(e){console.error('Hóspedes cadastrados:',e);}
  hospedesCadastrados.sort((a,b)=>String(a.nome||'').localeCompare(String(b.nome||''),'pt-BR'));
  hospedesCarregados=true;
@@ -9658,9 +12542,9 @@ async function carregarHospedes(){
 function mesclarHospedesDasReservas(){
  const existentes=new Set(hospedesCadastrados.map(h=>normalizar(h.nome)));
  (reservasConfirmadas||[]).forEach(r=>{
-  const nome=String(r.nome||'').trim(),n=normalizar(nome);
+  const nome=obterNomeReservaParaHospede(r),n=normalizar(nome);
   if(nome&&n&&!existentes.has(n)){
-   hospedesCadastrados.push({id:'reserva-hospede-'+n,nome,telefone:r.telefone||'',email:r.email||'',origemLancamento:true});
+   hospedesCadastrados.push({id:'reserva-hospede-'+n,nome,telefone:obterTelefoneReservaParaHospede(r),email:r.email||'',origemLancamento:true});
    existentes.add(n);
   }
  });
@@ -9668,7 +12552,57 @@ function mesclarHospedesDasReservas(){
  paginaHospedesAtual=1;
  filtrarHospedes();
 }
-function filtrarHospedes(pagina=1){const el=$('listaHospedes');if(!el)return;const q=normalizar($('buscarHospede')?.value||'');const arr=hospedesCadastrados.filter(h=>!q||normalizar(h.nome).includes(q)||String(h.telefone||'').includes(q)||normalizar(h.email).includes(q)||String(h.cpf||'').includes(q));const paginas=Math.max(1,Math.ceil(arr.length/HOSPEDES_POR_PAGINA));paginaHospedesAtual=Math.min(Math.max(1,pagina),paginas);const vis=arr.slice((paginaHospedesAtual-1)*HOSPEDES_POR_PAGINA,paginaHospedesAtual*HOSPEDES_POR_PAGINA);el.innerHTML=vis.length?vis.map(h=>`<div class="reserva-item"><strong>👤 ${escapeHtmlReserva(h.nome)}</strong><p>📱 ${escapeHtmlReserva(h.telefone||'—')} ${h.email?` · ✉️ ${escapeHtmlReserva(h.email)}`:''}</p>${h.cpf?`<p>🪪 CPF: ${escapeHtmlReserva(h.cpf)}</p>`:''}${h.cidade||h.estado?`<p>📍 ${escapeHtmlReserva([h.cidade,h.estado].filter(Boolean).join(' - '))}</p>`:''}${h.origemLancamento?'<span style="display:inline-block;margin-top:8px;color:var(--cinza);font-size:12px">ℹ️ Encontrado nas reservas; cadastre os dados completos para editar.</span>':`<button class="azul" onclick="editarHospede('${h.id}')">✏️ Editar Cadastro</button>`}</div>`).join(''):`<p style="color:var(--cinza)">Nenhum hóspede encontrado.</p>`;const pg=$('paginacaoHospedes');if(pg)pg.innerHTML=arr.length<=HOSPEDES_POR_PAGINA?'':`<button onclick="filtrarHospedes(${paginaHospedesAtual-1})" ${paginaHospedesAtual===1?'disabled':''}>‹ Anterior</button><span>Página ${paginaHospedesAtual} de ${paginas} · ${arr.length} hóspedes</span><button onclick="filtrarHospedes(${paginaHospedesAtual+1})" ${paginaHospedesAtual===paginas?'disabled':''}>Próxima ›</button>`;}
+
+function filtrarHospedes(pagina=1){
+ if(!hospedesCarregados){carregarHospedes();return;}
+ const el=$('listaHospedes');
+ if(!el)return;
+ const q=normalizar($('buscarHospede')?.value||'');
+ const qNum=String($('buscarHospede')?.value||'').replace(/\D/g,'');
+ const arr=hospedesCadastrados.filter(h=>{
+  const nome=normalizar(h.nome||'');
+  const telefone=String(h.telefone||'').replace(/\D/g,'');
+  const email=normalizar(h.email||'');
+  const cpf=String(h.cpf||'').replace(/\D/g,'');
+  return !q||nome.includes(q)||email.includes(q)||(qNum&&telefone.includes(qNum))||(qNum&&cpf.includes(qNum));
+ });
+ const paginas=Math.max(1,Math.ceil(arr.length/HOSPEDES_POR_PAGINA));
+ paginaHospedesAtual=Math.min(Math.max(1,pagina),paginas);
+ const vis=arr.slice((paginaHospedesAtual-1)*HOSPEDES_POR_PAGINA,paginaHospedesAtual*HOSPEDES_POR_PAGINA);
+ el.innerHTML=vis.length?vis.map(h=>`<div class="reserva-item"><strong>👤 ${escapeHtmlReserva(h.nome)}</strong><p>📱 ${escapeHtmlReserva(h.telefone||'—')} ${h.email?` · ✉️ ${escapeHtmlReserva(h.email)}`:''}</p>${h.cpf?`<p>🪪 CPF: ${escapeHtmlReserva(h.cpf)}</p>`:''}${h.cidade||h.estado?`<p>📍 ${escapeHtmlReserva([h.cidade,h.estado].filter(Boolean).join(' - '))}</p>`:''}${h.origemReserva?`<p style="margin:6px 0;color:var(--cinza);font-size:12px">🗂️ Origem: ${escapeHtmlReserva(h.origemReserva)}</p>`:''}${h.origemLancamento?'<span style="display:inline-block;margin-top:8px;color:var(--cinza);font-size:12px">ℹ️ Encontrado nas reservas; cadastre os dados completos para editar.</span>':`<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="azul" onclick="editarHospede('${h.id}')">✏️ Editar Cadastro</button>${String(h.id||'').startsWith('reserva-hospede-')?'':`<button class="cinza" onclick="excluirHospede('${h.id}')">🗑️ Excluir</button>`}</div>`}</div>`).join(''):`<p style="color:var(--cinza)">Nenhum hóspede encontrado.</p>`;
+ const pg=$('paginacaoHospedes');
+ if(pg)pg.innerHTML=arr.length<=HOSPEDES_POR_PAGINA?'':`<button onclick="filtrarHospedes(${paginaHospedesAtual-1})" ${paginaHospedesAtual===1?'disabled':''}>‹ Anterior</button><span>Página ${paginaHospedesAtual} de ${paginas} · ${arr.length} hóspedes</span><button onclick="filtrarHospedes(${paginaHospedesAtual+1})" ${paginaHospedesAtual===paginas?'disabled':''}>Próxima ›</button>`;
+}
+
+async function excluirHospede(id){
+ const h=hospedesCadastrados.find(x=>x.id===id);
+ if(!h)return;
+ if(String(id).startsWith('reserva-hospede-'))return alert('⚠️ Este registro está vinculado a uma reserva. Não é possível excluí-lo.');
+ if(!confirm(`Excluir o cadastro de "${h.nome||'Hóspede'}"?\n\nO sistema verificará primeiro se existe alguma reserva vinculada.`))return;
+ try{
+  const snap=await db.collection('reservas').get();
+  const nomeHospede=normalizar(h.nome||'');
+  const telefoneHospede=String(h.telefone||'').replace(/\D/g,'');
+  const vinculo=snap.docs.find(d=>{
+   const r=d.data()||{};
+   if(r.hospedeId && String(r.hospedeId)===String(id))return true;
+   const nr=normalizar(obterNomeReservaParaHospede(r));
+   const tr=obterTelefoneReservaParaHospede(r).replace(/\D/g,'');
+   return (nomeHospede && nr===nomeHospede) || (telefoneHospede && tr===telefoneHospede);
+  });
+  if(vinculo){
+   const r=vinculo.data()||{};
+   return alert(`⚠️ Este hóspede não pode ser excluído.\n\nExiste uma reserva vinculada ao cadastro:\n${obterNomeReservaParaHospede(r)||h.nome}\n${r.entrada||''} a ${r.saida||''}\n\nNenhum dado foi alterado.`);
+  }
+  await db.collection('hospedes').doc(id).delete();
+  hospedesCadastrados=hospedesCadastrados.filter(x=>x.id!==id);
+  filtrarHospedes(paginaHospedesAtual);
+  alert('✅ Cadastro de hóspede excluído com sucesso.');
+ }catch(e){
+  console.error('Excluir hóspede:',e);
+  alert('❌ Não foi possível excluir o cadastro do hóspede.');
+ }
+}
 
 function limparFormularioHospede(){
  ['hospedeEdicaoId','cadHospedeNome','cadHospedeTelefone','cadHospedeEmail','cadHospedeCpf','cadHospedeNascimento','cadHospedeCep','cadHospedeEndereco','cadHospedeNumero','cadHospedeComplemento','cadHospedeBairro','cadHospedeCidade','cadHospedeEstado','cadHospedeObservacoes']
@@ -9710,6 +12644,8 @@ async function editarHospede(id){
 
 function fecharModalHospede(){
  $('modalHospede')?.classList.remove('aberto');
+ // Se o usuário cancelar, descarta somente o contexto de retorno; os campos da reserva continuam abertos.
+ if(window.__cadastroHospedeRetornoReserva?.ativo)window.__cadastroHospedeRetornoReserva={ativo:false,termo:''};
 }
 
 async function salvarHospedeFormulario(){
@@ -9741,6 +12677,7 @@ async function salvarHospedeFormulario(){
    atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()
   };
 
+  let hospedeIdSalvo=id||'';
   if(id){
    await db.collection('hospedes').doc(id).update(payload);
   }else{
@@ -9750,15 +12687,29 @@ async function salvarHospedeFormulario(){
     .limit(1).get();
    if(q.empty){
     payload.cadastradoEm=firebase.firestore.FieldValue.serverTimestamp();
-    await db.collection('hospedes').add(payload);
+    const novoDoc=await db.collection('hospedes').add(payload);
+    hospedeIdSalvo=novoDoc.id;
    }else{
     await q.docs[0].ref.update(payload);
+    hospedeIdSalvo=q.docs[0].id;
    }
   }
 
   await carregarHospedes();
+  const retornoReserva=!!window.__cadastroHospedeRetornoReserva?.ativo;
+  if(retornoReserva && hospedeIdSalvo && $('novoNomeReserva') && $('novoHospedeId')){
+   $('novoHospedeId').value=hospedeIdSalvo;
+   $('novoNomeReserva').value=dados.nome;
+   $('novoTelefoneReserva').value=dados.telefone;
+   fecharSugestoesHospedeReserva();
+  }
   fecharModalHospede();
-  alert('✅ Cadastro de hóspede salvo com sucesso!');
+  if(retornoReserva){
+   window.__cadastroHospedeRetornoReserva={ativo:false,termo:''};
+   alert('✅ Hóspede salvo e selecionado na reserva administrativa. Confira os dados da reserva e clique em “Salvar reserva” quando estiver pronto.');
+  }else{
+   alert('✅ Cadastro de hóspede salvo com sucesso!');
+  }
 
  }catch(e){
   console.error(e);
@@ -9823,23 +12774,37 @@ function preencherFormularioPrestador(x={}){$('prestadorEdicaoId').value=x.id||'
 function abrirCadastroPrestador(){limparFormularioPrestador();$('tituloModalPrestador').textContent='Novo Cadastro de Prestador';$('modalPrestador').classList.add('aberto');setTimeout(()=>$('cadPrestadorNome')?.focus(),100);}
 function editarPrestador(id){const x=prestadoresCadastrados.find(p=>p.id===id);if(!x)return;preencherFormularioPrestador(x);$('tituloModalPrestador').textContent='Editar Cadastro de Prestador';$('modalPrestador').classList.add('aberto');}
 function fecharModalPrestador(){$('modalPrestador')?.classList.remove('aberto');}
-async function salvarPrestadorFormulario(){const d=dadosFormularioPrestador(),id=$('prestadorEdicaoId').value;if(!d.nome)return alert('⚠️ Informe o nome/razão social.');if(!d.documento)return alert(`⚠️ Informe o ${d.tipo==='pj'?'CNPJ':'CPF'}.`);try{const ref=id?db.collection('prestadores').doc(id):db.collection('prestadores').doc();await ref.set({...d,nomeNormalizado:normalizar(d.nome),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp(),...(id?{}:{criadoEm:firebase.firestore.FieldValue.serverTimestamp()})},{merge:true});fecharModalPrestador();await carregarPrestadores();popularSelectPrestadores();alert(id?'✅ Prestador alterado.':'✅ Prestador cadastrado.');}catch(e){console.error(e);alert('❌ Erro ao salvar o prestador.');}}
-async function carregarPrestadores(){
- if(prestadoresCarregados){popularSelectPrestadores();filtrarPrestadores();return;}
+async function salvarPrestadorFormulario(){const d=dadosFormularioPrestador(),id=$('prestadorEdicaoId').value;if(!d.nome)return alert('⚠️ Informe o nome/razão social.');if(!d.documento)return alert(`⚠️ Informe o ${d.tipo==='pj'?'CNPJ':'CPF'}.`);try{const ref=id?db.collection('prestadores').doc(id):db.collection('prestadores').doc();await ref.set({...d,nomeNormalizado:normalizar(d.nome),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp(),...(id?{}:{criadoEm:firebase.firestore.FieldValue.serverTimestamp()})},{merge:true});fecharModalPrestador();await carregarPrestadores(true);popularSelectPrestadores();alert(id?'✅ Prestador alterado.':'✅ Prestador cadastrado.');}catch(e){console.error(e);alert('❌ Erro ao salvar o prestador.');}}
+async function carregarPrestadores(forcar=false){
+ if(prestadoresCarregados&&!forcar){
+  if(despesasCarregadas)mesclarPrestadoresDasDespesas();
+  else{popularSelectPrestadores();filtrarPrestadores();}
+  return true;
+ }
+ const listaAnterior=[...prestadoresCadastrados];
  prestadoresCadastrados=[];
  try{
-  // Uma única leitura da coleção. Os prestadores usados nas despesas são
-  // mesclados depois, usando despesasCadastradas já carregadas.
+  // Busca o cadastro atualizado na nuvem. Registros antigos das despesas
+  // são associados depois, sem alterar documentos no Firestore.
   const s=await db.collection('prestadores').get();
   s.forEach(d=>{
    const x=d.data()||{};
    const nome=x.nome||x.razaoSocial||x.nomePrestador||x.prestador||x.fantasia||'';
    prestadoresCadastrados.push({id:d.id,...x,nome:nome||'Prestador sem nome'});
   });
- }catch(e){console.error('Prestadores cadastrados:',e);}
+ }catch(e){
+  console.error('Prestadores cadastrados:',e);
+  prestadoresCadastrados=listaAnterior;
+  prestadoresCarregados=false;
+  popularSelectPrestadores();
+  return false;
+ }
  prestadoresCadastrados.sort((a,b)=>String(a.nome||'').localeCompare(String(b.nome||''),'pt-BR'));
  prestadoresCarregados=true;
- paginaPrestadoresAtual=1;popularSelectPrestadores();filtrarPrestadores();
+ paginaPrestadoresAtual=1;
+ if(despesasCarregadas)mesclarPrestadoresDasDespesas();
+ else{popularSelectPrestadores();filtrarPrestadores();}
+ return true;
 }
 
 function mesclarPrestadoresDasDespesas(){
@@ -10091,17 +13056,13 @@ function abrirAssistenteVozManutencao(){
 function iniciarReconhecimentoVozManutencao(){
  const Ctor=obterReconhecimentoVozManutencao();
  if(!Ctor){
-  atualizarStatusAssistenteVozManutencao(
-   '⚠️ O navegador deste dispositivo não disponibiliza reconhecimento de voz para esta página. Tente pelo Google Chrome no celular.'
-  );
+  atualizarStatusAssistenteVozManutencao('⚠️ Este navegador não disponibiliza reconhecimento de voz para esta página. Tente pelo Google Chrome.');
   return;
  }
-
  if(vozManutencaoOuvindo){
   try{reconhecimentoVozManutencao?.stop();}catch(e){}
   return;
  }
-
  try{
   const recognition=new Ctor();
   reconhecimentoVozManutencao=recognition;
@@ -10110,89 +13071,95 @@ function iniciarReconhecimentoVozManutencao(){
   recognition.interimResults=true;
   recognition.maxAlternatives=3;
 
+  let textoFinalAcumulado='';
+  let ultimaTranscricao='';
+  let processado=false;
+  let timerFallback=null;
+
+  function processarUmaVez(texto){
+   texto=String(texto||'').replace(/\s+/g,' ').trim();
+   if(!texto || processado)return;
+   processado=true;
+   if(timerFallback)clearTimeout(timerFallback);
+   const trans=$('vozManutencaoTranscricao');
+   if(trans)trans.textContent='“'+texto+'”';
+   try{
+    const interpretacao=interpretarManutencaoPorVoz(texto);
+    if(interpretacao.tipo==='pendencias'){
+     atualizarStatusAssistenteVozManutencao('🔎 Consultando as manutenções pendentes...');
+     consultarPendenciasPorVozManutencao();
+     return;
+    }
+    if(!interpretacao.casa){
+     atualizarStatusAssistenteVozManutencao('⚠️ Não identifiquei a casa. Diga o nome, por exemplo: “Casa Amarela”.');
+     return;
+    }
+    if(!interpretacao.item){
+     atualizarStatusAssistenteVozManutencao('⚠️ Não identifiquei o item. Diga o que precisa de manutenção.');
+     return;
+    }
+    if(!interpretacao.descricao){
+     atualizarStatusAssistenteVozManutencao('⚠️ Identifiquei a casa e o item, mas preciso da descrição do problema. Diga, por exemplo: “não está fechando direito”.');
+     return;
+    }
+    atualizarStatusAssistenteVozManutencao('✅ Comando reconhecido. Abrindo o formulário para conferência...');
+    setTimeout(()=>{
+     fecharAssistenteVozManutencao();
+     preencherManutencaoPorVoz(interpretacao);
+    },350);
+   }catch(err){
+    console.error('Erro ao interpretar comando de manutenção por voz:',err);
+    atualizarStatusAssistenteVozManutencao('⚠️ Reconheci a fala, mas não consegui interpretá-la. Toque em “Falar agora” e tente novamente.');
+   }
+  }
+
   recognition.onstart=function(){
    vozManutencaoOuvindo=true;
    atualizarBotaoVozManutencao(true);
-   atualizarStatusAssistenteVozManutencao('🎙️ Estou ouvindo... fale a manutenção ou peça a lista de serviços pendentes.');
+   atualizarStatusAssistenteVozManutencao('🎙️ Estou ouvindo... fale a manutenção ou pergunte quais serviços estão pendentes.');
   };
-
-  recognition.onaudiostart=function(){
-   atualizarStatusAssistenteVozManutencao('🎙️ Microfone ativado. Pode falar.');
-  };
-
-  recognition.onsoundstart=function(){
-   atualizarStatusAssistenteVozManutencao('🔊 Som detectado. Continue falando...');
-  };
-
-  recognition.onspeechstart=function(){
-   atualizarStatusAssistenteVozManutencao('🎙️ Estou ouvindo sua fala...');
-  };
-
-  let textoVozAcumulado='';
-  let textoVozProcessado=false;
-
-  function processarTextoVozManutencao(texto){
-   texto=String(texto||'').trim();
-   if(!texto || textoVozProcessado)return;
-   textoVozProcessado=true;
-
-   const trans=$('vozManutencaoTranscricao');
-   if(trans)trans.textContent='“'+texto+'”';
-
-   const interpretacao=interpretarManutencaoPorVoz(texto);
-   if(interpretacao.tipo==='pendencias'){
-    atualizarStatusAssistenteVozManutencao('🔎 Consultando as manutenções pendentes...');
-    consultarPendenciasPorVozManutencao();
-    return;
-   }
-
-   if(!interpretacao.casa){
-    atualizarStatusAssistenteVozManutencao('⚠️ Não identifiquei a casa. Diga, por exemplo: “Trocar chuveiro da Casa Amarela, não está aquecendo.”');
-    return;
-   }
-   if(!interpretacao.item){
-    atualizarStatusAssistenteVozManutencao('⚠️ Não identifiquei o item de manutenção. Você pode dizer, por exemplo: “Trocar chuveiro da Casa Amarela...”');
-    return;
-   }
-   if(!interpretacao.descricao){
-    atualizarStatusAssistenteVozManutencao('⚠️ Identifiquei a casa e o item, mas não encontrei a descrição do problema. Diga o que está acontecendo.');
-    return;
-   }
-
-   atualizarStatusAssistenteVozManutencao('✅ Entendi. Registrando a manutenção automaticamente...');
-   setTimeout(()=>{
-    fecharAssistenteVozManutencao();
-    preencherManutencaoPorVoz(interpretacao);
-   },450);
-  }
+  recognition.onaudiostart=function(){atualizarStatusAssistenteVozManutencao('🎙️ Microfone ativado. Pode falar.');};
+  recognition.onsoundstart=function(){atualizarStatusAssistenteVozManutencao('🔊 Som detectado. Continue falando...');};
+  recognition.onspeechstart=function(){atualizarStatusAssistenteVozManutencao('🎙️ Estou ouvindo sua fala...');};
 
   recognition.onresult=function(event){
    let parcial='';
-   let finalTexto='';
+   let finalNovo='';
    for(let i=event.resultIndex;i<event.results.length;i++){
-    const trecho=event.results[i][0]?.transcript||'';
-    if(event.results[i].isFinal) finalTexto+=' '+trecho;
+    const result=event.results[i];
+    const trecho=String(result?.[0]?.transcript||'').trim();
+    if(!trecho)continue;
+    if(result.isFinal)finalNovo+=' '+trecho;
     else parcial+=' '+trecho;
    }
-
-   if(finalTexto.trim()) textoVozAcumulado=(textoVozAcumulado+' '+finalTexto).trim();
-   const exibicao=(textoVozAcumulado||parcial).trim();
-   if(exibicao){
+   if(finalNovo.trim())textoFinalAcumulado=(textoFinalAcumulado+' '+finalNovo).trim();
+   ultimaTranscricao=(textoFinalAcumulado+' '+parcial).replace(/\s+/g,' ').trim();
+   if(ultimaTranscricao){
     const trans=$('vozManutencaoTranscricao');
-    if(trans)trans.textContent='“'+exibicao+'”';
+    if(trans)trans.textContent='“'+ultimaTranscricao+'”';
    }
-
-   if(finalTexto.trim()) processarTextoVozManutencao(textoVozAcumulado);
+   if(textoFinalAcumulado)processarUmaVez(textoFinalAcumulado);
   };
 
+  // Processa a fala assim que o navegador sinaliza que a pessoa terminou,
+  // usando também o texto provisório quando não chega isFinal=true.
   recognition.onspeechend=function(){
-   atualizarStatusAssistenteVozManutencao('⏳ Fala encerrada. Aguardando a transcrição final...');
+   atualizarStatusAssistenteVozManutencao('⏳ Fala encerrada. Processando o texto reconhecido...');
+   const texto=ultimaTranscricao||textoFinalAcumulado;
+   if(texto)processarUmaVez(texto);
+   else{
+    if(timerFallback)clearTimeout(timerFallback);
+    timerFallback=setTimeout(()=>{
+     if(!processado){
+      const trans=$('vozManutencaoTranscricao');
+      const textoTela=String(trans?.textContent||'').replace(/[“”]/g,'').trim();
+      if(textoTela && !/nenhuma fala recebida/i.test(textoTela))processarUmaVez(textoTela);
+      else atualizarStatusAssistenteVozManutencao('⚠️ Não recebi texto do reconhecimento. Toque em “Falar agora” e tente novamente.');
+     }
+    },1200);
+   }
   };
-
-  recognition.onnomatch=function(){
-   atualizarStatusAssistenteVozManutencao('⚠️ Ouvi o áudio, mas não consegui entender as palavras. Tente falar um pouco mais devagar.');
-  };
-
+  recognition.onnomatch=function(){atualizarStatusAssistenteVozManutencao('⚠️ Ouvi o áudio, mas não entendi as palavras. Tente falar um pouco mais devagar.');};
   recognition.onerror=function(event){
    vozManutencaoOuvindo=false;
    atualizarBotaoVozManutencao(false);
@@ -10203,24 +13170,19 @@ function iniciarReconhecimentoVozManutencao(){
     'audio-capture':'⚠️ Não consegui acessar o microfone deste dispositivo.',
     'network':'⚠️ O serviço de reconhecimento de voz não respondeu. Verifique a conexão com a internet.'
    };
-   atualizarStatusAssistenteVozManutencao(mensagens[event.error]||('⚠️ Não foi possível reconhecer a fala ('+event.error+').'));
+   atualizarStatusAssistenteVozManutencao(mensagens[event.error]||('⚠️ Falha no reconhecimento de voz ('+event.error+').'));
   };
-
   recognition.onend=function(){
    vozManutencaoOuvindo=false;
    atualizarBotaoVozManutencao(false);
-
-   // Alguns navegadores encerram a sessão sem marcar o último resultado como isFinal.
-   // Nesse caso, usamos a transcrição acumulada para não ficar preso em “Processando”.
-   if(!textoVozProcessado && textoVozAcumulado.trim()){
-    processarTextoVozManutencao(textoVozAcumulado);
-   }else if(!textoVozProcessado){
-    atualizarStatusAssistenteVozManutencao('⚠️ Não consegui obter uma transcrição final. Toque em “Falar agora” e tente novamente.');
+   if(timerFallback)clearTimeout(timerFallback);
+   if(!processado){
+    const texto=ultimaTranscricao||textoFinalAcumulado;
+    if(texto)processarUmaVez(texto);
+    else atualizarStatusAssistenteVozManutencao('⚠️ O reconhecimento terminou sem transcrição. Toque em “Falar agora” e tente novamente.');
    }
-
    reconhecimentoVozManutencao=null;
   };
-
   recognition.start();
  }catch(e){
   console.error('Assistente de voz:',e);
@@ -10229,7 +13191,6 @@ function iniciarReconhecimentoVozManutencao(){
   atualizarStatusAssistenteVozManutencao('⚠️ Não foi possível iniciar o microfone. Tente novamente.');
  }
 }
-
 async function preencherManutencaoPorVoz(dados){
  try{
   await abrirNovaManutencao();
@@ -10501,8 +13462,9 @@ function imprimirEmissaoManutencoes(){const html=htmlEmissaoManutencoes();if(!ht
 function enviarEmissaoManutencoesWhatsApp(){const d=validarEmissaoManutencoes();if(!d)return;const numero=String(d.prest.telefone||d.prest.celular||d.prest.whatsapp||'').replace(/\D/g,'');if(!numero)return alert('⚠️ O prestador selecionado não possui telefone/WhatsApp cadastrado.');window.open(`https://wa.me/${numero.startsWith('55')?numero:'55'+numero}?text=${encodeURIComponent(textoEmissaoManutencoes())}`,'_blank');}
 function enviarEmissaoManutencoesEmail(){const d=validarEmissaoManutencoes();if(!d)return;const email=String(d.prest.email||'').trim();if(!email)return alert('⚠️ O prestador selecionado não possui e-mail cadastrado.');window.location.href=`mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent('Ordem de Manutenção')}&body=${encodeURIComponent(textoEmissaoManutencoes())}`;}
 
-async function carregarDespesas(){
- if(despesasCarregadas){gerarRelatorioDespesas();return;}
+async function carregarDespesas(forcar=false){
+ if(despesasCarregadas&&!forcar){gerarRelatorioDespesas();return true;}
+ const listaAnterior=[...despesasCadastradas];
  despesasCadastradas=[];
  try{
   // Não depende de orderBy/índice. Ordenamos no navegador para garantir
@@ -10513,16 +13475,64 @@ async function carregarDespesas(){
   despesasCadastradas.sort((a,b)=>String(b.data||'').localeCompare(String(a.data||'')));
  }catch(e){
   console.error('Despesas cadastradas:',e);
+  despesasCadastradas=listaAnterior;
+  despesasCarregadas=false;
+  gerarRelatorioDespesas();
+  return false;
  }
  despesasCarregadas=true;
  paginaDespesasAtual=1;
  gerarRelatorioDespesas();
  if($('dashboardAnualRelatorios'))atualizarDashboardAnual();
+ return true;
+}
+
+async function prepararPaginaDespesas(consultar=false, atualizarNuvem=false){
+ const selNovo=$('despesaPrestadorId');
+ const selFiltro=$('filtroDespesaPrestador');
+ if(selNovo&&!prestadoresCarregados&&selNovo.options.length<=1){
+  selNovo.innerHTML='<option value="">⏳ Carregando prestadores...</option>';
+  selNovo.disabled=true;
+ }
+ if(selFiltro&&!prestadoresCarregados&&selFiltro.options.length<=1){
+  selFiltro.innerHTML='<option value="todos">⏳ Carregando prestadores...</option>';
+  selFiltro.disabled=true;
+ }
+ try{
+  const [okDespesas,okPrestadores]=await Promise.all([
+   carregarDespesas(atualizarNuvem),
+   carregarPrestadores(atualizarNuvem)
+  ]);
+  if(!okDespesas||!okPrestadores){
+   if(selNovo)selNovo.innerHTML='<option value="">Não foi possível carregar os prestadores</option>';
+   if(selFiltro)selFiltro.innerHTML='<option value="todos">Todos</option>';
+   alert('Não foi possível carregar a lista de despesas ou prestadores. Confira a conexão e tente novamente.');
+   return false;
+  }
+  mesclarPrestadoresDasDespesas();
+  popularSelectPrestadores();
+  if(consultar){paginaDespesasAtual=1;gerarRelatorioDespesas();}
+  return true;
+ }catch(e){
+  console.error('Preparação da área Despesas / Caixa:',e);
+  alert('Não foi possível preparar a área de despesas. Tente consultar novamente.');
+  return false;
+ }finally{
+  if(selNovo)selNovo.disabled=false;
+  if(selFiltro)selFiltro.disabled=false;
+ }
+}
+
+async function consultarLancamentosDespesas(){
+ const btn=$('btnConsultarLancamentosDespesas');
+ if(btn){btn.disabled=true;btn.textContent='⏳ Carregando lançamentos e prestadores...';}
+ try{await prepararPaginaDespesas(true,false);}
+ finally{if(btn){btn.disabled=false;btn.textContent='🔎 Consultar lançamentos';}}
 }
 function limparFormularioDespesa(){if(!$('despesaData'))return;$('despesaEditId').value='';$('despesaData').value=dataStr(hoje());$('despesaCasa').value='amarela';$('despesaCategoria').value='agua';$('despesaValor').value='';$('despesaFormaPagamento').value='Pix';$('despesaContaOrigem').value='Caixa Casa Amarela';atualizarCaixaDestinoDespesa();$('despesaPrestadorId').value='';$('despesaPrestador').value='';$('despesaPrestadorInfo').textContent='';$('despesaDescricao').value='';$('despesaObservacao').value='';$('tituloFormularioDespesa').textContent='➕ Novo lançamento de despesa';$('btnSalvarDespesa').textContent='💾 Lançar despesa';}
 async function salvarDespesa(){const id=$('despesaEditId').value,data=$('despesaData').value,casa=$('despesaCasa').value,categoria=$('despesaCategoria').value,valor=valorNumericoDespesa($('despesaValor').value),formaPagamento=$('despesaFormaPagamento').value,contaOrigem=$('despesaContaOrigem').value;if(!data||!casa||!categoria||valor<=0||!formaPagamento||!contaOrigem)return alert('⚠️ Preencha os campos obrigatórios da despesa.');const dados={data,casa,categoria,valor,formaPagamento,contaOrigem,prestadorId:$('despesaPrestadorId').value||'',prestador:$('despesaPrestador').value.trim(),descricao:$('despesaDescricao').value.trim(),observacao:$('despesaObservacao').value.trim(),atualizadoEm:firebase.firestore.FieldValue.serverTimestamp()};try{if(id)await db.collection('despesas').doc(id).update(dados);else await db.collection('despesas').add({...dados,criadoEm:firebase.firestore.FieldValue.serverTimestamp()});await carregarDespesas();limparFormularioDespesa();if($('dashboardAnualRelatorios'))atualizarDashboardAnual();alert(id?'✅ Despesa alterada.':'✅ Despesa lançada.');}catch(e){console.error(e);alert('❌ Erro ao salvar a despesa.');}}
 function editarDespesa(id){const x=despesasCadastradas.find(d=>d.id===id);if(!x)return;$('despesaEditId').value=id;$('despesaData').value=x.data||'';$('despesaCasa').value=x.casa||'amarela';$('despesaCategoria').value=x.categoria||'outros';$('despesaValor').value=Number(x.valor||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});$('despesaFormaPagamento').value=x.formaPagamento||'Pix';$('despesaContaOrigem').value=x.contaOrigem||contaDestinoCasa(x.casa);$('despesaPrestadorId').value=x.prestadorId||'';$('despesaPrestador').value=x.prestador||'';selecionarPrestadorDespesa();$('despesaDescricao').value=x.descricao||'';$('despesaObservacao').value=x.observacao||'';$('tituloFormularioDespesa').textContent='✏️ Editar lançamento de despesa';$('btnSalvarDespesa').textContent='💾 Salvar alteração';$('pagina-despesas').scrollIntoView({behavior:'smooth',block:'start'});}
-function obterDespesasFiltradas(){let a=[...despesasCadastradas],c=$('filtroDespesaCasa')?.value||'todas',cat=$('filtroDespesaCategoria')?.value||'todas',pag=$('filtroDespesaPagamento')?.value||'todas',cont=$('filtroDespesaConta')?.value||'todas',prest=$('filtroDespesaPrestador')?.value||'todos',ini=$('filtroDespesaDataInicial')?.value||'',fim=$('filtroDespesaDataFinal')?.value||'';if(prest!=='todos')a=a.filter(x=>(x.prestadorId||'')===prest);if(c!=='todas')a=a.filter(x=>x.casa===c);if(cat!=='todas')a=a.filter(x=>x.categoria===cat);if(pag!=='todas')a=a.filter(x=>x.formaPagamento===pag);if(cont!=='todas')a=a.filter(x=>x.contaOrigem===cont);if(ini)a=a.filter(x=>x.data>=ini);if(fim)a=a.filter(x=>x.data<=fim);return a.sort((x,y)=>(y.data||'').localeCompare(x.data||''));}
+function obterDespesasFiltradas(){let a=[...despesasCadastradas],c=$('filtroDespesaCasa')?.value||'todas',cat=$('filtroDespesaCategoria')?.value||'todas',pag=$('filtroDespesaPagamento')?.value||'todas',cont=$('filtroDespesaConta')?.value||'todas',prest=$('filtroDespesaPrestador')?.value||'todos',ini=$('filtroDespesaDataInicial')?.value||'',fim=$('filtroDespesaDataFinal')?.value||'';if(prest!=='todos'){const selecionado=prestadoresCadastrados.find(p=>String(p.id)===String(prest));const nomeSelecionado=normalizar(selecionado?.nome||selecionado?.fantasia||'');a=a.filter(x=>String(x.prestadorId||'')===String(prest)||(nomeSelecionado&&normalizar(x.prestador||'')===nomeSelecionado));}if(c!=='todas')a=a.filter(x=>x.casa===c);if(cat!=='todas')a=a.filter(x=>x.categoria===cat);if(pag!=='todas')a=a.filter(x=>x.formaPagamento===pag);if(cont!=='todas')a=a.filter(x=>x.contaOrigem===cont);if(ini)a=a.filter(x=>x.data>=ini);if(fim)a=a.filter(x=>x.data<=fim);return a.sort((x,y)=>(y.data||'').localeCompare(x.data||''));}
 function gerarRelatorioDespesas(){const a=obterDespesasFiltradas();ultimasDespesasFiltradas=[...a];const total=a.reduce((s,x)=>s+Number(x.valor||0),0),el=$('listaDespesas'),res=$('despesasResumo');if(res)res.innerHTML=`<div class="resumo-card"><small>Lançamentos</small><strong>${a.length}</strong></div><div class="resumo-card"><small>Total</small><strong>${moeda(total)}</strong></div>`;const pags=Math.max(1,Math.ceil(a.length/DESPESAS_POR_PAGINA));paginaDespesasAtual=Math.min(Math.max(1,paginaDespesasAtual),pags);const vis=a.slice((paginaDespesasAtual-1)*DESPESAS_POR_PAGINA,paginaDespesasAtual*DESPESAS_POR_PAGINA);if(el)el.innerHTML=vis.length?`<div style="overflow-x:auto"><table class="tabela-admin-compacta"><thead><tr><th>Data</th><th>Casa</th><th>Categoria</th><th>Prestador</th><th>Descrição</th><th>Forma</th><th>Conta</th><th>Valor</th><th>Ações</th></tr></thead><tbody>${vis.map(x=>`<tr><td>${dataBr(x.data)}</td><td>${escapeHtmlReserva(casas[x.casa]?.nome||x.casa)}</td><td>${nomeCategoriaDespesa(x.categoria)}</td><td>${escapeHtmlReserva(x.prestador||'—')}</td><td>${escapeHtmlReserva(x.descricao||'—')}</td><td>${escapeHtmlReserva(x.formaPagamento||'—')}</td><td>${escapeHtmlReserva(x.contaOrigem||'—')}</td><td><strong>${moeda(x.valor)}</strong></td><td><button class="azul" onclick="editarDespesa('${x.id}')">✏️ Editar</button><button class="vermelho" onclick="excluirDespesa('${x.id}')">Excluir</button></td></tr>`).join('')}</tbody></table></div>`:'<p style="color:var(--cinza)">Nenhuma despesa encontrada.</p>';const pe=$('paginacaoDespesas');if(pe)pe.innerHTML=a.length<=DESPESAS_POR_PAGINA?'':`<button onclick="mudarPaginaDespesas(${paginaDespesasAtual-1})" ${paginaDespesasAtual===1?'disabled':''}>‹ Anterior</button> <span>${paginaDespesasAtual}/${pags}</span> <button onclick="mudarPaginaDespesas(${paginaDespesasAtual+1})" ${paginaDespesasAtual===pags?'disabled':''}>Próxima ›</button>`;}
 function mudarPaginaDespesas(p){paginaDespesasAtual=p;gerarRelatorioDespesas();}
 async function excluirDespesa(id){if(!confirm('Excluir esta despesa?'))return;try{await db.collection('despesas').doc(id).delete();await carregarDespesas();if($('dashboardAnualRelatorios'))atualizarDashboardAnual();}catch(e){console.error(e);alert('❌ Não foi possível excluir.');}}
@@ -10595,13 +13605,6 @@ carregarClimaPublico();setInterval(carregarClimaPublico,30*60*1000);
 /* NAVEGAÇÃO MOBILE PÚBLICA ADICIONADA */
 function navegarPublicoMobile(acao){
 
-    const navMap = {
-        inicio: 'areaPublica',
-        disponibilidade: 'nossasCasas',
-        casas: 'nossasCasas',
-        contato: 'rodapePublico'
-    };
-
     if(acao === 'reservas'){
         try{
             if(typeof abrirAreaCliente === 'function'){
@@ -10615,23 +13618,49 @@ function navegarPublicoMobile(acao){
         return;
     }
 
-    const alvo = $(navMap[acao] || 'areaPublica');
-
-    if(alvo){
-        if(acao === 'inicio'){
-            window.scrollTo({
-                top:0,
-                behavior:'smooth'
-            });
-        }else{
-            alvo.scrollIntoView({
-                behavior:'smooth',
-                block:'start'
-            });
+    // No celular, os atalhos devem levar diretamente à interface compacta.
+    if(acao === 'disponibilidade'){
+        const campoDatas = $('mobileCampoDatas');
+        if(campoDatas){
+            campoDatas.scrollIntoView({behavior:'smooth',block:'center'});
+            atualizarNavegacaoMobile('disponibilidade');
+            return;
         }
+        const secaoMobile = $('mobilePublicoCompacto');
+        if(secaoMobile)secaoMobile.scrollIntoView({behavior:'smooth',block:'start'});
+        atualizarNavegacaoMobile('disponibilidade');
+        return;
     }
 
-    atualizarNavegacaoMobile(acao);
+    if(acao === 'casas'){
+        const alvoCasas = $('mobileTituloCasasCompacto') || $('mobileListaCasasCompacta');
+        if(alvoCasas){
+            alvoCasas.scrollIntoView({behavior:'smooth',block:'start'});
+            atualizarNavegacaoMobile('casas');
+            return;
+        }
+        const secaoMobile = $('mobilePublicoCompacto');
+        if(secaoMobile)secaoMobile.scrollIntoView({behavior:'smooth',block:'start'});
+        atualizarNavegacaoMobile('casas');
+        return;
+    }
+
+    if(acao === 'inicio'){
+        // Início deve sempre recarregar a página para limpar qualquer
+        // consulta/reserva anterior e devolver a interface ao estado inicial.
+        try{
+            const urlInicial = window.location.pathname + window.location.search;
+            window.location.replace(urlInicial);
+        }catch(e){
+            console.error('Erro ao recarregar a página inicial:',e);
+            window.location.reload();
+        }
+        return;
+    }
+
+    const alvo = $('rodapePublico');
+    if(alvo)alvo.scrollIntoView({behavior:'smooth',block:'start'});
+    atualizarNavegacaoMobile('contato');
 }
 
 function atualizarNavegacaoMobile(acao){
