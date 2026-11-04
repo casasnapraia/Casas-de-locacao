@@ -59,14 +59,20 @@ export function planejar({ casa, origem, eventos, internos, existentes, hoje }) 
   return { criar, remover: removeDemais ? [] : remover, remocaoRetida: removeDemais ? remover.length : 0, total: vistos.size };
 }
 
+// Remove espaços e caracteres invisíveis que podem vir ao copiar e colar.
+export function limparLink(valor) {
+  return String(valor || '').replace(/[\s\u00A0\u200B-\u200F\u2060\uFEFF]/g, '').replace(/^webcal:\/\//i, 'https://');
+}
+
 export function lerConfiguracao(json) {
   let lista;
-  try { lista = JSON.parse(json || ''); } catch { throw new Error('ICAL_FEEDS não é um JSON válido'); }
+  try { lista = JSON.parse(String(json || '').replace(/^\uFEFF/, '').trim()); } catch { throw new Error('ICAL_FEEDS não é um JSON válido'); }
   if (!Array.isArray(lista) || !lista.length) throw new Error('ICAL_FEEDS está vazio');
   lista.forEach((f, i) => {
     if (!CASAS.includes(f.casa)) throw new Error(`Item ${i + 1}: casa inválida`);
     if (!['airbnb', 'booking'].includes(f.origem)) throw new Error(`Item ${i + 1}: origem inválida`);
-    if (!/^https:\/\//.test(f.url || '')) throw new Error(`Item ${i + 1}: link inválido`);
+    f.url = limparLink(f.url);
+    if (!/^https:\/\//i.test(f.url)) throw new Error(`Item ${i + 1}: link inválido (começa com "${f.url.slice(0, 8)}", ${f.url.length} caracteres)`);
   });
   return lista;
 }
