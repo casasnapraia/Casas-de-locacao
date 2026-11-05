@@ -23,7 +23,7 @@ export function lerEventosIcal(texto) {
     if (campo('STATUS').toUpperCase() === 'CANCELLED') continue;
     const entrada = dataIso(campo('DTSTART'));
     const saida = dataIso(campo('DTEND'));
-    if (entrada && saida && saida > entrada) eventos.push({ entrada, saida });
+    if (entrada && saida && saida > entrada) eventos.push({ entrada, saida, titulo: campo('SUMMARY') });
   }
   return eventos;
 }
@@ -41,10 +41,16 @@ function coberto(ev, ocupacoes) {
   return true;
 }
 
+// Datas apenas fechadas a cerca de 1 ano ou mais são o limite da agenda da plataforma, não ocupação.
+// Reservas (título "Reserved" ou outro) nunca entram nesta regra.
+export function limiteDaAgenda(ev, hoje) {
+  return /not available|closed|indispon/i.test(ev.titulo || '') && ev.entrada >= somarDia(hoje, 360);
+}
+
 // Decide o que criar e remover, sem acessar nada externo.
 export function planejar({ casa, origem, eventos, internos, existentes, hoje }) {
   const prefixo = `ext_${casa}_${origem}_`;
-  const futuros = eventos.filter((e) => e.saida >= hoje);
+  const futuros = eventos.filter((e) => e.saida >= hoje && !limiteDaAgenda(e, hoje));
   const vistos = new Map();
   for (const e of futuros) {
     if (coberto(e, internos.filter((o) => o.casa === casa))) continue;
