@@ -52,17 +52,20 @@ export function planejar({ casa, origem, eventos, internos, existentes, hoje }) 
   const prefixo = `ext_${casa}_${origem}_`;
   const futuros = eventos.filter((e) => e.saida >= hoje && !limiteDaAgenda(e, hoje));
   const vistos = new Map();
+  const cobertos = new Set();
   for (const e of futuros) {
-    if (coberto(e, internos.filter((o) => o.casa === casa))) continue;
     const id = `${prefixo}${e.entrada}_${e.saida}`;
+    if (coberto(e, internos.filter((o) => o.casa === casa))) { cobertos.add(id); continue; }
     vistos.set(id, { casa, entrada: e.entrada, saida: e.saida, motivo: origem === 'airbnb' ? 'Airbnb' : origem === 'booking' ? 'Booking.com' : origem, origem, externo: true });
   }
   const atuais = existentes.filter((x) => x.id.startsWith(prefixo) && x.saida >= hoje);
   const idsAtuais = new Set(atuais.map((x) => x.id));
   const criar = [...vistos.entries()].filter(([id]) => !idsAtuais.has(id)).map(([id, dados]) => ({ id, dados }));
   const remover = atuais.filter((x) => !vistos.has(x.id)).map((x) => x.id);
-  const removeDemais = atuais.length >= 3 && remover.length / atuais.length > 0.5;
-  return { criar, remover: removeDemais ? [] : remover, remocaoRetida: removeDemais ? remover.length : 0, total: vistos.size };
+  // A trava protege contra um calendário que veio vazio; datas ainda presentes nele, já ocupadas no painel, podem sair.
+  const sumiram = remover.filter((id) => !cobertos.has(id));
+  const removeDemais = atuais.length >= 3 && sumiram.length / atuais.length > 0.5;
+  return { criar, remover: removeDemais ? remover.filter((id) => cobertos.has(id)) : remover, remocaoRetida: removeDemais ? sumiram.length : 0, total: vistos.size };
 }
 
 // Remove espaços e caracteres invisíveis que podem vir ao copiar e colar.
