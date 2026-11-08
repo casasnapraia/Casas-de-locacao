@@ -86,6 +86,47 @@ export function lerConfiguracao(json) {
   return lista;
 }
 
+// ---------- Envio: gera um .ics por casa e plataforma com as datas ocupadas no painel ----------
+const ROTULO_DESTINO = { airbnb: /airbnb/i, booking: /booking/i };
+
+export function lerExportacoes(texto) {
+  return String(texto || '').split(/[,;\s]+/).filter(Boolean).map((item) => {
+    const [casa, destino] = item.toLowerCase().split(':');
+    if (!CASAS.includes(casa) || !ROTULO_DESTINO[destino]) throw new Error(`EXPORTAR_CALENDARIOS: item inválido "${item}"`);
+    return { casa, destino };
+  });
+}
+
+// Junta períodos que se tocam ou se sobrepõem.
+export function juntarPeriodos(lista) {
+  const ord = lista.filter((x) => x.entrada < x.saida).sort((a, b) => a.entrada.localeCompare(b.entrada));
+  const out = [];
+  for (const x of ord) {
+    const u = out[out.length - 1];
+    if (u && x.entrada <= u.saida) { if (x.saida > u.saida) u.saida = x.saida; } else out.push({ entrada: x.entrada, saida: x.saida });
+  }
+  return out;
+}
+
+// Ocupações do painel que devem ir para a plataforma: reservas e bloqueios, menos o que veio dela mesma.
+export function periodosParaExportar({ casa, destino, disponibilidade, origemPorReserva, bloqueios, hoje }) {
+  const daPlataforma = ROTULO_DESTINO[destino];
+  const res = disponibilidade.filter((d) => d.casa === casa && !daPlataforma.test(origemPorReserva[d.reservaId || d.id] || ''));
+  const blq = bloqueios.filter((b) => b.casa === casa && !(b.externo && b.origem === destino));
+  return juntarPeriodos([...res, ...blq].filter((x) => x.entrada && x.saida && x.saida > hoje));
+}
+
+export function gerarIcs(casa, periodos, agora = new Date()) {
+  const carimbo = agora.toISOString().replace(/[-:]/g, '').replace(/\.\d+Z$/, 'Z');
+  const d = (iso) => iso.replace(/-/g, '');
+  const linhas = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Casas na Praia//Calendario//PT', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH'];
+  for (const p of periodos) {
+    linhas.push('BEGIN:VEVENT', `UID:${casa}-${d(p.entrada)}-${d(p.saida)}@casas-na-praia.web.app`, `DTSTAMP:${carimbo}`, `DTSTART;VALUE=DATE:${d(p.entrada)}`, `DTEND;VALUE=DATE:${d(p.saida)}`, 'SUMMARY:Indisponível', 'END:VEVENT');
+  }
+  linhas.push('END:VCALENDAR');
+  return linhas.join('\r\n') + '\r\n';
+}
+
 async function baixar(url) {
   const r = await fetch(url, { signal: AbortSignal.timeout(30000), headers: { 'User-Agent': 'casas-na-praia-sync' } });
   if (!r.ok) throw new Error(`HTTP ${r.status}`);
@@ -122,6 +163,29 @@ async function principal() {
     } catch (e) {
       falhas++;
       console.error(`${rotulo}: falhou (${e?.name === 'TimeoutError' ? 'tempo esgotado' : String(e?.message || 'erro').replace(/https?:\/\/\S+/g, '[link]')}). Nada foi alterado para este calendário.`);
+    }
+  }
+  const exportacoes = lerExportacoes(process.env.EXPORTAR_CALENDARIOS);
+  if (exportacoes.length) {
+    try {
+      const { mkdirSync, writeFileSync } = await import('node:fs');
+      // Atualiza a leitura depois das gravações acima, para o envio refletir o estado atual.
+      const [rs2, bs2, futuras] = await Promise.all([db.collection('disponibilidade').get(), db.collection('bloqueios').get(), db.collection('reservas').where('saida', '>=', hoje).get()]);
+      const origemPorReserva = {};
+      futuras.forEach((d) => { origemPorReserva[d.id] = String(d.data().origemReserva || ''); });
+      const disp = rs2.docs.map((d) => ({ id: d.id, ...d.data() }));
+      const blqs = bs2.docs.map((d) => ({ id: d.id, ...d.data() }));
+      mkdirSync('saida-calendarios', { recursive: true });
+      for (const { casa, destino } of exportacoes) {
+        const periodos = periodosParaExportar({ casa, destino, disponibilidade: disp, origemPorReserva, bloqueios: blqs, hoje });
+        writeFileSync(`saida-calendarios/${casa}-para-${destino}.ics`, gerarIcs(casa, periodos));
+        console.log(`Envio ${casa} para ${destino}: ${periodos.length} período(s) ocupado(s)`);
+        periodos.forEach((p) => console.log(`  > ${p.entrada} a ${p.saida}`));
+      }
+    } catch (e) {
+      falhas++;
+      console.error(`Envio dos calendários falhou (${String(e?.message || 'erro')}). Os links continuam com a versão anterior.`);
+      try { (await import('node:fs')).rmSync('saida-calendarios', { recursive: true, force: true }); } catch {}
     }
   }
   if (falhas) process.exitCode = 1;
