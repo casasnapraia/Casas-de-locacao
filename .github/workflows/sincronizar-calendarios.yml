@@ -11,7 +11,7 @@ on:
         default: false
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: sincronizar-calendarios
@@ -33,4 +33,18 @@ jobs:
           ICAL_FEEDS: ${{ secrets.ICAL_FEEDS }}
           FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           APLICAR: ${{ github.event_name == 'workflow_dispatch' && inputs.aplicar || github.event_name == 'schedule' && vars.SINCRONIZACAO_ATIVA == 'true' }}
+          EXPORTAR_CALENDARIOS: ${{ vars.EXPORTAR_CALENDARIOS }}
         run: node scripts/sincronizar-calendarios.mjs
+      - name: Publicar calendários para as plataformas
+        if: ${{ always() && (github.event_name == 'workflow_dispatch' && inputs.aplicar || github.event_name == 'schedule' && vars.SINCRONIZACAO_ATIVA == 'true') && hashFiles('saida-calendarios/*.ics') != '' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd saida-calendarios
+          git init -q
+          git checkout -q -b calendarios
+          git add *.ics
+          git -c user.name="casas-na-praia" -c user.email="actions@users.noreply.github.com" commit -q -m "Atualiza calendários"
+          git push -q -f "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" calendarios
+          echo "Links publicados:"
+          for f in *.ics; do echo "  https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/calendarios/$f"; done
