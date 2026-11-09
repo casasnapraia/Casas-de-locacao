@@ -142,7 +142,8 @@ async function principal() {
   const db = getFirestore();
   const hoje = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Sao_Paulo' }).format(new Date());
   console.log(aplicar ? 'Modo: APLICAR' : 'Modo: TESTE (nada será gravado)');
-  const [rs, bs] = await Promise.all([db.collection('disponibilidade').get(), db.collection('bloqueios').get()]);
+  // Só o que termina de hoje em diante: o histórico não muda nada aqui e só gastaria leituras.
+  const [rs, bs] = await Promise.all([db.collection('disponibilidade').where('saida', '>=', hoje).get(), db.collection('bloqueios').where('saida', '>=', hoje).get()]);
   const bloqueios = bs.docs.map((d) => ({ id: d.id, ...d.data() }));
   const internos = [...rs.docs.map((d) => d.data()), ...bloqueios.filter((b) => !b.externo)].filter((o) => o.casa && o.entrada && o.saida);
   let falhas = 0;
@@ -170,7 +171,7 @@ async function principal() {
     try {
       const { mkdirSync, writeFileSync } = await import('node:fs');
       // Atualiza a leitura depois das gravações acima, para o envio refletir o estado atual.
-      const [rs2, bs2, futuras] = await Promise.all([db.collection('disponibilidade').get(), db.collection('bloqueios').get(), db.collection('reservas').where('saida', '>=', hoje).get()]);
+      const [rs2, bs2, futuras] = await Promise.all([db.collection('disponibilidade').where('saida', '>', hoje).get(), db.collection('bloqueios').where('saida', '>', hoje).get(), db.collection('reservas').where('saida', '>=', hoje).get()]);
       const origemPorReserva = {};
       futuras.forEach((d) => { origemPorReserva[d.id] = String(d.data().origemReserva || ''); });
       const disp = rs2.docs.map((d) => ({ id: d.id, ...d.data() }));
